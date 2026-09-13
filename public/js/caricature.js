@@ -103,10 +103,89 @@ class SarcasticGuru {
       this.speakRandom(this.context);
     });
 
+    // Automatically remove white background around Saint Nandhish
+    this.removeWhiteBackground();
+
     // Initial greeting after 0.8s
     setTimeout(() => {
       this.speakRandom(this.context);
     }, 800);
+  }
+
+  removeWhiteBackground() {
+    const img = this.avatar ? this.avatar.querySelector('img') : null;
+    if (!img) return;
+
+    const process = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        const w = img.naturalWidth || img.width;
+        const h = img.naturalHeight || img.height;
+        if (!w || !h) return;
+
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        const imgData = ctx.getImageData(0, 0, w, h);
+        const data = imgData.data;
+
+        // Check if pixel is outer white/near-white
+        const isWhite = (x, y) => {
+          const idx = (y * w + x) * 4;
+          return data[idx] > 220 && data[idx + 1] > 220 && data[idx + 2] > 220;
+        };
+
+        const visited = new Uint8Array(w * h);
+        const queue = [];
+
+        // Seed with outer edges (flood fill ensures his white tunic is kept solid)
+        for (let x = 0; x < w; x++) {
+          if (isWhite(x, 0)) { queue.push((0 * w) + x); visited[(0 * w) + x] = 1; }
+          if (isWhite(x, h - 1)) { queue.push(((h - 1) * w) + x); visited[((h - 1) * w) + x] = 1; }
+        }
+        for (let y = 0; y < h; y++) {
+          if (isWhite(0, y)) { queue.push((y * w) + 0); visited[(y * w) + 0] = 1; }
+          if (isWhite(w - 1, y)) { queue.push((y * w) + (w - 1)); visited[(y * w) + (w - 1)] = 1; }
+        }
+
+        let head = 0;
+        while (head < queue.length) {
+          const pos = queue[head++];
+          const cx = pos % w;
+          const cy = Math.floor(pos / w);
+
+          const idx = (cy * w + cx) * 4;
+          data[idx + 3] = 0; // Transparent!
+
+          const neighbors = [
+            [cx + 1, cy], [cx - 1, cy], [cx, cy + 1], [cx, cy - 1]
+          ];
+
+          for (const [nx, ny] of neighbors) {
+            if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+              const nPos = ny * w + nx;
+              if (!visited[nPos] && isWhite(nx, ny)) {
+                visited[nPos] = 1;
+                queue.push(nPos);
+              }
+            }
+          }
+        }
+
+        ctx.putImageData(imgData, 0, 0);
+        img.src = canvas.toDataURL('image/png');
+      } catch (err) {
+        console.warn('Canvas background removal notice:', err);
+      }
+    };
+
+    if (img.complete && img.naturalWidth) {
+      process();
+    } else {
+      img.onload = process;
+    }
   }
 
   speak(text, duration = 6500) {
