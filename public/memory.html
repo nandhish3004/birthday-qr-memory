@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Birthday Memory 💗</title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/memory.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💗</text></svg>">
+  <!-- Confetti library for celebration effect -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <!-- Floating background hearts & sparkles -->
+  <div class="floating-hearts-container" id="heartsContainer"></div>
+
+  <div class="memory-page-wrapper">
+    <!-- Top Scrapbook Header -->
+    <header class="memory-header">
+      <div class="header-badge">
+        <span class="sparkle">✨</span>
+        <span id="memoryNumberBadge">Memory #1</span>
+        <span class="sparkle">✨</span>
+      </div>
+      <h1 class="birthday-title">Happy Birthday Shaaaw!</h1>
+      <p class="subtitle">A special moment locked in time forever 💌</p>
+    </header>
+
+    <!-- Main Keepsake Card / Polaroid Frame -->
+    <main class="polaroid-frame" id="polaroidCard">
+      <!-- Washi tape decorative sticker -->
+      <div class="washi-tape"></div>
+
+      <!-- Loading State -->
+      <div class="state-container active" id="loadingState">
+        <div class="spinner-heart">💗</div>
+        <p class="loading-text">Unwrapping your memory...</p>
+      </div>
+
+      <!-- Video Memory State -->
+      <div class="state-container" id="videoState">
+        <div class="video-wrapper">
+          <video id="memoryVideo" playsinline controls preload="metadata">
+            <source src="" type="video/mp4">
+            Your phone browser doesn't support HTML5 video playback.
+          </video>
+        </div>
+      </div>
+
+      <!-- Audio Memory State -->
+      <div class="state-container" id="audioState">
+        <div class="audio-player-card">
+          <div class="vinyl-disc-wrapper" id="vinylWrapper">
+            <div class="vinyl-grooves">
+              <div class="vinyl-center">
+                <div class="vinyl-heart">🎵</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="audio-track-info">
+            <h3 class="track-title" id="audioTitle">Special Voice Note / Song</h3>
+            <p class="track-artist">Recorded with love for you 🎧</p>
+          </div>
+
+          <!-- Sound wave visualizer -->
+          <div class="sound-wave" id="soundWave">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+
+          <!-- Native Audio Player with customized skin -->
+          <audio id="memoryAudio" preload="metadata"></audio>
+          
+          <div class="custom-audio-controls">
+            <button class="audio-play-btn" id="audioPlayBtn" aria-label="Play Audio">
+              <svg id="playIcon" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+              <svg id="pauseIcon" viewBox="0 0 24 24" width="28" height="28" fill="currentColor" style="display:none;">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+              </svg>
+            </button>
+            <div class="audio-progress-container" id="audioProgressContainer">
+              <div class="audio-progress-bar" id="audioProgressBar"></div>
+            </div>
+            <span class="audio-time" id="audioTime">0:00</span>
+          </div>
+
+          <!-- Poster Spotify card inspired sticker -->
+          <div class="spotify-quote-card">
+            <div class="quote-header">
+              <svg class="spotify-icon" viewBox="0 0 24 24" width="20" height="20" fill="#1DB954">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.49 17.3c-.22.36-.68.47-1.04.25-2.85-1.74-6.44-2.14-10.66-1.18-.41.09-.81-.17-.9-.58-.09-.41.17-.81.58-.9 4.63-1.06 8.59-.6 11.77 1.37.36.22.48.68.25 1.04zm1.46-3.26c-.28.45-.87.59-1.32.31-3.27-2.01-8.25-2.59-12.11-1.42-.5.15-1.03-.13-1.18-.63-.15-.5.13-1.03.63-1.18 4.41-1.34 9.91-.7 13.67 1.6.45.28.59.87.31 1.32zm.12-3.4c-3.92-2.33-10.38-2.54-14.12-1.4-.6.18-1.24-.16-1.42-.76-.18-.6.16-1.24.76-1.42 4.31-1.31 11.43-1.07 15.93 1.6.54.32.72 1.02.4 1.56-.32.55-1.01.73-1.55.42z"/>
+              </svg>
+              <span>Now Playing Memories</span>
+            </div>
+            <p class="quote-lyrics">"I belong with you, you belong with me, you're my sweetheart..."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty / Unassigned State -->
+      <div class="state-container" id="emptyState">
+        <div class="surprise-container" id="surpriseBox">
+          <div class="gift-animation-box">
+            <span class="gift-icon">🎁</span>
+            <div class="pulsing-halo"></div>
+          </div>
+          <h2 class="surprise-headline">A little surprise is waiting here 💗</h2>
+          <p class="surprise-description">
+            This special birthday secret is being crafted with love and hugs!
+          </p>
+          <div class="stamp-pill">
+            <span>Special Delivery 💌</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Note / Caption Area (Polaroid Footer) -->
+      <div class="polaroid-caption" id="memoryCaptionArea">
+        <h2 class="memory-custom-title" id="memoryTitle">Memory #1</h2>
+        <p class="memory-note" id="memoryNote">Forever grateful for you in my life!</p>
+      </div>
+
+      <!-- Silver Stars & Stickers -->
+      <div class="silver-star star-top-right">★</div>
+      <div class="silver-star star-bottom-left">★</div>
+    </main>
+
+    <!-- Bottom Navigation Bar (Jump between all 8 memories) -->
+    <nav class="memory-navigation">
+      <p class="nav-label">Browse all memories:</p>
+      <div class="memory-pills-row" id="memoryNavPills">
+        <!-- Pills 1-8 generated dynamically -->
+      </div>
+      <div class="action-buttons-row">
+        <a href="/" class="btn-secondary">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+          </svg>
+          View Full Poster
+        </a>
+        <button class="btn-primary" id="celebrateBtn">
+          Celebrate 🎉
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <script src="/js/memory.js"></script>
+</body>
+</html>

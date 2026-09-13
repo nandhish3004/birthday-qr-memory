@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: birthday-qr-memory-system
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: ADMIN_PIN
+        generateValue: false
+        value: shaaaw2026
+      - key: STORAGE_TYPE
+        value: local

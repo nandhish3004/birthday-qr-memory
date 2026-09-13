@@ -1,0 +1,237 @@
+.showcase-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Header */
+.showcase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 30px;
+  background: var(--card-glass);
+  backdrop-filter: blur(10px);
+  padding: 18px 24px;
+  border-radius: 16px;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-soft);
+}
+
+.header-titles h1 {
+  font-family: var(--font-handwritten);
+  font-size: 2.2rem;
+  color: var(--deep-berry);
+  margin-top: 4px;
+  line-height: 1.1;
+}
+
+.header-titles p {
+  color: #7d4455;
+  font-size: 0.95rem;
+}
+
+/* Two-Column Layout */
+.showcase-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .showcase-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Poster Card */
+.poster-display-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow-polaroid);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.poster-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+.poster-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Interactive Scannable QR Pins on Poster */
+.qr-pin-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.qr-interactive-pin {
+  position: absolute;
+  pointer-events: auto;
+  background: #ffffff;
+  padding: 4px;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 117, 143, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.qr-interactive-pin:hover {
+  transform: scale(1.35) rotate(0deg) !important;
+  z-index: 100;
+  box-shadow: 0 12px 28px rgba(255, 77, 109, 0.45);
+}
+
+.qr-interactive-pin img {
+  width: 100%;
+  height: auto;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.qr-pin-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--deep-berry);
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+.poster-actions-row {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Directory Card */
+.memories-directory-card {
+  background: var(--card-glass);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid var(--card-border);
+  padding: 24px;
+  box-shadow: var(--shadow-soft);
+}
+
+.directory-header h2 {
+  font-size: 1.4rem;
+  color: var(--deep-berry);
+}
+
+.directory-header p {
+  color: #7d4455;
+  font-size: 0.9rem;
+  margin-bottom: 18px;
+}
+
+.directory-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.directory-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 117, 143, 0.2);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.directory-item:hover {
+  transform: translateX(4px);
+  border-color: var(--primary-pink);
+  box-shadow: 0 4px 12px rgba(255, 92, 138, 0.15);
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.item-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ffe5ec;
+  color: var(--deep-berry);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.item-details h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--dark-plum);
+}
+
+.item-details p {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+/* Guarantee Card */
+.scannability-guarantee-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 14px 16px;
+  border-radius: 10px;
+}
+
+.guarantee-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.guarantee-content h4 {
+  color: #166534;
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+.guarantee-content p {
+  color: #15803d;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}

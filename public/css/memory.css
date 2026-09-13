@@ -1,0 +1,477 @@
+.memory-page-wrapper {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+}
+
+/* Header */
+.memory-header {
+  text-align: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 117, 143, 0.3);
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--deep-berry);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(255, 92, 138, 0.15);
+  margin-bottom: 8px;
+}
+
+.sparkle {
+  animation: pulseSparkle 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulseSparkle {
+  0% { transform: scale(0.8); opacity: 0.7; }
+  100% { transform: scale(1.2); opacity: 1; }
+}
+
+.birthday-title {
+  font-family: var(--font-handwritten);
+  font-size: 2.5rem;
+  color: var(--deep-berry);
+  line-height: 1.1;
+  text-shadow: 1px 2px 4px rgba(255, 117, 143, 0.2);
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #8c4a60;
+  font-weight: 400;
+}
+
+/* Polaroid Scrapbook Card */
+.polaroid-frame {
+  background: #ffffff;
+  width: 100%;
+  border-radius: 12px;
+  padding: 18px 18px 24px;
+  box-shadow: var(--shadow-polaroid);
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transform: rotate(-0.5deg);
+  transition: transform 0.3s ease;
+}
+
+.polaroid-frame:hover {
+  transform: rotate(0deg) translateY(-2px);
+}
+
+/* Washi Tape Accent on Top */
+.washi-tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(1.5deg);
+  width: 110px;
+  height: 26px;
+  background: rgba(255, 182, 193, 0.75);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border-left: 2px dashed rgba(255, 255, 255, 0.6);
+  border-right: 2px dashed rgba(255, 255, 255, 0.6);
+  z-index: 5;
+}
+
+/* Silver Stars Decor */
+.silver-star {
+  position: absolute;
+  font-size: 1.6rem;
+  color: #d1d5db;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 1px 2px 3px rgba(0, 0, 0, 0.2);
+  z-index: 6;
+  pointer-events: none;
+}
+
+.star-top-right {
+  top: -10px;
+  right: -8px;
+  transform: rotate(15deg);
+}
+
+.star-bottom-left {
+  bottom: -10px;
+  left: -6px;
+  transform: rotate(-20deg);
+}
+
+/* Dynamic State Containers */
+.state-container {
+  display: none;
+  width: 100%;
+  min-height: 280px;
+  background: #fdf2f4;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.state-container.active {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Loading State */
+.spinner-heart {
+  font-size: 3.5rem;
+  animation: heartPulse 1.2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes heartPulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+.loading-text {
+  margin-top: 14px;
+  color: #a8557a;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* Video State */
+.video-wrapper {
+  width: 100%;
+  background: #000000;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-wrapper video {
+  width: 100%;
+  max-height: 480px;
+  display: block;
+  outline: none;
+  background: #000;
+}
+
+/* Audio State */
+.audio-player-card {
+  width: 100%;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(180deg, #fff5f7 0%, #ffe9ee 100%);
+  border-radius: 8px;
+}
+
+.vinyl-disc-wrapper {
+  width: 130px;
+  height: 130px;
+  background: #181818;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.vinyl-disc-wrapper.spinning {
+  animation: spinVinyl 6s linear infinite;
+}
+
+@keyframes spinVinyl {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.vinyl-grooves {
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vinyl-center {
+  width: 44px;
+  height: 44px;
+  background: var(--primary-pink);
+  border-radius: 50%;
+  border: 4px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.audio-track-info {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.track-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--deep-berry);
+}
+
+.track-artist {
+  font-size: 0.85rem;
+  color: #9d5c70;
+}
+
+/* Sound wave equalizer */
+.sound-wave {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 28px;
+  margin-bottom: 16px;
+}
+
+.sound-wave span {
+  width: 4px;
+  background: var(--primary-pink);
+  border-radius: 4px;
+  height: 6px;
+  transition: height 0.2s ease;
+}
+
+.sound-wave.playing span:nth-child(2n) {
+  animation: waveMotion 0.8s ease-in-out infinite alternate;
+}
+.sound-wave.playing span:nth-child(2n+1) {
+  animation: waveMotion 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes waveMotion {
+  0% { height: 6px; }
+  100% { height: 26px; }
+}
+
+/* Custom Audio Controls */
+.custom-audio-controls {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.audio-play-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--primary-pink);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(255, 92, 138, 0.4);
+}
+
+.audio-play-btn:active {
+  transform: scale(0.92);
+}
+
+.audio-progress-container {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 92, 138, 0.2);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.audio-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--primary-pink);
+  border-radius: 4px;
+  transition: width 0.1s linear;
+}
+
+.audio-time {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #8c4a60;
+  min-width: 38px;
+}
+
+/* Poster Spotify Inspired Card */
+.spotify-quote-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 117, 143, 0.25);
+  border-radius: 8px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.quote-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.quote-lyrics {
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--deep-berry);
+}
+
+/* Empty Surprise State */
+.surprise-container {
+  padding: 36px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gift-animation-box {
+  position: relative;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.gift-icon {
+  font-size: 4rem;
+  display: inline-block;
+  animation: gentleBounce 2s ease-in-out infinite;
+}
+
+@keyframes gentleBounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.06); }
+}
+
+.surprise-headline {
+  font-family: var(--font-handwritten);
+  font-size: 2rem;
+  color: var(--deep-berry);
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.surprise-description {
+  font-size: 0.95rem;
+  color: #7d4455;
+  margin-bottom: 18px;
+  max-width: 320px;
+}
+
+.stamp-pill {
+  background: #ffccd5;
+  color: #a4133c;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px dashed #c9184a;
+}
+
+/* Polaroid Caption Section */
+.polaroid-caption {
+  margin-top: 18px;
+  text-align: center;
+  padding-top: 6px;
+}
+
+.memory-custom-title {
+  font-family: var(--font-handwritten);
+  font-size: 1.8rem;
+  color: var(--dark-plum);
+  margin-bottom: 4px;
+}
+
+.memory-note {
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.5;
+  font-style: italic;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+/* Navigation Section */
+.memory-navigation {
+  width: 100%;
+  margin-top: 24px;
+  text-align: center;
+}
+
+.nav-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #8c4a60;
+  margin-bottom: 10px;
+}
+
+.memory-pills-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.memory-pill {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 117, 143, 0.3);
+  color: var(--deep-berry);
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.memory-pill:hover,
+.memory-pill.current {
+  background: var(--primary-pink);
+  color: #ffffff;
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(255, 92, 138, 0.4);
+}
+
+.action-buttons-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
