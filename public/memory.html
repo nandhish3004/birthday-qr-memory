@@ -10,11 +10,11 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-  <!-- Floating cozy spores & twinkling star particles -->
+  <!-- Ambient floating particles -->
   <div class="spores-container" id="sporesContainer"></div>
 
   <div class="memory-page-wrapper">
-    <!-- Cute Joyce's Alphabet Christmas String Lights -->
+    <!-- Minimalist Pastel String Lights -->
     <div class="christmas-lights-string">
       <span class="christmas-bulb bulb-red"></span>
       <span class="christmas-bulb bulb-blue"></span>
@@ -28,164 +28,207 @@
       <span class="christmas-bulb bulb-blue"></span>
     </div>
 
-    <!-- Cute Stranger Things Neon Header -->
-    <header class="cute-stranger-header">
-      <div class="title-top-bar"></div>
-      <h1 class="cute-stranger-logo">STRANGER MEMORIES</h1>
-      <div class="title-bottom-bar"></div>
-      <p class="cute-subtext">✨ SHAAAW'S BIRTHDAY ARCHIVE ✨</p>
+    <!-- Modern Brand Header -->
+    <header class="modern-brand-header">
+      <div class="header-pill-badge">✨ FOR SHAAAW &bull; BIRTHDAY EDITION ✨</div>
+      <h1 class="modern-brand-title">STRANGER MEMORIES</h1>
+      <p class="modern-brand-sub">Tap any Hawkins character below to hear their cameo!</p>
     </header>
 
-    <!-- Main Retro Windows Window Box -->
-    <main class="retro-window-box" id="mainKeepsakeCard">
-      <!-- Windows 95/XP Style Titlebar -->
-      <div class="retro-titlebar">
-        <div class="titlebar-left">
-          <span class="titlebar-icon">📼</span>
-          <span class="titlebar-title" id="windowTitle">Memory_01.exe — Hawkins Media Player</span>
-        </div>
-        <div class="titlebar-controls">
-          <button class="win-btn" title="Minimize">_</button>
-          <button class="win-btn" title="Maximize">口</button>
-          <button class="win-btn win-close" title="Close">✕</button>
+    <!-- Hawkins Party Modern Cameo Story Bar (Steve, Will, Mike, Lucas, Dustin, Eleven, Vecna, Demo, Saint) -->
+    <section class="cameo-story-container" aria-label="Stranger Things Cameos">
+      <div class="cameo-story-label">
+        <span>Hawkins Party Cameos</span>
+        <span style="font-size: 0.68rem; color: var(--pastel-crimson);">Tap to listen ⚡</span>
+      </div>
+      <div class="cameo-story-scroll">
+        <!-- Steve -->
+        <button class="cameo-chip-btn chip-steve" onclick="triggerCameo('steve')" title="Steve Harrington">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">🧢</div>
+          </div>
+          <span class="cameo-chip-name">Steve</span>
+        </button>
+
+        <!-- Will -->
+        <button class="cameo-chip-btn chip-will" onclick="triggerCameo('will')" title="Will Byers">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">🏰</div>
+          </div>
+          <span class="cameo-chip-name">Will</span>
+        </button>
+
+        <!-- Mike -->
+        <button class="cameo-chip-btn chip-mike" onclick="triggerCameo('mike')" title="Mike Wheeler">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">⚔️</div>
+          </div>
+          <span class="cameo-chip-name">Mike</span>
+        </button>
+
+        <!-- Lucas -->
+        <button class="cameo-chip-btn chip-lucas" onclick="triggerCameo('lucas')" title="Lucas Sinclair">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">🎯</div>
+          </div>
+          <span class="cameo-chip-name">Lucas</span>
+        </button>
+
+        <!-- Dustin -->
+        <button class="cameo-chip-btn chip-dustin" onclick="triggerCameo('dustin')" title="Dustin Henderson">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">📻</div>
+          </div>
+          <span class="cameo-chip-name">Dustin</span>
+        </button>
+
+        <!-- Eleven -->
+        <button class="cameo-chip-btn chip-eleven" onclick="triggerCameo('eleven')" title="Eleven (011)">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">🧇</div>
+          </div>
+          <span class="cameo-chip-name">Eleven</span>
+        </button>
+
+        <!-- Vecna -->
+        <button class="cameo-chip-btn chip-vecna" onclick="triggerCameo('vecna')" title="Vecna">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">🕰️</div>
+          </div>
+          <span class="cameo-chip-name">Vecna</span>
+        </button>
+
+        <!-- Demogorgon -->
+        <button class="cameo-chip-btn chip-demo" onclick="triggerCameo('demogorgon')" title="Cute Demogorgon">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">🌸</div>
+          </div>
+          <span class="cameo-chip-name">Demo</span>
+        </button>
+
+        <!-- Saint Nandhish -->
+        <button class="cameo-chip-btn chip-saint" onclick="triggerCameo('saint')" title="Saint Nandhish">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">🧙‍♂️</div>
+          </div>
+          <span class="cameo-chip-name">Saint</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Modern Glass Memory Card -->
+    <main class="modern-memory-card" id="mainKeepsakeCard">
+      <!-- Card Header Strip -->
+      <div class="card-header-bar">
+        <span class="chapter-pill-tag" id="chapterBadge">CHAPTER 01</span>
+        <span class="badge badge-empty" id="statusBadge">Loading...</span>
+      </div>
+
+      <!-- State: Loading -->
+      <div class="state-container active" id="loadingState">
+        <div class="modern-loader">
+          <div class="pulse-ring-loader">
+            <span class="loader-heart">💗</span>
+          </div>
+          <p class="loader-text">Loading Shaaaw's Memory Stream...</p>
         </div>
       </div>
 
-      <!-- Windows Menu Bar -->
-      <div class="retro-menubar">
-        <span class="menu-item">File</span>
-        <span class="menu-item">Edit</span>
-        <span class="menu-item">View</span>
-        <span class="menu-item">Playback</span>
-        <span class="menu-item">Help</span>
+      <!-- State: Modern Video Player -->
+      <div class="state-container" id="videoState">
+        <div class="modern-video-wrapper">
+          <video class="modern-video-player" id="memoryVideo" playsinline controls preload="metadata">
+            <source src="" type="video/mp4">
+            Your browser doesn't support HTML5 video.
+          </video>
+        </div>
       </div>
 
-      <!-- Window Body -->
-      <div class="window-body">
-        <!-- Loading State -->
-        <div class="state-container active" id="loadingState">
-          <div class="cute-spinner-portal">
-            <div class="portal-ring"></div>
-            <div class="portal-core">💗</div>
-          </div>
-          <p class="cute-loading-text">Loading HawkinsOS Memory Stream...</p>
-        </div>
-
-        <!-- Video State: Cute Microsoft Media Player / Retro TV -->
-        <div class="state-container" id="videoState">
-          <div class="cute-retro-tv">
-            <div class="tv-screen-frame">
-              <div class="crt-scanlines"></div>
-              <div class="crt-osd-tag">
-                <span class="osd-dot"></span> PLAY ▶ HAWKINS-AV
-              </div>
-              <video id="memoryVideo" playsinline controls preload="metadata">
-                <source src="" type="video/mp4">
-                Your browser doesn't support video playback.
-              </video>
-            </div>
-            <div class="tv-cute-knobs-bar">
-              <span class="tv-sticker">★ 1983 SPECIAL EDITION ★</span>
-              <div class="tv-dials">
-                <span class="tv-dial"></span>
-                <span class="tv-dial"></span>
-                <span class="tv-led"></span>
-              </div>
+      <!-- State: Modern Audio Streaming Player -->
+      <div class="state-container" id="audioState">
+        <div class="modern-audio-card">
+          <!-- Floating Rotating Vinyl Disc -->
+          <div class="vinyl-disc-stage">
+            <div class="modern-vinyl-disc" id="vinylDisc">
+              <div class="vinyl-grooves"></div>
+              <div class="vinyl-center-label">💗</div>
             </div>
           </div>
-        </div>
 
-        <!-- Audio State: Cute Microsoft Sound Player / Max's Walkman -->
-        <div class="state-container" id="audioState">
-          <div class="cute-walkman-card">
-            <div class="walkman-top-header">
-              <span class="walkman-brand">WALKMAN 🎧</span>
-              <span class="walkman-tape-counter">REC 0<span id="tapeCounter">42</span></span>
+          <!-- Track Info -->
+          <div class="audio-track-info">
+            <h3 class="audio-track-title" id="audioTrackTitle">Voice Note for Shaaaw</h3>
+            <span class="audio-track-sub">PERSONAL RECORDING 💗</span>
+          </div>
+
+          <!-- Animated Waveform Visualizer -->
+          <div class="waveform-visualizer" id="waveformViz">
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+          </div>
+
+          <!-- Hidden Native Audio -->
+          <audio id="memoryAudio" preload="metadata"></audio>
+
+          <!-- Modern Scrubber Module -->
+          <div class="audio-progress-module">
+            <div class="modern-track-slider" id="audioProgressContainer">
+              <div class="modern-track-fill" id="audioProgressBar"></div>
             </div>
-
-            <!-- Cassette Tape with Spinning Spools -->
-            <div class="cute-cassette-housing">
-              <div class="cassette-label-sticker">
-                <span class="cassette-song-title" id="audioTitle">Special Voice Note / Song</span>
-                <span class="cassette-tag">FOR SHAAAW WITH LOVE 💗</span>
-              </div>
-              <div class="cassette-transparent-window">
-                <div class="cassette-spool left-spool" id="spoolLeft">
-                  <span class="spool-center-heart">💗</span>
-                </div>
-                <div class="tape-bridge"></div>
-                <div class="cassette-spool right-spool" id="spoolRight">
-                  <span class="spool-center-heart">💗</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Native Audio Element -->
-            <audio id="memoryAudio" preload="metadata"></audio>
-
-            <!-- Cute Mechanical Audio Controls -->
-            <div class="cute-audio-controls">
-              <button class="cute-play-btn" id="audioPlayBtn" aria-label="Play Cassette">
-                <span id="playIcon">▶ PLAY</span>
-                <span id="pauseIcon" style="display:none;">⏸ PAUSE</span>
-              </button>
-              <div class="cute-audio-track" id="audioProgressContainer">
-                <div class="cute-audio-fill" id="audioProgressBar"></div>
-              </div>
-              <span class="cute-time-display" id="audioTime">0:00</span>
-            </div>
-
-            <div class="cute-quote-bubble">
-              <em>"I belong with you, you belong with me, you're my sweetheart..."</em>
+            <div class="track-timestamps">
+              <span id="audioTimeCurrent">0:00</span>
+              <span id="audioTimeTotal">0:00</span>
             </div>
           </div>
-        </div>
 
-        <!-- Empty State: Cute Baby Demogorgon Surprise -->
-        <div class="state-container" id="emptyState">
-          <div class="cute-demogorgon-surprise" id="surpriseBox">
-            <div class="chibi-demogorgon-wrapper">
-              <div class="chibi-demogorgon-face">
-                <div class="chibi-petal petal-top"></div>
-                <div class="chibi-petal petal-right"></div>
-                <div class="chibi-petal petal-bottom"></div>
-                <div class="chibi-petal petal-left"></div>
-                <div class="chibi-center-smile">
-                  <span class="chibi-eye eye-left">^</span>
-                  <span class="chibi-eye eye-right">^</span>
-                  <span class="chibi-blush blush-left"></span>
-                  <span class="chibi-blush blush-right"></span>
-                </div>
-              </div>
-              <div class="cute-gift-box">🎁</div>
-            </div>
-
-            <h2 class="cute-surprise-title">A little surprise is waiting here 💗</h2>
-            <p class="cute-surprise-sub">
-              A secret birthday memory is being prepared with all the love in the universe!
-            </p>
-            <div class="cute-surprise-tag">
-              <span>Special Delivery from Hawkins 💌</span>
-            </div>
+          <!-- Playback Controls -->
+          <div class="modern-playback-controls">
+            <button class="skip-btn" id="audioRewind10" title="Rewind 10 Seconds">⏪ 10</button>
+            <button class="main-play-btn" id="audioPlayBtn" title="Play / Pause">
+              <span id="playIcon">▶</span>
+              <span id="pauseIcon" style="display:none;">⏸</span>
+            </button>
+            <button class="skip-btn" id="audioForward10" title="Forward 10 Seconds">10 ⏩</button>
           </div>
         </div>
+      </div>
 
-        <!-- Memory Title & Heartfelt Note (Notepad.exe style) -->
-        <div class="memory-message-footer">
-          <div class="chapter-badge" id="chapterBadge">CHAPTER 01</div>
-          <h2 class="memory-custom-title" id="memoryTitle">Memory #1</h2>
-          <p class="memory-note" id="memoryNote">A special moment locked in time forever!</p>
+      <!-- State: Modern Surprise State -->
+      <div class="state-container" id="emptyState">
+        <div class="modern-surprise-box" id="surpriseBox">
+          <div class="surprise-gift-orb">🎁</div>
+          <h2 class="surprise-title">A sweet surprise is being prepared 💗</h2>
+          <p class="surprise-sub">
+            A secret birthday memory is being loaded into this chapter just for you, Shaaaw! Check back soon.
+          </p>
+          <span class="surprise-pill">Special Delivery for Shaaaw ✨</span>
         </div>
+      </div>
+
+      <!-- Editorial Note Card -->
+      <div class="memory-editorial-card">
+        <h2 class="editorial-title" id="memoryTitle">Memory #1</h2>
+        <p class="editorial-note" id="memoryNote">A special moment locked in time forever!</p>
       </div>
     </main>
 
-    <!-- Cute Bottom Navigation (Memories 1 to 8) -->
-    <nav class="cute-memory-nav">
-      <p class="nav-caption">SELECT CHAPTER:</p>
-      <div class="cute-pills-row" id="memoryNavPills">
-        <!-- 1 to 8 pills generated dynamically -->
+    <!-- Modern Chapter Switcher & Actions -->
+    <nav class="modern-bottom-nav">
+      <span class="nav-label">Browse All Chapters:</span>
+      <div class="chapter-pills-scroll" id="memoryNavPills">
+        <!-- 1 to 8 pills populated dynamically -->
       </div>
-      <div class="nav-buttons-row">
+      <div class="bottom-action-buttons">
         <a href="/" class="btn-secondary">
           ✨ Memory Hub
         </a>
@@ -196,7 +239,7 @@
     </nav>
   </div>
 
-  <!-- Sarcastic Guru Caricature Companion -->
+  <!-- Sarcastic Guru & Full Cameo Companion Engine -->
   <script src="/js/caricature.js"></script>
   <script src="/js/memory.js"></script>
 </body>

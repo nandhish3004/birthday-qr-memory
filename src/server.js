@@ -191,21 +191,40 @@ app.delete('/api/memories/:id', requireAdmin, (req, res) => {
   res.json({ success: true, memory: result.memory });
 });
 
+// Helper to determine effective public base URL
+function getEffectiveBaseUrl(req) {
+  if (BASE_URL && !BASE_URL.includes('localhost')) {
+    return BASE_URL.replace(/\/+$/, '');
+  }
+  if (process.env.RENDER_EXTERNAL_URL) {
+    return process.env.RENDER_EXTERNAL_URL.replace(/\/+$/, '');
+  }
+  if (req) {
+    const proto = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+    const host = req.headers['x-forwarded-host'] || req.get('host');
+    if (host && !host.includes('localhost')) {
+      return `${proto}://${host}`.replace(/\/+$/, '');
+    }
+  }
+  return BASE_URL.replace(/\/+$/, '');
+}
+
 // ----------------------
 // Configuration & Poster API
 // ----------------------
 
 // Get current system configuration
 app.get('/api/config', (req, res) => {
+  const currentBase = getEffectiveBaseUrl(req);
   res.json({
-    baseUrl: BASE_URL,
+    baseUrl: currentBase,
     storageType: process.env.STORAGE_TYPE || 'local',
     nodeEnv: process.env.NODE_ENV || 'development',
     placements: QR_PLACEMENTS
   });
 });
 
-// Update Base URL
+// Update Base URL manually
 app.post('/api/admin/set-base-url', requireAdmin, async (req, res) => {
   const { baseUrl } = req.body;
   if (!baseUrl || !baseUrl.startsWith('http')) {
@@ -223,60 +242,238 @@ app.post('/api/admin/set-base-url', requireAdmin, async (req, res) => {
   }
 });
 
-// Generate or regenerate QRs & Poster
-app.post('/api/admin/generate-poster', requireAdmin, async (req, res) => {
+// Dynamic live QR code thumbnail endpoint
+app.get('/api/qr/:id', async (req, res) => {
   try {
-    const targetBaseUrl = req.body.baseUrl || BASE_URL;
-    const qrResults = await generateAllQRCodes(targetBaseUrl);
-    const posterResult = await composePoster(targetBaseUrl);
-    res.json({
-      success: true,
-      qrResults,
-      posterResult
+    const id = parseInt(req.params.id, 10);
+    const domain = getEffectiveBaseUrl(req);
+    const targetUrl = `${domain}/memory/${id}`;
+    const QRCode = require('qrcode');
+
+    const buffer = await QRCode.toBuffer(targetUrl, {
+      errorCorrectionLevel: 'H',
+      margin: 4,
+      width: 600,
+      color: { dark: '#000000', light: '#ffffff' }
     });
+
+    res.setHeader('Content-Type', 'image/png');
+    res.send(buffer);
   } catch (err) {
-    console.error('Poster generation error:', err);
+    res.status(500).send('Error generating QR');
+  }
+});
+
+// Download individual QR code (Generated live on the fly with the exact current domain)
+app.get('/api/admin/download-qr/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const domain = getEffectiveBaseUrl(req);
+    const targetUrl = `${domain}/memory/${id}`;
+    const QRCode = require('qrcode');
+
+    const qrBuffer = await QRCode.toBuffer(targetUrl, {
+      errorCorrectionLevel: 'H',
+      margin: 4,
+      width: 1400,
+      color: { dark: '#000000', light: '#ffffff' }
+    });
+
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Content-Disposition', `attachment; filename="shaaaw_qr_memory_${id}.png"`);
+    res.send(qrBuffer);
+  } catch (err) {
+    console.error('Error generating download QR:', err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Download individual QR code
-app.get('/api/admin/download-qr/:id', (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  const qrPath = path.join(QR_OUTPUT_DIR, `${id}.png`);
-  if (!fs.existsSync(qrPath)) {
-    return res.status(404).json({ error: 'QR Code not generated yet' });
-  }
-  res.download(qrPath, `birthday_qr_memory_${id}.png`);
-});
+// Download all 8 QR codes as a ZIP (Generated live on the fly with the exact current domain)
+app.get('/api/admin/download-all-qrs', async (req, res) => {
+  try {
+    const domain = getEffectiveBaseUrl(req);
+    const QRCode = require('qrcode');
+    const archive = archiver('zip', { zlib: { level: 9 } });
 
-// Download composite poster
-app.get('/api/admin/download-poster', (req, res) => {
-  if (!fs.existsSync(POSTER_OUTPUT)) {
-    return res.status(404).json({ error: 'Poster not generated yet. Please generate from the admin dashboard.' });
-  }
-  res.download(POSTER_OUTPUT, 'birthday_poster_with_scannable_qrs.png');
-});
+    res.attachment('shaaaw_birthday_all_8_qrs.zip');
 
-// Download all 8 QR codes as a ZIP
-app.get('/api/admin/download-all-qrs', (req, res) => {
-  const archive = archiver('zip', { zlib: { level: 9 } });
-  res.attachment('birthday_memory_qrs_all.zip');
+    archive.on('error', (err) => {
+      res.status(500).send({ error: err.message });
+    });
 
-  archive.on('error', (err) => {
-    res.status(500).send({ error: err.message });
-  });
+    archive.pipe(res);
 
-  archive.pipe(res);
-
-  for (let i = 1; i <= 8; i++) {
-    const file = path.join(QR_OUTPUT_DIR, `${i}.png`);
-    if (fs.existsSync(file)) {
-      archive.file(file, { name: `qr_memory_${i}.png` });
+    for (let i = 1; i <= 8; i++) {
+      const targetUrl = `${domain}/memory/${i}`;
+      const buffer = await QRCode.toBuffer(targetUrl, {
+        errorCorrectionLevel: 'H',
+        margin: 4,
+        width: 1400,
+        color: { dark: '#000000', light: '#ffffff' }
+      });
+      archive.append(buffer, { name: `qr_memory_${i}.png` });
     }
-  }
 
-  archive.finalize();
+    archive.finalize();
+  } catch (err) {
+    console.error('ZIP generation error:', err);
+    res.status(500).send({ error: err.message });
+  }
+});
+
+// Printable Sheet: Renders a print-ready A4 grid with all 8 QR codes, titles, and cutting lines
+app.get('/admin/printable-sheet', async (req, res) => {
+  try {
+    const domain = getEffectiveBaseUrl(req);
+    const QRCode = require('qrcode');
+    const memories = db.getAllMemories();
+
+    const qrCards = [];
+    for (const mem of memories) {
+      const targetUrl = `${domain}/memory/${mem.id}`;
+      const dataUrl = await QRCode.toDataURL(targetUrl, {
+        errorCorrectionLevel: 'H',
+        margin: 4,
+        width: 600,
+        color: { dark: '#000000', light: '#ffffff' }
+      });
+      qrCards.push({
+        id: mem.id,
+        title: mem.title || `Memory #${mem.id}`,
+        type: mem.media_type,
+        url: targetUrl,
+        qrDataUrl: dataUrl
+      });
+    }
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Printable QR Cards for Shaaaw's Birthday (Chapters 1 - 8)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      padding: 24px;
+    }
+    .print-header {
+      max-width: 900px;
+      margin: 0 auto 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 16px 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .print-title h1 { font-size: 1.3rem; font-weight: 800; color: #e11d48; }
+    .print-title p { font-size: 0.85rem; color: #64748b; margin-top: 4px; }
+    .print-btn {
+      background: #e11d48;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
+    }
+    .cards-grid {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .qr-card-item {
+      background: #ffffff;
+      border: 2px dashed #cbd5e1;
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
+      page-break-inside: avoid;
+    }
+    .qr-img {
+      width: 140px;
+      height: 140px;
+      display: block;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
+    .qr-info { flex: 1; }
+    .chapter-tag {
+      display: inline-block;
+      background: #ffe4e6;
+      color: #be123c;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+    .card-meta {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+    .card-url {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      word-break: break-all;
+      font-family: monospace;
+    }
+    @media print {
+      body { background: #ffffff; padding: 0; }
+      .print-header { display: none; }
+      .cards-grid { max-width: 100%; gap: 14px; }
+      .qr-card-item { border: 1.5px dashed #94a3b8; padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="print-header">
+    <div class="print-title">
+      <h1>🖨️ Physical QR Card Sheet for Shaaaw</h1>
+      <p>Domain: <strong>${domain}</strong> &bull; Error Correction: High (30%) &bull; Margin: 4 (100% Mobile Scanner Safe)</p>
+    </div>
+    <button class="print-btn" onclick="window.print()">Print Cards (Ctrl + P)</button>
+  </div>
+  <div class="cards-grid">
+    ${qrCards.map(c => `
+      <div class="qr-card-item">
+        <img class="qr-img" src="${c.qrDataUrl}" alt="Chapter ${c.id} QR">
+        <div class="qr-info">
+          <span class="chapter-tag">CHAPTER 0${c.id}</span>
+          <h3 class="card-title">${c.title}</h3>
+          <p class="card-meta">Media: ${c.type === 'empty' ? 'Secret Surprise' : c.type.toUpperCase()}</p>
+          <p class="card-url">${c.url}</p>
+        </div>
+      </div>
+    `).join('')}
+  </div>
+</body>
+</html>`;
+    res.send(html);
+  } catch (err) {
+    console.error('Print sheet error:', err);
+    res.status(500).send('Error generating printable card sheet: ' + err.message);
+  }
 });
 
 // Server Initialization

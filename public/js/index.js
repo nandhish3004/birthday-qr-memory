@@ -1,12 +1,12 @@
-// Dreamy particles generator
+// Ambient particles generator
 function initDreamyParticles() {
   const container = document.getElementById('sporesContainer');
   if (!container) return;
   const emojis = ['✨', '⭐', '🌸', '💖', '⚡', '💫'];
 
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 22; i++) {
     const p = document.createElement('div');
-    const isStar = Math.random() > 0.5;
+    const isStar = Math.random() > 0.45;
     p.className = `spore ${isStar ? 'star' : 'bubble'}`;
     if (isStar) {
       p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
@@ -23,26 +23,20 @@ function initDreamyParticles() {
   }
 }
 
-// Retro Taskbar System Clock
-function startClock() {
-  const clockEl = document.getElementById('trayClock');
-  if (!clockEl) return;
-
-  function update() {
-    const now = new Date();
-    let hours = now.getHours();
-    const mins = now.getMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12 || 12;
-    clockEl.textContent = `${hours}:${mins < 10 ? '0' : ''}${mins} ${ampm}`;
+// Confetti Trigger
+function triggerConfetti() {
+  if (typeof confetti === 'function') {
+    confetti({
+      particleCount: 85,
+      spread: 90,
+      origin: { y: 0.6 },
+      colors: ['#e11d48', '#f43f5e', '#ff758f', '#fbbf24', '#c084fc', '#38bdf8']
+    });
   }
-
-  update();
-  setInterval(update, 1000);
 }
 
-// Load Memories & Render Chapter Cards
-async function loadDesktopMemories() {
+// Load Memories & Render Modern Chapter Cards
+async function loadModernMemories() {
   const grid = document.getElementById('chaptersGrid');
   if (!grid) return;
 
@@ -55,42 +49,46 @@ async function loadDesktopMemories() {
     memories.forEach(mem => {
       const card = document.createElement('a');
       card.href = `/memory/${mem.id}`;
-      card.className = 'chapter-tape-card';
+      card.className = 'modern-chapter-card';
 
-      let icon = '🎁';
-      let badge = '<span class="badge badge-empty">Surprise 💗</span>';
-
+      let typeBadge = '<span class="badge badge-empty">🎁 Surprise</span>';
       if (mem.media_type === 'video') {
-        icon = '📺';
-        badge = '<span class="badge badge-video">Video 🎬</span>';
+        typeBadge = '<span class="badge badge-video">🎬 Video</span>';
       } else if (mem.media_type === 'audio') {
-        icon = '📼';
-        badge = '<span class="badge badge-audio">Audio 🎵</span>';
+        typeBadge = '<span class="badge badge-audio">🎵 Audio</span>';
       }
 
+      const notePreview = mem.note || "A special memory prepared for Shaaaw's birthday!";
+
       card.innerHTML = `
-        <div class="card-tape-icon">${icon}</div>
-        <div class="card-chapter-tag">CHAPTER 0${mem.id}</div>
-        <div class="card-memory-title">${mem.title || `Memory #${mem.id}`}</div>
-        <div class="card-status-badge">${badge}</div>
+        <div class="card-top-tags">
+          <span class="card-chapter-num">CHAPTER 0${mem.id}</span>
+          ${typeBadge}
+        </div>
+        <div class="card-content-block">
+          <h3 class="card-title-text">${mem.title || `Memory #${mem.id}`}</h3>
+          <p class="card-snippet-text">${notePreview}</p>
+        </div>
+        <div class="card-footer-action">
+          <span class="action-open-label">Open Memory →</span>
+        </div>
       `;
 
       grid.appendChild(card);
     });
   } catch (err) {
-    console.error('Failed to load memories for desktop:', err);
+    console.error('Failed to load memories for home portal:', err);
   }
 }
 
 // Initialize on DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
   initDreamyParticles();
-  startClock();
 
-  // Initialize Sarcastic Guru Companion
+  // Initialize Sarcastic Guru Companion with Hawkins Cast
   if (typeof initSarcasticGuru === 'function') {
     initSarcasticGuru('welcome_showcase');
   }
 
-  loadDesktopMemories();
+  loadModernMemories();
 });

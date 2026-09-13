@@ -2,18 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HawkinsOS '83 — Shaaaw's Birthday Dimension ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Stranger Memories ✨ Happy Birthday Shaaaw</title>
   <link rel="stylesheet" href="/css/global.css">
   <link rel="stylesheet" href="/css/index.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-  <!-- Floating cozy spores & twinkling star particles -->
+  <!-- Ambient floating particles -->
   <div class="spores-container" id="sporesContainer"></div>
 
-  <div class="desktop-screen-container">
-    <!-- Cute Joyce's Christmas String Lights -->
+  <div class="modern-home-container">
+    <!-- Minimalist Pastel String Lights -->
     <div class="christmas-lights-string">
       <span class="christmas-bulb bulb-red"></span>
       <span class="christmas-bulb bulb-blue"></span>
@@ -27,98 +28,130 @@
       <span class="christmas-bulb bulb-blue"></span>
     </div>
 
-    <!-- Desktop Icons Sidebar (Microsoft OS inspired) -->
-    <aside class="desktop-icons-col">
-      <a href="/admin" class="desktop-icon-item" title="Admin Control Panel">
-        <div class="ms-icon-box">🔐</div>
-        <span class="ms-icon-label">Admin.exe</span>
-      </a>
-      <a href="#memoriesHub" class="desktop-icon-item" title="All Memories">
-        <div class="ms-icon-box">📁</div>
-        <span class="ms-icon-label">My_Memories</span>
-      </a>
-      <div class="desktop-icon-item" onclick="triggerConfetti()" title="Birthday Sparkles">
-        <div class="ms-icon-box">🎉</div>
-        <span class="ms-icon-label">Party.bat</span>
-      </div>
-      <div class="desktop-icon-item" title="Recycle Bin">
-        <div class="ms-icon-box">🗑️</div>
-        <span class="ms-icon-label">Vecna_Trash</span>
-      </div>
-    </aside>
+    <!-- Modern Brand Header -->
+    <header class="modern-brand-header">
+      <div class="header-pill-badge">✨ FOR SHAAAW &bull; BIRTHDAY EDITION ✨</div>
+      <h1 class="modern-brand-title">STRANGER MEMORIES</h1>
+      <p class="modern-brand-sub">Welcome to your personal 8-chapter birthday archive</p>
+    </header>
 
-    <!-- Main Central Retro Window: Shaaaw's Birthday Dimension -->
-    <main class="retro-window-box" id="memoriesHub">
-      <!-- Windows 95/XP Style Titlebar -->
-      <div class="retro-titlebar">
-        <div class="titlebar-left">
-          <span class="titlebar-icon">⚡</span>
-          <span class="titlebar-title">HawkinsOS '83 — Welcome_Shaaaw.exe</span>
-        </div>
-        <div class="titlebar-controls">
-          <button class="win-btn">_</button>
-          <button class="win-btn">口</button>
-          <button class="win-btn win-close">✕</button>
-        </div>
+    <!-- Hawkins Party Modern Cameo Story Bar (Steve, Will, Mike, Lucas, Dustin, Eleven, Vecna, Demo, Saint) -->
+    <section class="cameo-story-container" aria-label="Stranger Things Cameos">
+      <div class="cameo-story-label">
+        <span>Hawkins Party Cameos</span>
+        <span style="font-size: 0.68rem; color: var(--pastel-crimson);">Tap to listen ⚡</span>
       </div>
+      <div class="cameo-story-scroll">
+        <!-- Steve -->
+        <button class="cameo-chip-btn chip-steve" onclick="triggerCameo('steve')" title="Steve Harrington">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">🧢</div>
+          </div>
+          <span class="cameo-chip-name">Steve</span>
+        </button>
 
-      <!-- Windows Menu Bar -->
-      <div class="retro-menubar">
-        <span class="menu-item">File</span>
-        <span class="menu-item">Edit</span>
-        <span class="menu-item">View</span>
-        <span class="menu-item">Favorites</span>
-        <span class="menu-item">Help</span>
+        <!-- Will -->
+        <button class="cameo-chip-btn chip-will" onclick="triggerCameo('will')" title="Will Byers">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">🏰</div>
+          </div>
+          <span class="cameo-chip-name">Will</span>
+        </button>
+
+        <!-- Mike -->
+        <button class="cameo-chip-btn chip-mike" onclick="triggerCameo('mike')" title="Mike Wheeler">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">⚔️</div>
+          </div>
+          <span class="cameo-chip-name">Mike</span>
+        </button>
+
+        <!-- Lucas -->
+        <button class="cameo-chip-btn chip-lucas" onclick="triggerCameo('lucas')" title="Lucas Sinclair">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">🎯</div>
+          </div>
+          <span class="cameo-chip-name">Lucas</span>
+        </button>
+
+        <!-- Dustin -->
+        <button class="cameo-chip-btn chip-dustin" onclick="triggerCameo('dustin')" title="Dustin Henderson">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">📻</div>
+          </div>
+          <span class="cameo-chip-name">Dustin</span>
+        </button>
+
+        <!-- Eleven -->
+        <button class="cameo-chip-btn chip-eleven" onclick="triggerCameo('eleven')" title="Eleven (011)">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">🧇</div>
+          </div>
+          <span class="cameo-chip-name">Eleven</span>
+        </button>
+
+        <!-- Vecna -->
+        <button class="cameo-chip-btn chip-vecna" onclick="triggerCameo('vecna')" title="Vecna">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">🕰️</div>
+          </div>
+          <span class="cameo-chip-name">Vecna</span>
+        </button>
+
+        <!-- Demogorgon -->
+        <button class="cameo-chip-btn chip-demo" onclick="triggerCameo('demogorgon')" title="Cute Demogorgon">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">🌸</div>
+          </div>
+          <span class="cameo-chip-name">Demo</span>
+        </button>
+
+        <!-- Saint Nandhish -->
+        <button class="cameo-chip-btn chip-saint" onclick="triggerCameo('saint')" title="Saint Nandhish">
+          <div class="cameo-chip-ring">
+            <div class="cameo-chip-avatar">🧙‍♂️</div>
+          </div>
+          <span class="cameo-chip-name">Saint</span>
+        </button>
       </div>
+    </section>
 
-      <!-- Window Content -->
-      <div class="window-body">
-        <!-- Cute Stranger Things Neon Header -->
-        <header class="cute-stranger-header" style="width:100%;">
-          <div class="title-top-bar"></div>
-          <h1 class="cute-stranger-logo">STRANGER MEMORIES</h1>
-          <div class="title-bottom-bar"></div>
-          <p class="cute-subtext">✨ HAPPY BIRTHDAY SHAAAW! ✨</p>
-        </header>
-
-        <div class="welcome-banner-box">
-          <p class="welcome-desc">
-            Welcome to your personal 80s memory dimension! All 8 secret tapes are waiting below. Tap any chapter to unlock the video, voice note, or surprise!
-          </p>
-        </div>
-
-        <!-- 8 Cute Chapter Tape Cards Grid (NO POSTER, NO QR CODES) -->
-        <div class="chapters-grid" id="chaptersGrid">
-          <!-- Populated dynamically (1 to 8) -->
-        </div>
+    <!-- Modern Hero Glass Card -->
+    <section class="modern-hero-card">
+      <div class="hero-welcome-badge">Happy Birthday Shaaaw 💗</div>
+      <h2 class="hero-main-title">8 Special Keepsakes Just For You</h2>
+      <p class="hero-desc">
+        Every QR code on your card unlocks one of these 8 chapters. You can scan them with your phone camera anytime, or tap below to explore all videos, voice notes, and surprises!
+      </p>
+      <div class="hero-actions-row">
+        <button class="btn-primary" onclick="triggerConfetti()">
+          Celebrate 🎉
+        </button>
+        <a href="/admin" class="btn-secondary">
+          🔐 Admin Panel
+        </a>
       </div>
+    </section>
+
+    <!-- Chapters Grid Section -->
+    <div class="chapters-section-header">
+      <h2 class="section-title">✨ All Chapters</h2>
+      <span class="section-caption">Chapters 01 &ndash; 08</span>
+    </div>
+
+    <main class="modern-chapters-grid" id="chaptersGrid">
+      <!-- 8 Modern Chapter Cards Populated Dynamically -->
     </main>
   </div>
 
-  <!-- Retro Windows Taskbar -->
-  <footer class="retro-taskbar">
-    <div class="start-btn-wrapper">
-      <a href="/admin" class="retro-start-btn">
-        <span class="start-icon">⊞</span>
-        <span class="start-text">Start</span>
-      </a>
-    </div>
+  <!-- Floating Bottom Dock -->
+  <nav class="modern-bottom-dock">
+    <a href="/admin" class="dock-item" title="Admin Settings">🔐 Admin</a>
+    <a href="/admin/printable-sheet" class="dock-item" target="_blank" title="Printable QR Cards">🖨️ Print Sheet</a>
+    <button class="dock-item" style="background:none;border:none;cursor:pointer;" onclick="triggerConfetti()" title="Sparkles">🎉 Sparkles</button>
+  </nav>
 
-    <div class="taskbar-active-tabs">
-      <div class="taskbar-tab active">
-        <span class="tab-icon">⚡</span>
-        <span class="tab-title">Stranger Memories</span>
-      </div>
-    </div>
-
-    <div class="retro-system-tray">
-      <span class="tray-icon" title="Sound Volume">🔊</span>
-      <span class="tray-icon" title="Birthday Love">💗</span>
-      <span class="tray-clock" id="trayClock">19:83 PM</span>
-    </div>
-  </footer>
-
-  <!-- Sarcastic Guru Caricature Companion -->
+  <!-- Sarcastic Guru Companion with Full Hawkins Cast -->
   <script src="/js/caricature.js"></script>
   <script src="/js/index.js"></script>
 </body>

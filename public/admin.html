@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HawkinsOS Control Panel — Memory & QR Manager</title>
+  <title>Control Panel — Shaaaw's Birthday QR & Memory System</title>
   <link rel="stylesheet" href="/css/global.css">
   <link rel="stylesheet" href="/css/admin.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
@@ -12,117 +12,99 @@
   <!-- Ambient Dreamy Spores -->
   <div class="spores-container" id="sporesContainer"></div>
 
-  <!-- Windows Security PIN Login Dialog -->
+  <!-- Modern Security PIN Login Dialog -->
   <div class="login-overlay" id="loginOverlay">
-    <div class="retro-window-box login-window">
-      <div class="retro-titlebar">
-        <div class="titlebar-left">
-          <span class="titlebar-icon">🔐</span>
-          <span class="titlebar-title">HawkinsOS Security — Enter Password</span>
-        </div>
-      </div>
-      <div class="login-card-body">
-        <div class="login-ms-icon">🗝️</div>
-        <h3>Admin Authentication</h3>
-        <p>Enter the security PIN to access the Memory & Physical Card QR Manager.</p>
-        <form id="loginForm">
-          <input type="password" id="pinInput" placeholder="Enter PIN (Default: shaaaw2026)" required autofocus autocomplete="current-password">
-          <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;">Unlock System</button>
-          <p class="login-error" id="loginError"></p>
-        </form>
-      </div>
+    <div class="login-card">
+      <div class="login-key-orb">🔐</div>
+      <h3>Admin Authentication</h3>
+      <p>Enter your secret PIN to access the Memory & Physical Card QR Manager.</p>
+      <form id="loginForm">
+        <input type="password" id="pinInput" placeholder="Enter PIN (Default: shaaaw2026)" required autofocus autocomplete="current-password">
+        <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:8px;">Unlock Control Panel</button>
+        <p class="login-error" id="loginError"></p>
+      </form>
     </div>
   </div>
 
-  <!-- Main Control Panel Window -->
+  <!-- Main Modern Control Panel -->
   <div class="admin-wrapper" id="adminWrapper">
-    <div class="retro-window-box main-admin-window">
-      <!-- Titlebar -->
-      <div class="retro-titlebar">
-        <div class="titlebar-left">
-          <span class="titlebar-icon">⚙️</span>
-          <span class="titlebar-title">HawkinsOS Control Panel — Memory & Physical Card QR Manager.exe</span>
-        </div>
-        <div class="titlebar-controls">
-          <button class="win-btn">_</button>
-          <button class="win-btn">口</button>
-          <button class="win-btn win-close">✕</button>
+    <!-- Modern Top Navbar -->
+    <header class="admin-navbar">
+      <div class="admin-nav-brand">
+        <div class="brand-icon-pill">⚙️</div>
+        <div class="brand-meta">
+          <h1>Admin Control Panel</h1>
+          <p>Physical QR Cards & Memory Media System</p>
         </div>
       </div>
-
-      <!-- Menu Bar -->
-      <div class="retro-menubar">
-        <span class="menu-item">File</span>
-        <span class="menu-item">Configure</span>
-        <span class="menu-item">QR_Tools</span>
-        <span class="menu-item">View</span>
-        <span class="menu-item" id="logoutBtn" style="color:#ff6b8b; margin-left:auto;">🔒 Logout</span>
+      <div class="admin-nav-actions">
+        <a href="/" class="btn-secondary" target="_blank">
+          ✨ View Birthday Hub
+        </a>
+        <a href="/admin/printable-sheet" class="btn-secondary" target="_blank">
+          🖨️ Print QR Card Sheet
+        </a>
+        <button class="btn-secondary" id="logoutBtn" style="color:var(--pastel-crimson);">
+          🔒 Logout
+        </button>
       </div>
+    </header>
 
-      <!-- Window Content -->
-      <div class="window-body">
-        <!-- Physical Card QR Generator & Base URL Setup -->
-        <section class="admin-config-banner">
-          <div class="banner-badge">📱 PHYSICAL CARD QR GENERATOR</div>
-          <h3>Customize Your Physical Card QR Codes</h3>
-          <p>
-            Enter your live public Render URL below. Clicking <strong>"Generate Printable QRs"</strong> will immediately generate all 8 high-resolution QR codes encoded with your live link, ready to print onto your physical card!
-          </p>
-          <div class="url-control-row">
-            <div class="url-input-wrap">
-              <label for="baseUrlInput">Current Live Public URL:</label>
-              <input type="url" id="baseUrlInput" placeholder="https://birthday-qr-memory-xxxx.onrender.com" value="">
-            </div>
-            <button class="btn-primary" id="updateBaseUrlBtn">
-              ⚡ Apply URL & Regenerate 8 QRs
-            </button>
-            <button class="btn-secondary" id="downloadAllQrsBtn">
-              📥 Download All 8 QRs (ZIP)
-            </button>
-          </div>
-        </section>
-
-        <!-- Stats Overview -->
-        <div class="stats-ribbon">
-          <div class="stat-box">
-            <span class="stat-icon">📼</span>
-            <span class="stat-label">Total Chapters:</span>
-            <span class="stat-value">8</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-icon">🎬</span>
-            <span class="stat-label">Media Assigned:</span>
-            <span class="stat-value text-green" id="activeMemoriesCount">0</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-icon">🎁</span>
-            <span class="stat-label">Surprises Waiting:</span>
-            <span class="stat-value text-pink" id="emptyMemoriesCount">8</span>
-          </div>
+    <!-- Physical Card QR Generator Banner -->
+    <section class="admin-config-card">
+      <span class="config-tag-badge">📱 100% MOBILE SCANNER READY &bull; HIGH PRINT QUALITY</span>
+      <h2>Physical Card QR Code Generator</h2>
+      <p>
+        All QR codes are generated with ISO-standard 4-module quiet zones and high contrast (pure black on white, 1400px resolution). They scan instantly on any iPhone, Android, or tablet camera. Set your live Render URL below to keep all printed cards active.
+      </p>
+      <div class="url-control-row">
+        <div class="url-input-wrap">
+          <label for="baseUrlInput">Current Live Public Domain:</label>
+          <input type="url" id="baseUrlInput" placeholder="https://birthday-qr-memory-xxxx.onrender.com" value="">
         </div>
+        <button class="btn-primary" id="updateBaseUrlBtn">
+          ⚡ Apply & Regenerate 8 QRs
+        </button>
+        <button class="btn-secondary" id="downloadAllQrsBtn">
+          📦 Download All 8 QRs (ZIP)
+        </button>
+        <a href="/admin/printable-sheet" class="btn-primary" target="_blank" style="background:linear-gradient(135deg,#059669,#10b981);">
+          🖨️ Print Card Sheet
+        </a>
+      </div>
+    </section>
 
-        <!-- 8 Memories Management Grid -->
-        <div class="admin-memories-grid" id="memoriesGrid">
-          <!-- Dynamically populated cards 1 to 8 -->
-        </div>
+    <!-- Quick Stats Ribbon -->
+    <div class="stats-ribbon">
+      <div class="stat-box">
+        <span class="stat-icon">📼</span>
+        <span>Total Chapters: <strong class="stat-value">8</strong></span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-icon">🎬</span>
+        <span>Media Assigned: <strong class="stat-value text-green" id="activeMemoriesCount">0</strong></span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-icon">🎁</span>
+        <span>Surprises Waiting: <strong class="stat-value text-pink" id="emptyMemoriesCount">8</strong></span>
       </div>
     </div>
+
+    <!-- 8 Memories Management Grid -->
+    <main class="admin-memories-grid" id="memoriesGrid">
+      <!-- Populated dynamically (1 to 8) -->
+    </main>
   </div>
 
   <!-- Mobile Live Preview Modal -->
   <div class="modal-backdrop" id="previewModal">
-    <div class="retro-window-box modal-window-box">
-      <div class="retro-titlebar">
-        <div class="titlebar-left">
-          <span class="titlebar-icon">📱</span>
-          <span class="titlebar-title" id="modalTitle">Memory_Preview.exe</span>
-        </div>
-        <div class="titlebar-controls">
-          <button class="win-btn win-close" id="modalCloseBtn">✕</button>
-        </div>
+    <div class="modal-content-card">
+      <div class="modal-top-bar">
+        <h3 id="modalTitle">Memory Live Preview</h3>
+        <button class="modal-close-btn" id="modalCloseBtn">✕</button>
       </div>
-      <div class="mobile-device-frame">
-        <iframe id="previewIframe" src="" frameborder="0"></iframe>
+      <div class="modal-body" style="padding:0;">
+        <iframe id="previewIframe" src="" frameborder="0" style="width:100%; height:540px; border:none;"></iframe>
       </div>
     </div>
   </div>
@@ -130,7 +112,7 @@
   <!-- Toast Notification -->
   <div class="toast" id="adminToast"></div>
 
-  <!-- Sarcastic Guru Companion -->
+  <!-- Sarcastic Guru Companion with Hawkins Cast -->
   <script src="/js/caricature.js"></script>
   <script src="/js/admin.js"></script>
 </body>
