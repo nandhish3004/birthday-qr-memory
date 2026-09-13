@@ -3,82 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday Shaaaw! — Interactive Scrapbook Poster</title>
+  <title>HawkinsOS '83 — Shaaaw's Birthday Dimension ✨</title>
   <link rel="stylesheet" href="/css/global.css">
   <link rel="stylesheet" href="/css/index.css">
-  <!-- QRCode.js client-side library for high-res browser canvas composition -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 </head>
 <body>
-  <!-- Floating background hearts -->
-  <div class="floating-hearts-container" id="heartsContainer"></div>
+  <!-- Floating cozy spores & twinkling star particles -->
+  <div class="spores-container" id="sporesContainer"></div>
 
-  <div class="showcase-container">
-    <!-- Top Navigation Bar -->
-    <header class="showcase-header">
-      <div class="header-titles">
-        <span class="badge" style="background:#ffe3e8; color:#c9184a;">💗 Interactive Birthday Gift</span>
-        <h1>Happy Birthday Shaaaw! 🎂✨</h1>
-        <p>Scan any QR code on the poster with your camera or tap below to unlock memories!</p>
+  <div class="desktop-screen-container">
+    <!-- Cute Joyce's Christmas String Lights -->
+    <div class="christmas-lights-string">
+      <span class="christmas-bulb bulb-red"></span>
+      <span class="christmas-bulb bulb-blue"></span>
+      <span class="christmas-bulb bulb-yellow"></span>
+      <span class="christmas-bulb bulb-green"></span>
+      <span class="christmas-bulb bulb-orange"></span>
+      <span class="christmas-bulb bulb-purple"></span>
+      <span class="christmas-bulb bulb-red"></span>
+      <span class="christmas-bulb bulb-yellow"></span>
+      <span class="christmas-bulb bulb-green"></span>
+      <span class="christmas-bulb bulb-blue"></span>
+    </div>
+
+    <!-- Desktop Icons Sidebar (Microsoft OS inspired) -->
+    <aside class="desktop-icons-col">
+      <a href="/admin" class="desktop-icon-item" title="Admin Control Panel">
+        <div class="ms-icon-box">🔐</div>
+        <span class="ms-icon-label">Admin.exe</span>
+      </a>
+      <a href="#memoriesHub" class="desktop-icon-item" title="All Memories">
+        <div class="ms-icon-box">📁</div>
+        <span class="ms-icon-label">My_Memories</span>
+      </a>
+      <div class="desktop-icon-item" onclick="triggerConfetti()" title="Birthday Sparkles">
+        <div class="ms-icon-box">🎉</div>
+        <span class="ms-icon-label">Party.bat</span>
       </div>
-      <div class="header-btn-group">
-        <a href="/admin" class="btn-secondary">
-          🔐 Admin Dashboard
-        </a>
+      <div class="desktop-icon-item" title="Recycle Bin">
+        <div class="ms-icon-box">🗑️</div>
+        <span class="ms-icon-label">Vecna_Trash</span>
       </div>
-    </header>
+    </aside>
 
-    <!-- Main Content Area: Poster Showcase + Control Center -->
-    <main class="showcase-layout">
-      <!-- Left Column: Interactive Poster with Scannable QR Hotspots -->
-      <section class="poster-display-card">
-        <div class="poster-wrapper" id="posterWrapper">
-          <img id="mainPosterImg" src="/assets/original-poster.jpg" alt="Shaaaw Birthday Scrapbook Poster" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%221000%22><rect width=%22600%22 height=%221000%22 fill=%22%23ffebee%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2224%22 fill=%22%23c9184a%22>Loading Birthday Poster...</text></svg>'">
+    <!-- Main Central Retro Window: Shaaaw's Birthday Dimension -->
+    <main class="retro-window-box" id="memoriesHub">
+      <!-- Windows 95/XP Style Titlebar -->
+      <div class="retro-titlebar">
+        <div class="titlebar-left">
+          <span class="titlebar-icon">⚡</span>
+          <span class="titlebar-title">HawkinsOS '83 — Welcome_Shaaaw.exe</span>
+        </div>
+        <div class="titlebar-controls">
+          <button class="win-btn">_</button>
+          <button class="win-btn">口</button>
+          <button class="win-btn win-close">✕</button>
+        </div>
+      </div>
 
-          <!-- 8 Interactive QR Overlay Pins -->
-          <div class="qr-pin-layer" id="qrPinLayer">
-            <!-- Dynamically populated pins 1 to 8 with real scannable QRs and tooltips -->
-          </div>
+      <!-- Windows Menu Bar -->
+      <div class="retro-menubar">
+        <span class="menu-item">File</span>
+        <span class="menu-item">Edit</span>
+        <span class="menu-item">View</span>
+        <span class="menu-item">Favorites</span>
+        <span class="menu-item">Help</span>
+      </div>
+
+      <!-- Window Content -->
+      <div class="window-body">
+        <!-- Cute Stranger Things Neon Header -->
+        <header class="cute-stranger-header" style="width:100%;">
+          <div class="title-top-bar"></div>
+          <h1 class="cute-stranger-logo">STRANGER MEMORIES</h1>
+          <div class="title-bottom-bar"></div>
+          <p class="cute-subtext">✨ HAPPY BIRTHDAY SHAAAW! ✨</p>
+        </header>
+
+        <div class="welcome-banner-box">
+          <p class="welcome-desc">
+            Welcome to your personal 80s memory dimension! All 8 secret tapes are waiting below. Tap any chapter to unlock the video, voice note, or surprise!
+          </p>
         </div>
 
-        <div class="poster-actions-row">
-          <button class="btn-primary" id="downloadCanvasPosterBtn">
-            🖨️ Download Print-Ready Poster (High-Res)
-          </button>
-          <a href="/api/admin/download-all-qrs" class="btn-secondary">
-            📥 Download 8 QR Images
-          </a>
+        <!-- 8 Cute Chapter Tape Cards Grid (NO POSTER, NO QR CODES) -->
+        <div class="chapters-grid" id="chaptersGrid">
+          <!-- Populated dynamically (1 to 8) -->
         </div>
-      </section>
-
-      <!-- Right Column: Memory Direct Links & Verification Panel -->
-      <section class="memories-directory-card">
-        <div class="directory-header">
-          <h2>💌 All 8 Memory Pages</h2>
-          <p>Each permanent URL connects to its QR code on the poster.</p>
-        </div>
-
-        <div class="directory-list" id="directoryList">
-          <!-- Populated dynamically (Items 1 to 8) -->
-        </div>
-
-        <div class="scannability-guarantee-card">
-          <div class="guarantee-icon">📱</div>
-          <div class="guarantee-content">
-            <h4>100% Genuinely Scannable</h4>
-            <p>
-              Every QR code features error correction level H (30% redundancy) and an isolated quiet zone. Test by opening your phone camera right now and pointing it at any QR code on screen!
-            </p>
-          </div>
-        </div>
-      </section>
+      </div>
     </main>
   </div>
 
-  <!-- Hidden canvas for client-side ultra-resolution poster composition -->
-  <canvas id="exportCanvas" style="display:none;"></canvas>
+  <!-- Retro Windows Taskbar -->
+  <footer class="retro-taskbar">
+    <div class="start-btn-wrapper">
+      <a href="/admin" class="retro-start-btn">
+        <span class="start-icon">⊞</span>
+        <span class="start-text">Start</span>
+      </a>
+    </div>
 
-  <script src="/js/poster-canvas.js"></script>
+    <div class="taskbar-active-tabs">
+      <div class="taskbar-tab active">
+        <span class="tab-icon">⚡</span>
+        <span class="tab-title">Stranger Memories</span>
+      </div>
+    </div>
+
+    <div class="retro-system-tray">
+      <span class="tray-icon" title="Sound Volume">🔊</span>
+      <span class="tray-icon" title="Birthday Love">💗</span>
+      <span class="tray-clock" id="trayClock">19:83 PM</span>
+    </div>
+  </footer>
+
+  <!-- Sarcastic Guru Caricature Companion -->
+  <script src="/js/caricature.js"></script>
   <script src="/js/index.js"></script>
 </body>
 </html>

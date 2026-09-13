@@ -1,36 +1,30 @@
 @echo off
 cd /d "%~dp0"
 echo ======================================================
-echo  Pushing Birthday QR Memory System to GitHub
-echo  GitHub Account: nandhish3004
+echo  Pushing Updates to GitHub: nandhish3004
+echo  Saint Nandhish personalized commentary for Shaaaw!
 echo ======================================================
 echo.
 
-echo 1. Initializing Git repository...
-git init
-
-echo 2. Staging project files...
+echo 1. Staging files...
 git add .
 
-echo 3. Creating commit...
-git commit -m "Complete Birthday QR-Code Memory System for Shaaaw"
+echo 2. Committing changes...
+git commit -m "Personalize Saint Nandhish dialogue addressing Shaaaw directly with witty banter"
 
-echo 4. Setting branch to main...
+echo 3. Setting main branch...
 git branch -M main
 
-echo 5. Linking remote repository...
+echo 4. Linking remote if needed...
 git remote remove origin 2>nul
 git remote add origin https://github.com/nandhish3004/birthday-qr-memory.git
 
-echo 6. Pushing to GitHub...
-echo (If prompted, log in with your GitHub credentials or browser)
+echo 5. Pushing updates to GitHub...
 git push -u origin main
 
 echo.
 echo ======================================================
-echo  Done! If you haven't created the repository yet,
-echo  create a new repo named 'birthday-qr-memory' at:
-echo  https://github.com/new
+echo  Done! Render will automatically deploy in ~1 minute!
 echo ======================================================
 echo.
 pause

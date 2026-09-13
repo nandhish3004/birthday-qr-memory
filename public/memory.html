@@ -3,143 +3,191 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Birthday Memory 💗</title>
+  <title>Stranger Memories 💗 Happy Birthday Shaaaw</title>
   <link rel="stylesheet" href="/css/global.css">
   <link rel="stylesheet" href="/css/memory.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💗</text></svg>">
-  <!-- Confetti library for celebration effect -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-  <!-- Floating background hearts & sparkles -->
-  <div class="floating-hearts-container" id="heartsContainer"></div>
+  <!-- Floating cozy spores & twinkling star particles -->
+  <div class="spores-container" id="sporesContainer"></div>
 
   <div class="memory-page-wrapper">
-    <!-- Top Scrapbook Header -->
-    <header class="memory-header">
-      <div class="header-badge">
-        <span class="sparkle">✨</span>
-        <span id="memoryNumberBadge">Memory #1</span>
-        <span class="sparkle">✨</span>
-      </div>
-      <h1 class="birthday-title">Happy Birthday Shaaaw!</h1>
-      <p class="subtitle">A special moment locked in time forever 💌</p>
+    <!-- Cute Joyce's Alphabet Christmas String Lights -->
+    <div class="christmas-lights-string">
+      <span class="christmas-bulb bulb-red"></span>
+      <span class="christmas-bulb bulb-blue"></span>
+      <span class="christmas-bulb bulb-yellow"></span>
+      <span class="christmas-bulb bulb-green"></span>
+      <span class="christmas-bulb bulb-orange"></span>
+      <span class="christmas-bulb bulb-purple"></span>
+      <span class="christmas-bulb bulb-red"></span>
+      <span class="christmas-bulb bulb-yellow"></span>
+      <span class="christmas-bulb bulb-green"></span>
+      <span class="christmas-bulb bulb-blue"></span>
+    </div>
+
+    <!-- Cute Stranger Things Neon Header -->
+    <header class="cute-stranger-header">
+      <div class="title-top-bar"></div>
+      <h1 class="cute-stranger-logo">STRANGER MEMORIES</h1>
+      <div class="title-bottom-bar"></div>
+      <p class="cute-subtext">✨ SHAAAW'S BIRTHDAY ARCHIVE ✨</p>
     </header>
 
-    <!-- Main Keepsake Card / Polaroid Frame -->
-    <main class="polaroid-frame" id="polaroidCard">
-      <!-- Washi tape decorative sticker -->
-      <div class="washi-tape"></div>
-
-      <!-- Loading State -->
-      <div class="state-container active" id="loadingState">
-        <div class="spinner-heart">💗</div>
-        <p class="loading-text">Unwrapping your memory...</p>
-      </div>
-
-      <!-- Video Memory State -->
-      <div class="state-container" id="videoState">
-        <div class="video-wrapper">
-          <video id="memoryVideo" playsinline controls preload="metadata">
-            <source src="" type="video/mp4">
-            Your phone browser doesn't support HTML5 video playback.
-          </video>
+    <!-- Main Retro Windows Window Box -->
+    <main class="retro-window-box" id="mainKeepsakeCard">
+      <!-- Windows 95/XP Style Titlebar -->
+      <div class="retro-titlebar">
+        <div class="titlebar-left">
+          <span class="titlebar-icon">📼</span>
+          <span class="titlebar-title" id="windowTitle">Memory_01.exe — Hawkins Media Player</span>
+        </div>
+        <div class="titlebar-controls">
+          <button class="win-btn" title="Minimize">_</button>
+          <button class="win-btn" title="Maximize">口</button>
+          <button class="win-btn win-close" title="Close">✕</button>
         </div>
       </div>
 
-      <!-- Audio Memory State -->
-      <div class="state-container" id="audioState">
-        <div class="audio-player-card">
-          <div class="vinyl-disc-wrapper" id="vinylWrapper">
-            <div class="vinyl-grooves">
-              <div class="vinyl-center">
-                <div class="vinyl-heart">🎵</div>
+      <!-- Windows Menu Bar -->
+      <div class="retro-menubar">
+        <span class="menu-item">File</span>
+        <span class="menu-item">Edit</span>
+        <span class="menu-item">View</span>
+        <span class="menu-item">Playback</span>
+        <span class="menu-item">Help</span>
+      </div>
+
+      <!-- Window Body -->
+      <div class="window-body">
+        <!-- Loading State -->
+        <div class="state-container active" id="loadingState">
+          <div class="cute-spinner-portal">
+            <div class="portal-ring"></div>
+            <div class="portal-core">💗</div>
+          </div>
+          <p class="cute-loading-text">Loading HawkinsOS Memory Stream...</p>
+        </div>
+
+        <!-- Video State: Cute Microsoft Media Player / Retro TV -->
+        <div class="state-container" id="videoState">
+          <div class="cute-retro-tv">
+            <div class="tv-screen-frame">
+              <div class="crt-scanlines"></div>
+              <div class="crt-osd-tag">
+                <span class="osd-dot"></span> PLAY ▶ HAWKINS-AV
+              </div>
+              <video id="memoryVideo" playsinline controls preload="metadata">
+                <source src="" type="video/mp4">
+                Your browser doesn't support video playback.
+              </video>
+            </div>
+            <div class="tv-cute-knobs-bar">
+              <span class="tv-sticker">★ 1983 SPECIAL EDITION ★</span>
+              <div class="tv-dials">
+                <span class="tv-dial"></span>
+                <span class="tv-dial"></span>
+                <span class="tv-led"></span>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="audio-track-info">
-            <h3 class="track-title" id="audioTitle">Special Voice Note / Song</h3>
-            <p class="track-artist">Recorded with love for you 🎧</p>
-          </div>
-
-          <!-- Sound wave visualizer -->
-          <div class="sound-wave" id="soundWave">
-            <span></span><span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span><span></span>
-          </div>
-
-          <!-- Native Audio Player with customized skin -->
-          <audio id="memoryAudio" preload="metadata"></audio>
-          
-          <div class="custom-audio-controls">
-            <button class="audio-play-btn" id="audioPlayBtn" aria-label="Play Audio">
-              <svg id="playIcon" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-              <svg id="pauseIcon" viewBox="0 0 24 24" width="28" height="28" fill="currentColor" style="display:none;">
-                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-              </svg>
-            </button>
-            <div class="audio-progress-container" id="audioProgressContainer">
-              <div class="audio-progress-bar" id="audioProgressBar"></div>
+        <!-- Audio State: Cute Microsoft Sound Player / Max's Walkman -->
+        <div class="state-container" id="audioState">
+          <div class="cute-walkman-card">
+            <div class="walkman-top-header">
+              <span class="walkman-brand">WALKMAN 🎧</span>
+              <span class="walkman-tape-counter">REC 0<span id="tapeCounter">42</span></span>
             </div>
-            <span class="audio-time" id="audioTime">0:00</span>
-          </div>
 
-          <!-- Poster Spotify card inspired sticker -->
-          <div class="spotify-quote-card">
-            <div class="quote-header">
-              <svg class="spotify-icon" viewBox="0 0 24 24" width="20" height="20" fill="#1DB954">
-                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.49 17.3c-.22.36-.68.47-1.04.25-2.85-1.74-6.44-2.14-10.66-1.18-.41.09-.81-.17-.9-.58-.09-.41.17-.81.58-.9 4.63-1.06 8.59-.6 11.77 1.37.36.22.48.68.25 1.04zm1.46-3.26c-.28.45-.87.59-1.32.31-3.27-2.01-8.25-2.59-12.11-1.42-.5.15-1.03-.13-1.18-.63-.15-.5.13-1.03.63-1.18 4.41-1.34 9.91-.7 13.67 1.6.45.28.59.87.31 1.32zm.12-3.4c-3.92-2.33-10.38-2.54-14.12-1.4-.6.18-1.24-.16-1.42-.76-.18-.6.16-1.24.76-1.42 4.31-1.31 11.43-1.07 15.93 1.6.54.32.72 1.02.4 1.56-.32.55-1.01.73-1.55.42z"/>
-              </svg>
-              <span>Now Playing Memories</span>
+            <!-- Cassette Tape with Spinning Spools -->
+            <div class="cute-cassette-housing">
+              <div class="cassette-label-sticker">
+                <span class="cassette-song-title" id="audioTitle">Special Voice Note / Song</span>
+                <span class="cassette-tag">FOR SHAAAW WITH LOVE 💗</span>
+              </div>
+              <div class="cassette-transparent-window">
+                <div class="cassette-spool left-spool" id="spoolLeft">
+                  <span class="spool-center-heart">💗</span>
+                </div>
+                <div class="tape-bridge"></div>
+                <div class="cassette-spool right-spool" id="spoolRight">
+                  <span class="spool-center-heart">💗</span>
+                </div>
+              </div>
             </div>
-            <p class="quote-lyrics">"I belong with you, you belong with me, you're my sweetheart..."</p>
+
+            <!-- Native Audio Element -->
+            <audio id="memoryAudio" preload="metadata"></audio>
+
+            <!-- Cute Mechanical Audio Controls -->
+            <div class="cute-audio-controls">
+              <button class="cute-play-btn" id="audioPlayBtn" aria-label="Play Cassette">
+                <span id="playIcon">▶ PLAY</span>
+                <span id="pauseIcon" style="display:none;">⏸ PAUSE</span>
+              </button>
+              <div class="cute-audio-track" id="audioProgressContainer">
+                <div class="cute-audio-fill" id="audioProgressBar"></div>
+              </div>
+              <span class="cute-time-display" id="audioTime">0:00</span>
+            </div>
+
+            <div class="cute-quote-bubble">
+              <em>"I belong with you, you belong with me, you're my sweetheart..."</em>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Empty / Unassigned State -->
-      <div class="state-container" id="emptyState">
-        <div class="surprise-container" id="surpriseBox">
-          <div class="gift-animation-box">
-            <span class="gift-icon">🎁</span>
-            <div class="pulsing-halo"></div>
-          </div>
-          <h2 class="surprise-headline">A little surprise is waiting here 💗</h2>
-          <p class="surprise-description">
-            This special birthday secret is being crafted with love and hugs!
-          </p>
-          <div class="stamp-pill">
-            <span>Special Delivery 💌</span>
+        <!-- Empty State: Cute Baby Demogorgon Surprise -->
+        <div class="state-container" id="emptyState">
+          <div class="cute-demogorgon-surprise" id="surpriseBox">
+            <div class="chibi-demogorgon-wrapper">
+              <div class="chibi-demogorgon-face">
+                <div class="chibi-petal petal-top"></div>
+                <div class="chibi-petal petal-right"></div>
+                <div class="chibi-petal petal-bottom"></div>
+                <div class="chibi-petal petal-left"></div>
+                <div class="chibi-center-smile">
+                  <span class="chibi-eye eye-left">^</span>
+                  <span class="chibi-eye eye-right">^</span>
+                  <span class="chibi-blush blush-left"></span>
+                  <span class="chibi-blush blush-right"></span>
+                </div>
+              </div>
+              <div class="cute-gift-box">🎁</div>
+            </div>
+
+            <h2 class="cute-surprise-title">A little surprise is waiting here 💗</h2>
+            <p class="cute-surprise-sub">
+              A secret birthday memory is being prepared with all the love in the universe!
+            </p>
+            <div class="cute-surprise-tag">
+              <span>Special Delivery from Hawkins 💌</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Note / Caption Area (Polaroid Footer) -->
-      <div class="polaroid-caption" id="memoryCaptionArea">
-        <h2 class="memory-custom-title" id="memoryTitle">Memory #1</h2>
-        <p class="memory-note" id="memoryNote">Forever grateful for you in my life!</p>
+        <!-- Memory Title & Heartfelt Note (Notepad.exe style) -->
+        <div class="memory-message-footer">
+          <div class="chapter-badge" id="chapterBadge">CHAPTER 01</div>
+          <h2 class="memory-custom-title" id="memoryTitle">Memory #1</h2>
+          <p class="memory-note" id="memoryNote">A special moment locked in time forever!</p>
+        </div>
       </div>
-
-      <!-- Silver Stars & Stickers -->
-      <div class="silver-star star-top-right">★</div>
-      <div class="silver-star star-bottom-left">★</div>
     </main>
 
-    <!-- Bottom Navigation Bar (Jump between all 8 memories) -->
-    <nav class="memory-navigation">
-      <p class="nav-label">Browse all memories:</p>
-      <div class="memory-pills-row" id="memoryNavPills">
-        <!-- Pills 1-8 generated dynamically -->
+    <!-- Cute Bottom Navigation (Memories 1 to 8) -->
+    <nav class="cute-memory-nav">
+      <p class="nav-caption">SELECT CHAPTER:</p>
+      <div class="cute-pills-row" id="memoryNavPills">
+        <!-- 1 to 8 pills generated dynamically -->
       </div>
-      <div class="action-buttons-row">
+      <div class="nav-buttons-row">
         <a href="/" class="btn-secondary">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-          </svg>
-          View Full Poster
+          ✨ Memory Hub
         </a>
         <button class="btn-primary" id="celebrateBtn">
           Celebrate 🎉
@@ -148,6 +196,8 @@
     </nav>
   </div>
 
+  <!-- Sarcastic Guru Caricature Companion -->
+  <script src="/js/caricature.js"></script>
   <script src="/js/memory.js"></script>
 </body>
 </html>

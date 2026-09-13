@@ -3,97 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard — Birthday Memory System</title>
+  <title>HawkinsOS Control Panel — Memory & QR Manager</title>
   <link rel="stylesheet" href="/css/global.css">
   <link rel="stylesheet" href="/css/admin.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔐</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
 </head>
 <body>
-  <!-- PIN Login Overlay (Secure Barrier) -->
+  <!-- Ambient Dreamy Spores -->
+  <div class="spores-container" id="sporesContainer"></div>
+
+  <!-- Windows Security PIN Login Dialog -->
   <div class="login-overlay" id="loginOverlay">
-    <div class="login-card">
-      <div class="lock-icon">🔐</div>
-      <h2>Admin Access</h2>
-      <p>Enter the security PIN to manage birthday memories and poster QR codes.</p>
-      <form id="loginForm">
-        <div class="input-group">
-          <input type="password" id="pinInput" placeholder="Enter PIN (Default: shaaaw2026)" required autofocus autocomplete="current-password">
+    <div class="retro-window-box login-window">
+      <div class="retro-titlebar">
+        <div class="titlebar-left">
+          <span class="titlebar-icon">🔐</span>
+          <span class="titlebar-title">HawkinsOS Security — Enter Password</span>
         </div>
-        <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">Unlock Dashboard</button>
-        <p class="login-error" id="loginError"></p>
-      </form>
+      </div>
+      <div class="login-card-body">
+        <div class="login-ms-icon">🗝️</div>
+        <h3>Admin Authentication</h3>
+        <p>Enter the security PIN to access the Memory & Physical Card QR Manager.</p>
+        <form id="loginForm">
+          <input type="password" id="pinInput" placeholder="Enter PIN (Default: shaaaw2026)" required autofocus autocomplete="current-password">
+          <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;">Unlock System</button>
+          <p class="login-error" id="loginError"></p>
+        </form>
+      </div>
     </div>
   </div>
 
-  <!-- Main Dashboard Container -->
+  <!-- Main Control Panel Window -->
   <div class="admin-wrapper" id="adminWrapper">
-    <!-- Top Header -->
-    <header class="admin-header">
-      <div class="header-branding">
-        <h1>🎂 Birthday Memory Admin</h1>
-        <p>Manage all 8 scannable QR memories, media files, and poster composition</p>
-      </div>
-      <div class="header-actions">
-        <a href="/" class="btn-secondary" target="_blank">View Live Poster</a>
-        <button class="btn-secondary" id="logoutBtn">Logout</button>
-      </div>
-    </header>
-
-    <!-- Base URL & Poster Generation Banner -->
-    <section class="banner-card">
-      <div class="banner-content">
-        <h3>🌐 Public Domain & Scannable QR Configuration</h3>
-        <p>
-          QR codes must point to a live public HTTPS URL so anyone scanning with an iPhone/Android camera opens the memory.
-        </p>
-        <div class="url-input-row">
-          <div class="url-field">
-            <label for="baseUrlInput">Current Public Base URL:</label>
-            <input type="url" id="baseUrlInput" placeholder="https://birthday-shaaaw.onrender.com" value="">
-          </div>
-          <button class="btn-primary" id="updateBaseUrlBtn">
-            Update & Regenerate QRs + Poster
-          </button>
+    <div class="retro-window-box main-admin-window">
+      <!-- Titlebar -->
+      <div class="retro-titlebar">
+        <div class="titlebar-left">
+          <span class="titlebar-icon">⚙️</span>
+          <span class="titlebar-title">HawkinsOS Control Panel — Memory & Physical Card QR Manager.exe</span>
+        </div>
+        <div class="titlebar-controls">
+          <button class="win-btn">_</button>
+          <button class="win-btn">口</button>
+          <button class="win-btn win-close">✕</button>
         </div>
       </div>
-      <div class="banner-actions">
-        <button class="btn-secondary" id="downloadAllQrsBtn">
-          📥 Download All 8 QRs (ZIP)
-        </button>
-        <button class="btn-secondary" id="previewPosterBtn">
-          🖼️ Preview Scannable Poster
-        </button>
-        <a href="/api/admin/download-poster" class="btn-primary" download id="downloadPosterBtn">
-          🖨️ Download Print-Ready Poster
-        </a>
-      </div>
-    </section>
 
-    <!-- Status Overview Bar -->
-    <div class="overview-stats-bar">
-      <div class="stat-pill">
-        <span class="stat-num" id="totalMemoriesCount">8</span> Total Memories
+      <!-- Menu Bar -->
+      <div class="retro-menubar">
+        <span class="menu-item">File</span>
+        <span class="menu-item">Configure</span>
+        <span class="menu-item">QR_Tools</span>
+        <span class="menu-item">View</span>
+        <span class="menu-item" id="logoutBtn" style="color:#ff6b8b; margin-left:auto;">🔒 Logout</span>
       </div>
-      <div class="stat-pill">
-        <span class="stat-num stat-green" id="activeMemoriesCount">0</span> Media Assigned
-      </div>
-      <div class="stat-pill">
-        <span class="stat-num stat-pink" id="emptyMemoriesCount">8</span> Waiting Surprises
+
+      <!-- Window Content -->
+      <div class="window-body">
+        <!-- Physical Card QR Generator & Base URL Setup -->
+        <section class="admin-config-banner">
+          <div class="banner-badge">📱 PHYSICAL CARD QR GENERATOR</div>
+          <h3>Customize Your Physical Card QR Codes</h3>
+          <p>
+            Enter your live public Render URL below. Clicking <strong>"Generate Printable QRs"</strong> will immediately generate all 8 high-resolution QR codes encoded with your live link, ready to print onto your physical card!
+          </p>
+          <div class="url-control-row">
+            <div class="url-input-wrap">
+              <label for="baseUrlInput">Current Live Public URL:</label>
+              <input type="url" id="baseUrlInput" placeholder="https://birthday-qr-memory-xxxx.onrender.com" value="">
+            </div>
+            <button class="btn-primary" id="updateBaseUrlBtn">
+              ⚡ Apply URL & Regenerate 8 QRs
+            </button>
+            <button class="btn-secondary" id="downloadAllQrsBtn">
+              📥 Download All 8 QRs (ZIP)
+            </button>
+          </div>
+        </section>
+
+        <!-- Stats Overview -->
+        <div class="stats-ribbon">
+          <div class="stat-box">
+            <span class="stat-icon">📼</span>
+            <span class="stat-label">Total Chapters:</span>
+            <span class="stat-value">8</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-icon">🎬</span>
+            <span class="stat-label">Media Assigned:</span>
+            <span class="stat-value text-green" id="activeMemoriesCount">0</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-icon">🎁</span>
+            <span class="stat-label">Surprises Waiting:</span>
+            <span class="stat-value text-pink" id="emptyMemoriesCount">8</span>
+          </div>
+        </div>
+
+        <!-- 8 Memories Management Grid -->
+        <div class="admin-memories-grid" id="memoriesGrid">
+          <!-- Dynamically populated cards 1 to 8 -->
+        </div>
       </div>
     </div>
-
-    <!-- 8 Memories Grid -->
-    <main class="memories-grid" id="memoriesGrid">
-      <!-- Generated dynamically by admin.js (Cards 1 through 8) -->
-    </main>
   </div>
 
   <!-- Mobile Live Preview Modal -->
   <div class="modal-backdrop" id="previewModal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 id="modalTitle">Memory #1 Mobile Preview</h3>
-        <button class="modal-close-btn" id="modalCloseBtn">&times;</button>
+    <div class="retro-window-box modal-window-box">
+      <div class="retro-titlebar">
+        <div class="titlebar-left">
+          <span class="titlebar-icon">📱</span>
+          <span class="titlebar-title" id="modalTitle">Memory_Preview.exe</span>
+        </div>
+        <div class="titlebar-controls">
+          <button class="win-btn win-close" id="modalCloseBtn">✕</button>
+        </div>
       </div>
       <div class="mobile-device-frame">
         <iframe id="previewIframe" src="" frameborder="0"></iframe>
@@ -101,26 +127,11 @@
     </div>
   </div>
 
-  <!-- Poster Preview Modal -->
-  <div class="modal-backdrop" id="posterModal">
-    <div class="modal-box poster-modal-box">
-      <div class="modal-header">
-        <h3>Final Poster with 8 Scannable QR Codes</h3>
-        <button class="modal-close-btn" id="posterModalCloseBtn">&times;</button>
-      </div>
-      <div class="poster-preview-container">
-        <img id="posterPreviewImg" src="/assets/poster-with-qrs.png" alt="Birthday Poster with QR codes" onerror="this.src='/assets/original-poster.jpg'">
-      </div>
-      <div class="modal-footer">
-        <p class="modal-note">Genuinely scannable with normal camera. Print at 300 DPI for best quality.</p>
-        <a href="/api/admin/download-poster" class="btn-primary" download>Download Full Poster</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Notification Toast -->
+  <!-- Toast Notification -->
   <div class="toast" id="adminToast"></div>
 
+  <!-- Sarcastic Guru Companion -->
+  <script src="/js/caricature.js"></script>
   <script src="/js/admin.js"></script>
 </body>
 </html>

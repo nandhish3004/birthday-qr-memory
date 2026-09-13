@@ -1,29 +1,36 @@
-// Ambient background floating hearts generator
-function initFloatingHearts() {
-  const container = document.getElementById('heartsContainer');
+// Ambient background floating spores & twinkling stars generator
+function initDreamyParticles() {
+  const container = document.getElementById('sporesContainer');
   if (!container) return;
-  const hearts = ['💗', '💖', '✨', '🌸', '⭐', '🤍'];
+  const emojis = ['✨', '⭐', '🌸', '💖', '⚡', '💫'];
 
-  for (let i = 0; i < 15; i++) {
-    const heart = document.createElement('div');
-    heart.className = 'floating-heart';
-    heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
-    heart.style.left = `${Math.random() * 95}vw`;
-    heart.style.animationDelay = `${Math.random() * 8}s`;
-    heart.style.animationDuration = `${8 + Math.random() * 8}s`;
-    heart.style.fontSize = `${1 + Math.random() * 1}rem`;
-    container.appendChild(heart);
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    const isStar = Math.random() > 0.5;
+    p.className = `spore ${isStar ? 'star' : 'bubble'}`;
+    if (isStar) {
+      p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+      p.style.fontSize = `${0.8 + Math.random() * 0.8}rem`;
+    } else {
+      const size = 4 + Math.random() * 8;
+      p.style.width = `${size}px`;
+      p.style.height = `${size}px`;
+    }
+    p.style.left = `${Math.random() * 95}vw`;
+    p.style.animationDelay = `${Math.random() * 8}s`;
+    p.style.animationDuration = `${7 + Math.random() * 8}s`;
+    container.appendChild(p);
   }
 }
 
-// Confetti burst helper
+// Confetti helper
 function triggerConfetti() {
   if (typeof confetti === 'function') {
     confetti({
-      particleCount: 80,
-      spread: 70,
+      particleCount: 75,
+      spread: 80,
       origin: { y: 0.6 },
-      colors: ['#ff758f', '#ffb3c1', '#ffd166', '#c9184a', '#ffffff']
+      colors: ['#ff2d55', '#ff6b8b', '#ffd166', '#9d4edd', '#06d6a0', '#ffffff']
     });
   }
 }
@@ -38,7 +45,7 @@ function getMemoryIdFromUrl() {
       return parsed;
     }
   }
-  return 1; // Default to 1
+  return 1;
 }
 
 // Render 1-8 navigation pills
@@ -51,7 +58,7 @@ function renderNavPills(currentId) {
     const pill = document.createElement('a');
     pill.href = `/memory/${i}`;
     pill.className = `memory-pill ${i === currentId ? 'current' : ''}`;
-    pill.textContent = i;
+    pill.textContent = i < 10 ? `0${i}` : i;
     pill.title = `Memory #${i}`;
     pillsContainer.appendChild(pill);
   }
@@ -65,8 +72,8 @@ function setupAudioPlayer(audioEl, audioUrl) {
   const progressBar = document.getElementById('audioProgressBar');
   const progressContainer = document.getElementById('audioProgressContainer');
   const timeDisplay = document.getElementById('audioTime');
-  const vinyl = document.getElementById('vinylWrapper');
-  const soundWave = document.getElementById('soundWave');
+  const spoolLeft = document.getElementById('spoolLeft');
+  const spoolRight = document.getElementById('spoolRight');
 
   audioEl.src = audioUrl;
 
@@ -86,16 +93,21 @@ function setupAudioPlayer(audioEl, audioUrl) {
 
   audioEl.onplay = () => {
     playIcon.style.display = 'none';
-    pauseIcon.style.display = 'block';
-    vinyl.classList.add('spinning');
-    soundWave.classList.add('playing');
+    pauseIcon.style.display = 'inline';
+    if (spoolLeft) spoolLeft.classList.add('spinning');
+    if (spoolRight) spoolRight.classList.add('spinning');
+
+    // Sarcastic Guru Audio Comment
+    if (window.guruInstance) {
+      window.guruInstance.speakRandom('audio_play');
+    }
   };
 
   audioEl.onpause = () => {
-    playIcon.style.display = 'block';
+    playIcon.style.display = 'inline';
     pauseIcon.style.display = 'none';
-    vinyl.classList.remove('spinning');
-    soundWave.classList.remove('playing');
+    if (spoolLeft) spoolLeft.classList.remove('spinning');
+    if (spoolRight) spoolRight.classList.remove('spinning');
   };
 
   audioEl.ontimeupdate = () => {
@@ -124,7 +136,13 @@ async function loadMemory() {
   const memoryId = getMemoryIdFromUrl();
   renderNavPills(memoryId);
 
-  document.getElementById('memoryNumberBadge').textContent = `Memory #${memoryId}`;
+  const windowTitle = document.getElementById('windowTitle');
+  const chapterBadge = document.getElementById('chapterBadge');
+  const headerMemoryNum = document.getElementById('headerMemoryNum');
+
+  if (windowTitle) windowTitle.textContent = `Memory_0${memoryId}.exe — Hawkins Media Player`;
+  if (chapterBadge) chapterBadge.textContent = `CHAPTER 0${memoryId}`;
+  if (headerMemoryNum) headerMemoryNum.textContent = `#${memoryId}`;
 
   const loadingState = document.getElementById('loadingState');
   const videoState = document.getElementById('videoState');
@@ -144,7 +162,7 @@ async function loadMemory() {
 
     // Set title and note
     memoryTitle.textContent = memory.title || `Memory #${memoryId}`;
-    memoryNote.textContent = memory.note || "A little surprise is waiting here 💗";
+    memoryNote.textContent = memory.note || "A special moment locked in time forever!";
 
     // Hide loading
     loadingState.classList.remove('active');
@@ -153,22 +171,31 @@ async function loadMemory() {
       videoEl.src = memory.media_url;
       videoState.classList.add('active');
       setTimeout(triggerConfetti, 400);
+
+      videoEl.onplay = () => {
+        if (window.guruInstance) {
+          window.guruInstance.speakRandom('video_play');
+        }
+      };
     } else if (memory.media_type === 'audio' && memory.media_url) {
       document.getElementById('audioTitle').textContent = memory.file_name || memory.title || "Voice Note";
       setupAudioPlayer(audioEl, memory.media_url);
       audioState.classList.add('active');
       setTimeout(triggerConfetti, 400);
     } else {
-      // Empty / placeholder state
+      // Empty surprise state
       emptyState.classList.add('active');
+      if (window.guruInstance) {
+        setTimeout(() => window.guruInstance.speakRandom('unassigned'), 1200);
+      }
     }
   } catch (err) {
     console.error(err);
     loadingState.innerHTML = `
       <div style="text-align:center; padding: 20px;">
-        <span style="font-size:2.5rem;">💌</span>
-        <p style="color:#c9184a; font-weight:600; margin-top:8px;">Unable to load memory</p>
-        <button class="btn-secondary" style="margin-top:10px;" onclick="location.reload()">Try Again</button>
+        <span style="font-size:2.5rem;">⚡</span>
+        <p style="color:#ff2d55; font-weight:700; margin-top:8px;">SIGNAL LOST IN THE UPSIDE DOWN</p>
+        <button class="btn-secondary" style="margin-top:10px;" onclick="location.reload()">Retry Connection</button>
       </div>
     `;
   }
@@ -176,7 +203,13 @@ async function loadMemory() {
 
 // Initialize on DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
-  initFloatingHearts();
+  initDreamyParticles();
+
+  // Initialize Sarcastic Guru Companion
+  if (typeof initSarcasticGuru === 'function') {
+    initSarcasticGuru('welcome_memory');
+  }
+
   loadMemory();
 
   // Celebrate button
@@ -192,9 +225,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (surpriseBox) {
     surpriseBox.addEventListener('click', () => {
       triggerConfetti();
-      const desc = surpriseBox.querySelector('.surprise-description');
-      if (desc) {
-        desc.textContent = "💗 Shh... something magical is coming very soon!";
+      if (window.guruInstance) {
+        window.guruInstance.speak("💗 Shh, Shaaaw! No snooping around! Your surprise is coming very soon!");
       }
     });
   }

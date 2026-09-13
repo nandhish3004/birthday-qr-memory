@@ -35,6 +35,18 @@ app.get('/assets/original-poster.jpg', (req, res) => {
   res.status(404).send('Original poster not found');
 });
 
+app.get('/assets/caricature.png', (req, res) => {
+  const localCaricature = path.join(__dirname, '..', 'public', 'assets', 'caricature.png');
+  const uploadedCaricature = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\e6a1bd95-2328-4114-a602-d70aeb13f4f0\\.user_uploaded\\media_1789319562845.png";
+  if (fs.existsSync(localCaricature)) {
+    return res.sendFile(localCaricature);
+  }
+  if (fs.existsSync(uploadedCaricature)) {
+    return res.sendFile(uploadedCaricature);
+  }
+  res.status(404).send('Caricature not found');
+});
+
 app.use('/uploads', express.static(UPLOADS_DIR));
 app.use('/assets', express.static(path.join(__dirname, '..', 'public', 'assets')));
 app.use(express.static(path.join(__dirname, '..', 'public')));
