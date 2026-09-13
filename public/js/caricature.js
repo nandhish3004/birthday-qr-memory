@@ -144,6 +144,16 @@ class CameoCastEngine {
   }
 
   init() {
+    // If the Hawkins Live Encounter Theater is active on the page, Saint Nandhish
+    // is already the star host on stage! Do not spawn a redundant floating widget.
+    if (document.getElementById('hawkinsCameoTheater') || 
+        document.querySelector('.cameo-theater-card') || 
+        document.querySelector('.cameo-theater-anchor') ||
+        document.querySelector('.cameo-story-container') ||
+        window.theaterInstance) {
+      return;
+    }
+
     if (document.getElementById('sarcasticGuruWidget')) return;
 
     this.container = document.createElement('div');
@@ -151,22 +161,10 @@ class CameoCastEngine {
     this.container.className = 'guru-companion-widget';
 
     this.container.innerHTML = `
-      <div class="guru-quick-cameos" id="guruQuickCameos">
-        <button class="quick-cameo-btn" onclick="triggerCameo('steve')" title="Steve Harrington">🧢</button>
-        <button class="quick-cameo-btn" onclick="triggerCameo('will')" title="Will Byers">🏰</button>
-        <button class="quick-cameo-btn" onclick="triggerCameo('mike')" title="Mike Wheeler">⚔️</button>
-        <button class="quick-cameo-btn" onclick="triggerCameo('lucas')" title="Lucas Sinclair">🎯</button>
-        <button class="quick-cameo-btn" onclick="triggerCameo('dustin')" title="Dustin Henderson">📻</button>
-        <button class="quick-cameo-btn" onclick="triggerCameo('eleven')" title="Eleven (011)">🧇</button>
-        <button class="quick-cameo-btn" onclick="triggerCameo('vecna')" title="Vecna">🕰️</button>
-        <button class="quick-cameo-btn" onclick="triggerCameo('demogorgon')" title="Demogorgon">🌸</button>
-        <button class="quick-cameo-btn" onclick="triggerCameo('saint')" title="Saint Nandhish">🧙‍♂️</button>
-      </div>
-
       <div class="guru-speech-bubble" id="guruBubble">
         <span class="bubble-tag" id="guruSpeakerTag">✨ Saint Nandhish</span>
         <p class="bubble-text" id="guruText">Blessing Shaaaw's birthday...</p>
-        <span class="bubble-tip">Tap character buttons above for cameos!</span>
+        <span class="bubble-tip">Tap Saint Nandhish for holy blessings</span>
       </div>
 
       <div class="guru-avatar-wrapper" id="guruAvatar" title="Tap Saint Nandhish for holy blessings">

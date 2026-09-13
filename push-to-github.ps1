@@ -18,7 +18,7 @@ Write-Host "3. Staging modified files..." -ForegroundColor Green
 git add .
 
 Write-Host "4. Committing changes..." -ForegroundColor Green
-git commit -m "Permanent permalink QRs (never change on media upload/replace), persistent domain config, 30s character animations (Steve, Max, Dustin, Eleven) conversing with Saint Nandhish caricature, The Hawkins Archive"
+git commit -m "Fix dialogue box overlap on characters in Cameo Theater, unobstructed stage view, remove disturbing floating buttons"
 
 Write-Host "5. Setting main branch..." -ForegroundColor Green
 git branch -M main

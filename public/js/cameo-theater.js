@@ -830,7 +830,13 @@ class HawkinsCameoTheater {
         `).join('')}
       </div>
 
-      <!-- Animated Stage Canvas -->
+      <!-- Dialogue Speech Box (Cleanly positioned above stage so it NEVER obscures characters) -->
+      <div class="stage-dialogue-box speaker-guest" id="stageDialogueBox">
+        <div class="dialogue-speaker-pill" id="dialogueSpeakerPill">🧢 Steve Harrington</div>
+        <p class="dialogue-content-text" id="dialogueContentText">Loading encounter...</p>
+      </div>
+
+      <!-- Animated Stage Canvas (100% unobstructed, pristine character view) -->
       <div class="theater-stage-canvas" id="stageCanvas">
         <!-- Ambient Stage Glow & Backdrop -->
         <div class="stage-backdrop-glow"></div>
@@ -842,10 +848,9 @@ class HawkinsCameoTheater {
           <div class="actor-puppet-frame" id="guestPuppetFrame"></div>
         </div>
 
-        <!-- Center Dynamic Dialogue Speech Cloud -->
-        <div class="stage-dialogue-box" id="stageDialogueBox">
-          <div class="dialogue-speaker-pill" id="dialogueSpeakerPill">🧢 Steve Harrington</div>
-          <p class="dialogue-content-text" id="dialogueContentText">Loading encounter...</p>
+        <!-- Stage Center Ambient Spark -->
+        <div class="stage-center-ambient">
+          <span class="stage-sparkle-center">✨</span>
         </div>
 
         <!-- Right Character: Saint Nandhish (Caricature) -->
