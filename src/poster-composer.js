@@ -9,31 +9,33 @@ const POSTER_SRC = path.join(ASSETS_DIR, 'original-poster.jpg');
 const POSTER_OUTPUT = path.join(ASSETS_DIR, 'poster-with-qrs.png');
 
 // Fallback path to the original user-uploaded poster
-const USER_UPLOADED_POSTER = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\e6a1bd95-2328-4114-a602-d70aeb13f4f0\\.user_uploaded\\media_1789313085861.jpg";
+const USER_UPLOADED_POSTER = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\e6a1bd95-2328-4114-a602-d70aeb13f4f0\\.user_uploaded\\media_1789324183044.jpg";
 
 /**
- * Aesthetic placement coordinates for 8 QR codes (proportional % of image width and height)
- * Carefully chosen on the scrapbook background to preserve faces, polaroids, and text.
+ * Aesthetic placement coordinates for 8 QR codes on the Shaaaw Scrapbook Poster
+ * Directly matching the paper scrap placeholders:
+ * Left column: 3 QRs (Top-Left, Mid-Left, Bottom-Left)
+ * Right column: 5 QRs (Top-Right, Mid-Right, Lower-Mid, Lower-Right, Bottom-Right)
  */
 const QR_PLACEMENTS = [
-  { id: 1, label: "Memory #1 💗", xPct: 0.32, yPct: 0.058, sizePct: 0.125, rotation: -2 }, // Near top postcard stamp
-  { id: 2, label: "Memory #2 ✨", xPct: 0.81, yPct: 0.042, sizePct: 0.125, rotation: 3 },  // Above film strip top right
-  { id: 3, label: "Memory #3 🎵", xPct: 0.04, yPct: 0.345, sizePct: 0.125, rotation: -1 }, // Near silver balloon "13"
-  { id: 4, label: "Memory #4 💌", xPct: 0.06, yPct: 0.605, sizePct: 0.135, rotation: 2 },  // Below "HAPPY Bday" cutouts
-  { id: 5, label: "Memory #5 🌸", xPct: 0.52, yPct: 0.535, sizePct: 0.125, rotation: -2 }, // Above flowers / center-right
-  { id: 6, label: "Memory #6 🎶", xPct: 0.82, yPct: 0.600, sizePct: 0.125, rotation: 1 },  // Next to Spotify quote card
-  { id: 7, label: "Memory #7 🎸", xPct: 0.18, yPct: 0.900, sizePct: 0.125, rotation: -3 }, // Next to electric guitar bottom left
-  { id: 8, label: "Memory #8 💫", xPct: 0.52, yPct: 0.885, sizePct: 0.125, rotation: 2 }   // Bottom center between photos
+  { id: 1, label: "Tape 01 💗", xPct: 0.045, yPct: 0.042, sizePct: 0.105, rotation: 0 }, // Top-Left pink scrap
+  { id: 2, label: "Tape 02 ✨", xPct: 0.042, yPct: 0.292, sizePct: 0.105, rotation: 0 }, // Mid-Left pink scrap
+  { id: 3, label: "Tape 03 🎵", xPct: 0.038, yPct: 0.580, sizePct: 0.105, rotation: 0 }, // Bottom-Left pink scrap
+  { id: 4, label: "Tape 04 🧇", xPct: 0.885, yPct: 0.092, sizePct: 0.095, rotation: 0 }, // Top-Right pink scrap
+  { id: 5, label: "Tape 05 🏰", xPct: 0.885, yPct: 0.298, sizePct: 0.095, rotation: 0 }, // Mid-Right purple scrap
+  { id: 6, label: "Tape 06 ⚔️", xPct: 0.870, yPct: 0.585, sizePct: 0.095, rotation: 0 }, // Lower-Mid-Right beige scrap
+  { id: 7, label: "Tape 07 🎯", xPct: 0.860, yPct: 0.715, sizePct: 0.095, rotation: 0 }, // Lower-Right kraft scrap
+  { id: 8, label: "Tape 08 📻", xPct: 0.845, yPct: 0.862, sizePct: 0.095, rotation: 0 }  // Bottom-Right pink scrap
 ];
 
 // Ensure original poster exists in public/assets
 function ensureOriginalPoster() {
-  if (!fs.existsSync(POSTER_SRC)) {
-    if (fs.existsSync(USER_UPLOADED_POSTER)) {
+  if (fs.existsSync(USER_UPLOADED_POSTER)) {
+    const statsUser = fs.statSync(USER_UPLOADED_POSTER);
+    const statsSrc = fs.existsSync(POSTER_SRC) ? fs.statSync(POSTER_SRC) : null;
+    if (!statsSrc || statsSrc.size !== statsUser.size) {
       fs.copyFileSync(USER_UPLOADED_POSTER, POSTER_SRC);
-      console.log('Copied uploaded poster to assets directory.');
-    } else {
-      console.warn('Original poster source not found at', USER_UPLOADED_POSTER);
+      console.log('Updated original poster in assets with new Shaaaw collage.');
     }
   }
 }
@@ -55,36 +57,23 @@ async function composePoster(baseUrl = 'http://localhost:3000') {
   const posterWidth = poster.bitmap.width;
   const posterHeight = poster.bitmap.height;
 
-  // 3. Composite each QR code
+  // 3. Composite each QR code directly over the dummy placeholder
   for (const placement of QR_PLACEMENTS) {
     const qrPath = path.join(QR_DIR, `${placement.id}.png`);
     if (!fs.existsSync(qrPath)) continue;
 
     const qrImage = await Jimp.read(qrPath);
     const targetSize = Math.round(posterWidth * placement.sizePct);
-    const borderPadding = Math.round(targetSize * 0.12);
-    const totalFrameSize = targetSize + (borderPadding * 2);
 
-    // Create a scrapbook sticker background (white Polaroid-style card with soft shadow/border)
-    const stickerCard = new Jimp(totalFrameSize, totalFrameSize + Math.round(borderPadding * 1.2), 0xFFFFFFFF);
-
-    // Resize QR code
+    // Resize QR code with crisp clarity
     qrImage.resize(targetSize, targetSize, Jimp.RESIZE_BILINEAR);
-
-    // Composite QR inside the white sticker card
-    stickerCard.composite(qrImage, borderPadding, borderPadding);
-
-    // If rotation requested, rotate slightly for scrapbook feel
-    if (placement.rotation && Math.abs(placement.rotation) <= 5) {
-      stickerCard.rotate(placement.rotation);
-    }
 
     // Coordinates on poster
     const posX = Math.round(posterWidth * placement.xPct);
     const posY = Math.round(posterHeight * placement.yPct);
 
-    // Composite sticker onto poster
-    poster.composite(stickerCard, posX, posY, {
+    // Composite real QR right over the dummy QR code
+    poster.composite(qrImage, posX, posY, {
       mode: Jimp.BLEND_SOURCE_OVER,
       opacitySource: 1.0,
       opacityDest: 1.0

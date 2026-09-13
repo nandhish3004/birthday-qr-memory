@@ -188,6 +188,11 @@ async function loadMemory() {
         statusBadge.className = 'badge badge-video';
         statusBadge.textContent = '🎬 Video Reel';
       }
+      // Direct instant playback when QR is scanned
+      videoEl.autoplay = true;
+      videoEl.play().catch(e => {
+        console.log('Video autoplay deferred by browser policy:', e);
+      });
       setTimeout(triggerConfetti, 400);
     } else if (memory.media_type === 'audio' && memory.media_url) {
       const audioTitle = document.getElementById('audioTrackTitle');
@@ -200,6 +205,11 @@ async function loadMemory() {
         statusBadge.className = 'badge badge-audio';
         statusBadge.textContent = '🎵 Audio Tape';
       }
+      // Direct instant playback when QR is scanned
+      audioEl.autoplay = true;
+      audioEl.play().catch(e => {
+        console.log('Audio autoplay deferred by browser policy:', e);
+      });
       setTimeout(triggerConfetti, 400);
     } else {
       // Empty surprise state
@@ -225,11 +235,7 @@ async function loadMemory() {
 document.addEventListener('DOMContentLoaded', () => {
   initDreamyParticles();
 
-  // Initialize Sarcastic Guru & Stranger Things Cast Companion
-  if (typeof initSarcasticGuru === 'function') {
-    initSarcasticGuru('welcome_memory');
-  }
-
+  // Load and play target memory immediately
   loadMemory();
 
   // Celebrate button
@@ -237,9 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (celebrateBtn) {
     celebrateBtn.addEventListener('click', () => {
       triggerConfetti();
-      if (window.guruInstance) {
-        window.guruInstance.speakCharacter('saint');
-      }
     });
   }
 
@@ -248,9 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (surpriseBox) {
     surpriseBox.addEventListener('click', () => {
       triggerConfetti();
-      if (window.guruInstance) {
-        window.guruInstance.speak("✨ Shhh, Shaaaw! A top-secret birthday surprise is in the works! Stay tuned!");
-      }
     });
   }
 });

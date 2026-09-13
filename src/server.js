@@ -355,6 +355,28 @@ app.get('/api/admin/download-all-qrs', async (req, res) => {
   }
 });
 
+// View Scrapbook Poster with Real QRs in browser
+app.get('/admin/poster-studio', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'poster-studio.html'));
+});
+
+// Download Ready-to-Print Composite Scrapbook Poster with Real QRs
+app.get('/api/admin/download-poster', async (req, res) => {
+  try {
+    const domain = getEffectiveBaseUrl(req);
+    await composePoster(domain);
+    if (fs.existsSync(POSTER_OUTPUT)) {
+      res.setHeader('Content-Type', 'image/png');
+      res.setHeader('Content-Disposition', 'attachment; filename="shaaaw_scrapbook_poster_with_real_qrs.png"');
+      return res.sendFile(POSTER_OUTPUT);
+    }
+    res.status(404).send('Poster generation failed');
+  } catch (err) {
+    console.error('Poster download error:', err);
+    res.status(500).send('Error generating poster: ' + err.message);
+  }
+});
+
 // Printable Sheet: Renders a print-ready A4 grid with all 8 QR codes, titles, and cutting lines
 app.get('/admin/printable-sheet', async (req, res) => {
   try {

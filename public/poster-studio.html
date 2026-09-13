@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shaaaw Scrapbook Poster Studio &bull; Real QRs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Playfair+Display:ital,wght@1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/global.css">
+  <style>
+    .studio-header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 25px -5px rgba(225, 29, 72, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .studio-title-block h1 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .studio-title-block p {
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .studio-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .poster-viewport-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .canvas-wrapper {
+      max-width: 100%;
+      overflow: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+      background: #fafafa;
+    }
+    #posterCanvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .info-banner {
+      background: linear-gradient(135deg, rgba(255, 228, 230, 0.6), rgba(254, 243, 199, 0.6));
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      border-radius: 14px;
+      padding: 12px 18px;
+      margin-top: 20px;
+      width: 100%;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .scanner-test-pill {
+      background: #10b981;
+      color: #ffffff;
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient spore particles -->
+  <div class="particles-bg" id="sporesContainer"></div>
+
+  <div class="page-shell" style="max-width: 1100px;">
+    <!-- Studio Header & Export Tools -->
+    <header class="studio-header">
+      <div class="studio-title-block">
+        <span class="badge badge-video" style="margin-bottom: 6px;">✨ READY-TO-PRINT POSTER</span>
+        <h1>🖼️ Scrapbook Poster with Real QRs</h1>
+        <p>All dummy QR placeholders have been replaced with your permanent scannable memory QR codes!</p>
+      </div>
+      <div class="studio-actions">
+        <button class="btn-primary" id="downloadCanvasBtn">
+          📥 Download High-Res Poster (PNG)
+        </button>
+        <button class="btn-secondary" onclick="window.print()">
+          🖨️ Print
+        </button>
+        <a href="/admin" class="btn-secondary">
+          🔐 Admin Panel
+        </a>
+      </div>
+    </header>
+
+    <!-- Canvas Preview Card -->
+    <main class="poster-viewport-card">
+      <div class="canvas-wrapper">
+        <canvas id="posterCanvas"></canvas>
+      </div>
+
+      <div class="info-banner">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="scanner-test-pill">✓ 100% Mobile Safe</span>
+          <span><strong>Aim your phone camera right at the screen:</strong> Every QR code on this poster will instantly open that tape's video/audio memory!</span>
+        </div>
+        <a href="/api/admin/download-poster" download="shaaaw_poster_real_qrs.png" class="btn-secondary" style="font-size: 0.8rem; padding: 6px 14px;">
+          Direct Server PNG
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // QR Code Placement Map for Shaaaw Scrapbook Poster (Proportional percentages)
+    const QR_MAP = [
+      { id: 1, xPct: 0.045, yPct: 0.042, sizePct: 0.105 }, // Top-Left pink scrap
+      { id: 2, xPct: 0.042, yPct: 0.292, sizePct: 0.105 }, // Mid-Left pink scrap
+      { id: 3, xPct: 0.038, yPct: 0.580, sizePct: 0.105 }, // Bottom-Left pink scrap
+      { id: 4, xPct: 0.885, yPct: 0.092, sizePct: 0.095 }, // Top-Right pink scrap
+      { id: 5, xPct: 0.885, yPct: 0.298, sizePct: 0.095 }, // Mid-Right purple scrap
+      { id: 6, xPct: 0.870, yPct: 0.585, sizePct: 0.095 }, // Lower-Mid-Right beige scrap
+      { id: 7, xPct: 0.860, yPct: 0.715, sizePct: 0.095 }, // Lower-Right kraft scrap
+      { id: 8, xPct: 0.845, yPct: 0.862, sizePct: 0.095 }  // Bottom-Right pink scrap
+    ];
+
+    async function composePosterOnCanvas() {
+      const canvas = document.getElementById('posterCanvas');
+      const ctx = canvas.getContext('2d');
+
+      // 1. Load the base scrapbook poster
+      const baseImg = new Image();
+      baseImg.crossOrigin = 'anonymous';
+      baseImg.src = '/assets/original-poster.jpg?t=' + Date.now();
+
+      await new Promise((resolve, reject) => {
+        baseImg.onload = resolve;
+        baseImg.onerror = reject;
+      });
+
+      canvas.width = baseImg.naturalWidth || 1600;
+      canvas.height = baseImg.naturalHeight || 2400;
+
+      // Draw original poster
+      ctx.drawImage(baseImg, 0, 0);
+
+      // 2. Load and draw all 8 real QR codes over the dummy spots
+      for (const item of QR_MAP) {
+        try {
+          const qrImg = new Image();
+          qrImg.crossOrigin = 'anonymous';
+          qrImg.src = `/api/qr/${item.id}?t=${Date.now()}`;
+
+          await new Promise((resolve) => {
+            qrImg.onload = resolve;
+            qrImg.onerror = resolve; // Continue on failure
+          });
+
+          const targetSize = Math.round(canvas.width * item.sizePct);
+          const posX = Math.round(canvas.width * item.xPct);
+          const posY = Math.round(canvas.height * item.yPct);
+
+          // Draw real QR cleanly over the dummy placeholder
+          ctx.drawImage(qrImg, posX, posY, targetSize, targetSize);
+        } catch (err) {
+          console.warn('Error compositing QR ' + item.id, err);
+        }
+      }
+    }
+
+    // 1-Click High-Res Download
+    document.getElementById('downloadCanvasBtn').addEventListener('click', () => {
+      const canvas = document.getElementById('posterCanvas');
+      const link = document.createElement('a');
+      link.download = 'shaaaw_scrapbook_poster_with_real_qrs.png';
+      link.href = canvas.toDataURL('image/png', 1.0);
+      link.click();
+    });
+
+    // Run on load
+    document.addEventListener('DOMContentLoaded', composePosterOnCanvas);
+  </script>
+</body>
+</html>
