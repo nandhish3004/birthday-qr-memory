@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Stranger Memories 💗 Happy Birthday Shaaaw</title>
+  <title>The Hawkins Archive ✨ Tape for Shaaaw</title>
   <link rel="stylesheet" href="/css/global.css">
   <link rel="stylesheet" href="/css/memory.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💗</text></svg>">
@@ -30,97 +30,19 @@
 
     <!-- Modern Brand Header -->
     <header class="modern-brand-header">
-      <div class="header-pill-badge">✨ FOR SHAAAW &bull; BIRTHDAY EDITION ✨</div>
-      <h1 class="modern-brand-title">STRANGER MEMORIES</h1>
-      <p class="modern-brand-sub">Tap any Hawkins character below to hear their cameo!</p>
+      <div class="header-pill-badge">✨ FOR SHAAAW &bull; SPECIAL EDITION ✨</div>
+      <h1 class="modern-brand-title">THE HAWKINS ARCHIVE</h1>
+      <p class="modern-brand-sub">Exclusive Birthday Tapes &bull; Chapter by Chapter</p>
     </header>
 
-    <!-- Hawkins Party Modern Cameo Story Bar (Steve, Will, Mike, Lucas, Dustin, Eleven, Vecna, Demo, Saint) -->
-    <section class="cameo-story-container" aria-label="Stranger Things Cameos">
-      <div class="cameo-story-label">
-        <span>Hawkins Party Cameos</span>
-        <span style="font-size: 0.68rem; color: var(--pastel-crimson);">Tap to listen ⚡</span>
-      </div>
-      <div class="cameo-story-scroll">
-        <!-- Steve -->
-        <button class="cameo-chip-btn chip-steve" onclick="triggerCameo('steve')" title="Steve Harrington">
-          <div class="cameo-chip-ring">
-            <div class="cameo-chip-avatar">🧢</div>
-          </div>
-          <span class="cameo-chip-name">Steve</span>
-        </button>
+    <!-- Interactive 30-Second Hawkins Cameo Animation Theater -->
+    <div class="cameo-theater-anchor"></div>
 
-        <!-- Will -->
-        <button class="cameo-chip-btn chip-will" onclick="triggerCameo('will')" title="Will Byers">
-          <div class="cameo-chip-ring">
-            <div class="cameo-chip-avatar">🏰</div>
-          </div>
-          <span class="cameo-chip-name">Will</span>
-        </button>
-
-        <!-- Mike -->
-        <button class="cameo-chip-btn chip-mike" onclick="triggerCameo('mike')" title="Mike Wheeler">
-          <div class="cameo-chip-ring">
-            <div class="cameo-chip-avatar">⚔️</div>
-          </div>
-          <span class="cameo-chip-name">Mike</span>
-        </button>
-
-        <!-- Lucas -->
-        <button class="cameo-chip-btn chip-lucas" onclick="triggerCameo('lucas')" title="Lucas Sinclair">
-          <div class="cameo-chip-ring">
-            <div class="cameo-chip-avatar">🎯</div>
-          </div>
-          <span class="cameo-chip-name">Lucas</span>
-        </button>
-
-        <!-- Dustin -->
-        <button class="cameo-chip-btn chip-dustin" onclick="triggerCameo('dustin')" title="Dustin Henderson">
-          <div class="cameo-chip-ring">
-            <div class="cameo-chip-avatar">📻</div>
-          </div>
-          <span class="cameo-chip-name">Dustin</span>
-        </button>
-
-        <!-- Eleven -->
-        <button class="cameo-chip-btn chip-eleven" onclick="triggerCameo('eleven')" title="Eleven (011)">
-          <div class="cameo-chip-ring">
-            <div class="cameo-chip-avatar">🧇</div>
-          </div>
-          <span class="cameo-chip-name">Eleven</span>
-        </button>
-
-        <!-- Vecna -->
-        <button class="cameo-chip-btn chip-vecna" onclick="triggerCameo('vecna')" title="Vecna">
-          <div class="cameo-chip-ring">
-            <div class="cameo-chip-avatar">🕰️</div>
-          </div>
-          <span class="cameo-chip-name">Vecna</span>
-        </button>
-
-        <!-- Demogorgon -->
-        <button class="cameo-chip-btn chip-demo" onclick="triggerCameo('demogorgon')" title="Cute Demogorgon">
-          <div class="cameo-chip-ring">
-            <div class="cameo-chip-avatar">🌸</div>
-          </div>
-          <span class="cameo-chip-name">Demo</span>
-        </button>
-
-        <!-- Saint Nandhish -->
-        <button class="cameo-chip-btn chip-saint" onclick="triggerCameo('saint')" title="Saint Nandhish">
-          <div class="cameo-chip-ring">
-            <div class="cameo-chip-avatar">🧙‍♂️</div>
-          </div>
-          <span class="cameo-chip-name">Saint</span>
-        </button>
-      </div>
-    </section>
-
-    <!-- Modern Glass Memory Card -->
+    <!-- Modern Glass Keepsake Card -->
     <main class="modern-memory-card" id="mainKeepsakeCard">
       <!-- Card Header Strip -->
       <div class="card-header-bar">
-        <span class="chapter-pill-tag" id="chapterBadge">CHAPTER 01</span>
+        <span class="chapter-pill-tag" id="chapterBadge">TAPE 01</span>
         <span class="badge badge-empty" id="statusBadge">Loading...</span>
       </div>
 
@@ -130,7 +52,7 @@
           <div class="pulse-ring-loader">
             <span class="loader-heart">💗</span>
           </div>
-          <p class="loader-text">Loading Shaaaw's Memory Stream...</p>
+          <p class="loader-text">Decryption in progress &bull; Loading Tape...</p>
         </div>
       </div>
 
@@ -157,8 +79,8 @@
 
           <!-- Track Info -->
           <div class="audio-track-info">
-            <h3 class="audio-track-title" id="audioTrackTitle">Voice Note for Shaaaw</h3>
-            <span class="audio-track-sub">PERSONAL RECORDING 💗</span>
+            <h3 class="audio-track-title" id="audioTrackTitle">Audio Tape for Shaaaw</h3>
+            <span class="audio-track-sub">SPECIAL TAPE FOR SHAAAW 💗</span>
           </div>
 
           <!-- Animated Waveform Visualizer -->
@@ -207,30 +129,30 @@
       <div class="state-container" id="emptyState">
         <div class="modern-surprise-box" id="surpriseBox">
           <div class="surprise-gift-orb">🎁</div>
-          <h2 class="surprise-title">A sweet surprise is being prepared 💗</h2>
+          <h2 class="surprise-title">A classified surprise is locked inside this tape 💗</h2>
           <p class="surprise-sub">
-            A secret birthday memory is being loaded into this chapter just for you, Shaaaw! Check back soon.
+            This tape is being prepared exclusively for Shaaaw's birthday. Check back soon!
           </p>
-          <span class="surprise-pill">Special Delivery for Shaaaw ✨</span>
+          <span class="surprise-pill">Classified Hawkins Dispatch ✨</span>
         </div>
       </div>
 
       <!-- Editorial Note Card -->
       <div class="memory-editorial-card">
-        <h2 class="editorial-title" id="memoryTitle">Memory #1</h2>
+        <h2 class="editorial-title" id="memoryTitle">Tape 01</h2>
         <p class="editorial-note" id="memoryNote">A special moment locked in time forever!</p>
       </div>
     </main>
 
-    <!-- Modern Chapter Switcher & Actions -->
+    <!-- Modern Tape Switcher & Actions -->
     <nav class="modern-bottom-nav">
-      <span class="nav-label">Browse All Chapters:</span>
+      <span class="nav-label">Select Tape:</span>
       <div class="chapter-pills-scroll" id="memoryNavPills">
         <!-- 1 to 8 pills populated dynamically -->
       </div>
       <div class="bottom-action-buttons">
         <a href="/" class="btn-secondary">
-          ✨ Memory Hub
+          ✨ Tape Archive
         </a>
         <button class="btn-primary" id="celebrateBtn">
           Celebrate 🎉
@@ -239,7 +161,8 @@
     </nav>
   </div>
 
-  <!-- Sarcastic Guru & Full Cameo Companion Engine -->
+  <!-- Scripts: 30s Cameo Theater Animation & Tape Controller -->
+  <script src="/js/cameo-theater.js"></script>
   <script src="/js/caricature.js"></script>
   <script src="/js/memory.js"></script>
 </body>

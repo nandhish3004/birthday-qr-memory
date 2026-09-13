@@ -1,8 +1,8 @@
 @echo off
 cd /d "%~dp0"
 echo ======================================================
-echo  Pushing Modern Software UI & 100%% Mobile QRs to GitHub
-echo  Featuring Steve, Will, Mike, Lucas, and Full Cast
+echo  Pushing Permanent QRs & Hawkins Cameo Theater
+echo  Featuring Steve, Max, Dustin, Eleven, and Saint Nandhish
 echo ======================================================
 echo.
 
@@ -19,7 +19,7 @@ echo 3. Staging modified files...
 git add .
 
 echo 4. Committing changes...
-git commit -m "Modern 2026 software UI, 100% mobile scanner print-ready QRs, printable card sheet, and full Stranger Things cameos (Steve, Will, Mike, Lucas, Dustin, Eleven, Vecna, Demogorgon, Saint Nandhish)"
+git commit -m "Permanent permalink QRs (never change on media upload/replace), persistent domain config, 30s character animations (Steve, Max, Dustin, Eleven) conversing with Saint Nandhish caricature, The Hawkins Archive"
 
 echo 5. Setting main branch...
 git branch -M main
@@ -29,7 +29,7 @@ git push -u origin main
 
 echo.
 echo ======================================================
-echo  Done! Modern software UI pushed to GitHub!
+echo  Done! Permanent QRs & Animations pushed to GitHub!
 echo  Render is building your live deployment now!
 echo ======================================================
 echo.

@@ -342,6 +342,9 @@ window.initSarcasticGuru = function(context) {
 
 // Global cameo trigger
 window.triggerCameo = function(charKey) {
+  if (window.theaterInstance) {
+    window.theaterInstance.loadScene(charKey);
+  }
   if (window.guruInstance) {
     window.guruInstance.speakCharacter(charKey);
   }

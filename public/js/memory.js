@@ -58,8 +58,8 @@ function renderNavPills(currentId) {
     const pill = document.createElement('a');
     pill.href = `/memory/${i}`;
     pill.className = `nav-chapter-chip ${i === currentId ? 'active' : ''}`;
-    pill.innerHTML = `<span>Chapter 0${i}</span>`;
-    pill.title = `Memory #${i}`;
+    pill.innerHTML = `<span>Tape 0${i}</span>`;
+    pill.title = `Tape #${i}`;
     pillsContainer.appendChild(pill);
   }
 }
@@ -117,10 +117,6 @@ function setupAudioPlayer(audioEl, audioUrl) {
     if (pauseIcon) pauseIcon.style.display = 'inline';
     if (vinylDisc) vinylDisc.classList.add('playing');
     if (waveformViz) waveformViz.classList.add('playing');
-
-    if (window.guruInstance) {
-      window.guruInstance.speakRandom('audio_play');
-    }
   };
 
   audioEl.onpause = () => {
@@ -153,14 +149,14 @@ function setupAudioPlayer(audioEl, audioUrl) {
   }
 }
 
-// Fetch and display Memory
+// Fetch and display Tape
 async function loadMemory() {
   const memoryId = getMemoryIdFromUrl();
   renderNavPills(memoryId);
 
   const chapterBadge = document.getElementById('chapterBadge');
   const statusBadge = document.getElementById('statusBadge');
-  if (chapterBadge) chapterBadge.textContent = `CHAPTER 0${memoryId}`;
+  if (chapterBadge) chapterBadge.textContent = `TAPE 0${memoryId}`;
 
   const loadingState = document.getElementById('loadingState');
   const videoState = document.getElementById('videoState');
@@ -174,12 +170,12 @@ async function loadMemory() {
 
   try {
     const res = await fetch(`/api/memories/${memoryId}`);
-    if (!res.ok) throw new Error('Could not fetch memory data');
+    if (!res.ok) throw new Error('Could not fetch tape data');
     const data = await res.json();
     const memory = data.memory;
 
     // Set title and note
-    if (memoryTitle) memoryTitle.textContent = memory.title || `Memory #${memoryId}`;
+    if (memoryTitle) memoryTitle.textContent = memory.title || `Tape #${memoryId}`;
     if (memoryNote) memoryNote.textContent = memory.note || "A special moment locked in time forever for Shaaaw!";
 
     // Hide loading
@@ -190,15 +186,9 @@ async function loadMemory() {
       videoState.classList.add('active');
       if (statusBadge) {
         statusBadge.className = 'badge badge-video';
-        statusBadge.textContent = '🎬 Video Stream';
+        statusBadge.textContent = '🎬 Video Reel';
       }
       setTimeout(triggerConfetti, 400);
-
-      videoEl.onplay = () => {
-        if (window.guruInstance) {
-          window.guruInstance.speakRandom('video_play');
-        }
-      };
     } else if (memory.media_type === 'audio' && memory.media_url) {
       const audioTitle = document.getElementById('audioTrackTitle');
       if (audioTitle) {
@@ -208,7 +198,7 @@ async function loadMemory() {
       audioState.classList.add('active');
       if (statusBadge) {
         statusBadge.className = 'badge badge-audio';
-        statusBadge.textContent = '🎵 Audio Track';
+        statusBadge.textContent = '🎵 Audio Tape';
       }
       setTimeout(triggerConfetti, 400);
     } else {
@@ -216,10 +206,7 @@ async function loadMemory() {
       emptyState.classList.add('active');
       if (statusBadge) {
         statusBadge.className = 'badge badge-empty';
-        statusBadge.textContent = '🎁 Secret Surprise';
-      }
-      if (window.guruInstance) {
-        setTimeout(() => window.guruInstance.speakRandom('unassigned'), 1000);
+        statusBadge.textContent = '🎁 Classified Surprise';
       }
     }
   } catch (err) {
@@ -227,8 +214,8 @@ async function loadMemory() {
     loadingState.innerHTML = `
       <div style="text-align:center; padding: 30px 10px;">
         <span style="font-size:2.5rem;">✨</span>
-        <p style="color:#e11d48; font-weight:700; margin-top:8px;">Memory Signal Initializing...</p>
-        <button class="btn-secondary" style="margin-top:12px;" onclick="location.reload()">Reload Memory</button>
+        <p style="color:#e11d48; font-weight:700; margin-top:8px;">Tape Signal Initializing...</p>
+        <button class="btn-secondary" style="margin-top:12px;" onclick="location.reload()">Reload Tape</button>
       </div>
     `;
   }

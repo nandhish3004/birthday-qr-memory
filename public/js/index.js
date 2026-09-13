@@ -51,26 +51,26 @@ async function loadModernMemories() {
       card.href = `/memory/${mem.id}`;
       card.className = 'modern-chapter-card';
 
-      let typeBadge = '<span class="badge badge-empty">🎁 Surprise</span>';
+      let typeBadge = '<span class="badge badge-empty">🎁 Classified Surprise</span>';
       if (mem.media_type === 'video') {
-        typeBadge = '<span class="badge badge-video">🎬 Video</span>';
+        typeBadge = '<span class="badge badge-video">🎬 Video Reel</span>';
       } else if (mem.media_type === 'audio') {
-        typeBadge = '<span class="badge badge-audio">🎵 Audio</span>';
+        typeBadge = '<span class="badge badge-audio">🎵 Audio Tape</span>';
       }
 
-      const notePreview = mem.note || "A special memory prepared for Shaaaw's birthday!";
+      const notePreview = mem.note || "A special birthday tape locked inside the Hawkins archive.";
 
       card.innerHTML = `
         <div class="card-top-tags">
-          <span class="card-chapter-num">CHAPTER 0${mem.id}</span>
+          <span class="card-chapter-num">TAPE 0${mem.id}</span>
           ${typeBadge}
         </div>
         <div class="card-content-block">
-          <h3 class="card-title-text">${mem.title || `Memory #${mem.id}`}</h3>
+          <h3 class="card-title-text">${mem.title || `Tape #${mem.id}`}</h3>
           <p class="card-snippet-text">${notePreview}</p>
         </div>
         <div class="card-footer-action">
-          <span class="action-open-label">Open Memory →</span>
+          <span class="action-open-label">Play Tape →</span>
         </div>
       `;
 

@@ -1,6 +1,6 @@
 Write-Host "======================================================" -ForegroundColor Cyan
-Write-Host " Pushing Modern Software UI & 100% Mobile QRs to GitHub" -ForegroundColor Cyan
-Write-Host " Steve, Will, Mike, Lucas, and Full Cast" -ForegroundColor Yellow
+Write-Host " Pushing Permanent QRs & Hawkins Cameo Theater" -ForegroundColor Cyan
+Write-Host " Steve, Max, Dustin, Eleven, and Saint Nandhish" -ForegroundColor Yellow
 Write-Host "======================================================" -ForegroundColor Cyan
 
 Set-Location -Path $PSScriptRoot
@@ -18,7 +18,7 @@ Write-Host "3. Staging modified files..." -ForegroundColor Green
 git add .
 
 Write-Host "4. Committing changes..." -ForegroundColor Green
-git commit -m "Modern 2026 software UI, 100% mobile scanner print-ready QRs, printable card sheet, and full Stranger Things cameos (Steve, Will, Mike, Lucas, Dustin, Eleven, Vecna, Demogorgon, Saint Nandhish)"
+git commit -m "Permanent permalink QRs (never change on media upload/replace), persistent domain config, 30s character animations (Steve, Max, Dustin, Eleven) conversing with Saint Nandhish caricature, The Hawkins Archive"
 
 Write-Host "5. Setting main branch..." -ForegroundColor Green
 git branch -M main
@@ -27,6 +27,6 @@ Write-Host "6. Pushing to GitHub..." -ForegroundColor Green
 git push -u origin main
 
 Write-Host "`n======================================================" -ForegroundColor Cyan
-Write-Host " Done! Modern software UI pushed to GitHub!" -ForegroundColor Yellow
+Write-Host " Done! Permanent QRs & Animations pushed to GitHub!" -ForegroundColor Yellow
 Write-Host " Render will update your live site in ~1 minute!" -ForegroundColor White
 Write-Host "======================================================" -ForegroundColor Cyan

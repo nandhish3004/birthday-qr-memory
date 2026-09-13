@@ -123,11 +123,11 @@ function renderMemoriesGrid(memories) {
     card.className = 'admin-memory-card';
     card.id = `memoryCard-${mem.id}`;
 
-    let statusBadge = `<span class="badge badge-empty">🎁 Surprise</span>`;
+    let statusBadge = `<span class="badge badge-empty">🎁 Classified Surprise</span>`;
     if (mem.media_type === 'video') {
-      statusBadge = `<span class="badge badge-video">🎬 Video</span>`;
+      statusBadge = `<span class="badge badge-video">🎬 Video Reel</span>`;
     } else if (mem.media_type === 'audio') {
-      statusBadge = `<span class="badge badge-audio">🎵 Audio</span>`;
+      statusBadge = `<span class="badge badge-audio">🎵 Audio Tape</span>`;
     }
 
     const mediaInfo = mem.media_url ? `
@@ -137,7 +137,7 @@ function renderMemoriesGrid(memories) {
       </div>
     ` : `
       <div style="font-size:0.78rem; color:var(--text-muted); font-style:italic;">
-        No media uploaded yet &mdash; currently showing "Secret Surprise" state.
+        No media uploaded yet &mdash; currently showing "Classified Surprise" state.
       </div>
     `;
 
@@ -145,15 +145,15 @@ function renderMemoriesGrid(memories) {
       <div class="memory-card-top">
         <div class="card-meta-wrap">
           <div style="display:flex; align-items:center; gap:8px;">
-            <span class="meta-chapter-tag">CHAPTER 0${mem.id}</span>
+            <span class="meta-chapter-tag">TAPE 0${mem.id}</span>
             ${statusBadge}
           </div>
-          <input type="text" class="meta-title-input" id="titleInput-${mem.id}" value="${mem.title || `Memory #${mem.id}`}" placeholder="Memory Title">
+          <input type="text" class="meta-title-input" id="titleInput-${mem.id}" value="${mem.title || `Tape #${mem.id}`}" placeholder="Tape Title">
           <textarea class="meta-note-input" id="noteInput-${mem.id}" placeholder="Heartfelt birthday message for Shaaaw...">${mem.note || ''}</textarea>
           <button class="btn-secondary" style="align-self:flex-start; font-size:0.78rem; padding:4px 12px;" onclick="saveNote(${mem.id})">Save Details</button>
         </div>
         <div class="card-qr-box" title="100% Mobile Scanner Safe QR (Click to download high-res PNG)">
-          <a href="/api/admin/download-qr/${mem.id}" download title="Download Chapter 0${mem.id} QR Code">
+          <a href="/api/admin/download-qr/${mem.id}" download title="Download Tape 0${mem.id} QR Code">
             <img class="card-qr-img" src="/api/qr/${mem.id}?t=${Date.now()}" alt="QR ${mem.id}">
           </a>
         </div>
@@ -284,7 +284,7 @@ function openPreview(id) {
   const iframe = document.getElementById('previewIframe');
   const modalTitle = document.getElementById('modalTitle');
 
-  modalTitle.textContent = `Chapter 0${id} Live Preview`;
+  modalTitle.textContent = `Tape 0${id} Live Preview`;
   iframe.src = `/memory/${id}?preview=true&t=${Date.now()}`;
   modal.style.display = 'flex';
 }

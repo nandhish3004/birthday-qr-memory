@@ -191,14 +191,45 @@ app.delete('/api/memories/:id', requireAdmin, (req, res) => {
   res.json({ success: true, memory: result.memory });
 });
 
-// Helper to determine effective public base URL
+const CONFIG_FILE = path.join(__dirname, '..', 'data', 'config.json');
+
+function loadSavedConfig() {
+  try {
+    if (fs.existsSync(CONFIG_FILE)) {
+      const data = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+      if (data && data.baseUrl && !data.baseUrl.includes('localhost')) {
+        return data.baseUrl.replace(/\/+$/, '');
+      }
+    }
+  } catch (err) {}
+  return null;
+}
+
+function saveConfig(baseUrl) {
+  try {
+    const dir = path.dirname(CONFIG_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(CONFIG_FILE, JSON.stringify({ baseUrl }, null, 2));
+  } catch (err) {}
+}
+
+// Helper to determine effective public base URL (Permanent Live Domain)
 function getEffectiveBaseUrl(req) {
+  // 1. Saved permanent domain in config.json
+  const saved = loadSavedConfig();
+  if (saved) return saved;
+
+  // 2. BASE_URL env variable if not localhost
   if (BASE_URL && !BASE_URL.includes('localhost')) {
     return BASE_URL.replace(/\/+$/, '');
   }
+
+  // 3. Render environment variable
   if (process.env.RENDER_EXTERNAL_URL) {
     return process.env.RENDER_EXTERNAL_URL.replace(/\/+$/, '');
   }
+
+  // 4. Incoming request host if not localhost
   if (req) {
     const proto = req.headers['x-forwarded-proto'] || req.protocol || 'https';
     const host = req.headers['x-forwarded-host'] || req.get('host');
@@ -206,6 +237,7 @@ function getEffectiveBaseUrl(req) {
       return `${proto}://${host}`.replace(/\/+$/, '');
     }
   }
+
   return BASE_URL.replace(/\/+$/, '');
 }
 
@@ -224,7 +256,7 @@ app.get('/api/config', (req, res) => {
   });
 });
 
-// Update Base URL manually
+// Update Base URL manually & persist permanently
 app.post('/api/admin/set-base-url', requireAdmin, async (req, res) => {
   const { baseUrl } = req.body;
   if (!baseUrl || !baseUrl.startsWith('http')) {
@@ -232,10 +264,12 @@ app.post('/api/admin/set-base-url', requireAdmin, async (req, res) => {
   }
 
   BASE_URL = baseUrl.replace(/\/+$/, '');
+  saveConfig(BASE_URL);
+
   try {
     await generateAllQRCodes(BASE_URL);
     await composePoster(BASE_URL);
-    res.json({ success: true, baseUrl: BASE_URL, message: 'Base URL updated, QRs and poster regenerated!' });
+    res.json({ success: true, baseUrl: BASE_URL, message: 'Permanent live domain saved! All QRs updated.' });
   } catch (err) {
     console.warn('Poster generation error during base URL update:', err.message);
     res.json({ success: true, baseUrl: BASE_URL, warning: err.message });
@@ -339,7 +373,7 @@ app.get('/admin/printable-sheet', async (req, res) => {
       });
       qrCards.push({
         id: mem.id,
-        title: mem.title || `Memory #${mem.id}`,
+        title: mem.title || `Tape #${mem.id}`,
         type: mem.media_type,
         url: targetUrl,
         qrDataUrl: dataUrl
@@ -350,7 +384,7 @@ app.get('/admin/printable-sheet', async (req, res) => {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Printable QR Cards for Shaaaw's Birthday (Chapters 1 - 8)</title>
+  <title>Physical QR Cards for Shaaaw (Tapes 01 - 08)</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap');
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -457,11 +491,11 @@ app.get('/admin/printable-sheet', async (req, res) => {
   <div class="cards-grid">
     ${qrCards.map(c => `
       <div class="qr-card-item">
-        <img class="qr-img" src="${c.qrDataUrl}" alt="Chapter ${c.id} QR">
+        <img class="qr-img" src="${c.qrDataUrl}" alt="Tape ${c.id} QR">
         <div class="qr-info">
-          <span class="chapter-tag">CHAPTER 0${c.id}</span>
+          <span class="chapter-tag">TAPE 0${c.id}</span>
           <h3 class="card-title">${c.title}</h3>
-          <p class="card-meta">Media: ${c.type === 'empty' ? 'Secret Surprise' : c.type.toUpperCase()}</p>
+          <p class="card-meta">Format: ${c.type === 'empty' ? 'Classified Surprise' : (c.type === 'video' ? 'VIDEO REEL' : 'AUDIO TAPE')}</p>
           <p class="card-url">${c.url}</p>
         </div>
       </div>
@@ -479,6 +513,11 @@ app.get('/admin/printable-sheet', async (req, res) => {
 // Server Initialization
 async function initServer() {
   ensureOriginalPoster();
+  const savedBase = loadSavedConfig();
+  if (savedBase) {
+    BASE_URL = savedBase;
+    console.log('Loaded permanent domain from config:', BASE_URL);
+  }
   try {
     console.log('Generating initial QR codes for Base URL:', BASE_URL);
     await generateAllQRCodes(BASE_URL);
