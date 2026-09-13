@@ -25,12 +25,12 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static assets
 app.get('/assets/original-poster.jpg', (req, res) => {
   const localPoster = path.join(__dirname, '..', 'public', 'assets', 'original-poster.jpg');
-  const uploadedPoster = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\e6a1bd95-2328-4114-a602-d70aeb13f4f0\\.user_uploaded\\media_1789313085861.jpg";
-  if (fs.existsSync(localPoster)) {
-    return res.sendFile(localPoster);
-  }
+  const uploadedPoster = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\e6a1bd95-2328-4114-a602-d70aeb13f4f0\\.user_uploaded\\media_1789324183044.jpg";
   if (fs.existsSync(uploadedPoster)) {
     return res.sendFile(uploadedPoster);
+  }
+  if (fs.existsSync(localPoster)) {
+    return res.sendFile(localPoster);
   }
   res.status(404).send('Original poster not found');
 });
@@ -284,14 +284,16 @@ app.get('/api/qr/:id', async (req, res) => {
     const targetUrl = `${domain}/memory/${id}`;
     const QRCode = require('qrcode');
 
+    // 1600px Ultra-HD razor-sharp QR with tight margin for maximum module size
     const buffer = await QRCode.toBuffer(targetUrl, {
       errorCorrectionLevel: 'H',
-      margin: 4,
-      width: 600,
+      margin: 1,
+      width: 1600,
       color: { dark: '#000000', light: '#ffffff' }
     });
 
     res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
     res.send(buffer);
   } catch (err) {
     res.status(500).send('Error generating QR');

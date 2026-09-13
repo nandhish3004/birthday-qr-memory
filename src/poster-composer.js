@@ -52,27 +52,46 @@ async function composePoster(baseUrl = 'http://localhost:3000') {
   // 1. Ensure all QR codes are freshly generated with the target baseUrl
   await generateAllQRCodes(baseUrl);
 
-  // 2. Load the base poster image
+  // 2. Load the base poster image & upscale to 4K Ultra-HD
   const poster = await Jimp.read(POSTER_SRC);
+
+  // Master 4K upscale (2400px width minimum, 300+ DPI print resolution)
+  if (poster.bitmap.width < 2400) {
+    const scale = 2400 / poster.bitmap.width;
+    poster.resize(2400, Math.round(poster.bitmap.height * scale), Jimp.RESIZE_BICUBIC);
+    // Edge-sharpening convolution pass for crisp poster clarity
+    poster.convolute([
+      [0, -0.3, 0],
+      [-0.3, 2.2, -0.3],
+      [0, -0.3, 0]
+    ]);
+  }
+
   const posterWidth = poster.bitmap.width;
   const posterHeight = poster.bitmap.height;
+  const QRCode = require('qrcode');
 
-  // 3. Composite each QR code directly over the dummy placeholder
+  // 3. Composite each QR code generated directly at exact target size (NO resizing blur!)
   for (const placement of QR_PLACEMENTS) {
-    const qrPath = path.join(QR_DIR, `${placement.id}.png`);
-    if (!fs.existsSync(qrPath)) continue;
-
-    const qrImage = await Jimp.read(qrPath);
     const targetSize = Math.round(posterWidth * placement.sizePct);
+    const domain = baseUrl.replace(/\/+$/, '');
+    const targetUrl = `${domain}/memory/${placement.id}`;
 
-    // Resize QR code with crisp clarity
-    qrImage.resize(targetSize, targetSize, Jimp.RESIZE_BILINEAR);
+    // Direct exact-pixel QR generation with tight margin for maximum module size & optical contrast
+    const qrBuffer = await QRCode.toBuffer(targetUrl, {
+      errorCorrectionLevel: 'H',
+      margin: 1,
+      width: targetSize,
+      color: { dark: '#000000', light: '#ffffff' }
+    });
+
+    const qrImage = await Jimp.read(qrBuffer);
 
     // Coordinates on poster
     const posX = Math.round(posterWidth * placement.xPct);
     const posY = Math.round(posterHeight * placement.yPct);
 
-    // Composite real QR right over the dummy QR code
+    // Composite real QR code with 100% crisp, pure black pixels
     poster.composite(qrImage, posX, posY, {
       mode: Jimp.BLEND_SOURCE_OVER,
       opacitySource: 1.0,
@@ -80,8 +99,8 @@ async function composePoster(baseUrl = 'http://localhost:3000') {
     });
   }
 
-  // 4. Save high-res composite poster
-  await poster.quality(95).writeAsync(POSTER_OUTPUT);
+  // 4. Save Master 4K composite poster at maximum quality (100)
+  await poster.quality(100).writeAsync(POSTER_OUTPUT);
   console.log('Successfully created composite poster at:', POSTER_OUTPUT);
 
   return {

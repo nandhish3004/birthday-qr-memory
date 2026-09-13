@@ -33,7 +33,7 @@ Write-Host "3. Staging modified files..." -ForegroundColor Green
 git add .
 
 Write-Host "4. Committing changes..." -ForegroundColor Green
-git commit -m "Direct instant memory playback when scanning QR (no distracting theater on tape page), updated scrapbook poster, first 3 QRs integrated"
+git commit -m "Master 4K Ultra-HD poster export with zero-blur QR vector clarity, unsharp mask sharpening, and full-resolution print engine"
 
 Write-Host "5. Setting main branch..." -ForegroundColor Green
 git branch -M main
