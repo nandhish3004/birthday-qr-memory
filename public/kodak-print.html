@@ -584,20 +584,47 @@
               <span><strong>8 QR Codes Protected:</strong> All 8 codes are inside the 1/4" safe zone</span>
             </li>
             <li class="checklist-item">
-              <span class="check-icon">✓</span>
-              <span><strong>Zero Cut-Off:</strong> "Happy Birthday Shaaw" & Stitch fully preserved</span>
-            </li>
           </ul>
+        </div>
+
+        <!-- Shaaaw Center Photo Adjustments -->
+        <div class="panel-card" style="border-color: #f472b6; background: rgba(36, 16, 42, 0.85);">
+          <h3 class="panel-title" style="color: #fbcfe8;">
+            <span>📸 Center Polaroid Photo (Shaaaw)</span>
+          </h3>
+          <p style="font-size: 0.82rem; color: #cbd5e1; margin-top: -6px; margin-bottom: 14px;">
+            Shaaaw's photo is placed in the center Polaroid in 4K clarity. Fine-tune framing:
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
+                <span>Vertical Position (Pan):</span>
+                <span id="panVal" style="color: #f472b6; font-weight: 700;">Face Focus (16%)</span>
+              </div>
+              <input type="range" id="sliderPanY" min="0" max="100" value="16" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawPan(this.value)">
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
+                <span>Zoom Level:</span>
+                <span id="zoomVal" style="color: #f472b6; font-weight: 700;">1.00x</span>
+              </div>
+              <input type="range" id="sliderZoom" min="100" max="180" value="100" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawZoom(this.value)">
+            </div>
+          </div>
         </div>
 
         <!-- Export Buttons -->
         <div class="panel-card actions-card">
-          <button class="btn-download-hero" onclick="downloadMasterImage('jpeg')">
-            <span>⬇️ Download 9×10.9 Kodak JPEG (300 DPI)</span>
+          <button class="btn-download-hero" onclick="downloadMasterImage('jpeg', true)" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">
+            <span>💎 Download 4K Ultra-HD Master (3840×4650)</span>
           </button>
 
-          <button class="btn-download-sub" onclick="downloadMasterImage('png')">
-            <span>💾 Download Lossless 9×10.9 PNG</span>
+          <button class="btn-download-sub" onclick="downloadMasterImage('png', true)" style="font-weight: 700; color: #fbcfe8;">
+            <span>💾 Download Lossless 4K PNG Master</span>
+          </button>
+
+          <button class="btn-download-sub" onclick="downloadMasterImage('jpeg', false)">
+            <span>⬇️ Download 9×10.9 Kodak JPEG (300 DPI)</span>
           </button>
 
           <button class="btn-download-sub" onclick="window.print()">
@@ -623,6 +650,36 @@
     const ctx = canvas.getContext('2d');
     let currentStyle = 'mat';
     const sourceImage = new Image();
+    const shaawImage = new Image();
+    let shaawPanY = 0.16;
+    let shaawZoom = 1.0;
+
+    const shaawCandidates = [
+      '/assets/shaaw-center.jpg',
+      'assets/shaaw-center.jpg'
+    ];
+    let shaawIdx = 0;
+    function tryLoadNextShaaw() {
+      if (shaawIdx >= shaawCandidates.length) return;
+      shaawImage.src = shaawCandidates[shaawIdx++];
+    }
+    shaawImage.onload = () => {
+      render9x10_9Poster();
+    };
+    shaawImage.onerror = tryLoadNextShaaw;
+    tryLoadNextShaaw();
+
+    function updateShaawPan(val) {
+      shaawPanY = val / 100;
+      document.getElementById('panVal').textContent = Math.round(val) + '%';
+      render9x10_9Poster();
+    }
+
+    function updateShaawZoom(val) {
+      shaawZoom = val / 100;
+      document.getElementById('zoomVal').textContent = (val / 100).toFixed(2) + 'x';
+      render9x10_9Poster();
+    }
 
     // Try loaded local poster or fallback paths
     const posterCandidates = [
@@ -685,18 +742,15 @@
 
       if (currentStyle === 'mat') {
         // Style A: Archival Parchment Mat with Rose-Gold Border
-        // 1. Background fill: warm vintage parchment
         ctx.fillStyle = '#fbf6ee';
         ctx.fillRect(0, 0, targetW, targetH);
 
-        // 2. Subtle parchment texture/tint
         const grad = ctx.createRadialGradient(targetW/2, targetH/2, 200, targetW/2, targetH/2, 1800);
         grad.addColorStop(0, '#fdfbf7');
         grad.addColorStop(1, '#f3ece0');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, targetW, targetH);
 
-        // 3. Double archival frame border
         ctx.strokeStyle = '#da8ca0';
         ctx.lineWidth = 5;
         ctx.strokeRect(55, 55, targetW - 110, targetH - 110);
@@ -705,7 +759,6 @@
         ctx.lineWidth = 2.5;
         ctx.strokeRect(72, 72, targetW - 144, targetH - 144);
 
-        // 4. Safe sizing for collage (leaving safe margin for frame lip)
         const safeMarginY = 95;
         const availH = targetH - (safeMarginY * 2);
         const scale = availH / origH;
@@ -714,7 +767,6 @@
         drawX = Math.round((targetW - drawW) / 2);
         drawY = safeMarginY;
 
-        // 5. Soft drop shadow behind collage
         ctx.shadowColor = 'rgba(40, 15, 25, 0.25)';
         ctx.shadowBlur = 40;
         ctx.shadowOffsetX = 0;
@@ -722,34 +774,25 @@
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(drawX, drawY, drawW, drawH);
 
-        // Reset shadow
         ctx.shadowColor = 'transparent';
         ctx.shadowBlur = 0;
         ctx.shadowOffsetY = 0;
 
-        // 6. Draw the collage
         ctx.drawImage(sourceImage, drawX, drawY, drawW, drawH);
 
-        // 7. Refined inner photo trim edge
         ctx.strokeStyle = '#f5e8ea';
         ctx.lineWidth = 4;
         ctx.strokeRect(drawX, drawY, drawW, drawH);
 
       } else if (currentStyle === 'seamless') {
-        // Style B: Seamless Textured Grunge Bleed
-        // Sample vintage floral edge texture and extend across sides
         ctx.save();
-        
-        // Blurred edge fill to blend sides
         ctx.filter = 'blur(35px)';
         ctx.drawImage(sourceImage, -150, 0, targetW + 300, targetH);
         ctx.filter = 'none';
 
-        // Dark romantic overlay to harmonize
         ctx.fillStyle = 'rgba(35, 18, 28, 0.4)';
         ctx.fillRect(0, 0, targetW, targetH);
 
-        // Center collage cleanly
         const safeMarginY = 50;
         const availH = targetH - (safeMarginY * 2);
         const scale = availH / origH;
@@ -758,21 +801,18 @@
         drawX = Math.round((targetW - drawW) / 2);
         drawY = safeMarginY;
 
-        // Soft glow behind main collage
         ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
         ctx.shadowBlur = 50;
         ctx.drawImage(sourceImage, drawX, drawY, drawW, drawH);
         ctx.restore();
 
-        // Draw crisp overlay
         ctx.drawImage(sourceImage, drawX, drawY, drawW, drawH);
 
       } else if (currentStyle === 'white-border') {
-        // Style C: Traditional Kodak White Photo Border
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, targetW, targetH);
 
-        const borderMargin = 75; // 1/4" white border
+        const borderMargin = 75;
         const availW = targetW - (borderMargin * 2);
         const availH = targetH - (borderMargin * 2);
         const scale = Math.min(availW / origW, availH / origH);
@@ -782,6 +822,49 @@
         drawY = Math.round((targetH - drawH) / 2);
 
         ctx.drawImage(sourceImage, drawX, drawY, drawW, drawH);
+      }
+
+      // ====================================================================
+      // 🌸 COMPOSITE SHAAAW PHOTO INTO CENTER POLAROID (4K CLARITY)
+      // ====================================================================
+      if (shaawImage.complete && shaawImage.naturalWidth) {
+        const px = drawX + Math.round(drawW * 0.338);
+        const py = drawY + Math.round(drawH * 0.244);
+        const pw = Math.round(drawW * 0.334);
+        const ph = Math.round(drawH * 0.229);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(px, py, pw, ph);
+        ctx.clip();
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+
+        const destAspect = pw / ph;
+        const imgW = shaawImage.naturalWidth;
+        const imgH = shaawImage.naturalHeight;
+        const baseCropW = imgW;
+        const baseCropH = imgW / destAspect;
+        
+        const cropW = baseCropW / shaawZoom;
+        const cropH = baseCropH / shaawZoom;
+        const cropX = (imgW - cropW) / 2;
+        const cropY = Math.max(0, Math.min(imgH - cropH, (imgH - cropH) * shaawPanY));
+
+        ctx.drawImage(shaawImage, cropX, cropY, cropW, cropH, px, py, pw, ph);
+
+        // Soft inner border for realistic polaroid depth
+        ctx.strokeStyle = 'rgba(60, 40, 30, 0.25)';
+        ctx.lineWidth = 2.5;
+        ctx.strokeRect(px, py, pw, ph);
+
+        // Redraw hand-drawn heart at bottom-right of photo
+        ctx.font = 'bold ' + Math.round(pw * 0.08) + 'px Arial, sans-serif';
+        ctx.fillStyle = 'rgba(20, 20, 20, 0.85)';
+        ctx.fillText('♡', px + pw - (pw * 0.12), py + ph - (ph * 0.08));
+
+        ctx.restore();
       }
 
       // ====================================================================
@@ -836,15 +919,27 @@
       });
     }
 
-    function downloadMasterImage(format = 'jpeg') {
+    function downloadMasterImage(format = 'jpeg', is4K = false) {
+      let exportCanvas = canvas;
+      if (is4K) {
+        exportCanvas = document.createElement('canvas');
+        exportCanvas.width = 3840;
+        exportCanvas.height = 4650;
+        const eCtx = exportCanvas.getContext('2d');
+        eCtx.imageSmoothingEnabled = true;
+        eCtx.imageSmoothingQuality = 'high';
+        eCtx.drawImage(canvas, 0, 0, 3840, 4650);
+      }
       const link = document.createElement('a');
-      const filename = `Shaaaw-Scrapbook-9x10.9-Kodak-300DPI.${format === 'jpeg' ? 'jpg' : 'png'}`;
+      const filename = is4K
+        ? `Shaaaw-Scrapbook-Poster-4K-UltraHD-Kodak.${format === 'jpeg' ? 'jpg' : 'png'}`
+        : `Shaaaw-Scrapbook-9x10.9-Kodak-300DPI.${format === 'jpeg' ? 'jpg' : 'png'}`;
       link.download = filename;
 
       if (format === 'jpeg') {
-        link.href = canvas.toDataURL('image/jpeg', 0.98);
+        link.href = exportCanvas.toDataURL('image/jpeg', 1.0);
       } else {
-        link.href = canvas.toDataURL('image/png');
+        link.href = exportCanvas.toDataURL('image/png');
       }
       document.body.appendChild(link);
       link.click();

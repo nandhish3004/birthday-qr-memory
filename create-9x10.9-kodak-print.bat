@@ -12,15 +12,22 @@ if exist "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-4
     copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789372775279.jpg" "public\assets\lord-nandhish-raw.jpg" >nul
     copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789372775279.jpg" "docs\assets\lord-nandhish.png" >nul
 )
+if exist "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789381931433.jpg" (
+    copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789381931433.jpg" "public\assets\shaaw-center.jpg" >nul
+    copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789381931433.jpg" "docs\assets\shaaw-center.jpg" >nul
+)
 
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\prepare-kodak-and-assets.ps1" -TargetDir "%~dp0"
 
 echo.
 echo ==============================================================================
 echo Files Generated:
-echo  1. Shaaaw-Scrapbook-Poster-9x10.9-Kodak-300DPI.jpg  (Best for Kodak Kiosks/Labs)
-echo  2. Shaaaw-Scrapbook-Poster-9x10.9-Kodak-300DPI.png  (Lossless Archival)
-echo  3. public\assets\lord-nandhish.png                  (Celestial Deity Avatar)
+echo  1. Shaaaw-Scrapbook-Poster-4K-UltraHD-Kodak.jpg   (3840x4650 Ultra-HD Master)
+echo  2. Shaaaw-Scrapbook-Poster-4K-UltraHD-Kodak.png   (Lossless 4K PNG Master)
+echo  3. Shaaaw-Scrapbook-Poster-9x10.9-Kodak-300DPI.jpg (2700x3270 @ 300 DPI Kiosk)
+echo  4. Shaaaw-Scrapbook-Poster-9x10.9-Kodak-300DPI.png (Lossless Archival)
+echo  5. public\assets\shaaw-center.jpg                 (Shaaaw Center Polaroid)
+echo  6. public\assets\lord-nandhish.png                 (Celestial Deity Avatar)
 echo ==============================================================================
 echo.
 pause

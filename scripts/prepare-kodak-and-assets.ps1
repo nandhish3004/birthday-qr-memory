@@ -121,6 +121,37 @@ if ($lordSource) {
 }
 
 # ------------------------------------------------------------------------------
+# STEP 1B: Process Shaaaw Center Polaroid Photo
+# ------------------------------------------------------------------------------
+Write-Host "`n1B. Processing Shaaaw Center Polaroid Photo..." -ForegroundColor Cyan
+
+$shaawUploadCandidates = @(
+    "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789381931433.jpg",
+    (Join-Path $assetsDir "shaaw-center.jpg"),
+    (Join-Path $docsAssetsDir "shaaw-center.jpg")
+)
+
+$shaawSource = $null
+foreach ($cand in $shaawUploadCandidates) {
+    if (Test-Path $cand) {
+        $shaawSource = $cand
+        break
+    }
+}
+
+$shaawTarget = Join-Path $assetsDir "shaaw-center.jpg"
+$docsShaawTarget = Join-Path $docsAssetsDir "shaaw-center.jpg"
+
+if ($shaawSource) {
+    Copy-Item $shaawSource $shaawTarget -Force
+    Copy-Item $shaawSource $docsShaawTarget -Force
+    Write-Host "   -> Loaded Shaaaw photo from: $shaawSource" -ForegroundColor Green
+    Write-Host "   ✅ Synced Shaaaw center photo into public\assets\ and docs\assets\" -ForegroundColor Green
+} else {
+    Write-Host "   ⚠️ Could not locate Shaaaw center photo source image." -ForegroundColor Yellow
+}
+
+# ------------------------------------------------------------------------------
 # STEP 2: Generate & Sync All 8 Permanent QR Codes (1 to 8)
 # ------------------------------------------------------------------------------
 Write-Host "`n2. Ensuring All 8 Permanent QR Codes are Active & Downloaded..." -ForegroundColor Cyan
@@ -223,6 +254,50 @@ if ($posterSource) {
         $g.DrawImage($origBmp, $drawX, $drawY, $drawW, $drawH)
 
         # ----------------------------------------------------------------------
+        # COMPOSITE SHAAAW PHOTO INTO CENTER POLAROID FRAME (4K CLARITY)
+        # ----------------------------------------------------------------------
+        if ($shaawSource -and (Test-Path $shaawSource)) {
+            try {
+                $shaawBmp = [System.Drawing.Bitmap]::FromFile($shaawSource)
+                
+                # Center Polaroid photo window relative to collage:
+                # xPct = 0.338, yPct = 0.244, wPct = 0.334, hPct = 0.229
+                $px = $drawX + [int]($drawW * 0.338)
+                $py = $drawY + [int]($drawH * 0.244)
+                $pw = [int]($drawW * 0.334)
+                $ph = [int]($drawH * 0.229)
+
+                # Focus crop on Shaaaw's face & upper body (maintains original photo resolution)
+                $destAspect = [double]$pw / [double]$ph
+                $srcW = $shaawBmp.Width
+                $srcH = [int]($shaawBmp.Width / $destAspect)
+                $srcX = 0
+                # Offset by 16% of extra vertical space to keep hair and face perfectly framed
+                $srcY = [int](($shaawBmp.Height - $srcH) * 0.16)
+                if ($srcY -lt 0) { $srcY = 0 }
+                if ($srcY + $srcH -gt $shaawBmp.Height) { $srcH = $shaawBmp.Height - $srcY }
+
+                # Draw high-clarity photo
+                $destRect = New-Object System.Drawing.Rectangle($px, $py, $pw, $ph)
+                $g.DrawImage($shaawBmp, $destRect, $srcX, $srcY, $srcW, $srcH, [System.Drawing.GraphicsUnit]::Pixel)
+
+                # Subtle authentic polaroid inner photo border
+                $innerPhotoPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(60, 40, 30, 20), 2.0)
+                $g.DrawRectangle($innerPhotoPen, $px, $py, $pw, $ph)
+
+                # Redraw cute handwritten heart at bottom-right corner of the photo
+                $heartFont = New-Object System.Drawing.Font("Arial", [float]($pw * 0.08), [System.Drawing.FontStyle]::Bold)
+                $heartBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(230, 20, 20, 20))
+                $g.DrawString("♡", $heartFont, $heartBrush, [float]($px + $pw - ($pw * 0.12)), [float]($py + $ph - ($ph * 0.18)))
+
+                $shaawBmp.Dispose()
+                Write-Host "   ✅ Beautifully composited Shaaaw into Center Polaroid Photo Frame!" -ForegroundColor Green
+            } catch {
+                Write-Host "   ⚠️ Could not composite Shaaaw photo: $($_.Exception.Message)" -ForegroundColor Yellow
+            }
+        }
+
+        # ----------------------------------------------------------------------
         # CRITICAL: OVERLAY ALL 8 WORKING PERMANENT QR CODES ON TOP OF DUMMY ONES
         # ----------------------------------------------------------------------
         $qrPlacements = @(
@@ -264,28 +339,58 @@ if ($posterSource) {
         $borderPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(245, 235, 230), 3.0)
         $g.DrawRectangle($borderPen, $drawX, $drawY, $drawW, $drawH)
 
+        # ----------------------------------------------------------------------
+        # SAVE 1: 300 DPI KODAK PHOTO PAPER MASTER (2700 x 3270 px)
+        # ----------------------------------------------------------------------
         $outJpg = Join-Path $rootDir "Shaaaw-Scrapbook-Poster-9x10.9-Kodak-300DPI.jpg"
         $outPng = Join-Path $rootDir "Shaaaw-Scrapbook-Poster-9x10.9-Kodak-300DPI.png"
         $old8x10 = Join-Path $rootDir "Shaaaw-Scrapbook-Poster-8x10-Kodak-300DPI.jpg"
         if (Test-Path $old8x10) { Remove-Item $old8x10 -Force }
 
-        $encoderParams = New-Object System.Drawing.Imaging.EncoderParameters(1)
-        $encoderParams.Param[0] = New-Object System.Drawing.Imaging.EncoderParameter([System.Drawing.Imaging.Encoder]::Quality, 98L)
+        $encoderParams100 = New-Object System.Drawing.Imaging.EncoderParameters(1)
+        $encoderParams100.Param[0] = New-Object System.Drawing.Imaging.EncoderParameter([System.Drawing.Imaging.Encoder]::Quality, 100L)
         $jpgCodec = [System.Drawing.Imaging.ImageCodecInfo]::GetImageEncoders() | Where-Object { $_.MimeType -eq "image/jpeg" }
 
-        $bmpMat.Save($outJpg, $jpgCodec, $encoderParams)
+        $bmpMat.Save($outJpg, $jpgCodec, $encoderParams100)
         $bmpMat.Save($outPng, [System.Drawing.Imaging.ImageFormat]::Png)
 
         Copy-Item $outJpg (Join-Path $assetsDir "Shaaaw-9x10.9-Kodak-Print.jpg") -Force
         Copy-Item $outJpg (Join-Path $docsAssetsDir "Shaaaw-9x10.9-Kodak-Print.jpg") -Force
 
+        # ----------------------------------------------------------------------
+        # SAVE 2: 4K ULTRA-HD MASTER EXPORT (3840 x 4650 px @ 426 DPI) - 100% MAXIMUM CLARITY
+        # ----------------------------------------------------------------------
+        $target4KW = 3840
+        $target4KH = 4650
+        $bmp4K = New-Object System.Drawing.Bitmap($target4KW, $target4KH, [System.Drawing.Imaging.PixelFormat]::Format24bppRgb)
+        $bmp4K.SetResolution(426.0, 426.0)
+        $g4K = [System.Drawing.Graphics]::FromImage($bmp4K)
+        $g4K.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+        $g4K.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::HighQuality
+        $g4K.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
+        $g4K.CompositingQuality = [System.Drawing.Drawing2D.CompositingQuality]::HighQuality
+        $g4K.DrawImage($bmpMat, 0, 0, $target4KW, $target4KH)
+
+        $out4kJpg = Join-Path $rootDir "Shaaaw-Scrapbook-Poster-4K-UltraHD-Kodak.jpg"
+        $out4kPng = Join-Path $rootDir "Shaaaw-Scrapbook-Poster-4K-UltraHD-Kodak.png"
+
+        $bmp4K.Save($out4kJpg, $jpgCodec, $encoderParams100)
+        $bmp4K.Save($out4kPng, [System.Drawing.Imaging.ImageFormat]::Png)
+
+        Copy-Item $out4kJpg (Join-Path $assetsDir "Shaaaw-Scrapbook-Poster-4K-UltraHD-Kodak.jpg") -Force
+        Copy-Item $out4kJpg (Join-Path $docsAssetsDir "Shaaaw-Scrapbook-Poster-4K-UltraHD-Kodak.jpg") -Force
+
+        $g4K.Dispose()
+        $bmp4K.Dispose()
         $g.Dispose()
         $bmpMat.Dispose()
         $origBmp.Dispose()
 
-        Write-Host "`n   🎉 ALL 8 QR CODES REPLACED & KODAK 9x10.9 PRINT CREATED!" -ForegroundColor Green
-        Write-Host "      📁 JPEG (300 DPI): $outJpg (9.0 x 10.9 in, 2700x3270)" -ForegroundColor Green
-        Write-Host "      📁 PNG  (300 DPI): $outPng (Lossless Archival)" -ForegroundColor Green
+        Write-Host "`n   🎉 SHAAAW CENTER PHOTO COMPOSITED & 4K ULTRA-HD PRINTS CREATED!" -ForegroundColor Green
+        Write-Host "      📁 4K Ultra-HD Master (3840x4650, 100% Quality): $out4kJpg" -ForegroundColor Green
+        Write-Host "      📁 4K Lossless PNG Master:                        $out4kPng" -ForegroundColor Green
+        Write-Host "      📁 9x10.9 Kodak Paper (2700x3270 @ 300 DPI):       $outJpg" -ForegroundColor Green
+        Write-Host "      📁 9x10.9 Kodak Lossless PNG:                     $outPng" -ForegroundColor Green
     } catch {
         Write-Host "   ⚠️ Kodak print error: $($_.Exception.Message)" -ForegroundColor Red
     }
