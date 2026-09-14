@@ -3,7 +3,7 @@ cd /d "%~dp0"
 title 9x10.9 Kodak Photo Paper Print Engine (300 DPI)
 echo ==============================================================================
 echo   Shaaaw's Scrapbook Poster - 9x10.9 Inch Kodak Photo Paper Formatter
-echo   (Note: Configured for 9x10.9 inches: 2700 x 3270 @ 300 DPI per requirements)
+echo   Resolution: 2700 x 3270 @ 300 DPI (Photo-Lab Archival Standard)
 echo ==============================================================================
 echo.
 

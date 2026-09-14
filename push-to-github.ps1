@@ -1,6 +1,6 @@
 Write-Host "======================================================" -ForegroundColor Cyan
-Write-Host " Pushing Permanent QRs & Hawkins Cameo Theater" -ForegroundColor Cyan
-Write-Host " Steve, Max, Dustin, Eleven, and Saint Nandhish" -ForegroundColor Yellow
+Write-Host " Pushing Permanent QRs & Supreme Lord Nandhish Realm" -ForegroundColor Cyan
+Write-Host " 9x10.9 Kodak Photo Paper Print Engine (300 DPI)" -ForegroundColor Yellow
 Write-Host "======================================================" -ForegroundColor Cyan
 
 Set-Location -Path $PSScriptRoot
@@ -10,15 +10,14 @@ if (!(Test-Path "public\assets")) { New-Item -ItemType Directory -Path "public\a
 if (!(Test-Path "public\assets\qr")) { New-Item -ItemType Directory -Path "public\assets\qr" -Force }
 if (!(Test-Path "docs")) { New-Item -ItemType Directory -Path "docs" -Force }
 
-Write-Host "2. Processing Lord Nandhish caricature & generating 8x10 Kodak prints..." -ForegroundColor Green
+Write-Host "2. Processing Supreme Lord Nandhish caricature & generating 9x10.9 Kodak prints..." -ForegroundColor Green
 try { & "$PSScriptRoot\scripts\prepare-kodak-and-assets.ps1" } catch {}
-try { node scripts/generate-qrs.js } catch {}
 
 Write-Host "3. Staging modified files..." -ForegroundColor Green
 git add .
 
 Write-Host "4. Committing changes..." -ForegroundColor Green
-git commit -m "Master 4K Ultra-HD poster export with zero-blur QR vector clarity, unsharp mask sharpening, and full-resolution print engine"
+git commit -m "Update Supreme Lord Nandhish and 9x10.9 Kodak photo print engine (2700x3270 @ 300 DPI)"
 
 Write-Host "5. Setting main branch..." -ForegroundColor Green
 git branch -M main

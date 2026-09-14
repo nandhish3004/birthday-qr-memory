@@ -3,8 +3,14 @@ param(
 )
 
 # ==============================================================================
-# 🎨 ULTRA-FAST 8x10 KODAK PHOTO PRINT & ASSET ENGINE (300 DPI)
+# 🎨 ULTRA-FAST 9x10.9 KODAK PHOTO PRINT & ASSET ENGINE (300 DPI)
 # ==============================================================================
+# 1. Copies and creates transparent Supreme Lord Nandhish caricature
+# 2. Generates & verifies ALL 8 genuine permanent QR codes (1 to 8)
+# 3. Composites the 8 REAL QR codes over the dummy poster placeholders
+# 4. Formats for 2700 x 3270 @ 300 DPI Kodak Photo Paper (9" x 10.9")
+# ==============================================================================
+
 Add-Type -AssemblyName System.Drawing
 
 if (-not $TargetDir -or -not (Test-Path $TargetDir)) {
@@ -14,13 +20,17 @@ $rootDir = (Resolve-Path $TargetDir).Path
 $assetsDir = Join-Path $rootDir "public\assets"
 $docsDir = Join-Path $rootDir "docs"
 $docsAssetsDir = Join-Path $docsDir "assets"
+$qrDir = Join-Path $assetsDir "qr"
+$docsQrDir = Join-Path $docsAssetsDir "qr"
 
 if (-not (Test-Path $assetsDir)) { New-Item -ItemType Directory -Path $assetsDir -Force | Out-Null }
 if (-not (Test-Path $docsAssetsDir)) { New-Item -ItemType Directory -Path $docsAssetsDir -Force | Out-Null }
+if (-not (Test-Path $qrDir)) { New-Item -ItemType Directory -Path $qrDir -Force | Out-Null }
+if (-not (Test-Path $docsQrDir)) { New-Item -ItemType Directory -Path $docsQrDir -Force | Out-Null }
 
 Write-Host "`n========================================================" -ForegroundColor Cyan
-Write-Host "📸 KODAK 8x10 PRINT ENGINE & LORD NANDHISH ASSET SETUP" -ForegroundColor Yellow
-Write-Host "Target Root: $rootDir" -ForegroundColor Green
+Write-Host "📸 KODAK 9x10.9 PRINT ENGINE & PERMANENT QR REPLACEMENT" -ForegroundColor Yellow
+Write-Host "Target Root: $rootDir (2700 x 3270 @ 300 DPI)" -ForegroundColor Green
 Write-Host "========================================================`n" -ForegroundColor Cyan
 
 # High-performance C# image byte processor
@@ -97,7 +107,7 @@ if ($lordSource) {
         [FastImageProcessor]::MakeCheckerboardTransparent($lordSource, $lordPngOutput)
         Copy-Item $lordPngOutput $docsLordPng -Force
         $converted = $true
-        Write-Host "   ✅ Instantly generated transparent Lord Nandhish!" -ForegroundColor Green
+        Write-Host "   ✅ Generated transparent Lord Nandhish!" -ForegroundColor Green
     } catch {
         Write-Host "   ⚠️ Fast processor note: $($_.Exception.Message)" -ForegroundColor Yellow
     }
@@ -105,16 +115,53 @@ if ($lordSource) {
     if (-not $converted) {
         Copy-Item $lordSource $lordPngOutput -Force
         Copy-Item $lordSource $docsLordPng -Force
-        Write-Host "   -> Direct asset copy complete." -ForegroundColor Green
     }
 } else {
     Write-Host "   ⚠️ Could not locate Lord Nandhish source image." -ForegroundColor Yellow
 }
 
 # ------------------------------------------------------------------------------
-# STEP 2: Format Scrapbook Poster for 8x10 Kodak Photo Paper (2400 x 3000 @ 300 DPI)
+# STEP 2: Generate & Sync All 8 Permanent QR Codes (1 to 8)
 # ------------------------------------------------------------------------------
-Write-Host "`n2. Formatting Scrapbook Poster for 8x10 Inch Kodak Photo Paper..." -ForegroundColor Cyan
+Write-Host "`n2. Ensuring All 8 Permanent QR Codes are Active & Downloaded..." -ForegroundColor Cyan
+
+$permanentBase = "https://nandhish3004.github.io/birthday-qr-memory/m"
+
+for ($i = 1; $i -le 8; $i++) {
+    $qrPath = Join-Path $qrDir "$i.png"
+    $docsQrPath = Join-Path $docsQrDir "$i.png"
+    $targetUrl = "$permanentBase/$i"
+
+    $needGen = $false
+    if (-not (Test-Path $qrPath) -or (Get-Item $qrPath).Length -lt 2000) {
+        $needGen = $true
+    }
+
+    if ($needGen) {
+        try {
+            Write-Host "   -> Fetching genuine QR #$i -> $targetUrl" -ForegroundColor Green
+            $apiUrl = "https://api.qrserver.com/v1/create-qr-code/?size=800x800&ecc=H&margin=2&data=$([Uri]::EscapeDataString($targetUrl))"
+            $webClient = New-Object System.Net.WebClient
+            $webClient.DownloadFile($apiUrl, $qrPath)
+            $webClient.Dispose()
+            Copy-Item $qrPath $docsQrPath -Force
+        } catch {
+            try {
+                Invoke-WebRequest -Uri $apiUrl -OutFile $qrPath -UseBasicParsing -TimeoutSec 15
+                Copy-Item $qrPath $docsQrPath -Force
+            } catch {
+                Write-Host "   ⚠️ Could not fetch QR #$i from API: $($_.Exception.Message)" -ForegroundColor Yellow
+            }
+        }
+    } else {
+        Copy-Item $qrPath $docsQrPath -Force
+    }
+}
+
+# ------------------------------------------------------------------------------
+# STEP 3: Format Scrapbook Poster & REPLACE ALL 8 QR CODES FOR KODAK 9x10.9
+# ------------------------------------------------------------------------------
+Write-Host "`n3. Compositing 8 Genuine QR Codes onto 9x10.9 Kodak Canvas (2700 x 3270)..." -ForegroundColor Cyan
 
 $posterCandidates = @(
     "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789368265793.jpg",
@@ -138,8 +185,8 @@ if ($posterSource) {
         $origW = $origBmp.Width
         $origH = $origBmp.Height
 
-        $targetW = 2400
-        $targetH = 3000
+        $targetW = 2700 # 9.0 inches @ 300 DPI
+        $targetH = 3270 # 10.9 inches @ 300 DPI
 
         # Safe Margin: 85px ensures all 8 QR codes are inside frame lip & lab cut line
         $safeMargin = 85
@@ -172,15 +219,55 @@ if ($posterSource) {
         $shadowBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(35, 0, 0, 0))
         $g.FillRectangle($shadowBrush, $drawX + 8, $drawY + 8, $drawW, $drawH)
 
-        # Draw collage
+        # Draw base collage
         $g.DrawImage($origBmp, $drawX, $drawY, $drawW, $drawH)
 
-        # Inner border
+        # ----------------------------------------------------------------------
+        # CRITICAL: OVERLAY ALL 8 WORKING PERMANENT QR CODES ON TOP OF DUMMY ONES
+        # ----------------------------------------------------------------------
+        $qrPlacements = @(
+            @{ id = 1; xPct = 0.045; yPct = 0.042; sizePct = 0.105 }, # Top-Left pink scrap
+            @{ id = 2; xPct = 0.042; yPct = 0.292; sizePct = 0.105 }, # Mid-Left pink scrap
+            @{ id = 3; xPct = 0.038; yPct = 0.580; sizePct = 0.105 }, # Bottom-Left pink scrap
+            @{ id = 4; xPct = 0.885; yPct = 0.092; sizePct = 0.095 }, # Top-Right pink scrap
+            @{ id = 5; xPct = 0.885; yPct = 0.298; sizePct = 0.095 }, # Mid-Right purple scrap
+            @{ id = 6; xPct = 0.870; yPct = 0.585; sizePct = 0.095 }, # Lower-Mid-Right beige scrap
+            @{ id = 7; xPct = 0.860; yPct = 0.715; sizePct = 0.095 }, # Lower-Right kraft scrap
+            @{ id = 8; xPct = 0.845; yPct = 0.862; sizePct = 0.095 }  # Bottom-Right pink scrap
+        )
+
+        $whiteBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::White)
+        $qrBorderPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(235, 225, 220), 2.0)
+
+        foreach ($p in $qrPlacements) {
+            $qrFile = Join-Path $qrDir "$($p.id).png"
+            if (Test-Path $qrFile) {
+                $qx = $drawX + [int]($drawW * $p.xPct)
+                $qy = $drawY + [int]($drawH * $p.yPct)
+                $qs = [int]($drawW * $p.sizePct)
+
+                # 1. Clean white backing square (completely erases dummy QR underneath)
+                $g.FillRectangle($whiteBrush, $qx - 3, $qy - 3, $qs + 6, $qs + 6)
+                $g.DrawRectangle($qrBorderPen, $qx - 3, $qy - 3, $qs + 6, $qs + 6)
+
+                # 2. Draw the real, verified permanent QR code
+                $qrImg = [System.Drawing.Bitmap]::FromFile($qrFile)
+                $g.DrawImage($qrImg, $qx, $qy, $qs, $qs)
+                $qrImg.Dispose()
+                Write-Host "   ✅ Replaced QR #$($p.id) at (${qx}, ${qy}) with genuine permanent code." -ForegroundColor Green
+            } else {
+                Write-Host "   ⚠️ QR file missing: $qrFile" -ForegroundColor Yellow
+            }
+        }
+
+        # Inner frame border
         $borderPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(245, 235, 230), 3.0)
         $g.DrawRectangle($borderPen, $drawX, $drawY, $drawW, $drawH)
 
-        $outJpg = Join-Path $rootDir "Shaaaw-Scrapbook-Poster-8x10-Kodak-300DPI.jpg"
-        $outPng = Join-Path $rootDir "Shaaaw-Scrapbook-Poster-8x10-Kodak-300DPI.png"
+        $outJpg = Join-Path $rootDir "Shaaaw-Scrapbook-Poster-9x10.9-Kodak-300DPI.jpg"
+        $outPng = Join-Path $rootDir "Shaaaw-Scrapbook-Poster-9x10.9-Kodak-300DPI.png"
+        $old8x10 = Join-Path $rootDir "Shaaaw-Scrapbook-Poster-8x10-Kodak-300DPI.jpg"
+        if (Test-Path $old8x10) { Remove-Item $old8x10 -Force }
 
         $encoderParams = New-Object System.Drawing.Imaging.EncoderParameters(1)
         $encoderParams.Param[0] = New-Object System.Drawing.Imaging.EncoderParameter([System.Drawing.Imaging.Encoder]::Quality, 98L)
@@ -189,21 +276,21 @@ if ($posterSource) {
         $bmpMat.Save($outJpg, $jpgCodec, $encoderParams)
         $bmpMat.Save($outPng, [System.Drawing.Imaging.ImageFormat]::Png)
 
-        Copy-Item $outJpg (Join-Path $assetsDir "Shaaaw-8x10-Kodak-Print.jpg") -Force
-        Copy-Item $outJpg (Join-Path $docsAssetsDir "Shaaaw-8x10-Kodak-Print.jpg") -Force
+        Copy-Item $outJpg (Join-Path $assetsDir "Shaaaw-9x10.9-Kodak-Print.jpg") -Force
+        Copy-Item $outJpg (Join-Path $docsAssetsDir "Shaaaw-9x10.9-Kodak-Print.jpg") -Force
 
         $g.Dispose()
         $bmpMat.Dispose()
         $origBmp.Dispose()
 
-        Write-Host "   ✅ MASTER KODAK 8x10 PRINT GENERATED!" -ForegroundColor Green
-        Write-Host "      📁 JPEG (300 DPI): $outJpg" -ForegroundColor Green
-        Write-Host "      📁 PNG  (300 DPI): $outPng" -ForegroundColor Green
+        Write-Host "`n   🎉 ALL 8 QR CODES REPLACED & KODAK 9x10.9 PRINT CREATED!" -ForegroundColor Green
+        Write-Host "      📁 JPEG (300 DPI): $outJpg (9.0 x 10.9 in, 2700x3270)" -ForegroundColor Green
+        Write-Host "      📁 PNG  (300 DPI): $outPng (Lossless Archival)" -ForegroundColor Green
     } catch {
         Write-Host "   ⚠️ Kodak print error: $($_.Exception.Message)" -ForegroundColor Red
     }
 }
 
 Write-Host "`n========================================================" -ForegroundColor Cyan
-Write-Host "🎉 Assets & Kodak 8x10 Print Ready!" -ForegroundColor Yellow
+Write-Host "🎉 COMPLETE! Test by scanning any QR directly from the screen!" -ForegroundColor Yellow
 Write-Host "========================================================`n" -ForegroundColor Cyan

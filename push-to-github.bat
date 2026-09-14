@@ -1,8 +1,8 @@
 @echo off
 cd /d "%~dp0"
 echo ======================================================
-echo  Pushing Permanent QRs and Hawkins Cameo Theater
-echo  Featuring Steve, Max, Dustin, Eleven, and Saint Nandhish
+echo  Pushing Permanent QRs & Supreme Lord Nandhish Cosmic Realm
+echo  9x10.9 Kodak Photo Paper Print Engine (300 DPI)
 echo ======================================================
 echo.
 
@@ -12,7 +12,7 @@ if not exist "public\assets\qr" mkdir "public\assets\qr"
 if not exist "docs" mkdir "docs"
 if not exist "docs\assets" mkdir "docs\assets"
 
-echo 2. Syncing Lord Nandhish caricature directly...
+echo 2. Syncing Supreme Lord Nandhish caricature directly...
 if exist "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789372775279.jpg" (
     copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789372775279.jpg" "public\assets\lord-nandhish.png" >nul
     copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789372775279.jpg" "public\assets\lord-nandhish-raw.jpg" >nul
@@ -20,14 +20,14 @@ if exist "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-4
     echo    - Lord Nandhish caricature copied to public\assets\ and docs\assets\
 )
 
-echo 3. Running fast 8x10 Kodak print engine and asset processor...
+echo 3. Running fast 9x10.9 Kodak print engine and asset processor...
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\prepare-kodak-and-assets.ps1" -TargetDir "%~dp0"
 
 echo 4. Staging modified files...
 git add .
 
 echo 5. Committing changes...
-git commit -m "Update Lord Nandhish caricature asset and 8x10 Kodak photo print studio"
+git commit -m "Update Supreme Lord Nandhish and 9x10.9 Kodak photo print engine (2700x3270 @ 300 DPI)"
 
 echo 6. Setting main branch...
 git branch -M main
@@ -37,7 +37,7 @@ git push -u origin main
 
 echo.
 echo ======================================================
-echo  Done! Permanent QRs and Animations pushed to GitHub!
+echo  Done! 9x10.9 Kodak Poster & Permanent QRs pushed to GitHub!
 echo  Render is building your live deployment now!
 echo ======================================================
 echo.

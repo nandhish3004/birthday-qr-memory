@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kodak 8×10 Photo Print Studio 📸 Shaaaw's Birthday Scrapbook</title>
+  <title>Kodak 9×10.9 Photo Print Studio 📸 Shaaaw's Birthday Scrapbook</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <style>
     :root {
       --kodak-yellow: #ffb800;
@@ -144,7 +145,7 @@
       width: 100%;
       max-width: 520px;
       height: auto;
-      aspect-ratio: 4 / 5;
+      aspect-ratio: 9 / 10.9;
     }
 
     .guide-overlay {
@@ -414,12 +415,12 @@
     }
 
     .kodak-tip-box strong {
-      color: #ffb800;
+      color: #ffb800;    /* Dedicated Print Stylesheet */
     }
 
     @media print {
       @page {
-        size: 8in 10in;
+        size: 9in 10.9in;
         margin: 0;
       }
       body {
@@ -447,13 +448,13 @@
       .canvas-viewport {
         box-shadow: none !important;
         border-radius: 0 !important;
-        width: 8in !important;
-        height: 10in !important;
+        width: 9in !important;
+        height: 10.9in !important;
         max-width: none !important;
       }
       #kodakCanvas {
-        width: 8in !important;
-        height: 10in !important;
+        width: 9in !important;
+        height: 10.9in !important;
         max-width: none !important;
       }
     }
@@ -467,14 +468,14 @@
         <span>← Back to Vault Hub</span>
       </a>
       <div class="kodak-badge">
-        📸 Kodak 8×10 Master Studio (300 DPI)
+        📸 Kodak 9×10.9 Master Studio (300 DPI)
       </div>
     </nav>
 
     <header class="studio-header">
-      <h1 class="studio-title">Shaaaw's 8×10 Kodak Photo Paper Studio</h1>
+      <h1 class="studio-title">Shaaaw's 9×10.9 Kodak Photo Paper Studio</h1>
       <p class="studio-sub">
-        Modified specifically for <strong>8" × 10" Kodak Photo Paper</strong> at <strong>300 DPI</strong> (2400 × 3000 pixels). 
+        Modified specifically for <strong>9" × 10.9" Kodak Photo Paper</strong> at <strong>300 DPI</strong> (2700 × 3270 pixels). 
         Safe zones prevent photo frame lips and print trimming blades from cutting off your 8 QR codes!
       </p>
     </header>
@@ -482,12 +483,13 @@
     <div class="studio-grid">
       <div class="preview-stage-wrap">
         <div class="preview-header-bar">
-          <span>Target: <span class="paper-spec-tag">8.0 × 10.0 Inches (Kodak Paper)</span></span>
-          <span>Resolution: <span class="paper-spec-tag">2400 × 3000 px @ 300 DPI</span></span>
+          <span>Target: <span class="paper-spec-tag">9.0 × 10.9 Inches (Kodak Paper)</span></span>
+          <span>Resolution: <span class="paper-spec-tag">2700 × 3270 px @ 300 DPI</span></span>
         </div>
 
         <div class="canvas-viewport" id="canvasViewport">
-          <canvas id="kodakCanvas" width="2400" height="3000"></canvas>
+          <!-- 300 DPI Master 9x10.9 Canvas -->
+          <canvas id="kodakCanvas" width="2700" height="3270"></canvas>
           <div class="guide-overlay" id="guideOverlay">
             <div class="guide-bleed-line">
               <span class="guide-bleed-label">✂️ 1/8" Lab Cut Trim Line</span>
@@ -511,14 +513,14 @@
             <button class="style-option-btn active" id="btnStyleMat" onclick="setFramingStyle('mat')">
               <div>
                 <span class="style-btn-title">🌸 Archival Kodak Mat (Recommended)</span>
-                <span class="style-btn-desc">Warm parchment mat & rose-gold frame. Best for framing in an 8×10 glass frame.</span>
+                <span class="style-btn-desc">Warm parchment mat & rose-gold frame. Best for framing in a 9×10.9 glass frame.</span>
               </div>
             </button>
 
             <button class="style-option-btn" id="btnStyleSeamless" onclick="setFramingStyle('seamless')">
               <div>
                 <span class="style-btn-title">🌺 Seamless Vintage Bleed</span>
-                <span class="style-btn-desc">Torn paper & floral texture extended edge-to-edge across all 8×10 inches.</span>
+                <span class="style-btn-desc">Torn paper & floral texture extended edge-to-edge across all 9×10.9 inches.</span>
               </div>
             </button>
 
@@ -544,11 +546,11 @@
           <ul class="checklist-list">
             <li class="checklist-item">
               <span class="check-icon">✓</span>
-              <span><strong>Exact 4:5 Aspect Ratio:</strong> Fits 8"×10" without stretching or squishing</span>
+              <span><strong>Exact 9:10.9 Ratio:</strong> Fits 9"×10.9" without stretching or squishing</span>
             </li>
             <li class="checklist-item">
               <span class="check-icon">✓</span>
-              <span><strong>300 DPI Master Clarity:</strong> 2400 × 3000 px photo-lab standard</span>
+              <span><strong>300 DPI Master Clarity:</strong> 2700 × 3270 px photo-lab standard</span>
             </li>
             <li class="checklist-item">
               <span class="check-icon">✓</span>
@@ -563,22 +565,22 @@
 
         <div class="panel-card actions-card">
           <button class="btn-download-hero" onclick="downloadMasterImage('jpeg')">
-            <span>⬇️ Download 8×10 Kodak JPEG (300 DPI)</span>
+            <span>⬇️ Download 9×10.9 Kodak JPEG (300 DPI)</span>
           </button>
 
           <button class="btn-download-sub" onclick="downloadMasterImage('png')">
-            <span>💾 Download Lossless 8×10 PNG</span>
+            <span>💾 Download Lossless 9×10.9 PNG</span>
           </button>
 
           <button class="btn-download-sub" onclick="window.print()">
-            <span>🖨️ Direct Print (8×10 Kodak Paper)</span>
+            <span>🖨️ Direct Print (9×10.9 Kodak Paper)</span>
           </button>
         </div>
 
         <div class="kodak-tip-box">
           <strong>💡 Printing at Kodak Kiosk, Walmart, CVS, or Photo Lab:</strong><br>
           1. Download the <strong>JPEG (300 DPI)</strong> file onto a USB thumb drive or phone.<br>
-          2. At the kiosk or website, select <strong>8" × 10" Print Size</strong>.<br>
+          2. At the kiosk or website, select <strong>9" × 10.9" (or Custom Size)</strong>.<br>
           3. Choose <strong>"Kodak Glossy"</strong> or <strong>"Kodak Lustre/Matte"</strong> finish for richest color pop!
         </div>
       </div>
@@ -607,7 +609,7 @@
     }
 
     sourceImage.onload = () => {
-      render8x10Poster();
+      render9x10_9Poster();
     };
     sourceImage.onerror = tryLoadNextPoster;
     tryLoadNextPoster();
@@ -618,7 +620,7 @@
       if (style === 'mat') document.getElementById('btnStyleMat').classList.add('active');
       if (style === 'seamless') document.getElementById('btnStyleSeamless').classList.add('active');
       if (style === 'white-border') document.getElementById('btnStyleBorder').classList.add('active');
-      render8x10Poster();
+      render9x10_9Poster();
     }
 
     function toggleGuidelines(show) {
@@ -630,9 +632,9 @@
       }
     }
 
-    function render8x10Poster() {
-      const targetW = 2400;
-      const targetH = 3000;
+    function render9x10_9Poster() {
+      const targetW = 2700;
+      const targetH = 3270;
       canvas.width = targetW;
       canvas.height = targetH;
 
@@ -644,6 +646,8 @@
 
       const origW = sourceImage.naturalWidth;
       const origH = sourceImage.naturalHeight;
+
+      let drawX, drawY, drawW, drawH;
 
       if (currentStyle === 'mat') {
         ctx.fillStyle = '#fbf6ee';
@@ -666,10 +670,10 @@
         const safeMarginY = 95;
         const availH = targetH - (safeMarginY * 2);
         const scale = availH / origH;
-        const drawW = Math.round(origW * scale);
-        const drawH = Math.round(origH * scale);
-        const drawX = Math.round((targetW - drawW) / 2);
-        const drawY = safeMarginY;
+        drawW = Math.round(origW * scale);
+        drawH = Math.round(origH * scale);
+        drawX = Math.round((targetW - drawW) / 2);
+        drawY = safeMarginY;
 
         ctx.shadowColor = 'rgba(40, 15, 25, 0.25)';
         ctx.shadowBlur = 40;
@@ -700,10 +704,10 @@
         const safeMarginY = 50;
         const availH = targetH - (safeMarginY * 2);
         const scale = availH / origH;
-        const drawW = Math.round(origW * scale);
-        const drawH = Math.round(origH * scale);
-        const drawX = Math.round((targetW - drawW) / 2);
-        const drawY = safeMarginY;
+        drawW = Math.round(origW * scale);
+        drawH = Math.round(origH * scale);
+        drawX = Math.round((targetW - drawW) / 2);
+        drawY = safeMarginY;
 
         ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
         ctx.shadowBlur = 50;
@@ -720,18 +724,69 @@
         const availW = targetW - (borderMargin * 2);
         const availH = targetH - (borderMargin * 2);
         const scale = Math.min(availW / origW, availH / origH);
-        const drawW = Math.round(origW * scale);
-        const drawH = Math.round(origH * scale);
-        const drawX = Math.round((targetW - drawW) / 2);
-        const drawY = Math.round((targetH - drawH) / 2);
+        drawW = Math.round(origW * scale);
+        drawH = Math.round(origH * scale);
+        drawX = Math.round((targetW - drawW) / 2);
+        drawY = Math.round((targetH - drawH) / 2);
 
         ctx.drawImage(sourceImage, drawX, drawY, drawW, drawH);
       }
+
+      // ====================================================================
+      // 🌟 OVERLAY ALL 8 GENUINE PERMANENT BIRTHDAY QR CODES (SCANNABLE!)
+      // ====================================================================
+      const QR_PLACEMENTS = [
+        { id: 1, label: "Tape 01 💗", xPct: 0.045, yPct: 0.042, sizePct: 0.105 },
+        { id: 2, label: "Tape 02 ✨", xPct: 0.042, yPct: 0.292, sizePct: 0.105 },
+        { id: 3, label: "Tape 03 🎵", xPct: 0.038, yPct: 0.580, sizePct: 0.105 },
+        { id: 4, label: "Tape 04 🧇", xPct: 0.885, yPct: 0.092, sizePct: 0.095 },
+        { id: 5, label: "Tape 05 🏰", xPct: 0.885, yPct: 0.298, sizePct: 0.095 },
+        { id: 6, label: "Tape 06 ⚔️", xPct: 0.870, yPct: 0.585, sizePct: 0.095 },
+        { id: 7, label: "Tape 07 🎯", xPct: 0.860, yPct: 0.715, sizePct: 0.095 },
+        { id: 8, label: "Tape 08 📻", xPct: 0.845, yPct: 0.862, sizePct: 0.095 }
+      ];
+
+      QR_PLACEMENTS.forEach(p => {
+        const qx = drawX + Math.round(drawW * p.xPct);
+        const qy = drawY + Math.round(drawH * p.yPct);
+        const qs = Math.round(drawW * p.sizePct);
+        const targetUrl = 'https://nandhish3004.github.io/birthday-qr-memory/m/' + p.id;
+
+        // 1. Clean white backing card (erases dummy QR completely)
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(qx - 3, qy - 3, qs + 6, qs + 6);
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(qx - 3, qy - 3, qs + 6, qs + 6);
+
+        // 2. Generate and draw real working QR code
+        if (window.QRCode && typeof QRCode.toCanvas === 'function') {
+          const offCanvas = document.createElement('canvas');
+          QRCode.toCanvas(offCanvas, targetUrl, {
+            errorCorrectionLevel: 'H',
+            margin: 1,
+            width: qs,
+            color: { dark: '#000000', light: '#ffffff' }
+          }, function (err) {
+            if (!err) {
+              ctx.drawImage(offCanvas, qx, qy, qs, qs);
+            }
+          });
+        } else {
+          const qrImg = new Image();
+          qrImg.onload = () => {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(qx - 3, qy - 3, qs + 6, qs + 6);
+            ctx.drawImage(qrImg, qx, qy, qs, qs);
+          };
+          qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&margin=2&data=${encodeURIComponent(targetUrl)}`;
+        }
+      });
     }
 
     function downloadMasterImage(format = 'jpeg') {
       const link = document.createElement('a');
-      const filename = `Shaaaw-Scrapbook-8x10-Kodak-300DPI.${format === 'jpeg' ? 'jpg' : 'png'}`;
+      const filename = `Shaaaw-Scrapbook-9x10.9-Kodak-300DPI.${format === 'jpeg' ? 'jpg' : 'png'}`;
       link.download = filename;
 
       if (format === 'jpeg') {
@@ -743,6 +798,10 @@
       link.click();
       document.body.removeChild(link);
     }
+
+    window.addEventListener('load', () => {
+      setTimeout(render9x10_9Poster, 250);
+    });
   </script>
 </body>
 </html>
