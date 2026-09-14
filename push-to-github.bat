@@ -1,7 +1,7 @@
 @echo off
 cd /d "%~dp0"
 echo ======================================================
-echo  Pushing Permanent QRs & Supreme Lord Nandhish Cosmic Realm
+echo  Pushing Permanent QRs and Supreme Lord Nandhish Cosmic Realm
 echo  9x10.9 Kodak Photo Paper Print Engine (300 DPI)
 echo ======================================================
 echo.
@@ -12,7 +12,7 @@ if not exist "public\assets\qr" mkdir "public\assets\qr"
 if not exist "docs" mkdir "docs"
 if not exist "docs\assets" mkdir "docs\assets"
 
-echo 2. Syncing Supreme Lord Nandhish & Shaaaw Center Photo...
+echo 2. Syncing Supreme Lord Nandhish and Shaaaw Center Photo...
 if exist "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789372775279.jpg" (
     copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789372775279.jpg" "public\assets\lord-nandhish.png" >nul
     copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789372775279.jpg" "public\assets\lord-nandhish-raw.jpg" >nul
@@ -51,7 +51,7 @@ git push -u origin main
 
 echo.
 echo ======================================================
-echo  Done! 4K Shaaaw Poster, 9x10.9 Kodak Print & QRs Pushed!
+echo  Done! 4K Shaaaw Poster, 9x10.9 Kodak Print and QRs Pushed!
 echo  Render is building your live deployment now!
 echo ======================================================
 echo.
