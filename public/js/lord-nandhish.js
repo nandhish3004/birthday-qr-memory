@@ -282,7 +282,7 @@ class LordNandhishCosmicEngine {
       if (window.guruInstance) {
         window.guruInstance.speak(
           "✨ Saint Nandhish",
-          "🙏 *Bows in awe* Look upon Lord Nandhish, Shaaaw! The Supreme Cosmic Preserver has descended for your birthday!",
+          "🙏 Wishing you the most wonderful birthday filled with joy and blessings, Shaaaw!",
           'bubble-saint',
           8000
         );

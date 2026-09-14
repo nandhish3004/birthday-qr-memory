@@ -574,16 +574,16 @@
 
           <!-- Framing Integration Mode -->
           <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-            <button class="style-option-btn" id="btnModeSeamless" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setPolaroidMode('seamless')">
+            <button class="style-option-btn active" id="btnModeSeamless" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setPolaroidMode('seamless')">
               <div>
-                <span class="style-btn-title" style="font-size: 0.82rem;">✨ Seamless Aperture</span>
-                <span class="style-btn-desc" style="font-size: 0.72rem;">Clips photos directly inside background openings.</span>
+                <span class="style-btn-title" style="font-size: 0.82rem;">✨ Embedded Frame Aperture (Recommended)</span>
+                <span class="style-btn-desc" style="font-size: 0.72rem;">Embeds photos into the scrapbook's built-in frames without fake glued cards.</span>
               </div>
             </button>
-            <button class="style-option-btn active" id="btnModeStudio" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setPolaroidMode('studio-card')">
+            <button class="style-option-btn" id="btnModeStudio" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setPolaroidMode('studio-card')">
               <div>
-                <span class="style-btn-title" style="font-size: 0.82rem;">🖼️ Calibrated Studio Card (Recommended)</span>
-                <span class="style-btn-desc" style="font-size: 0.72rem;">Full white polaroid frames, chins, doodles & washi tape!</span>
+                <span class="style-btn-title" style="font-size: 0.82rem;">🖼️ Studio Card Overlay</span>
+                <span class="style-btn-desc" style="font-size: 0.72rem;">Full white polaroid frames & chins.</span>
               </div>
             </button>
           </div>
@@ -697,16 +697,16 @@
           </p>
 
           <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-            <button class="style-option-btn active" id="btnQrBadge" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setQrStyleMode('badge')">
+            <button class="style-option-btn active" id="btnQrFlush" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setQrStyleMode('flush')">
               <div>
-                <span class="style-btn-title" style="font-size: 0.82rem;">🏷️ Keepsake Mini Cards (Recommended)</span>
-                <span class="style-btn-desc" style="font-size: 0.72rem;">Encased inside cute polaroid cards with washi tape &amp; track labels!</span>
+                <span class="style-btn-title" style="font-size: 0.82rem;">🎯 Embedded Note Fit (Recommended)</span>
+                <span class="style-btn-desc" style="font-size: 0.72rem;">Embedded cleanly on the 8 paper notes without washi glue.</span>
               </div>
             </button>
-            <button class="style-option-btn" id="btnQrFlush" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setQrStyleMode('flush')">
+            <button class="style-option-btn" id="btnQrBadge" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setQrStyleMode('badge')">
               <div>
-                <span class="style-btn-title" style="font-size: 0.82rem;">🎯 Flush Fit (Bare)</span>
-                <span class="style-btn-desc" style="font-size: 0.72rem;">Flush borderless QR code square.</span>
+                <span class="style-btn-title" style="font-size: 0.82rem;">🏷️ Keepsake Mini Cards</span>
+                <span class="style-btn-desc" style="font-size: 0.72rem;">Card badges with washi tape header.</span>
               </div>
             </button>
           </div>
@@ -736,18 +736,18 @@
           </div>
         </div>
 
-        <!-- Cute Funny Avatar Easter Eggs Panel -->
+        <!-- Meaningful Nandhish Avatars Storytelling Panel -->
         <div class="panel-card" style="border-color: #a855f7; background: rgba(28, 16, 44, 0.85);">
           <h3 class="panel-title" style="color: #e9d5ff;">
-            <span>🎭 Funny Nandhish Avatars (Cute Easter Eggs)</span>
+            <span>🎭 Meaningful Avatars (Storytelling Roles)</span>
           </h3>
           <p style="font-size: 0.82rem; color: #cbd5e1; margin-top: -6px; margin-bottom: 12px;">
-            Transparent funny caricature stickers positioned meaningfully on the poster:
+            Clean transparent figures integrated purposefully into the scrapbook memories:
           </p>
 
           <div style="display: flex; flex-direction: column; gap: 10px;">
             <div class="toggle-row">
-              <span style="font-size: 0.84rem;">🧘‍♂️ Buddha Avatar (On Retro Vinyl)</span>
+              <span style="font-size: 0.84rem;">🧘‍♂️ Buddha Nandhish (Music & Peace on Vinyl)</span>
               <label class="switch">
                 <input type="checkbox" id="toggleBuddha" checked onchange="toggleAvatar('buddha', this.checked)">
                 <span class="slider"></span>
@@ -755,7 +755,7 @@
             </div>
 
             <div class="toggle-row">
-              <span style="font-size: 0.84rem;">☸️ Vishnu Avatar (Beside Memory Card)</span>
+              <span style="font-size: 0.84rem;">☸️ Lord Vishnu Nandhish (Celestial Guardian of Shaaaw)</span>
               <label class="switch">
                 <input type="checkbox" id="toggleVishnu" checked onchange="toggleAvatar('vishnu', this.checked)">
                 <span class="slider"></span>
@@ -763,7 +763,7 @@
             </div>
 
             <div class="toggle-row">
-              <span style="font-size: 0.84rem;">🕊️ Shepherd Avatar (Bottom Greeting)</span>
+              <span style="font-size: 0.84rem;">🕊️ Shepherd Nandhish (Birthday Greetings & Celebration)</span>
               <label class="switch">
                 <input type="checkbox" id="toggleShepherd" checked onchange="toggleAvatar('shepherd', this.checked)">
                 <span class="slider"></span>
@@ -819,9 +819,8 @@
     const extraPhotos = {};
     const qrCanvasCache = {};
 
-    // Precision Framing & QR Alignment State
-    let polaroidMode = 'studio-card'; // 'studio-card' (full cardstock, chin, doodles & tape) or 'seamless'
-    let qrStyleMode = 'badge';        // 'badge' (encased mini polaroid card tags) or 'flush'
+    let polaroidMode = 'seamless';    // 'seamless' (embedded in scrapbook frames) or 'studio-card'
+    let qrStyleMode = 'flush';        // 'flush' (embedded on paper notes) or 'badge'
     
     let shaawPanY = 0.18;
     let shaawPanX = 0.00;
@@ -832,7 +831,7 @@
     let qrScaleMultiplier = 1.00;
     let showAlignmentOutlines = false;
 
-    // Funny Avatar Figures State & Loaders
+    // Meaningful Storytelling Avatar Figures State & Loaders
     let showBuddhaAvatar = true;
     let showVishnuAvatar = true;
     let showShepherdAvatar = true;
@@ -842,7 +841,7 @@
     const avatarVishnuImg = new Image();
     const avatarShepherdImg = new Image();
 
-    // High-performance boundary BFS transparency filter
+    // High-performance boundary & enclosed pocket transparency filter
     function makeTransparentCanvas(sourceImg, type) {
       if (!sourceImg || !sourceImg.width || !sourceImg.height) return sourceImg;
       const off = document.createElement('canvas');
@@ -859,16 +858,20 @@
         const n = w * h;
 
         if (type === 'checkerboard') {
-          // Vishnu: Remove checkerboard background (grey and white squares)
+          // Vishnu: Remove all checkerboard background (grey and white squares)
+          // including trapped pockets between arms, weapons, crown & hair
           const visited = new Uint8Array(n);
           const queue = new Int32Array(n);
           let head = 0, tail = 0;
 
           function isChecker(r, g, b) {
             const diff = Math.max(Math.abs(r - g), Math.max(Math.abs(r - b), Math.abs(g - b)));
-            return (r >= 150 && r <= 232 && diff <= 16) || (r >= 230 && g >= 230 && b >= 230 && diff <= 12);
+            // Grey squares: r,g,b in 150..235, low saturation diff
+            // White squares: r,g,b >= 235
+            return (r >= 150 && r <= 235 && diff <= 16) || (r >= 235 && g >= 235 && b >= 235 && diff <= 12);
           }
 
+          // Pass 1: Seed from outer image borders
           for (let x = 0; x < w; x++) { seed(x, 0); seed(x, h - 1); }
           for (let y = 0; y < h; y++) { seed(0, y); seed(w - 1, y); }
 
@@ -884,7 +887,7 @@
 
           while (head < tail) {
             const idx = queue[head++];
-            data[idx * 4 + 3] = 0;
+            data[idx * 4 + 3] = 0; // Set transparent
             const x = idx % w;
             const y = (idx / w) | 0;
 
@@ -901,15 +904,14 @@
             }
           }
 
-          // Enclosed grey checkerboard pockets between arms
+          // Pass 2: Enclosed checkerboard pockets between Vishnu's arms, crown & torso
           for (let y = 0; y < h; y++) {
             for (let x = 0; x < w; x++) {
               const idx = y * w + x;
               if (visited[idx]) continue;
               const p = idx * 4;
               const r = data[p], g = data[p + 1], b = data[p + 2];
-              const diff = Math.max(Math.abs(r - g), Math.max(Math.abs(r - b), Math.abs(g - b)));
-              if (r >= 170 && r <= 220 && diff <= 6) {
+              if (isChecker(r, g, b)) {
                 let pHead = tail;
                 visited[idx] = 1;
                 queue[tail++] = idx;
@@ -935,7 +937,7 @@
           }
 
         } else if (type === 'black') {
-          // Buddha: Remove black background
+          // Buddha: Remove black background with smooth anti-aliased edge
           const visited = new Uint8Array(n);
           const queue = new Int32Array(n);
           let head = 0, tail = 0;
@@ -966,19 +968,19 @@
               if (visited[nIdx]) continue;
               const np = nIdx * 4;
               const r = data[np], g = data[np + 1], b = data[np + 2];
-              if (r <= 45 && g <= 45 && b <= 45) {
+              if (r <= 48 && g <= 48 && b <= 48) {
                 visited[nIdx] = 1;
                 queue[tail++] = nIdx;
-              } else if (r <= 70 && g <= 70 && b <= 70) {
+              } else if (r <= 78 && g <= 78 && b <= 78) {
                 visited[nIdx] = 1;
                 const avg = (r + g + b) / 3;
-                data[np + 3] = Math.max(0, Math.min(255, Math.round((avg - 45) * 10)));
+                data[np + 3] = Math.max(0, Math.min(255, Math.round((avg - 48) * 8.5)));
               }
             }
           }
 
         } else if (type === 'white') {
-          // Shepherd: Remove white background
+          // Shepherd: Remove white background with smooth edge feathering
           const visited = new Uint8Array(n);
           const queue = new Int32Array(n);
           let head = 0, tail = 0;
@@ -1019,10 +1021,10 @@
                 queue[tail++] = nIdx;
               } else {
                 const diff = Math.max(Math.abs(r - g), Math.max(Math.abs(r - b), Math.abs(g - b)));
-                if (r >= 205 && g >= 205 && b >= 205 && diff <= 15) {
+                if (r >= 200 && g >= 200 && b >= 200 && diff <= 16) {
                   visited[nIdx] = 1;
                   const avg = (r + g + b) / 3;
-                  data[np + 3] = Math.max(0, Math.min(255, Math.round((255 - avg) * 8)));
+                  data[np + 3] = Math.max(0, Math.min(255, Math.round((255 - avg) * 7.5)));
                 }
               }
             }
@@ -1207,7 +1209,7 @@
       if (document.getElementById('avatarScaleVal')) document.getElementById('avatarScaleVal').textContent = '100%';
 
       setPolaroidMode('studio-card');
-      setQrStyleMode('badge');
+      setQrStyleMode('flush');
     }
 
     function uploadMainPhoto(event) {
@@ -1238,10 +1240,11 @@
 
     const posterCandidates = [
       'assets/original-poster.jpg',
+      'assets/clean-poster-bg.jpg',
       '/assets/original-poster.jpg',
+      '/assets/clean-poster-bg.jpg',
       '../public/assets/original-poster.jpg',
-      '../assets/original-poster.jpg',
-      '../public/assets/poster-with-qrs.png'
+      '../public/assets/clean-poster-bg.jpg'
     ];
 
     let candidateIdx = 0;
@@ -1316,7 +1319,7 @@
       c.restore();
     }
 
-    // Pre-generate QR canvases for crisp rendering
+    // Pre-generate QR canvases for crisp rendering with warm note paper tone
     function getQRCodeCanvas(targetUrl, size) {
       const key = targetUrl + '_' + size;
       if (qrCanvasCache[key]) {
@@ -1333,8 +1336,8 @@
           margin: 1,
           width: size,
           color: { 
-            dark: '#1a1416', // Deep espresso ink
-            light: '#ffffff' 
+            dark: '#1a1215', // Rich deep espresso ink
+            light: '#faf7f0' // Warm vintage note paper background (seamlessly embedded)
           }
         }, function (err) {
           if (!err) {
@@ -1350,7 +1353,7 @@
           qrCanvasCache[key] = offCanvas;
           render9x10_9Poster();
         };
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&ecc=H&margin=1&data=${encodeURIComponent(targetUrl)}`;
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&ecc=H&margin=1&color=1a1215&bgcolor=faf7f0&data=${encodeURIComponent(targetUrl)}`;
       }
       qrCanvasCache[key] = offCanvas;
       return offCanvas;
@@ -1520,13 +1523,13 @@
         ctx.rotate(rotDeg * Math.PI / 180);
 
         if (polaroidMode === 'studio-card') {
-          // MODE B: REDESIGNED CRISP ARCHIVAL POLAROID CARD OVERLAY
-          ctx.shadowColor = 'rgba(30, 10, 20, 0.28)';
-          ctx.shadowBlur = isMain ? 32 : 18;
+          // NATURAL EMBEDDED POLAROID CARD (Seamless part of scrapbook layout)
+          ctx.shadowColor = 'rgba(30, 15, 20, 0.16)';
+          ctx.shadowBlur = isMain ? 14 : 9;
           ctx.shadowOffsetX = 0;
-          ctx.shadowOffsetY = isMain ? 10 : 6;
+          ctx.shadowOffsetY = isMain ? 4 : 2;
 
-          // Archival Silk Warm Ivory Polaroid Paper
+          // Silk Warm Ivory Polaroid Paper
           const cardGrad = ctx.createLinearGradient(-cardW / 2, -cardH / 2, cardW / 2, cardH / 2);
           cardGrad.addColorStop(0, '#ffffff');
           cardGrad.addColorStop(0.38, '#faf8f4');
@@ -1537,8 +1540,8 @@
           ctx.fill();
 
           ctx.shadowColor = 'transparent';
-          ctx.strokeStyle = 'rgba(160, 130, 110, 0.25)';
-          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = 'rgba(150, 120, 110, 0.22)';
+          ctx.lineWidth = 1.2;
           drawRoundedRect(ctx, -cardW / 2, -cardH / 2, cardW, cardH, 4);
           ctx.stroke();
 
@@ -1554,42 +1557,24 @@
           drawCroppedPhoto(photoImg, -apertureW / 2, photoTop, apertureW, apertureH, panX, panY, zoom, labelText, apertureW);
           
           // Inner photo bevel depth
-          ctx.strokeStyle = 'rgba(50, 25, 35, 0.22)';
-          ctx.lineWidth = 2;
+          ctx.strokeStyle = 'rgba(50, 25, 35, 0.20)';
+          ctx.lineWidth = 1.8;
           drawRoundedRect(ctx, -apertureW / 2, photoTop, apertureW, apertureH, 3);
           ctx.stroke();
           ctx.restore();
 
-          // Bottom chin handwritten calligraphy
+          // Bottom chin handwritten calligraphy (seamlessly part of the polaroid)
           const chinY = photoTop + apertureH + (cardH / 2 - (photoTop + apertureH)) / 2;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
           if (isMain) {
             ctx.fillStyle = '#3a272e';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.font = 'italic 700 ' + Math.round(cardW * 0.062) + 'px "Caveat", "Brush Script MT", cursive, sans-serif';
-            ctx.fillText('Our Prettiest Girl ♡ Shaaaw', 0, chinY);
-
-            ctx.font = 'bold ' + Math.round(cardW * 0.065) + 'px Arial, sans-serif';
-            ctx.fillStyle = 'rgba(236, 72, 153, 0.85)';
-            ctx.fillText('💖', cardW / 2 - 24, chinY);
-            ctx.fillText('♡', -cardW / 2 + 24, chinY);
-
-            // Pink washi tape strip on top
-            drawWashiTape(ctx, 0, -cardH / 2 + 2, Math.round(cardW * 0.32), 22, -1.5, 'gingham');
+            ctx.font = 'italic 700 ' + Math.round(cardW * 0.066) + 'px "Playfair Display", Georgia, serif';
+            ctx.fillText('Our Prettiest Girl ♡ Shaaaw 💖', 0, chinY);
           } else {
-            ctx.fillStyle = '#5a3d46';
-            ctx.font = 'italic 700 ' + Math.round(cardW * 0.062) + 'px "Caveat", "Brush Script MT", cursive, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#4a2835';
+            ctx.font = 'italic 600 ' + Math.round(cardW * 0.068) + 'px "Playfair Display", Georgia, serif';
             ctx.fillText(labelText || 'Memory ♡', 0, chinY);
-
-            ctx.font = 'bold ' + Math.round(cardW * 0.060) + 'px sans-serif';
-            ctx.fillStyle = 'rgba(236, 72, 153, 0.85)';
-            ctx.fillText('♡', cardW / 2 - 18, chinY);
-            ctx.fillText('♡', -cardW / 2 + 18, chinY);
-
-            // Gingham washi tape on top of frame
-            drawWashiTape(ctx, 0, -cardH / 2 + 2, Math.round(cardW * 0.30), 16, (rotDeg > 0 ? -2.5 : 2.5), 'gingham');
           }
 
           // Alignment Outlines (if inspector toggled)
@@ -1634,14 +1619,14 @@
       }
 
       // --- FRAME 0: CENTER MAIN POLAROID (SHAAAW) ---
-      const centerPhotoW = Math.round(drawW * 0.320 * centerWidthScale);
-      const centerPhotoH = Math.round(drawW * 0.322 * centerHeightScale);
-      const centerCardW = Math.round(drawW * 0.370 * centerWidthScale);
-      const centerCardH = Math.round(centerCardW * 1.16 * centerHeightScale);
+      const centerPhotoW = Math.round(drawW * 0.300 * centerWidthScale);
+      const centerPhotoH = Math.round(drawW * 0.300 * centerHeightScale);
+      const centerCardW = Math.round(drawW * 0.340 * centerWidthScale);
+      const centerCardH = Math.round(centerCardW * 1.18 * centerHeightScale);
 
       renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.504),
-        cy: drawY + Math.round(drawH * 0.338),
+        cx: drawX + Math.round(drawW * 0.512),
+        cy: drawY + Math.round(drawH * 0.355),
         apertureW: centerPhotoW,
         apertureH: centerPhotoH,
         cardW: centerCardW,
@@ -1656,103 +1641,103 @@
       });
 
       // --- FRAME 1: TOP-LEFT POLAROID (01. Memory) ---
-      const f1W = Math.round(drawW * 0.180);
+      const f1W = Math.round(drawW * 0.205);
       renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.180),
-        cy: drawY + Math.round(drawH * 0.218),
+        cx: drawX + Math.round(drawW * 0.205),
+        cy: drawY + Math.round(drawH * 0.200),
         apertureW: f1W,
         apertureH: f1W,
-        cardW: Math.round(drawW * 0.200),
-        cardH: Math.round(drawW * 0.200 * 1.18),
-        rotDeg: 4.5,
+        cardW: Math.round(f1W * 1.08),
+        cardH: Math.round(f1W * 1.08 * 1.18),
+        rotDeg: 3.5,
         photoImg: extraPhotos[1],
         labelText: '01. Memory 💗'
       });
 
       // --- FRAME 2: MID-LEFT POLAROID ---
-      const f2W = Math.round(drawW * 0.195);
+      const f2W = Math.round(drawW * 0.215);
       renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.165),
-        cy: drawY + Math.round(drawH * 0.430),
+        cx: drawX + Math.round(drawW * 0.175),
+        cy: drawY + Math.round(drawH * 0.445),
         apertureW: f2W,
         apertureH: f2W,
-        cardW: Math.round(drawW * 0.220),
-        cardH: Math.round(drawW * 0.220 * 1.18),
-        rotDeg: -6.8,
+        cardW: Math.round(f2W * 1.08),
+        cardH: Math.round(f2W * 1.08 * 1.18),
+        rotDeg: -5.0,
         photoImg: extraPhotos[2],
         labelText: '02. Smiles ✨'
       });
 
       // --- FRAME 3: BOTTOM-LEFT POLAROID ---
-      const f3W = Math.round(drawW * 0.190);
+      const f3W = Math.round(drawW * 0.220);
       renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.355),
-        cy: drawY + Math.round(drawH * 0.630),
+        cx: drawX + Math.round(drawW * 0.380),
+        cy: drawY + Math.round(drawH * 0.650),
         apertureW: f3W,
         apertureH: f3W,
-        cardW: Math.round(drawW * 0.215),
-        cardH: Math.round(drawW * 0.215 * 1.18),
-        rotDeg: -3.2,
+        cardW: Math.round(f3W * 1.08),
+        cardH: Math.round(f3W * 1.08 * 1.18),
+        rotDeg: -2.8,
         photoImg: extraPhotos[3],
         labelText: '03. Melody 🎵'
       });
 
       // --- FRAME 4: BOTTOM-RIGHT POLAROID ---
-      const f4W = Math.round(drawW * 0.190);
+      const f4W = Math.round(drawW * 0.220);
       renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.645),
-        cy: drawY + Math.round(drawH * 0.622),
+        cx: drawX + Math.round(drawW * 0.640),
+        cy: drawY + Math.round(drawH * 0.655),
         apertureW: f4W,
         apertureH: f4W,
-        cardW: Math.round(drawW * 0.215),
-        cardH: Math.round(drawW * 0.215 * 1.18),
-        rotDeg: 3.2,
+        cardW: Math.round(f4W * 1.08),
+        cardH: Math.round(f4W * 1.08 * 1.18),
+        rotDeg: 3.0,
         photoImg: extraPhotos[4],
         labelText: '04. Moments 🧇'
       });
 
       // --- FRAME 5: TOP-RIGHT POLAROID ---
-      const f5W = Math.round(drawW * 0.185);
+      const f5W = Math.round(drawW * 0.210);
       renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.785),
-        cy: drawY + Math.round(drawH * 0.208),
+        cx: drawX + Math.round(drawW * 0.770),
+        cy: drawY + Math.round(drawH * 0.215),
         apertureW: f5W,
         apertureH: f5W,
-        cardW: Math.round(drawW * 0.210),
-        cardH: Math.round(drawW * 0.210 * 1.18),
-        rotDeg: -6.2,
+        cardW: Math.round(f5W * 1.08),
+        cardH: Math.round(f5W * 1.08 * 1.18),
+        rotDeg: -5.5,
         photoImg: extraPhotos[5],
         labelText: '05. Fairytale 🏰'
       });
 
       // --- FRAME 6: MID-RIGHT POLAROID ---
-      const f6W = Math.round(drawW * 0.195);
+      const f6W = Math.round(drawW * 0.218);
       renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.840),
-        cy: drawY + Math.round(drawH * 0.468),
+        cx: drawX + Math.round(drawW * 0.835),
+        cy: drawY + Math.round(drawH * 0.495),
         apertureW: f6W,
         apertureH: f6W,
-        cardW: Math.round(drawW * 0.220),
-        cardH: Math.round(drawW * 0.220 * 1.18),
-        rotDeg: 6.5,
+        cardW: Math.round(f6W * 1.08),
+        cardH: Math.round(f6W * 1.08 * 1.18),
+        rotDeg: 6.0,
         photoImg: extraPhotos[6],
         labelText: '06. Forever 🌸'
       });
 
       // ====================================================================
-      // 🌟 REDESIGNED QR CODES (CALIBRATED DUMMY REPLACEMENT - ALL 8 QRs)
+      // 🌟 EMBEDDED SCANNABLE QR CODES (FITS DIRECTLY ON 8 SCRAPBOOK NOTES)
       // ====================================================================
       const QR_PLACEMENTS = [
-        // Left column (3 QRs) - QR 1 tucked into top corner away from Happy Birthday title
-        { id: 1, label: "Tape 01 💗", cxPct: 0.078, cyPct: 0.068, sizePct: 0.088, rotDeg: 0.0 },
-        { id: 2, label: "Tape 02 ✨", cxPct: 0.092, cyPct: 0.324, sizePct: 0.096, rotDeg: -1.5 },
-        { id: 3, label: "Tape 03 🎵", cxPct: 0.088, cyPct: 0.612, sizePct: 0.096, rotDeg: 0.0 },
-        // Right column (5 QRs)
-        { id: 4, label: "Tape 04 💌", cxPct: 0.925, cyPct: 0.120, sizePct: 0.096, rotDeg: 0.0 },
-        { id: 5, label: "Tape 05 🌸", cxPct: 0.925, cyPct: 0.322, sizePct: 0.096, rotDeg: -1.0 },
-        { id: 6, label: "Tape 06 🎶", cxPct: 0.915, cyPct: 0.608, sizePct: 0.096, rotDeg: 1.0 },
-        { id: 7, label: "Tape 07 🎸", cxPct: 0.908, cyPct: 0.738, sizePct: 0.096, rotDeg: -0.8 },
-        { id: 8, label: "Tape 08 💫", cxPct: 0.890, cyPct: 0.885, sizePct: 0.096, rotDeg: 0.8 }
+        // Left Column (3 QRs) - Embedded on the 3 left paper notes
+        { id: 1, label: "Tape 01 💗", cxPct: 0.098, cyPct: 0.082, sizePct: 0.090, rotDeg: 0.0 },
+        { id: 2, label: "Tape 02 ✨", cxPct: 0.098, cyPct: 0.332, sizePct: 0.095, rotDeg: 0.0 },
+        { id: 3, label: "Tape 03 🎵", cxPct: 0.098, cyPct: 0.635, sizePct: 0.095, rotDeg: 0.0 },
+        // Right Column (5 QRs) - Embedded on the 5 right paper notes
+        { id: 4, label: "Tape 04 💌", cxPct: 0.912, cyPct: 0.125, sizePct: 0.095, rotDeg: 0.0 },
+        { id: 5, label: "Tape 05 🌸", cxPct: 0.912, cyPct: 0.330, sizePct: 0.095, rotDeg: 0.0 },
+        { id: 6, label: "Tape 06 🎶", cxPct: 0.908, cyPct: 0.625, sizePct: 0.095, rotDeg: 0.0 },
+        { id: 7, label: "Tape 07 🎸", cxPct: 0.902, cyPct: 0.745, sizePct: 0.095, rotDeg: 0.0 },
+        { id: 8, label: "Tape 08 💫", cxPct: 0.885, cyPct: 0.885, sizePct: 0.095, rotDeg: 0.0 }
       ];
 
       QR_PLACEMENTS.forEach(p => {
@@ -1765,74 +1750,46 @@
         ctx.translate(qx, qy);
         ctx.rotate(p.rotDeg * Math.PI / 180);
 
-        if (qrStyleMode === 'flush') {
-          // FLUSH SCRAPBOOK FIT: Replaces only the dummy QR square!
-          ctx.fillStyle = '#ffffff';
-          drawRoundedRect(ctx, -qs / 2, -qs / 2, qs, qs, 3);
-          ctx.fill();
-
-          const qrCanvas = getQRCodeCanvas(targetUrl, qs);
-          if (qrCanvas && qrCanvas.width > 0) {
-            ctx.drawImage(qrCanvas, -qs / 2, -qs / 2, qs, qs);
-          } else {
-            const qrImg = new Image();
-            qrImg.onload = () => {
-              ctx.save();
-              ctx.translate(qx, qy);
-              ctx.rotate(p.rotDeg * Math.PI / 180);
-              ctx.drawImage(qrImg, -qs / 2, -qs / 2, qs, qs);
-              ctx.restore();
-            };
-            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&margin=1&data=${encodeURIComponent(targetUrl)}`;
-          }
-
-          // Delicate warm outline to blend with vintage scrap paper
-          ctx.strokeStyle = 'rgba(70, 40, 50, 0.20)';
-          ctx.lineWidth = 1.2;
-          drawRoundedRect(ctx, -qs / 2, -qs / 2, qs, qs, 3);
-          ctx.stroke();
-
-        } else {
-          // KEEPSAKE TAG BADGES: Decorative tag with washi tape & title
-          const badgeW = Math.round(qs * 1.15);
-          const badgeH = Math.round(qs * 1.35);
-
-          ctx.shadowColor = 'rgba(35, 15, 25, 0.22)';
-          ctx.shadowBlur = 14;
+        if (qrStyleMode === 'badge') {
+          // Mode B: Keepsake mini card badge with washi header
+          ctx.shadowColor = 'rgba(30, 15, 20, 0.16)';
+          ctx.shadowBlur = 6;
           ctx.shadowOffsetX = 0;
-          ctx.shadowOffsetY = 6;
-
-          ctx.fillStyle = '#fdfbf7';
-          drawRoundedRect(ctx, -badgeW / 2, -badgeH / 2, badgeW, badgeH, 4);
+          ctx.shadowOffsetY = 2;
+          ctx.fillStyle = '#ffffff';
+          drawRoundedRect(ctx, -qs / 2, -qs / 2, qs, qs, 4);
           ctx.fill();
-
           ctx.shadowColor = 'transparent';
-          ctx.strokeStyle = 'rgba(70, 45, 40, 0.15)';
-          ctx.lineWidth = 1.2;
-          drawRoundedRect(ctx, -badgeW / 2, -badgeH / 2, badgeW, badgeH, 4);
-          ctx.stroke();
-
-          // Washi tape header
-          drawWashiTape(ctx, 0, -badgeH / 2 + 2, Math.round(badgeW * 0.7), 12, 0, 'pink');
-
-          // Scannable QR code
-          const qrY = -badgeH / 2 + 15 + qs / 2;
-          const qrCanvas = getQRCodeCanvas(targetUrl, qs);
-          if (qrCanvas && qrCanvas.width > 0) {
-            ctx.drawImage(qrCanvas, -qs / 2, qrY - qs / 2, qs, qs);
-          } else {
-            const qrImg = new Image();
-            qrImg.onload = () => render9x10_9Poster();
-            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&margin=1&data=${encodeURIComponent(targetUrl)}`;
-          }
-
-          // Track label
-          ctx.fillStyle = '#4a2835';
-          ctx.font = '700 ' + Math.round(badgeW * 0.10) + 'px sans-serif';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(p.label, 0, badgeH / 2 - 8);
+          ctx.shadowBlur = 0;
+        } else {
+          // Mode A: SEAMLESS EMBEDDED NOTE FIT (Part of the scrapbook design)
+          // Uses warm vintage note paper tone and zero harsh glue shadows
+          ctx.fillStyle = '#faf7f0';
+          drawRoundedRect(ctx, -qs / 2, -qs / 2, qs, qs, 3);
+          ctx.fill();
         }
+
+        // 2. High-precision scannable QR matrix (deep espresso ink)
+        const qrCanvas = getQRCodeCanvas(targetUrl, qs);
+        if (qrCanvas && qrCanvas.width > 0) {
+          ctx.drawImage(qrCanvas, -qs / 2, -qs / 2, qs, qs);
+        } else {
+          const qrImg = new Image();
+          qrImg.onload = () => {
+            ctx.save();
+            ctx.translate(qx, qy);
+            ctx.rotate(p.rotDeg * Math.PI / 180);
+            ctx.drawImage(qrImg, -qs / 2, -qs / 2, qs, qs);
+            ctx.restore();
+          };
+          qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&margin=1&color=1a1215&bgcolor=faf7f0&data=${encodeURIComponent(targetUrl)}`;
+        }
+
+        // 3. Delicate aged note paper boundary
+        ctx.strokeStyle = qrStyleMode === 'badge' ? 'rgba(100, 70, 75, 0.22)' : 'rgba(120, 85, 90, 0.14)';
+        ctx.lineWidth = 1.0;
+        drawRoundedRect(ctx, -qs / 2, -qs / 2, qs, qs, 3);
+        ctx.stroke();
 
         // Inspector Outline (if toggled)
         if (showAlignmentOutlines) {
@@ -1848,10 +1805,10 @@
       });
 
       // ====================================================================
-      // 🌟 HILARIOUS & CUTE AVATAR FIGURES (MEANINGFUL SCRAPBOOK POSITIONS)
+      // 🌟 MEANINGFUL STORYTELLING AVATAR FIGURES (INTEGRATED SCRAPBOOK ROLES)
       // ====================================================================
 
-      function drawAvatarSticker(avatarAsset, cx, cy, width, rotDeg = 0) {
+      function drawAvatarSticker(avatarAsset, cx, cy, width, rotDeg = 0, role = 'default') {
         const item = avatarAsset;
         if (!item || !item.width || !item.height) return;
         const aspect = (item.naturalHeight || item.height) / (item.naturalWidth || item.width);
@@ -1861,42 +1818,56 @@
         ctx.translate(cx, cy);
         ctx.rotate(rotDeg * Math.PI / 180);
 
-        // Natural soft sticker drop shadow
-        ctx.shadowColor = 'rgba(25, 10, 20, 0.35)';
-        ctx.shadowBlur = 18;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 8;
+        if (role === 'celestial') {
+          // Lord Vishnu: Sacred golden aura guarding Queen Shaaaw's central memory
+          ctx.shadowColor = 'rgba(251, 191, 36, 0.45)';
+          ctx.shadowBlur = 22;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 4;
+        } else if (role === 'music') {
+          // Buddha: Warm melody reflection on the retro vinyl grooves
+          ctx.shadowColor = 'rgba(244, 114, 182, 0.35)';
+          ctx.shadowBlur = 18;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 6;
+        } else {
+          // Shepherd: Warm celebratory die-cut drop shadow
+          ctx.shadowColor = 'rgba(30, 15, 25, 0.28)';
+          ctx.shadowBlur = 14;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 6;
+        }
 
         ctx.drawImage(item, -width / 2, -height / 2, width, height);
 
         ctx.restore();
       }
 
-      // 1. BUDDHA NANDHISH: Meditating on top of the Retro Vinyl Record
+      // 1. BUDDHA NANDHISH: Meditating on the Retro Vinyl Record (Soulful Music & Inner Peace)
       if (showBuddhaAvatar) {
         const vinylCenterX = drawX + Math.round(drawW * 0.170);
         const vinylCenterY = drawY + Math.round(drawH * 0.805);
         const bWidth = Math.round(drawW * 0.175 * avatarScale);
         const buddhaAsset = processedAvatars['buddha'] || avatarBuddhaImg;
-        drawAvatarSticker(buddhaAsset, vinylCenterX, vinylCenterY, bWidth, -2);
+        drawAvatarSticker(buddhaAsset, vinylCenterX, vinylCenterY, bWidth, -2, 'music');
       }
 
-      // 2. LORD VISHNU NANDHISH: Guarding Shaaaw's central memory
+      // 2. LORD VISHNU NANDHISH: Celestial Guardian beside Queen Shaaaw's central memory polaroid
       if (showVishnuAvatar) {
-        const vishnuX = drawX + Math.round(drawW * 0.725);
-        const vishnuY = drawY + Math.round(drawH * 0.375);
+        const vishnuX = drawX + Math.round(drawW * 0.730);
+        const vishnuY = drawY + Math.round(drawH * 0.368);
         const vWidth = Math.round(drawW * 0.160 * avatarScale);
         const vishnuAsset = processedAvatars['vishnu'] || avatarVishnuImg;
-        drawAvatarSticker(vishnuAsset, vishnuX, vishnuY, vWidth, 2);
+        drawAvatarSticker(vishnuAsset, vishnuX, vishnuY, vWidth, 1.5, 'celestial');
       }
 
-      // 3. WELCOMING SHEPHERD NANDHISH: Celebrating Queen Shaaaw at bottom
+      // 3. WELCOMING SHEPHERD NANDHISH: Celebrating Queen Shaaaw at bottom greeting note
       if (showShepherdAvatar) {
-        const shepherdX = drawX + Math.round(drawW * 0.490);
-        const shepherdY = drawY + Math.round(drawH * 0.835);
+        const shepherdX = drawX + Math.round(drawW * 0.485);
+        const shepherdY = drawY + Math.round(drawH * 0.830);
         const sWidth = Math.round(drawW * 0.160 * avatarScale);
         const shepherdAsset = processedAvatars['shepherd'] || avatarShepherdImg;
-        drawAvatarSticker(shepherdAsset, shepherdX, shepherdY, sWidth, 0);
+        drawAvatarSticker(shepherdAsset, shepherdX, shepherdY, sWidth, 0, 'celebration');
       }
     }
 

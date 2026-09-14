@@ -171,138 +171,41 @@
       width: 100%;
       max-width: var(--poster-w);
       height: var(--poster-h);
-      background: #25141d;
+      background: #180d14 url('assets/clean-poster-bg.jpg') no-repeat center center;
+      background-size: 100% 100%;
       border-radius: 4px;
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.15);
       overflow: hidden;
       user-select: none;
-      transition: background 0.35s ease;
     }
 
-    /* Warm Vintage Romantic Scrapbook Wallpaper (Harmonizes with Vintage Silk Ivory Cards) */
-    .poster-bg-paper {
-      position: absolute;
-      inset: 0;
-      background: 
-        radial-gradient(ellipse at 50% 20%, rgba(255, 238, 222, 0.20) 0%, rgba(244, 114, 182, 0.08) 45%, transparent 75%),
-        radial-gradient(circle at 15% 75%, rgba(219, 39, 119, 0.09) 0%, transparent 48%),
-        radial-gradient(circle at 85% 80%, rgba(251, 191, 36, 0.07) 0%, transparent 45%),
-        repeating-linear-gradient(45deg, rgba(255, 225, 235, 0.02) 0, rgba(255, 225, 235, 0.02) 12px, transparent 12px, transparent 24px);
-      z-index: 1;
-      pointer-events: none;
-      transition: opacity 0.35s ease;
-    }
-
-    /* Layer of Vintage Newsprint & Floral Collage Scraps */
-    .poster-collage-underlay {
-      position: absolute;
-      inset: 0;
-      opacity: 0.14;
-      background-image: radial-gradient(#fbcfe8 1px, transparent 1px), radial-gradient(#f472b6 1px, #25141d 1px);
-      background-size: 22px 22px;
-      background-position: 0 0, 11px 11px;
-      z-index: 2;
-      pointer-events: none;
-      transition: opacity 0.35s ease;
-    }
-
-    .poster-vignette {
-      position: absolute;
-      inset: 0;
-      box-shadow: inset 0 0 120px rgba(10, 4, 8, 0.82), inset 0 0 45px rgba(25, 8, 18, 0.6);
-      z-index: 3;
-      pointer-events: none;
-    }
-
-    /* TOP BANNER: Happy Birthday Shaaaw!!! */
-    .top-banner-scrap {
-      position: absolute;
-      top: 25px;
-      left: 50%;
-      transform: translateX(-50%) rotate(-1.5deg);
-      width: 580px;
-      height: 98px;
-      background: linear-gradient(135deg, #fbcfe8 0%, #f472b6 60%, #db2777 100%);
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), 0 3px 8px rgba(0,0,0,0.25);
-      clip-path: polygon(1% 5%, 8% 1%, 18% 5%, 28% 1%, 38% 6%, 48% 1%, 58% 5%, 68% 1%, 78% 6%, 88% 2%, 96% 5%, 99% 3%, 98% 93%, 91% 98%, 81% 94%, 71% 99%, 61% 94%, 51% 99%, 41% 94%, 31% 99%, 21% 94%, 11% 99%, 2% 93%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 15;
-    }
-
-    .top-banner-scrap::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(0deg, rgba(255,255,255,0.15) 0, rgba(255,255,255,0.15) 2px, transparent 2px, transparent 6px);
-      pointer-events: none;
-    }
-
-    .banner-title {
-      font-family: 'Patrick Hand', 'Caveat', cursive;
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: #3b0724;
-      line-height: 1.0;
-      text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.7), 4px 4px 10px rgba(219, 39, 119, 0.3);
-      letter-spacing: 0.5px;
-      position: relative;
-    }
-
-    .banner-title span.name {
-      display: block;
-      font-size: 3.2rem;
-      color: #831843;
-      margin-top: -6px;
-      text-shadow: 3px 3px 0px #fdf2f8, 5px 5px 12px rgba(190, 24, 93, 0.4);
-    }
-
-    .banner-crown {
-      position: absolute;
-      top: -18px;
-      right: -25px;
-      font-size: 1.5rem;
-      transform: rotate(15deg);
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-    }
-
-    /* Ribbon Bow */
-    .satin-bow {
-      position: absolute;
-      top: 15px;
-      left: 110px;
-      width: 65px;
-      height: 65px;
-      z-index: 25;
-      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.35));
-      transform: rotate(-15deg);
-      pointer-events: none;
-    }
-
-    /* Pink Angel Mascot */
-    .angel-mascot {
-      position: absolute;
-      top: 10px;
-      right: 120px;
-      width: 105px;
-      height: 105px;
-      z-index: 25;
-      filter: drop-shadow(0 8px 18px rgba(0,0,0,0.4));
-      transform: rotate(10deg);
-      pointer-events: none;
+    /* Hide simulated overlay elements so clean scrapbook shines through */
+    .poster-bg-paper,
+    .poster-collage-underlay,
+    .poster-vignette,
+    .top-banner-scrap,
+    .satin-bow,
+    .angel-mascot,
+    .vinyl-record-wrap,
+    .cassette-tape-wrap,
+    .notepad-scrap-wrap,
+    .pink-card-scrap-wrap,
+    .flower-sprig-badge,
+    .butterfly-sticker,
+    .washi-tape-strip,
+    .qr-tag-label {
+      display: none !important;
     }
 
     /* ========================================================
-       7 POLAROID PHOTO FRAMES (VINTAGE ANTIQUE IVORY FINISH)
+       7 POLAROID PHOTO FRAMES (WARM VINTAGE SILK EMBEDDED)
        ======================================================== */
     .polaroid-card {
       position: absolute;
       background: var(--polaroid-card-grad);
       border: 1px solid var(--polaroid-border);
       border-radius: 3px;
-      box-shadow: var(--polaroid-shadow);
+      box-shadow: 0 5px 16px rgba(30, 15, 22, 0.18), 0 1px 3px rgba(0, 0, 0, 0.08);
       cursor: pointer;
       z-index: 10;
       transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
@@ -313,7 +216,7 @@
 
     .polaroid-card:hover {
       transform: scale(1.03) !important;
-      box-shadow: 0 22px 55px rgba(225, 29, 72, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.8) !important;
+      box-shadow: 0 16px 36px rgba(225, 29, 72, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.8) !important;
       z-index: 35 !important;
     }
 
@@ -342,14 +245,14 @@
       width: 100%;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 10px;
+      justify-content: center;
+      padding: 0 8px;
       position: relative;
     }
 
     .polaroid-caption {
       font-family: 'Patrick Hand', 'Caveat', cursive;
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       font-weight: 700;
       color: var(--polaroid-ink);
       white-space: nowrap;
@@ -359,152 +262,101 @@
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
     }
 
-    .polaroid-doodle-heart {
-      font-size: 1.15rem;
-      color: #2f1922;
-      opacity: 0.9;
-      pointer-events: none;
-      filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.5));
-    }
-
-    /* Washi Tapes */
-    .washi-tape-strip {
-      position: absolute;
-      height: 20px;
-      background: rgba(255, 235, 240, 0.85);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
-      z-index: 12;
-      pointer-events: none;
-    }
-
-    .washi-pink-check {
-      background-color: #fbcfe8;
-      background-image: repeating-linear-gradient(45deg, #f472b6 0, #f472b6 4px, transparent 4px, transparent 8px);
-      opacity: 0.92;
-      border: 1px solid rgba(219, 39, 119, 0.25);
-    }
-
-    .washi-translucent {
-      background: rgba(255, 250, 240, 0.75);
-      border-left: 2px dashed rgba(0,0,0,0.2);
-      border-right: 2px dashed rgba(0,0,0,0.2);
-    }
-
-    /* Coordinates & Tilts for the 7 Polaroids (Calibrated for Perfect Balance on 900x1090) */
+    /* Calibrated positions for the 7 Polaroids on clean scrapbook */
     /* 1. Center Hero Frame: Shaaaw */
     #cardCenter {
-      top: 230px;
-      left: 295px;
-      width: 310px;
-      padding: 12px 12px 8px;
-      transform: rotate(-2.0deg);
+      top: 242px;
+      left: 310px;
+      width: 280px;
+      padding: 10px 10px 8px;
+      transform: rotate(-1.5deg);
       z-index: 20;
-      background: linear-gradient(172deg, #ffffff 0%, #faf7f2 38%, #f6efe3 78%, #ece2d0 100%);
-      border: 1.5px solid rgba(219, 39, 119, 0.25);
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.85);
     }
-    #cardCenter .polaroid-photo-window {
-      width: 286px;
-      height: 286px;
-    }
-    #cardCenter .polaroid-chin {
-      height: 48px;
-    }
-    #cardCenter .polaroid-caption {
-      font-size: 1.28rem;
-      font-weight: 700;
-      color: #831843;
-    }
-    #cardCenter .washi-tape-strip {
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%) rotate(1deg);
-      width: 75px;
-      height: 22px;
-    }
+    #cardCenter .polaroid-photo-window { width: 260px; height: 260px; }
+    #cardCenter .polaroid-chin { height: 42px; }
+    #cardCenter .polaroid-caption { font-size: 1.15rem; font-weight: 700; color: #831843; }
 
-    /* 2. Top-Left Frame (01. Memory) - Lowered to give Happy Birthday banner full clearance */
+    /* 2. Top-Left Frame (01. Memory) */
     #card1 {
-      top: 168px;
-      left: 45px;
-      width: 190px;
-      padding: 10px 10px 8px;
-      transform: rotate(4.2deg);
+      top: 172px;
+      left: 125px;
+      width: 175px;
+      padding: 8px 8px 6px;
+      transform: rotate(3.5deg);
+      z-index: 10;
     }
-    #card1 .polaroid-photo-window { width: 170px; height: 170px; }
-    #card1 .polaroid-chin { height: 35px; }
-    #card1 .washi-tape-strip { top: -8px; left: 20%; transform: rotate(-6deg); width: 52px; }
+    #card1 .polaroid-photo-window { width: 159px; height: 159px; }
+    #card1 .polaroid-chin { height: 32px; }
 
-    /* 3. Mid-Left Frame */
+    /* 3. Mid-Left Frame (02. Smiles) */
     #card2 {
-      top: 380px;
-      left: 48px;
-      width: 205px;
-      padding: 10px 10px 8px;
-      transform: rotate(-5.8deg);
+      top: 435px;
+      left: 105px;
+      width: 180px;
+      padding: 8px 8px 6px;
+      transform: rotate(-4.5deg);
+      z-index: 10;
     }
-    #card2 .polaroid-photo-window { width: 185px; height: 185px; }
-    #card2 .polaroid-chin { height: 35px; }
-    #card2 .washi-tape-strip { top: -8px; right: 18%; transform: rotate(4deg); width: 54px; }
+    #card2 .polaroid-photo-window { width: 164px; height: 164px; }
+    #card2 .polaroid-chin { height: 32px; }
 
-    /* 4. Bottom-Left Frame */
+    /* 4. Bottom-Center-Left Frame (03. Melody) */
     #card3 {
-      top: 595px;
-      left: 232px;
-      width: 200px;
-      padding: 10px 10px 8px;
-      transform: rotate(-2.8deg);
+      top: 640px;
+      left: 295px;
+      width: 188px;
+      padding: 8px 8px 6px;
+      transform: rotate(-2.5deg);
+      z-index: 10;
     }
-    #card3 .polaroid-photo-window { width: 180px; height: 180px; }
-    #card3 .polaroid-chin { height: 35px; }
-    #card3 .washi-tape-strip { top: -9px; left: 50%; transform: translateX(-50%) rotate(-1deg); width: 62px; }
+    #card3 .polaroid-photo-window { width: 172px; height: 172px; }
+    #card3 .polaroid-chin { height: 32px; }
 
-    /* 5. Bottom-Right Frame */
+    /* 5. Bottom-Center-Right Frame (04. Moments) */
     #card4 {
-      top: 595px;
-      left: 468px;
-      width: 200px;
-      padding: 10px 10px 8px;
+      top: 648px;
+      left: 525px;
+      width: 188px;
+      padding: 8px 8px 6px;
       transform: rotate(2.8deg);
+      z-index: 10;
     }
-    #card4 .polaroid-photo-window { width: 180px; height: 180px; }
-    #card4 .polaroid-chin { height: 35px; }
-    #card4 .washi-tape-strip { top: -9px; left: 50%; transform: translateX(-50%) rotate(2deg); width: 62px; }
+    #card4 .polaroid-photo-window { width: 172px; height: 172px; }
+    #card4 .polaroid-chin { height: 32px; }
 
-    /* 6. Top-Right Frame */
+    /* 6. Top-Right Frame (05. Fairytale) */
     #card5 {
-      top: 140px;
-      left: 638px;
-      width: 195px;
-      padding: 10px 10px 8px;
-      transform: rotate(-4.2deg);
+      top: 178px;
+      left: 635px;
+      width: 178px;
+      padding: 8px 8px 6px;
+      transform: rotate(-4.0deg);
+      z-index: 10;
     }
-    #card5 .polaroid-photo-window { width: 175px; height: 175px; }
-    #card5 .polaroid-chin { height: 35px; }
-    #card5 .washi-tape-strip { top: -8px; right: 20%; transform: rotate(5deg); width: 52px; }
+    #card5 .polaroid-photo-window { width: 162px; height: 162px; }
+    #card5 .polaroid-chin { height: 32px; }
 
-    /* 7. Mid-Right Frame */
+    /* 7. Mid-Right Frame (06. Forever) */
     #card6 {
-      top: 390px;
-      left: 648px;
-      width: 205px;
-      padding: 10px 10px 8px;
-      transform: rotate(5.8deg);
+      top: 480px;
+      left: 685px;
+      width: 184px;
+      padding: 8px 8px 6px;
+      transform: rotate(5.5deg);
+      z-index: 10;
     }
-    #card6 .polaroid-photo-window { width: 185px; height: 185px; }
-    #card6 .polaroid-chin { height: 35px; }
-    #card6 .washi-tape-strip { top: -8px; left: 22%; transform: rotate(-5deg); width: 54px; }
+    #card6 .polaroid-photo-window { width: 168px; height: 168px; }
+    #card6 .polaroid-chin { height: 32px; }
 
     /* ========================================================
-       8 SCANNABLE QR CODE SLOTS (ORGANIC SCRAP MOUNTINGS)
+       8 SCANNABLE QR CODES (EMBEDDED DIRECTLY ON NOTES)
        ======================================================== */
     .qr-scrap-card {
       position: absolute;
       background: #faf6ee;
-      padding: 5px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(180, 140, 110, 0.35);
-      border-radius: 4px;
+      padding: 3px;
+      border: 1px solid rgba(130, 95, 85, 0.14);
+      border-radius: 3px;
       z-index: 18;
       cursor: pointer;
       transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
@@ -512,14 +364,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 80px;
-      height: 80px;
+      width: 76px;
+      height: 76px;
     }
 
     .qr-scrap-card:hover {
-      transform: scale(1.22) !important;
+      transform: scale(1.15) !important;
       z-index: 45 !important;
-      box-shadow: 0 14px 34px rgba(225, 29, 72, 0.55);
+      box-shadow: 0 8px 24px rgba(225, 29, 72, 0.45);
     }
 
     .qr-canvas {
@@ -529,52 +381,33 @@
       border-radius: 2px;
     }
 
-    .qr-tag-label {
-      position: absolute;
-      bottom: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #fdf2f8;
-      color: #9d174d;
-      font-size: 0.62rem;
-      font-weight: 800;
-      padding: 1px 6px;
-      border-radius: 999px;
-      white-space: nowrap;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      border: 1px solid #fbcfe8;
-    }
+    /* Exact Coordinates on the 8 Paper Notes with Heart Doodles */
+    #qr1 { top: 60px; left: 63px; transform: rotate(0deg); }
+    #qr2 { top: 316px; left: 63px; transform: rotate(0deg); }
+    #qr3 { top: 642px; left: 63px; transform: rotate(0deg); }
 
-    /* Exact Flank Placements - Calibrated for 100% Optical Balance & No Collisions */
-    /* Left Flank (3 QRs) */
-    #qr1 { top: 25px; left: 16px; transform: rotate(0deg); }
-    #qr2 { top: 265px; left: 14px; transform: rotate(-2deg); }
-    #qr3 { top: 535px; left: 16px; transform: rotate(0deg); }
-
-    /* Right Flank (5 QRs) */
-    #qr4 { top: 28px; right: 18px; transform: rotate(0deg); }
-    #qr5 { top: 265px; right: 16px; transform: rotate(-1.5deg); }
-    #qr6 { top: 535px; right: 16px; transform: rotate(1.5deg); }
-    #qr7 { top: 705px; right: 16px; transform: rotate(-1deg); }
-    #qr8 { top: 885px; right: 20px; transform: rotate(1deg); }
+    #qr4 { top: 96px; right: 38px; transform: rotate(0deg); }
+    #qr5 { top: 320px; right: 38px; transform: rotate(0deg); }
+    #qr6 { top: 636px; right: 40px; transform: rotate(0deg); }
+    #qr7 { top: 772px; right: 46px; transform: rotate(0deg); }
+    #qr8 { top: 924px; right: 65px; transform: rotate(0deg); }
 
     /* ========================================================
-       FUNNY NANDHISH AVATAR STICKERS (EASTER EGGS)
+       MEANINGFUL NANDHISH AVATARS (TRANSPARENT, NO BADGES)
        ======================================================== */
     .avatar-sticker {
       position: absolute;
-      z-index: 26;
       cursor: pointer;
       transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
-      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45));
+      filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.40));
       display: flex;
       flex-direction: column;
       align-items: center;
     }
     .avatar-sticker:hover {
-      transform: scale(1.15) translateY(-6px) !important;
+      transform: scale(1.12) translateY(-4px) !important;
       z-index: 50 !important;
-      filter: drop-shadow(0 20px 40px rgba(225, 29, 72, 0.6));
+      filter: drop-shadow(0 16px 32px rgba(225, 29, 72, 0.5));
     }
     .avatar-sticker img {
       width: 100%;
@@ -583,226 +416,31 @@
       pointer-events: none;
     }
 
+    /* 1. Buddha on Retro Vinyl Record */
     .avatar-buddha {
-      bottom: 80px;
-      left: 48px;
-      width: 165px;
-      transform: rotate(-2deg);
-    }
-    .avatar-vishnu {
-      top: 360px;
-      right: 175px;
-      width: 145px;
-      transform: rotate(3deg);
-    }
-    .avatar-shepherd {
-      bottom: 40px;
-      left: 365px;
-      width: 145px;
-      transform: rotate(0deg);
-    }
-
-    /* ========================================================
-       SCRAPBOOK KEEPSAKES & DETAILS AT BOTTOM
-       ======================================================== */
-    /* Retro Vinyl Record */
-    .vinyl-record-wrap {
-      position: absolute;
       bottom: 35px;
-      left: 20px;
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #2d2a2e 0%, #151416 55%, #050406 100%);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.08);
-      z-index: 14;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .vinyl-grooves {
-      position: absolute;
-      inset: 6%;
-      border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 
-        inset 0 0 0 8px rgba(255, 255, 255, 0.03),
-        inset 0 0 0 18px rgba(255, 255, 255, 0.04),
-        inset 0 0 0 28px rgba(255, 255, 255, 0.03),
-        inset 0 0 0 38px rgba(255, 255, 255, 0.03);
-      pointer-events: none;
-    }
-
-    .vinyl-label {
-      width: 95px;
-      height: 95px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #fbcfe8, #f472b6);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-    }
-
-    .vinyl-spindle {
-      width: 14px;
-      height: 14px;
-      background: #000;
-      border-radius: 50%;
-      border: 2px solid #fff;
-    }
-
-    .vinyl-title {
-      font-family: 'Caveat', cursive;
-      font-size: 0.82rem;
-      color: #4a0429;
-      font-weight: 700;
-      margin-top: 4px;
-    }
-
-    /* Vintage Audio Cassette Tape */
-    .cassette-tape-wrap {
-      position: absolute;
-      top: 555px;
-      left: 15px;
-      width: 170px;
-      height: 105px;
-      background: #334155;
-      border-radius: 6px;
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
-      border: 2px solid #475569;
-      z-index: 12;
-      transform: rotate(3.5deg);
-      padding: 6px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .cassette-label {
-      background: #fdf4ff;
-      border-radius: 3px;
-      padding: 4px 8px;
-      text-align: center;
-      border: 1px solid #e9d5ff;
-    }
-
-    .cassette-text {
-      font-family: 'Patrick Hand', cursive;
-      font-size: 0.8rem;
-      color: #701a75;
-      font-weight: 700;
-    }
-
-    .cassette-window {
-      background: #1e293b;
-      height: 24px;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      padding: 0 10px;
-    }
-
-    .cassette-reel {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #fff;
-      border: 2px dashed #0f172a;
-    }
-
-    /* Editable Lined Yellow Notepad Paper */
-    .notepad-scrap-wrap {
-      position: absolute;
-      bottom: 45px;
-      left: 275px;
-      width: 280px;
-      height: 185px;
-      background: #fffbeb;
-      padding: 16px 14px 18px 26px;
-      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.4);
-      border-radius: 2px;
-      transform: rotate(1.2deg);
-      z-index: 15;
-      background-image: 
-        linear-gradient(90deg, transparent 20px, #fca5a5 20px, #fca5a5 22px, transparent 22px),
-        repeating-linear-gradient(0deg, transparent 0, transparent 20px, #bfdbfe 20px, #bfdbfe 21px);
-      background-size: 100% 100%, 100% 21px;
-      border: 1px solid #fef3c7;
-    }
-
-    .notepad-holes {
-      position: absolute;
-      left: 8px;
-      top: 15px;
-      bottom: 15px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      pointer-events: none;
-    }
-
-    .notepad-hole {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #2a1520;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.6);
-    }
-
-    .notepad-text {
-      font-family: 'Caveat', cursive;
-      font-size: 1.18rem;
-      line-height: 21px;
-      color: #1e1b4b;
-      height: 100%;
-      outline: none;
-      word-break: break-word;
-    }
-
-    /* Editable Pink Torn Card Note */
-    .pink-card-scrap-wrap {
-      position: absolute;
-      bottom: 50px;
-      right: 120px;
-      width: 235px;
-      height: 155px;
-      background: #fbcfe8;
-      padding: 16px;
-      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
-      transform: rotate(-3.5deg);
-      z-index: 15;
-      clip-path: polygon(1% 2%, 12% 0, 25% 3%, 38% 0, 52% 2%, 67% 0, 80% 3%, 92% 1%, 99% 3%, 98% 97%, 88% 99%, 74% 96%, 60% 99%, 45% 96%, 32% 99%, 18% 96%, 5% 99%, 0% 96%);
-    }
-
-    .pink-card-text {
-      font-family: 'Caveat', cursive;
-      font-size: 1.15rem;
-      line-height: 1.4;
-      color: #831843;
-      height: 100%;
-      outline: none;
-    }
-
-    /* Decorative Accents */
-    .butterfly-sticker {
-      position: absolute;
-      font-size: 2.2rem;
-      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
-      pointer-events: none;
+      left: 25px;
+      width: 160px;
+      transform: rotate(-2deg);
       z-index: 22;
     }
 
-    .flower-sprig-badge {
-      position: absolute;
-      pointer-events: none;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-      z-index: 9;
+    /* 2. Vishnu beside Central Memory */
+    .avatar-vishnu {
+      top: 310px;
+      left: 575px;
+      width: 135px;
+      transform: rotate(2deg);
+      z-index: 25;
+    }
+
+    /* 3. Shepherd Welcoming at Bottom Center */
+    .avatar-shepherd {
+      bottom: 25px;
+      left: 380px;
+      width: 135px;
+      transform: rotate(0deg);
+      z-index: 22;
     }
 
     /* Right Control Sidebar */
