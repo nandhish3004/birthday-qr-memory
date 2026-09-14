@@ -8,7 +8,7 @@
  */
 
 const LORD_NANDHISH_DECREES = [
-  "I am Lord Nandhish, Preserver of the Multiverse and Supreme Sovereign of Shaaaw's Joy! Saint Nandhish is merely my humble earthly representative.",
+  "I am Lord Nandhish, Guardian of Shaaaw's Joy!",
   "Behold my Sudarshana Chakra! It spins eternally to slice away all sorrow, doubt, and mid vibes from Shaaaw's path across all galaxies!",
   "With my Panchajanya Conch, I sound the sacred cosmic vibration of celebration! Every star in the heavens honors Shaaaw today!",
   "By the crushing power of my Kaumodaki Gada, every demodog, bad vibe, and worry near Shaaaw is pulverized into harmless stardust!",
@@ -120,7 +120,7 @@ class LordNandhishCosmicEngine {
     const pill = document.createElement('div');
     pill.id = 'lordNandhishDarshanPill';
     pill.className = 'lord-darshan-pill';
-    pill.title = 'Seek the Supreme Darshan of Lord Nandhish';
+    pill.title = 'Lord Nandhish Avatar';
 
     pill.innerHTML = `
       <div class="lord-pill-avatar-wrap">
@@ -128,7 +128,7 @@ class LordNandhishCosmicEngine {
       </div>
       <div class="lord-pill-info">
         <span class="lord-pill-title">🕉️ Lord Nandhish</span>
-        <span class="lord-pill-sub">Supreme Cosmic Preserver</span>
+        <span class="lord-pill-sub">Guardian Avatar</span>
       </div>
     `;
 
@@ -142,29 +142,29 @@ class LordNandhishCosmicEngine {
 
     overlay.innerHTML = `
       <div class="lord-cosmos-card">
-        <button class="lord-close-btn" id="lordCloseBtn" title="Close Darshan">✕</button>
+        <button class="lord-close-btn" id="lordCloseBtn" title="Close">✕</button>
 
         <span class="lord-header-badge">
-          <span>🕉️ MAHA VISHNU AVATAR</span> &bull; <span>SUPREME CELESTIAL DEITY</span>
+          <span>🕉️ MAHA VISHNU AVATAR</span>
         </span>
 
         <h2 class="lord-main-title">LORD NANDHISH</h2>
         <p class="lord-subtitle">
-          Supreme Preserver of the Multiverse & Sovereign Guardian of Shaaaw's 8 Birthday Tapes
+          Guardian of Shaaaw's Birthday Tapes
         </p>
 
         <!-- Divine Avatar Stage with Rotating Sudarshana Chakra -->
         <div class="lord-stage-wrap">
           <div class="lord-cosmic-halo"></div>
-          <div class="lord-sudarshana-chakra" id="lordChakra" title="Sudarshana Chakra of Infinite Joy"></div>
+          <div class="lord-sudarshana-chakra" id="lordChakra" title="Sudarshana Chakra"></div>
           <img src="/assets/lord-nandhish.png" alt="Lord Nandhish" class="lord-avatar-figure" id="lordMainFigure">
         </div>
 
         <!-- Divine Decree Speech Box -->
         <div class="lord-decree-box">
-          <span class="lord-speaker-badge">🕉️ SUPREME COSMIC DECREE</span>
+          <span class="lord-speaker-badge">🕉️ CELESTIAL BLESSING</span>
           <p class="lord-decree-text" id="lordDecreeText">
-            "I am Lord Nandhish, Preserver of the Multiverse and Supreme Sovereign of Shaaaw's Joy! Saint Nandhish is merely my humble earthly representative."
+            "I am Lord Nandhish, Guardian of Shaaaw's Joy!"
           </p>
         </div>
 
@@ -185,7 +185,7 @@ class LordNandhishCosmicEngine {
         </div>
 
         <div class="saint-reverence-banner">
-          <span>🙏 <strong>Saint Nandhish bows in reverence:</strong> "My Lord Nandhish, You are the Supreme Preserver. Shaaaw is in divine hands!"</span>
+          <span>🙏 <strong>Saint Nandhish:</strong> "Shaaaw is in wonderful hands!"</span>
         </div>
       </div>
     `;
@@ -375,7 +375,7 @@ class LordNandhishCosmicEngine {
         <!-- Garland -->
         <path d="M 120 160 Q 150 240 180 160" fill="none" stroke="#f43f5e" stroke-width="8" stroke-dasharray="10 4"/>
         <text x="150" y="340" font-family="sans-serif" font-weight="900" font-size="16" fill="#fef08a" text-anchor="middle">🕉️ LORD NANDHISH</text>
-        <text x="150" y="365" font-family="sans-serif" font-weight="600" font-size="12" fill="#38bdf8" text-anchor="middle">Supreme Cosmic Preserver</text>
+        <text x="150" y="365" font-family="sans-serif" font-weight="600" font-size="12" fill="#38bdf8" text-anchor="middle">Guardian Avatar</text>
       </svg>
     `);
   }

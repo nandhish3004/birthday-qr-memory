@@ -747,7 +747,7 @@
 
           <div style="display: flex; flex-direction: column; gap: 10px;">
             <div class="toggle-row">
-              <span style="font-size: 0.84rem;">🧘‍♂️ DJ Zen Buddha (Sitting on Retro Vinyl)</span>
+              <span style="font-size: 0.84rem;">🧘‍♂️ Buddha Avatar (On Retro Vinyl)</span>
               <label class="switch">
                 <input type="checkbox" id="toggleBuddha" checked onchange="toggleAvatar('buddha', this.checked)">
                 <span class="slider"></span>
@@ -755,7 +755,7 @@
             </div>
 
             <div class="toggle-row">
-              <span style="font-size: 0.84rem;">☸️ Cosmic Vishnu (Guarding Shaaaw's Memory)</span>
+              <span style="font-size: 0.84rem;">☸️ Vishnu Avatar (Beside Memory Card)</span>
               <label class="switch">
                 <input type="checkbox" id="toggleVishnu" checked onchange="toggleAvatar('vishnu', this.checked)">
                 <span class="slider"></span>
@@ -763,7 +763,7 @@
             </div>
 
             <div class="toggle-row">
-              <span style="font-size: 0.84rem;">🕊️ Welcoming Shepherd (Celebrating Shaaaw)</span>
+              <span style="font-size: 0.84rem;">🕊️ Shepherd Avatar (Bottom Greeting)</span>
               <label class="switch">
                 <input type="checkbox" id="toggleShepherd" checked onchange="toggleAvatar('shepherd', this.checked)">
                 <span class="slider"></span>
@@ -817,6 +817,7 @@
     
     // Additional photos for frames 1-6
     const extraPhotos = {};
+    const qrCanvasCache = {};
 
     // Precision Framing & QR Alignment State
     let polaroidMode = 'studio-card'; // 'studio-card' (full cardstock, chin, doodles & tape) or 'seamless'
@@ -841,51 +842,197 @@
     const avatarVishnuImg = new Image();
     const avatarShepherdImg = new Image();
 
-    // Client-side automatic background transparency filter
+    // High-performance boundary BFS transparency filter
     function makeTransparentCanvas(sourceImg, type) {
+      if (!sourceImg || !sourceImg.width || !sourceImg.height) return sourceImg;
       const off = document.createElement('canvas');
-      off.width = sourceImg.naturalWidth || sourceImg.width;
-      off.height = sourceImg.naturalHeight || sourceImg.height;
+      const w = sourceImg.naturalWidth || sourceImg.width;
+      const h = sourceImg.naturalHeight || sourceImg.height;
+      off.width = w;
+      off.height = h;
       const oCtx = off.getContext('2d');
       oCtx.drawImage(sourceImg, 0, 0);
 
       try {
-        const imgData = oCtx.getImageData(0, 0, off.width, off.height);
+        const imgData = oCtx.getImageData(0, 0, w, h);
         const data = imgData.data;
-        const len = data.length;
+        const n = w * h;
 
-        if (type === 'white') {
-          // Shepherd: White background
-          for (let i = 0; i < len; i += 4) {
-            const r = data[i], g = data[i+1], b = data[i+2];
-            const diff = Math.max(Math.abs(r-g), Math.abs(r-b), Math.abs(g-b));
-            if (r > 220 && g > 220 && b > 220 && diff < 20) {
-              data[i+3] = 0;
+        if (type === 'checkerboard') {
+          // Vishnu: Remove checkerboard background (grey and white squares)
+          const visited = new Uint8Array(n);
+          const queue = new Int32Array(n);
+          let head = 0, tail = 0;
+
+          function isChecker(r, g, b) {
+            const diff = Math.max(Math.abs(r - g), Math.max(Math.abs(r - b), Math.abs(g - b)));
+            return (r >= 150 && r <= 232 && diff <= 16) || (r >= 230 && g >= 230 && b >= 230 && diff <= 12);
+          }
+
+          for (let x = 0; x < w; x++) { seed(x, 0); seed(x, h - 1); }
+          for (let y = 0; y < h; y++) { seed(0, y); seed(w - 1, y); }
+
+          function seed(x, y) {
+            const idx = y * w + x;
+            if (visited[idx]) return;
+            const p = idx * 4;
+            if (isChecker(data[p], data[p + 1], data[p + 2])) {
+              visited[idx] = 1;
+              queue[tail++] = idx;
             }
           }
+
+          while (head < tail) {
+            const idx = queue[head++];
+            data[idx * 4 + 3] = 0;
+            const x = idx % w;
+            const y = (idx / w) | 0;
+
+            const neighbors = [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]];
+            for (const [nx, ny] of neighbors) {
+              if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+              const nIdx = ny * w + nx;
+              if (visited[nIdx]) continue;
+              const np = nIdx * 4;
+              if (isChecker(data[np], data[np + 1], data[np + 2])) {
+                visited[nIdx] = 1;
+                queue[tail++] = nIdx;
+              }
+            }
+          }
+
+          // Enclosed grey checkerboard pockets between arms
+          for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+              const idx = y * w + x;
+              if (visited[idx]) continue;
+              const p = idx * 4;
+              const r = data[p], g = data[p + 1], b = data[p + 2];
+              const diff = Math.max(Math.abs(r - g), Math.max(Math.abs(r - b), Math.abs(g - b)));
+              if (r >= 170 && r <= 220 && diff <= 6) {
+                let pHead = tail;
+                visited[idx] = 1;
+                queue[tail++] = idx;
+                while (pHead < tail) {
+                  const cur = queue[pHead++];
+                  data[cur * 4 + 3] = 0;
+                  const cx = cur % w;
+                  const cy = (cur / w) | 0;
+                  const nb = [[cx - 1, cy], [cx + 1, cy], [cx, cy - 1], [cx, cy + 1]];
+                  for (const [nx, ny] of nb) {
+                    if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+                    const nIdx = ny * w + nx;
+                    if (visited[nIdx]) continue;
+                    const np = nIdx * 4;
+                    if (isChecker(data[np], data[np + 1], data[np + 2])) {
+                      visited[nIdx] = 1;
+                      queue[tail++] = nIdx;
+                    }
+                  }
+                }
+              }
+            }
+          }
+
         } else if (type === 'black') {
-          // Buddha: Black background
-          for (let i = 0; i < len; i += 4) {
-            const r = data[i], g = data[i+1], b = data[i+2];
-            if (r < 38 && g < 38 && b < 38) {
-              data[i+3] = 0;
+          // Buddha: Remove black background
+          const visited = new Uint8Array(n);
+          const queue = new Int32Array(n);
+          let head = 0, tail = 0;
+
+          for (let x = 0; x < w; x++) { seedB(x, 0); seedB(x, h - 1); }
+          for (let y = 0; y < h; y++) { seedB(0, y); seedB(w - 1, y); }
+
+          function seedB(x, y) {
+            const idx = y * w + x;
+            if (visited[idx]) return;
+            const p = idx * 4;
+            if (data[p] <= 45 && data[p + 1] <= 45 && data[p + 2] <= 45) {
+              visited[idx] = 1;
+              queue[tail++] = idx;
             }
           }
-        } else if (type === 'checkerboard') {
-          // Vishnu: Checkerboard background
-          for (let i = 0; i < len; i += 4) {
-            const r = data[i], g = data[i+1], b = data[i+2];
-            const diff = Math.max(Math.abs(r-g), Math.abs(r-b), Math.abs(g-b));
-            const isGrey = (r >= 170 && r <= 225 && diff <= 12);
-            const isWhite = (r >= 235 && g >= 235 && b >= 235 && diff <= 8);
-            if (isGrey || isWhite) {
-              data[i+3] = 0;
+
+          while (head < tail) {
+            const idx = queue[head++];
+            data[idx * 4 + 3] = 0;
+            const x = idx % w;
+            const y = (idx / w) | 0;
+
+            const neighbors = [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]];
+            for (const [nx, ny] of neighbors) {
+              if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+              const nIdx = ny * w + nx;
+              if (visited[nIdx]) continue;
+              const np = nIdx * 4;
+              const r = data[np], g = data[np + 1], b = data[np + 2];
+              if (r <= 45 && g <= 45 && b <= 45) {
+                visited[nIdx] = 1;
+                queue[tail++] = nIdx;
+              } else if (r <= 70 && g <= 70 && b <= 70) {
+                visited[nIdx] = 1;
+                const avg = (r + g + b) / 3;
+                data[np + 3] = Math.max(0, Math.min(255, Math.round((avg - 45) * 10)));
+              }
+            }
+          }
+
+        } else if (type === 'white') {
+          // Shepherd: Remove white background
+          const visited = new Uint8Array(n);
+          const queue = new Int32Array(n);
+          let head = 0, tail = 0;
+
+          function isWhite(r, g, b) {
+            const diff = Math.max(Math.abs(r - g), Math.max(Math.abs(r - b), Math.abs(g - b)));
+            return r >= 220 && g >= 220 && b >= 220 && diff <= 25;
+          }
+
+          for (let x = 0; x < w; x++) { seedW(x, 0); seedW(x, h - 1); }
+          for (let y = 0; y < h; y++) { seedW(0, y); seedW(w - 1, y); }
+
+          function seedW(x, y) {
+            const idx = y * w + x;
+            if (visited[idx]) return;
+            const p = idx * 4;
+            if (isWhite(data[p], data[p + 1], data[p + 2])) {
+              visited[idx] = 1;
+              queue[tail++] = idx;
+            }
+          }
+
+          while (head < tail) {
+            const idx = queue[head++];
+            data[idx * 4 + 3] = 0;
+            const x = idx % w;
+            const y = (idx / w) | 0;
+
+            const neighbors = [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]];
+            for (const [nx, ny] of neighbors) {
+              if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+              const nIdx = ny * w + nx;
+              if (visited[nIdx]) continue;
+              const np = nIdx * 4;
+              const r = data[np], g = data[np + 1], b = data[np + 2];
+              if (isWhite(r, g, b)) {
+                visited[nIdx] = 1;
+                queue[tail++] = nIdx;
+              } else {
+                const diff = Math.max(Math.abs(r - g), Math.max(Math.abs(r - b), Math.abs(g - b)));
+                if (r >= 205 && g >= 205 && b >= 205 && diff <= 15) {
+                  visited[nIdx] = 1;
+                  const avg = (r + g + b) / 3;
+                  data[np + 3] = Math.max(0, Math.min(255, Math.round((255 - avg) * 8)));
+                }
+              }
             }
           }
         }
+
         oCtx.putImageData(imgData, 0, 0);
         return off;
       } catch (e) {
+        console.warn('Canvas transparency exception:', e);
         return sourceImg;
       }
     }
@@ -899,12 +1046,7 @@
         targetImg.src = paths[idx++];
       }
       targetImg.onload = () => {
-        // If image has extension -raw or is jpeg, automatically create transparent version
-        if (targetImg.src.includes('-raw') || targetImg.src.endsWith('.jpg') || targetImg.src.endsWith('.jpeg')) {
-          processedAvatars[key] = makeTransparentCanvas(targetImg, type);
-        } else {
-          processedAvatars[key] = targetImg;
-        }
+        processedAvatars[key] = makeTransparentCanvas(targetImg, type);
         render9x10_9Poster();
       };
       targetImg.onerror = tryNext;
@@ -1134,18 +1276,20 @@
       }
     }
 
-    // Helper for rounded rectangle
+    // Helper for rounded rectangle with safety clamping
     function drawRoundedRect(c, x, y, width, height, radius) {
+      const maxR = Math.min(Math.abs(width) / 2, Math.abs(height) / 2);
+      const r = Math.max(0, Math.min(radius || 0, maxR));
       c.beginPath();
-      c.moveTo(x + radius, y);
-      c.lineTo(x + width - radius, y);
-      c.quadraticCurveTo(x + width, y, x + width, y + radius);
-      c.lineTo(x + width, y + height - radius);
-      c.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-      c.lineTo(x + radius, y + height);
-      c.quadraticCurveTo(x, y + height, x, y + height - radius);
-      c.lineTo(x, y + radius);
-      c.quadraticCurveTo(x, y, x + radius, y);
+      c.moveTo(x + r, y);
+      c.lineTo(x + width - r, y);
+      c.quadraticCurveTo(x + width, y, x + width, y + r);
+      c.lineTo(x + width, y + height - r);
+      c.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+      c.lineTo(x + r, y + height);
+      c.quadraticCurveTo(x, y + height, x, y + height - r);
+      c.lineTo(x, y + r);
+      c.quadraticCurveTo(x, y, x + r, y);
       c.closePath();
     }
 
@@ -1178,14 +1322,18 @@
       if (qrCanvasCache[key]) {
         return qrCanvasCache[key];
       }
+      const offCanvas = document.createElement('canvas');
+      offCanvas.width = size;
+      offCanvas.height = size;
+      const oCtx = offCanvas.getContext('2d');
+
       if (window.QRCode && typeof QRCode.toCanvas === 'function') {
-        const offCanvas = document.createElement('canvas');
         QRCode.toCanvas(offCanvas, targetUrl, {
           errorCorrectionLevel: 'H',
           margin: 1,
           width: size,
           color: { 
-            dark: '#1a1416', // Warm deep espresso ink
+            dark: '#1a1416', // Deep espresso ink
             light: '#ffffff' 
           }
         }, function (err) {
@@ -1194,20 +1342,33 @@
             render9x10_9Poster();
           }
         });
-        return offCanvas;
+      } else {
+        const qrImg = new Image();
+        qrImg.crossOrigin = 'anonymous';
+        qrImg.onload = () => {
+          oCtx.drawImage(qrImg, 0, 0, size, size);
+          qrCanvasCache[key] = offCanvas;
+          render9x10_9Poster();
+        };
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&ecc=H&margin=1&data=${encodeURIComponent(targetUrl)}`;
       }
-      return null;
+      qrCanvasCache[key] = offCanvas;
+      return offCanvas;
     }
 
-    // Helper to draw cropped photo with pan & zoom
+    // Helper to draw cropped photo with pan & zoom (defaults to Shaaaw photo if frame unassigned)
     function drawCroppedPhoto(photoImg, destX, destY, destW, destH, panX, panY, zoom, labelText, scaleW) {
-      if (photoImg && photoImg.complete && photoImg.naturalWidth) {
+      const actualImg = (photoImg && photoImg.complete && photoImg.naturalWidth)
+        ? photoImg
+        : (shaawImage.complete && shaawImage.naturalWidth ? shaawImage : null);
+
+      if (actualImg) {
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
 
         const destAspect = destW / destH;
-        const imgW = photoImg.naturalWidth;
-        const imgH = photoImg.naturalHeight;
+        const imgW = actualImg.naturalWidth;
+        const imgH = actualImg.naturalHeight;
         const baseCropW = imgW;
         const baseCropH = imgW / destAspect;
         
@@ -1219,31 +1380,15 @@
         const cropX = Math.max(0, Math.min(maxPanX, maxPanX / 2 + panX * maxPanX));
         const cropY = Math.max(0, Math.min(maxPanY, maxPanY * panY));
 
-        ctx.drawImage(photoImg, cropX, cropY, cropW, cropH, destX, destY, destW, destH);
+        ctx.drawImage(actualImg, cropX, cropY, cropW, cropH, destX, destY, destW, destH);
       } else {
-        // Romantic archival placeholder art when no custom photo uploaded yet
-        ctx.fillStyle = '#fbf7f2';
+        ctx.fillStyle = '#faf7f2';
         ctx.fillRect(destX, destY, destW, destH);
-        
-        // Diagonal blush hatching
-        ctx.strokeStyle = 'rgba(235, 190, 200, 0.40)';
-        ctx.lineWidth = 1.5;
-        for (let i = destX - destH; i < destX + destW + destH; i += 22) {
-          ctx.beginPath();
-          ctx.moveTo(i, destY);
-          ctx.lineTo(i + destH, destY + destH);
-          ctx.stroke();
-        }
-
         ctx.fillStyle = '#db2777';
         ctx.font = 'bold ' + Math.round(scaleW * 0.16) + 'px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('♡', destX + destW / 2, destY + destH / 2 - 8);
-
-        ctx.fillStyle = '#831843';
-        ctx.font = '600 ' + Math.round(scaleW * 0.08) + 'px sans-serif';
-        ctx.fillText(labelText || 'Add Photo', destX + destW / 2, destY + destH / 2 + 18);
+        ctx.fillText('♡', destX + destW / 2, destY + destH / 2);
       }
     }
 
@@ -1706,9 +1851,9 @@
       // 🌟 HILARIOUS & CUTE AVATAR FIGURES (MEANINGFUL SCRAPBOOK POSITIONS)
       // ====================================================================
 
-      function drawAvatarSticker(avatarAsset, cx, cy, width, rotDeg = 0, caption = '') {
+      function drawAvatarSticker(avatarAsset, cx, cy, width, rotDeg = 0) {
         const item = avatarAsset;
-        if (!item) return;
+        if (!item || !item.width || !item.height) return;
         const aspect = (item.naturalHeight || item.height) / (item.naturalWidth || item.width);
         const height = Math.round(width * aspect);
 
@@ -1716,73 +1861,42 @@
         ctx.translate(cx, cy);
         ctx.rotate(rotDeg * Math.PI / 180);
 
-        // Warm scrapbook sticker drop shadow
-        ctx.shadowColor = 'rgba(25, 10, 20, 0.40)';
-        ctx.shadowBlur = 24;
+        // Natural soft sticker drop shadow
+        ctx.shadowColor = 'rgba(25, 10, 20, 0.35)';
+        ctx.shadowBlur = 18;
         ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 10;
+        ctx.shadowOffsetY = 8;
 
         ctx.drawImage(item, -width / 2, -height / 2, width, height);
-
-        ctx.shadowColor = 'transparent';
-        ctx.shadowBlur = 0;
-
-        // Cute scrapbook caption tag
-        if (caption) {
-          const fontSize = Math.max(14, Math.round(width * 0.080));
-          ctx.font = 'bold ' + fontSize + 'px "Plus Jakarta Sans", sans-serif';
-          const textMetrics = ctx.measureText(caption);
-          const pillW = textMetrics.width + 24;
-          const pillH = Math.round(fontSize * 1.8);
-          const pillY = Math.round(height / 2 + 6);
-
-          ctx.fillStyle = '#ffffff';
-          ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
-          ctx.shadowBlur = 10;
-          ctx.shadowOffsetY = 3;
-          drawRoundedRect(ctx, -pillW / 2, pillY, pillW, pillH, 999);
-          ctx.fill();
-
-          ctx.shadowColor = 'transparent';
-          ctx.strokeStyle = '#f472b6';
-          ctx.lineWidth = 1.8;
-          drawRoundedRect(ctx, -pillW / 2, pillY, pillW, pillH, 999);
-          ctx.stroke();
-
-          ctx.fillStyle = '#831843';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(caption, 0, pillY + pillH / 2);
-        }
 
         ctx.restore();
       }
 
-      // 1. BUDDHA NANDHISH: Meditating DJ sitting on top of the Retro Vinyl Record!
+      // 1. BUDDHA NANDHISH: Meditating on top of the Retro Vinyl Record
       if (showBuddhaAvatar) {
         const vinylCenterX = drawX + Math.round(drawW * 0.170);
         const vinylCenterY = drawY + Math.round(drawH * 0.805);
-        const bWidth = Math.round(drawW * 0.180 * avatarScale);
+        const bWidth = Math.round(drawW * 0.175 * avatarScale);
         const buddhaAsset = processedAvatars['buddha'] || avatarBuddhaImg;
-        drawAvatarSticker(buddhaAsset, vinylCenterX, vinylCenterY, bWidth, -2, 'DJ Zen Beats 🧘‍♂️💿');
+        drawAvatarSticker(buddhaAsset, vinylCenterX, vinylCenterY, bWidth, -2);
       }
 
-      // 2. COSMIC VISHNU NANDHISH: Celestial Preserver guarding Shaaaw's central memory!
+      // 2. LORD VISHNU NANDHISH: Guarding Shaaaw's central memory
       if (showVishnuAvatar) {
         const vishnuX = drawX + Math.round(drawW * 0.725);
         const vishnuY = drawY + Math.round(drawH * 0.375);
-        const vWidth = Math.round(drawW * 0.165 * avatarScale);
+        const vWidth = Math.round(drawW * 0.160 * avatarScale);
         const vishnuAsset = processedAvatars['vishnu'] || avatarVishnuImg;
-        drawAvatarSticker(vishnuAsset, vishnuX, vishnuY, vWidth, 2, 'Supreme Preserver ☸️✨');
+        drawAvatarSticker(vishnuAsset, vishnuX, vishnuY, vWidth, 2);
       }
 
-      // 3. WELCOMING SHEPHERD NANDHISH: Open-arms celebrating Queen Shaaaw at bottom
+      // 3. WELCOMING SHEPHERD NANDHISH: Celebrating Queen Shaaaw at bottom
       if (showShepherdAvatar) {
         const shepherdX = drawX + Math.round(drawW * 0.490);
         const shepherdY = drawY + Math.round(drawH * 0.835);
-        const sWidth = Math.round(drawW * 0.165 * avatarScale);
+        const sWidth = Math.round(drawW * 0.160 * avatarScale);
         const shepherdAsset = processedAvatars['shepherd'] || avatarShepherdImg;
-        drawAvatarSticker(shepherdAsset, shepherdX, shepherdY, sWidth, 0, 'Welcome to Shaaaw Day! 🕊️💖');
+        drawAvatarSticker(shepherdAsset, shepherdX, shepherdY, sWidth, 0);
       }
     }
 
