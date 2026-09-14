@@ -583,70 +583,178 @@
               <span class="check-icon">✓</span>
               <span><strong>8 QR Codes Protected:</strong> All 8 codes are inside the 1/4" safe zone</span>
             </li>
-            <li class="checklist-item">
           </ul>
         </div>
 
-        <!-- Shaaaw Center Photo Adjustments -->
+        <!-- Redesigned Polaroid Frames & Photo Controls -->
         <div class="panel-card" style="border-color: #f472b6; background: rgba(36, 16, 42, 0.85);">
           <h3 class="panel-title" style="color: #fbcfe8;">
-            <span>📸 Center Polaroid Photo (Shaaaw)</span>
+            <span>📸 Redesigned Polaroid Frames (Precision Fit)</span>
           </h3>
-          <p style="font-size: 0.82rem; color: #cbd5e1; margin-top: -6px; margin-bottom: 14px;">
-            Shaaaw's photo is calibrated to the Polaroid's natural <strong>-2.6° tilt</strong>. Adjust framing below:
+          <p style="font-size: 0.82rem; color: #cbd5e1; margin-top: -6px; margin-bottom: 12px;">
+            Corrected dimensions and aspect ratios prevent photo spill. Choose how photos sit in the frames:
           </p>
+
+          <!-- Framing Integration Mode -->
+          <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+            <button class="style-option-btn active" id="btnModeSeamless" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setPolaroidMode('seamless')">
+              <div>
+                <span class="style-btn-title" style="font-size: 0.82rem;">✨ Seamless Aperture</span>
+                <span class="style-btn-desc" style="font-size: 0.72rem;">Clips inside original frame. Keeps original washi tape & doodle hearts!</span>
+              </div>
+            </button>
+            <button class="style-option-btn" id="btnModeStudio" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setPolaroidMode('studio-card')">
+              <div>
+                <span class="style-btn-title" style="font-size: 0.82rem;">🖼️ Studio Card</span>
+                <span class="style-btn-desc" style="font-size: 0.72rem;">Brand new crisp 4K Polaroid frame card overlay.</span>
+              </div>
+            </button>
+          </div>
+
           <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
-                <span>Vertical Position (Pan Y):</span>
-                <span id="panVal" style="color: #f472b6; font-weight: 700;">Face Focus (18%)</span>
+            <!-- Center Polaroid Photo Adjustments -->
+            <div style="background: rgba(255, 255, 255, 0.04); border-radius: 10px; padding: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-weight: 700; font-size: 0.88rem; color: #f472b6;">🌟 Center Main Polaroid (Shaaaw)</span>
+                <label class="btn-download-sub" style="padding: 3px 8px; font-size: 0.74rem; cursor: pointer;">
+                  <span>Change Photo</span>
+                  <input type="file" accept="image/*" style="display: none;" onchange="uploadMainPhoto(event)">
+                </label>
               </div>
-              <input type="range" id="sliderPanY" min="0" max="100" value="18" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawPanY(this.value)">
+
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                    <span>Vertical Focus (Pan Y):</span>
+                    <span id="panVal" style="color: #f472b6; font-weight: 700;">18% (Face Focus)</span>
+                  </div>
+                  <input type="range" id="sliderPanY" min="0" max="100" value="18" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawPanY(this.value)">
+                </div>
+
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                    <span>Horizontal Center (Pan X):</span>
+                    <span id="panXVal" style="color: #f472b6; font-weight: 700;">0% (Centered)</span>
+                  </div>
+                  <input type="range" id="sliderPanX" min="-40" max="40" value="0" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawPanX(this.value)">
+                </div>
+
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                    <span>Photo Zoom:</span>
+                    <span id="zoomVal" style="color: #f472b6; font-weight: 700;">1.05x</span>
+                  </div>
+                  <input type="range" id="sliderZoom" min="100" max="200" value="105" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawZoom(this.value)">
+                </div>
+
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                    <span>Frame Tilt Angle:</span>
+                    <span id="tiltVal" style="color: #f472b6; font-weight: 700;">-2.6° (Poster Aligned)</span>
+                  </div>
+                  <input type="range" id="sliderTilt" min="-60" max="20" value="-26" step="1" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawTilt(this.value)">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.76rem; margin-bottom: 2px;">
+                      <span>Width Scale:</span>
+                      <span id="widthScaleVal" style="color: #f472b6; font-weight: 700;">100%</span>
+                    </div>
+                    <input type="range" id="sliderWidthScale" min="85" max="115" value="100" style="width: 100%; accent-color: #ec4899;" oninput="updateWidthScale(this.value)">
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.76rem; margin-bottom: 2px;">
+                      <span>Height Scale:</span>
+                      <span id="heightScaleVal" style="color: #f472b6; font-weight: 700;">100%</span>
+                    </div>
+                    <input type="range" id="sliderHeightScale" min="85" max="115" value="100" style="width: 100%; accent-color: #ec4899;" oninput="updateHeightScale(this.value)">
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
-                <span>Horizontal Position (Pan X):</span>
-                <span id="panXVal" style="color: #f472b6; font-weight: 700;">Center (0%)</span>
+
+            <!-- Additional Frames Customizer -->
+            <div style="background: rgba(255, 255, 255, 0.04); border-radius: 10px; padding: 10px;">
+              <div style="font-weight: 700; font-size: 0.85rem; color: #38bdf8; margin-bottom: 6px;">
+                📷 Extra Polaroid Frames (6 Surrounding Slots)
               </div>
-              <input type="range" id="sliderPanX" min="-40" max="40" value="0" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawPanX(this.value)">
-            </div>
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
-                <span>Zoom Level:</span>
-                <span id="zoomVal" style="color: #f472b6; font-weight: 700;">1.05x</span>
+              <p style="font-size: 0.78rem; color: #94a3b8; margin: 0 0 8px;">
+                Calibrated to exact poster angles. Upload photos for any frame:
+              </p>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                <label class="btn-download-sub" style="padding: 6px 10px; font-size: 0.78rem; cursor: pointer; flex: 1 1 calc(50% - 6px); justify-content: center;">
+                  <span>🖼️ Upload Frame 1 (Top-L)</span>
+                  <input type="file" accept="image/*" style="display: none;" onchange="uploadExtraPhoto(1, event)">
+                </label>
+                <label class="btn-download-sub" style="padding: 6px 10px; font-size: 0.78rem; cursor: pointer; flex: 1 1 calc(50% - 6px); justify-content: center;">
+                  <span>🖼️ Upload Frame 2 (Mid-L)</span>
+                  <input type="file" accept="image/*" style="display: none;" onchange="uploadExtraPhoto(2, event)">
+                </label>
+                <label class="btn-download-sub" style="padding: 6px 10px; font-size: 0.78rem; cursor: pointer; flex: 1 1 calc(50% - 6px); justify-content: center;">
+                  <span>🖼️ Upload Frame 3 (Btm-L)</span>
+                  <input type="file" accept="image/*" style="display: none;" onchange="uploadExtraPhoto(3, event)">
+                </label>
+                <label class="btn-download-sub" style="padding: 6px 10px; font-size: 0.78rem; cursor: pointer; flex: 1 1 calc(50% - 6px); justify-content: center;">
+                  <span>🖼️ Upload Frame 4 (Btm-R)</span>
+                  <input type="file" accept="image/*" style="display: none;" onchange="uploadExtraPhoto(4, event)">
+                </label>
+                <label class="btn-download-sub" style="padding: 6px 10px; font-size: 0.78rem; cursor: pointer; flex: 1 1 calc(50% - 6px); justify-content: center;">
+                  <span>🖼️ Upload Frame 5 (Top-R)</span>
+                  <input type="file" accept="image/*" style="display: none;" onchange="uploadExtraPhoto(5, event)">
+                </label>
+                <label class="btn-download-sub" style="padding: 6px 10px; font-size: 0.78rem; cursor: pointer; flex: 1 1 calc(50% - 6px); justify-content: center;">
+                  <span>🖼️ Upload Frame 6 (Mid-R)</span>
+                  <input type="file" accept="image/*" style="display: none;" onchange="uploadExtraPhoto(6, event)">
+                </label>
               </div>
-              <input type="range" id="sliderZoom" min="100" max="180" value="105" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawZoom(this.value)">
-            </div>
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
-                <span>Polaroid Frame Tilt Angle:</span>
-                <span id="tiltVal" style="color: #f472b6; font-weight: 700;">-2.6° (Perfect Fit)</span>
-              </div>
-              <input type="range" id="sliderTilt" min="-50" max="10" value="-26" step="1" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawTilt(this.value)">
             </div>
           </div>
         </div>
 
-        <!-- QR Code Integration Fine-Tuning -->
+        <!-- Redesigned QR Scrapbook Badges -->
         <div class="panel-card">
-          <h3 class="panel-title">🏷️ QR Code Scrapbook Integration</h3>
+          <h3 class="panel-title">🏷️ Redesigned QR Code Fit (All 8 QRs)</h3>
           <p style="font-size: 0.82rem; color: #94a3b8; margin-top: -6px; margin-bottom: 12px;">
-            Replaces only the dummy QR code squares. Hand-drawn hearts, torn paper edges, and paperclips remain 100% visible.
+            Redesigned to fit flush on scrapbook scraps without blocking surrounding paperclips or doodle hearts:
           </p>
+
+          <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+            <button class="style-option-btn active" id="btnQrFlush" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setQrStyleMode('flush')">
+              <div>
+                <span class="style-btn-title" style="font-size: 0.82rem;">🎯 Flush Fit (Clean)</span>
+                <span class="style-btn-desc" style="font-size: 0.72rem;">Replaces dummy QR squares exactly. Preserves paper edges & hearts!</span>
+              </div>
+            </button>
+            <button class="style-option-btn" id="btnQrBadge" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setQrStyleMode('badge')">
+              <div>
+                <span class="style-btn-title" style="font-size: 0.82rem;">🏷️ Keepsake Tags</span>
+                <span class="style-btn-desc" style="font-size: 0.72rem;">Adds washi tape header and track label title.</span>
+              </div>
+            </button>
+          </div>
+
           <div style="display: flex; flex-direction: column; gap: 12px;">
             <div>
               <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
-                <span>QR Size Scale:</span>
-                <span id="qrScaleVal" style="color: #fbbf24; font-weight: 700;">100% (Flush Fit)</span>
+                <span>QR Code Scale / Size:</span>
+                <span id="qrScaleVal" style="color: #fbbf24; font-weight: 700;">100% (Exact Dummy Replacement)</span>
               </div>
-              <input type="range" id="sliderQrScale" min="85" max="115" value="100" style="width: 100%; accent-color: #fbbf24;" oninput="updateQrScale(this.value)">
+              <input type="range" id="sliderQrScale" min="80" max="115" value="100" style="width: 100%; accent-color: #fbbf24;" oninput="updateQrScale(this.value)">
             </div>
+
             <div class="toggle-row" style="padding-top: 6px;">
-              <span>Warm Archival Paper Backing</span>
+              <span>🔍 Live Alignment Inspector Guides</span>
               <label class="switch">
-                <input type="checkbox" id="toggleWarmQr" checked onchange="toggleWarmPaper(this.checked)">
+                <input type="checkbox" id="toggleInspector" onchange="toggleAlignmentGuides(this.checked)">
                 <span class="slider"></span>
               </label>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+              <button class="btn-download-sub" style="padding: 6px 12px; font-size: 0.76rem;" onclick="resetCalibratedDefaults()">
+                <span>🔄 Reset to Calibrated Defaults</span>
+              </button>
             </div>
           </div>
         </div>
@@ -690,19 +798,29 @@
     const sourceImage = new Image();
     const shaawImage = new Image();
     
+    // Additional photos for frames 1-6
+    const extraPhotos = {};
+
+    // Precision Framing & QR Alignment State
+    let polaroidMode = 'seamless'; // 'seamless' (in-frame aperture fit) or 'studio-card' (crisp card overlay)
+    let qrStyleMode = 'flush';     // 'flush' (seamless dummy replacement) or 'badge' (keepsake tag badge)
+    
     let shaawPanY = 0.18;
     let shaawPanX = 0.00;
     let shaawZoom = 1.05;
     let polaroidTilt = -2.60;
+    let centerWidthScale = 1.00;
+    let centerHeightScale = 1.00;
     let qrScaleMultiplier = 1.00;
-    let useWarmPaper = true;
+    let showAlignmentOutlines = false;
 
     // Cache pre-rendered QR canvases so re-rendering is instantaneous
     const qrCanvasCache = {};
 
     const shaawCandidates = [
       '/assets/shaaw-center.jpg',
-      'assets/shaaw-center.jpg'
+      'assets/shaaw-center.jpg',
+      '../public/assets/shaaw-center.jpg'
     ];
     let shaawIdx = 0;
     function tryLoadNextShaaw() {
@@ -714,6 +832,20 @@
     };
     shaawImage.onerror = tryLoadNextShaaw;
     tryLoadNextShaaw();
+
+    function setPolaroidMode(mode) {
+      polaroidMode = mode;
+      document.getElementById('btnModeSeamless').classList.toggle('active', mode === 'seamless');
+      document.getElementById('btnModeStudio').classList.toggle('active', mode === 'studio-card');
+      render9x10_9Poster();
+    }
+
+    function setQrStyleMode(mode) {
+      qrStyleMode = mode;
+      document.getElementById('btnQrFlush').classList.toggle('active', mode === 'flush');
+      document.getElementById('btnQrBadge').classList.toggle('active', mode === 'badge');
+      render9x10_9Poster();
+    }
 
     function updateShaawPanY(val) {
       shaawPanY = val / 100;
@@ -739,23 +871,89 @@
       render9x10_9Poster();
     }
 
+    function updateWidthScale(val) {
+      centerWidthScale = val / 100;
+      document.getElementById('widthScaleVal').textContent = Math.round(val) + '%';
+      render9x10_9Poster();
+    }
+
+    function updateHeightScale(val) {
+      centerHeightScale = val / 100;
+      document.getElementById('heightScaleVal').textContent = Math.round(val) + '%';
+      render9x10_9Poster();
+    }
+
     function updateQrScale(val) {
       qrScaleMultiplier = val / 100;
       document.getElementById('qrScaleVal').textContent = Math.round(val) + '%';
       render9x10_9Poster();
     }
 
-    function toggleWarmPaper(val) {
-      useWarmPaper = val;
+    function toggleAlignmentGuides(val) {
+      showAlignmentOutlines = val;
       render9x10_9Poster();
+    }
+
+    function resetCalibratedDefaults() {
+      shaawPanY = 0.18;
+      shaawPanX = 0.00;
+      shaawZoom = 1.05;
+      polaroidTilt = -2.60;
+      centerWidthScale = 1.00;
+      centerHeightScale = 1.00;
+      qrScaleMultiplier = 1.00;
+
+      document.getElementById('sliderPanY').value = 18;
+      document.getElementById('panVal').textContent = '18% (Face Focus)';
+      document.getElementById('sliderPanX').value = 0;
+      document.getElementById('panXVal').textContent = '0% (Centered)';
+      document.getElementById('sliderZoom').value = 105;
+      document.getElementById('zoomVal').textContent = '1.05x';
+      document.getElementById('sliderTilt').value = -26;
+      document.getElementById('tiltVal').textContent = '-2.6° (Poster Aligned)';
+      document.getElementById('sliderWidthScale').value = 100;
+      document.getElementById('widthScaleVal').textContent = '100%';
+      document.getElementById('sliderHeightScale').value = 100;
+      document.getElementById('heightScaleVal').textContent = '100%';
+      document.getElementById('sliderQrScale').value = 100;
+      document.getElementById('qrScaleVal').textContent = '100% (Exact Dummy Replacement)';
+
+      setPolaroidMode('seamless');
+      setQrStyleMode('flush');
+    }
+
+    function uploadMainPhoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        shaawImage.onload = () => render9x10_9Poster();
+        shaawImage.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function uploadExtraPhoto(frameId, event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+          extraPhotos[frameId] = img;
+          render9x10_9Poster();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
     }
 
     // Try loaded local poster or fallback paths
     const posterCandidates = [
       '/assets/original-poster.jpg',
       'assets/original-poster.jpg',
-      '/assets/poster-with-qrs.png',
-      'assets/poster-with-qrs.png'
+      '../assets/original-poster.jpg',
+      '/assets/poster-with-qrs.png'
     ];
 
     let candidateIdx = 0;
@@ -774,7 +972,7 @@
 
     function setFramingStyle(style) {
       currentStyle = style;
-      document.querySelectorAll('.style-option-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.style-btn-group .style-option-btn').forEach(btn => btn.classList.remove('active'));
       if (style === 'mat') document.getElementById('btnStyleMat').classList.add('active');
       if (style === 'seamless') document.getElementById('btnStyleSeamless').classList.add('active');
       if (style === 'white-border') document.getElementById('btnStyleBorder').classList.add('active');
@@ -805,6 +1003,29 @@
       c.closePath();
     }
 
+    // Helper to draw cute washi tape strip
+    function drawWashiTape(c, x, y, w, h, angleDeg, colorPattern = 'gingham') {
+      c.save();
+      c.translate(x, y);
+      c.rotate(angleDeg * Math.PI / 180);
+      c.fillStyle = 'rgba(244, 180, 196, 0.85)';
+      c.fillRect(-w/2, -h/2, w, h);
+      // Gingham or tape texture
+      c.strokeStyle = 'rgba(255, 255, 255, 0.55)';
+      c.lineWidth = 1.5;
+      for (let i = -w/2; i < w/2; i += 6) {
+        c.beginPath();
+        c.moveTo(i, -h/2);
+        c.lineTo(i, h/2);
+        c.stroke();
+      }
+      // Torn fibrous edges
+      c.fillStyle = 'rgba(40, 20, 30, 0.08)';
+      c.fillRect(-w/2, -h/2, 2, h);
+      c.fillRect(w/2 - 2, -h/2, 2, h);
+      c.restore();
+    }
+
     // Pre-generate QR canvases for crisp rendering
     function getQRCodeCanvas(targetUrl, size) {
       const key = targetUrl + '_' + size;
@@ -819,7 +1040,7 @@
           width: size,
           color: { 
             dark: '#1a1416', // Warm deep espresso ink instead of harsh #000000
-            light: useWarmPaper ? '#fdfbf7' : '#ffffff' 
+            light: '#ffffff' 
           }
         }, function (err) {
           if (!err) {
@@ -830,6 +1051,54 @@
         return offCanvas;
       }
       return null;
+    }
+
+    // Helper to draw cropped photo with pan & zoom
+    function drawCroppedPhoto(photoImg, destX, destY, destW, destH, panX, panY, zoom, labelText, scaleW) {
+      if (photoImg && photoImg.complete && photoImg.naturalWidth) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+
+        const destAspect = destW / destH;
+        const imgW = photoImg.naturalWidth;
+        const imgH = photoImg.naturalHeight;
+        const baseCropW = imgW;
+        const baseCropH = imgW / destAspect;
+        
+        const cropW = baseCropW / zoom;
+        const cropH = baseCropH / zoom;
+        
+        const maxPanX = (imgW - cropW);
+        const maxPanY = (imgH - cropH);
+        const cropX = Math.max(0, Math.min(maxPanX, maxPanX / 2 + panX * maxPanX));
+        const cropY = Math.max(0, Math.min(maxPanY, maxPanY * panY));
+
+        ctx.drawImage(photoImg, cropX, cropY, cropW, cropH, destX, destY, destW, destH);
+      } else {
+        // Romantic placeholder art when no custom photo uploaded yet
+        ctx.fillStyle = '#f8f1e9';
+        ctx.fillRect(destX, destY, destW, destH);
+        
+        // Diagonal hatching
+        ctx.strokeStyle = 'rgba(235, 190, 200, 0.45)';
+        ctx.lineWidth = 1.5;
+        for (let i = destX - destH; i < destX + destW + destH; i += 22) {
+          ctx.beginPath();
+          ctx.moveTo(i, destY);
+          ctx.lineTo(i + destH, destY + destH);
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = '#db2777';
+        ctx.font = 'bold ' + Math.round(scaleW * 0.16) + 'px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('♡', destX + destW / 2, destY + destH / 2 - 8);
+
+        ctx.fillStyle = '#831843';
+        ctx.font = '600 ' + Math.round(scaleW * 0.08) + 'px sans-serif';
+        ctx.fillText(labelText || 'Add Photo', destX + destW / 2, destY + destH / 2 + 18);
+      }
     }
 
     // ========================================================================
@@ -938,109 +1207,336 @@
       }
 
       // ====================================================================
-      // 🌸 PRECISION POLAROID PHOTO EMBEDDING (MATCHES -2.6° TILT)
+      // 🌟 REDESIGNED POLAROID FRAMES (PRECISION FIT - ALL 7 FRAMES)
       // ====================================================================
-      if (shaawImage.complete && shaawImage.naturalWidth) {
-        // Geometric center of inner grey opening in original poster
-        const centerX = drawX + drawW * 0.5055;
-        const centerY = drawY + drawH * 0.3450;
-        
-        // Exact inner opening width and height
-        const pw = Math.round(drawW * 0.3180);
-        const ph = Math.round(drawH * 0.2205);
+
+      function renderPolaroidSlot(config) {
+        const {
+          cx, cy,
+          apertureW, apertureH,
+          cardW, cardH,
+          rotDeg,
+          photoImg,
+          panX = 0,
+          panY = 0.18,
+          zoom = 1.05,
+          isMain = false,
+          labelText = ''
+        } = config;
 
         ctx.save();
-        // Translate to the center of the Polaroid aperture and apply tilt rotation
-        ctx.translate(centerX, centerY);
-        ctx.rotate(polaroidTilt * Math.PI / 180);
+        ctx.translate(cx, cy);
+        ctx.rotate(rotDeg * Math.PI / 180);
 
-        // Clip strictly inside the Polaroid frame with gentle rounded corners
-        drawRoundedRect(ctx, -pw / 2, -ph / 2, pw, ph, 4);
-        ctx.clip();
+        if (polaroidMode === 'studio-card') {
+          // MODE B: REDESIGNED CRISP ARCHIVAL POLAROID CARD OVERLAY
+          ctx.shadowColor = 'rgba(30, 10, 20, 0.28)';
+          ctx.shadowBlur = isMain ? 32 : 18;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = isMain ? 10 : 6;
 
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
+          // Archival white card
+          ctx.fillStyle = '#fdfcf9';
+          drawRoundedRect(ctx, -cardW / 2, -cardH / 2, cardW, cardH, 4);
+          ctx.fill();
 
-        const destAspect = pw / ph;
-        const imgW = shaawImage.naturalWidth;
-        const imgH = shaawImage.naturalHeight;
-        const baseCropW = imgW;
-        const baseCropH = imgW / destAspect;
-        
-        const cropW = baseCropW / shaawZoom;
-        const cropH = baseCropH / shaawZoom;
-        
-        // Horizontal and Vertical pan calculations
-        const maxPanX = (imgW - cropW);
-        const maxPanY = (imgH - cropH);
-        const cropX = Math.max(0, Math.min(maxPanX, maxPanX / 2 + shaawPanX * maxPanX));
-        const cropY = Math.max(0, Math.min(maxPanY, maxPanY * shaawPanY));
+          ctx.shadowColor = 'transparent';
+          ctx.strokeStyle = 'rgba(70, 45, 40, 0.12)';
+          ctx.lineWidth = 1.5;
+          drawRoundedRect(ctx, -cardW / 2, -cardH / 2, cardW, cardH, 4);
+          ctx.stroke();
 
-        // Draw high-clarity photo (slight 1px overlap to ensure zero seam with frame)
-        ctx.drawImage(shaawImage, cropX, cropY, cropW, cropH, -pw / 2 - 1, -ph / 2 - 1, pw + 2, ph + 2);
+          // Polaroid aperture: equal top, left, right border
+          const sideMargin = Math.round((cardW - apertureW) / 2);
+          const photoTop = -cardH / 2 + sideMargin;
 
-        // Authentic polaroid inner photo depth bevel
-        ctx.strokeStyle = 'rgba(60, 30, 40, 0.22)';
-        ctx.lineWidth = 2.5;
-        drawRoundedRect(ctx, -pw / 2, -ph / 2, pw, ph, 4);
-        ctx.stroke();
+          ctx.save();
+          ctx.beginPath();
+          drawRoundedRect(ctx, -apertureW / 2, photoTop, apertureW, apertureH, 3);
+          ctx.clip();
+
+          drawCroppedPhoto(photoImg, -apertureW / 2, photoTop, apertureW, apertureH, panX, panY, zoom, labelText, apertureW);
+          
+          // Inner photo bevel depth
+          ctx.strokeStyle = 'rgba(50, 25, 35, 0.22)';
+          ctx.lineWidth = 2;
+          drawRoundedRect(ctx, -apertureW / 2, photoTop, apertureW, apertureH, 3);
+          ctx.stroke();
+          ctx.restore();
+
+          // Bottom chin handwritten calligraphy
+          const chinY = photoTop + apertureH + (cardH / 2 - (photoTop + apertureH)) / 2;
+          if (isMain) {
+            ctx.fillStyle = '#3a272e';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.font = 'italic 700 ' + Math.round(cardW * 0.062) + 'px "Caveat", "Brush Script MT", cursive, sans-serif';
+            ctx.fillText('Our Prettiest Girl ♡ Shaaaw', 0, chinY);
+
+            ctx.font = 'bold ' + Math.round(cardW * 0.065) + 'px Arial, sans-serif';
+            ctx.fillStyle = 'rgba(236, 72, 153, 0.85)';
+            ctx.fillText('💖', cardW / 2 - 24, chinY);
+            ctx.fillText('♡', -cardW / 2 + 24, chinY);
+
+            // Pink washi tape strip on top
+            drawWashiTape(ctx, 0, -cardH / 2 + 2, Math.round(cardW * 0.32), 22, -1.5, 'gingham');
+          } else {
+            ctx.fillStyle = '#5a3d46';
+            ctx.font = '700 ' + Math.round(cardW * 0.060) + 'px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('♡', cardW / 2 - 20, chinY);
+          }
+
+          // Alignment Outlines (if inspector toggled)
+          if (showAlignmentOutlines) {
+            ctx.strokeStyle = '#06b6d4';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(-cardW / 2, -cardH / 2, cardW, cardH);
+            ctx.strokeStyle = '#f43f5e';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(-apertureW / 2, photoTop, apertureW, apertureH);
+          }
+
+        } else {
+          // MODE A: SEAMLESS IN-FRAME APERTURE FIT (RECOMMENDED)
+          // Photo clips cleanly inside the original poster Polaroid opening.
+          // Preserves 100% of the poster's original white card, washi tape, and doodle hearts!
+          ctx.save();
+          ctx.beginPath();
+          drawRoundedRect(ctx, -apertureW / 2, -apertureH / 2, apertureW, apertureH, 3);
+          ctx.clip();
+
+          drawCroppedPhoto(photoImg, -apertureW / 2, -apertureH / 2, apertureW, apertureH, panX, panY, zoom, labelText, apertureW);
+
+          // Delicate inner photo shadow to blend naturally into poster frame opening
+          ctx.strokeStyle = 'rgba(40, 20, 30, 0.28)';
+          ctx.lineWidth = 2.5;
+          drawRoundedRect(ctx, -apertureW / 2, -apertureH / 2, apertureW, apertureH, 3);
+          ctx.stroke();
+
+          ctx.restore();
+
+          // Alignment Outlines (if inspector toggled)
+          if (showAlignmentOutlines) {
+            ctx.strokeStyle = '#06b6d4';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(-apertureW / 2, -apertureH / 2, apertureW, apertureH);
+            ctx.fillStyle = '#06b6d4';
+            ctx.font = 'bold 16px sans-serif';
+            ctx.fillText(labelText || (isMain ? 'Main Photo' : 'Frame'), -apertureW / 2 + 6, -apertureH / 2 + 20);
+          }
+        }
 
         ctx.restore();
       }
 
+      // --- FRAME 0: CENTER MAIN POLAROID (SHAAAW) ---
+      const centerPhotoW = Math.round(drawW * 0.322 * centerWidthScale);
+      const centerPhotoH = Math.round(drawW * 0.328 * centerHeightScale);
+      const centerCardW = Math.round(drawW * 0.395 * centerWidthScale);
+      const centerCardH = Math.round(centerCardW * 1.21 * centerHeightScale);
+
+      renderPolaroidSlot({
+        cx: drawX + Math.round(drawW * 0.5055),
+        cy: drawY + Math.round(drawH * 0.3555),
+        apertureW: centerPhotoW,
+        apertureH: centerPhotoH,
+        cardW: centerCardW,
+        cardH: centerCardH,
+        rotDeg: polaroidTilt,
+        photoImg: shaawImage,
+        panX: shaawPanX,
+        panY: shaawPanY,
+        zoom: shaawZoom,
+        isMain: true,
+        labelText: 'Shaaaw 💖'
+      });
+
+      // --- FRAME 1: TOP-LEFT POLAROID ---
+      const f1W = Math.round(drawW * 0.205);
+      renderPolaroidSlot({
+        cx: drawX + Math.round(drawW * 0.205),
+        cy: drawY + Math.round(drawH * 0.188),
+        apertureW: f1W,
+        apertureH: f1W,
+        cardW: Math.round(drawW * 0.240),
+        cardH: Math.round(drawW * 0.240 * 1.20),
+        rotDeg: 4.6,
+        photoImg: extraPhotos[1],
+        labelText: '01. Memory 💗'
+      });
+
+      // --- FRAME 2: MID-LEFT POLAROID ---
+      const f2W = Math.round(drawW * 0.218);
+      renderPolaroidSlot({
+        cx: drawX + Math.round(drawW * 0.170),
+        cy: drawY + Math.round(drawH * 0.442),
+        apertureW: f2W,
+        apertureH: f2W,
+        cardW: Math.round(drawW * 0.255),
+        cardH: Math.round(drawW * 0.255 * 1.20),
+        rotDeg: -6.2,
+        photoImg: extraPhotos[2],
+        labelText: '02. Smiles ✨'
+      });
+
+      // --- FRAME 3: BOTTOM-LEFT POLAROID ---
+      const f3W = Math.round(drawW * 0.205);
+      renderPolaroidSlot({
+        cx: drawX + Math.round(drawW * 0.355),
+        cy: drawY + Math.round(drawH * 0.648),
+        apertureW: f3W,
+        apertureH: f3W,
+        cardW: Math.round(drawW * 0.240),
+        cardH: Math.round(drawW * 0.240 * 1.20),
+        rotDeg: -2.2,
+        photoImg: extraPhotos[3],
+        labelText: '03. Melody 🎵'
+      });
+
+      // --- FRAME 4: BOTTOM-RIGHT POLAROID ---
+      const f4W = Math.round(drawW * 0.205);
+      renderPolaroidSlot({
+        cx: drawX + Math.round(drawW * 0.655),
+        cy: drawY + Math.round(drawH * 0.638),
+        apertureW: f4W,
+        apertureH: f4W,
+        cardW: Math.round(drawW * 0.240),
+        cardH: Math.round(drawW * 0.240 * 1.20),
+        rotDeg: 2.5,
+        photoImg: extraPhotos[4],
+        labelText: '04. Moments 🧇'
+      });
+
+      // --- FRAME 5: TOP-RIGHT POLAROID ---
+      const f5W = Math.round(drawW * 0.198);
+      renderPolaroidSlot({
+        cx: drawX + Math.round(drawW * 0.795),
+        cy: drawY + Math.round(drawH * 0.210),
+        apertureW: f5W,
+        apertureH: f5W,
+        cardW: Math.round(drawW * 0.235),
+        cardH: Math.round(drawW * 0.235 * 1.20),
+        rotDeg: -4.0,
+        photoImg: extraPhotos[5],
+        labelText: '05. Fairytale 🏰'
+      });
+
+      // --- FRAME 6: MID-RIGHT POLAROID ---
+      const f6W = Math.round(drawW * 0.218);
+      renderPolaroidSlot({
+        cx: drawX + Math.round(drawW * 0.845),
+        cy: drawY + Math.round(drawH * 0.495),
+        apertureW: f6W,
+        apertureH: f6W,
+        cardW: Math.round(drawW * 0.255),
+        cardH: Math.round(drawW * 0.255 * 1.20),
+        rotDeg: 6.2,
+        photoImg: extraPhotos[6],
+        labelText: '06. Forever 🌸'
+      });
+
       // ====================================================================
-      // 🌟 ORGANIC QR CODE SCRAP EMBEDDING (PRESERVES HEARTS & PAPERCLIPS)
+      // 🌟 REDESIGNED QR CODES (CALIBRATED DUMMY REPLACEMENT - ALL 8 QRs)
       // ====================================================================
-      // Calibrated to replace ONLY the dummy QR square, leaving all torn edges,
-      // paperclips, tape, and hand-drawn hearts (♡) 100% visible!
       const QR_PLACEMENTS = [
         // Left column (3 QRs)
-        { id: 1, cxPct: 0.096, cyPct: 0.076, baseSizePct: 0.076, rotDeg: 0.0 },
-        { id: 2, cxPct: 0.092, cyPct: 0.324, baseSizePct: 0.076, rotDeg: -1.2 },
-        { id: 3, cxPct: 0.088, cyPct: 0.614, baseSizePct: 0.076, rotDeg: 0.5 },
+        { id: 1, label: "Tape 01 💗", cxPct: 0.098, cyPct: 0.076, sizePct: 0.106, rotDeg: 0.0 },
+        { id: 2, label: "Tape 02 ✨", cxPct: 0.092, cyPct: 0.327, sizePct: 0.104, rotDeg: -1.5 },
+        { id: 3, label: "Tape 03 🎵", cxPct: 0.088, cyPct: 0.615, sizePct: 0.104, rotDeg: 0.0 },
         // Right column (5 QRs)
-        { id: 4, cxPct: 0.931, cyPct: 0.126, baseSizePct: 0.072, rotDeg: 0.0 },
-        { id: 5, cxPct: 0.931, cyPct: 0.328, baseSizePct: 0.072, rotDeg: -0.8 },
-        { id: 6, cxPct: 0.916, cyPct: 0.615, baseSizePct: 0.072, rotDeg: 1.0 },
-        { id: 7, cxPct: 0.908, cyPct: 0.745, baseSizePct: 0.072, rotDeg: -0.5 },
-        { id: 8, cxPct: 0.893, cyPct: 0.892, baseSizePct: 0.072, rotDeg: 0.8 }
+        { id: 4, label: "Tape 04 💌", cxPct: 0.934, cyPct: 0.126, sizePct: 0.098, rotDeg: 0.0 },
+        { id: 5, label: "Tape 05 🌸", cxPct: 0.934, cyPct: 0.328, sizePct: 0.098, rotDeg: -1.0 },
+        { id: 6, label: "Tape 06 🎶", cxPct: 0.916, cyPct: 0.615, sizePct: 0.098, rotDeg: 1.0 },
+        { id: 7, label: "Tape 07 🎸", cxPct: 0.908, cyPct: 0.745, sizePct: 0.098, rotDeg: -0.8 },
+        { id: 8, label: "Tape 08 💫", cxPct: 0.893, cyPct: 0.892, sizePct: 0.098, rotDeg: 0.8 }
       ];
 
       QR_PLACEMENTS.forEach(p => {
         const qx = drawX + Math.round(drawW * p.cxPct);
         const qy = drawY + Math.round(drawH * p.cyPct);
-        const qs = Math.round(drawW * p.baseSizePct * qrScaleMultiplier);
+        const qs = Math.round(drawW * p.sizePct * qrScaleMultiplier);
         const targetUrl = 'https://nandhish3004.github.io/birthday-qr-memory/m/' + p.id;
 
         ctx.save();
         ctx.translate(qx, qy);
         ctx.rotate(p.rotDeg * Math.PI / 180);
 
-        // 1. Warm archival paper backing that blends into the vintage scrap
-        ctx.fillStyle = useWarmPaper ? '#fcfbf8' : '#ffffff';
-        drawRoundedRect(ctx, -qs / 2, -qs / 2, qs, qs, 3);
-        ctx.fill();
+        if (qrStyleMode === 'flush') {
+          // FLUSH SCRAPBOOK FIT: Replaces only the dummy QR square!
+          // Preserves all surrounding torn paper edges, paperclips, and doodle hearts.
+          ctx.fillStyle = '#ffffff';
+          drawRoundedRect(ctx, -qs / 2, -qs / 2, qs, qs, 3);
+          ctx.fill();
 
-        // 2. Delicate antique border (1px)
-        ctx.strokeStyle = 'rgba(70, 45, 40, 0.16)';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
+          const qrCanvas = getQRCodeCanvas(targetUrl, qs);
+          if (qrCanvas && qrCanvas.width > 0) {
+            ctx.drawImage(qrCanvas, -qs / 2, -qs / 2, qs, qs);
+          } else {
+            const qrImg = new Image();
+            qrImg.onload = () => {
+              ctx.save();
+              ctx.translate(qx, qy);
+              ctx.rotate(p.rotDeg * Math.PI / 180);
+              ctx.drawImage(qrImg, -qs / 2, -qs / 2, qs, qs);
+              ctx.restore();
+            };
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&margin=1&data=${encodeURIComponent(targetUrl)}`;
+          }
 
-        // 3. Render verified permanent QR code
-        const qrCanvas = getQRCodeCanvas(targetUrl, qs);
-        if (qrCanvas && qrCanvas.width > 0) {
-          ctx.drawImage(qrCanvas, -qs / 2, -qs / 2, qs, qs);
+          // Delicate warm outline to blend with vintage scrap paper
+          ctx.strokeStyle = 'rgba(70, 40, 50, 0.20)';
+          ctx.lineWidth = 1.2;
+          drawRoundedRect(ctx, -qs / 2, -qs / 2, qs, qs, 3);
+          ctx.stroke();
+
         } else {
-          // Fallback image loader if canvas library is still rendering
-          const qrImg = new Image();
-          qrImg.onload = () => {
-            ctx.save();
-            ctx.translate(qx, qy);
-            ctx.rotate(p.rotDeg * Math.PI / 180);
-            ctx.drawImage(qrImg, -qs / 2, -qs / 2, qs, qs);
-            ctx.restore();
-          };
-          qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&margin=1&data=${encodeURIComponent(targetUrl)}`;
+          // KEEPSAKE TAG BADGES: Decorative tag with washi tape & title
+          const badgeW = Math.round(qs * 1.15);
+          const badgeH = Math.round(qs * 1.35);
+
+          ctx.shadowColor = 'rgba(35, 15, 25, 0.22)';
+          ctx.shadowBlur = 14;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 6;
+
+          ctx.fillStyle = '#fdfbf7';
+          drawRoundedRect(ctx, -badgeW / 2, -badgeH / 2, badgeW, badgeH, 4);
+          ctx.fill();
+
+          ctx.shadowColor = 'transparent';
+          ctx.strokeStyle = 'rgba(70, 45, 40, 0.15)';
+          ctx.lineWidth = 1.2;
+          drawRoundedRect(ctx, -badgeW / 2, -badgeH / 2, badgeW, badgeH, 4);
+          ctx.stroke();
+
+          // Washi tape header
+          drawWashiTape(ctx, 0, -badgeH / 2 + 2, Math.round(badgeW * 0.7), 12, 0, 'pink');
+
+          // Scannable QR code
+          const qrY = -badgeH / 2 + 15 + qs / 2;
+          const qrCanvas = getQRCodeCanvas(targetUrl, qs);
+          if (qrCanvas && qrCanvas.width > 0) {
+            ctx.drawImage(qrCanvas, -qs / 2, qrY - qs / 2, qs, qs);
+          }
+
+          // Track label
+          ctx.fillStyle = '#4a2835';
+          ctx.font = '700 ' + Math.round(badgeW * 0.10) + 'px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(p.label, 0, badgeH / 2 - 8);
+        }
+
+        // Inspector Outline (if toggled)
+        if (showAlignmentOutlines) {
+          ctx.strokeStyle = '#f59e0b';
+          ctx.lineWidth = 2.5;
+          ctx.strokeRect(-qs / 2, -qs / 2, qs, qs);
+          ctx.fillStyle = '#f59e0b';
+          ctx.font = 'bold 14px sans-serif';
+          ctx.fillText(`QR #${p.id}`, -qs / 2 + 4, -qs / 2 + 16);
         }
 
         ctx.restore();

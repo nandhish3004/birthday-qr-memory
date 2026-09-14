@@ -379,6 +379,7 @@ if ($posterSource) {
     try {
         $localPoster = Join-Path $assetsDir "original-poster.jpg"
         Copy-Item $posterSource $localPoster -Force
+        Copy-Item $posterSource (Join-Path $docsAssetsDir "original-poster.jpg") -Force
 
         $origBmp = [System.Drawing.Bitmap]::FromFile($posterSource)
         $origW = $origBmp.Width
@@ -430,9 +431,9 @@ if ($posterSource) {
                 
                 # Geometric center of inner Polaroid opening in original poster
                 $centerX = $drawX + [int]($drawW * 0.5055)
-                $centerY = $drawY + [int]($drawH * 0.3450)
-                $pw = [int]($drawW * 0.3180)
-                $ph = [int]($drawH * 0.2205)
+                $centerY = $drawY + [int]($drawH * 0.3555)
+                $pw = [int]($drawW * 0.3220)
+                $ph = [int]($drawW * 0.3280)
 
                 # Focus crop on Shaaaw's face & smile (18% vertical pan, 1.05x zoom)
                 $destAspect = [double]$pw / [double]$ph
@@ -474,14 +475,14 @@ if ($posterSource) {
         # Replaces only the dummy QR code squares, preserving the torn paper edges,
         # paperclips, washi tape, and cute hand-drawn hearts (♡)!
         $qrPlacements = @(
-            @{ id = 1; cxPct = 0.096; cyPct = 0.076; sizePct = 0.076; rot = 0.0 },
-            @{ id = 2; cxPct = 0.092; cyPct = 0.324; sizePct = 0.076; rot = -1.2 },
-            @{ id = 3; cxPct = 0.088; cyPct = 0.614; sizePct = 0.076; rot = 0.5 },
-            @{ id = 4; cxPct = 0.931; cyPct = 0.126; sizePct = 0.072; rot = 0.0 },
-            @{ id = 5; cxPct = 0.931; cyPct = 0.328; sizePct = 0.072; rot = -0.8 },
-            @{ id = 6; cxPct = 0.916; cyPct = 0.615; sizePct = 0.072; rot = 1.0 },
-            @{ id = 7; cxPct = 0.908; cyPct = 0.745; sizePct = 0.072; rot = -0.5 },
-            @{ id = 8; cxPct = 0.893; cyPct = 0.892; sizePct = 0.072; rot = 0.8 }
+            @{ id = 1; cxPct = 0.098; cyPct = 0.076; sizePct = 0.106; rot = 0.0 },
+            @{ id = 2; cxPct = 0.092; cyPct = 0.327; sizePct = 0.104; rot = -1.5 },
+            @{ id = 3; cxPct = 0.088; cyPct = 0.615; sizePct = 0.104; rot = 0.0 },
+            @{ id = 4; cxPct = 0.934; cyPct = 0.126; sizePct = 0.098; rot = 0.0 },
+            @{ id = 5; cxPct = 0.934; cyPct = 0.328; sizePct = 0.098; rot = -1.0 },
+            @{ id = 6; cxPct = 0.916; cyPct = 0.615; sizePct = 0.098; rot = 1.0 },
+            @{ id = 7; cxPct = 0.908; cyPct = 0.745; sizePct = 0.098; rot = -0.8 },
+            @{ id = 8; cxPct = 0.893; cyPct = 0.892; sizePct = 0.098; rot = 0.8 }
         )
 
         $ivoryBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(252, 251, 248))

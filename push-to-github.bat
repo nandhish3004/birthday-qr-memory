@@ -24,6 +24,15 @@ if exist "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-4
     copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789381931433.jpg" "docs\assets\shaaw-center.jpg" >nul
     echo    - Shaaaw center polaroid photo copied to public\assets\ and docs\assets\
 )
+if exist "public\assets\original-poster.jpg" (
+    copy /Y "public\assets\original-poster.jpg" "docs\assets\original-poster.jpg" >nul
+    echo    - Original poster copied to docs\assets\
+)
+if exist "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789368265793.jpg" (
+    copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789368265793.jpg" "public\assets\original-poster.jpg" >nul
+    copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789368265793.jpg" "docs\assets\original-poster.jpg" >nul
+    echo    - Master user-uploaded poster synced to public\assets\ and docs\assets\
+)
 
 echo 3. Running 4K Ultra-HD 9x10.9 Kodak print engine and asset processor...
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\prepare-kodak-and-assets.ps1" -TargetDir "%~dp0"
