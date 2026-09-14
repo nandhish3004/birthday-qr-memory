@@ -559,6 +559,61 @@
     #qr8 { top: 885px; right: 20px; transform: rotate(1deg); }
 
     /* ========================================================
+       FUNNY NANDHISH AVATAR STICKERS (EASTER EGGS)
+       ======================================================== */
+    .avatar-sticker {
+      position: absolute;
+      z-index: 26;
+      cursor: pointer;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .avatar-sticker:hover {
+      transform: scale(1.15) translateY(-6px) !important;
+      z-index: 50 !important;
+      filter: drop-shadow(0 20px 40px rgba(225, 29, 72, 0.6));
+    }
+    .avatar-sticker img {
+      width: 100%;
+      height: auto;
+      display: block;
+      pointer-events: none;
+    }
+    .avatar-badge {
+      background: #ffffff;
+      color: #831843;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-top: 4px;
+      border: 1.5px solid #f472b6;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      white-space: nowrap;
+    }
+    .avatar-buddha {
+      bottom: 80px;
+      left: 48px;
+      width: 165px;
+      transform: rotate(-2deg);
+    }
+    .avatar-vishnu {
+      top: 360px;
+      right: 175px;
+      width: 145px;
+      transform: rotate(3deg);
+    }
+    .avatar-shepherd {
+      bottom: 40px;
+      left: 365px;
+      width: 145px;
+      transform: rotate(0deg);
+    }
+
+    /* ========================================================
        SCRAPBOOK KEEPSAKES & DETAILS AT BOTTOM
        ======================================================== */
     /* Retro Vinyl Record */
@@ -1103,6 +1158,27 @@
         <div class="qr-scrap-card" id="qr8" title="Tape 08 - Click to Test" onclick="openMemory(8)">
           <canvas class="qr-canvas" id="qrCanvas8"></canvas>
           <div class="qr-tag-label">Tape 08</div>
+        </div>
+
+        <!-- ==============================================
+             3 FUNNY NANDHISH AVATAR STICKERS (EASTER EGGS)
+             ============================================== -->
+        <!-- 1. DJ Zen Buddha Nandhish (Sitting atop Retro Vinyl) -->
+        <div class="avatar-sticker avatar-buddha" title="DJ Zen Nandhish 🧘‍♂️💿">
+          <img src="assets/avatar-buddha.png" alt="DJ Zen Buddha Nandhish">
+          <div class="avatar-badge">DJ Zen Beats 🧘‍♂️</div>
+        </div>
+
+        <!-- 2. Cosmic Vishnu Nandhish (Guarding Shaaaw's Memory) -->
+        <div class="avatar-sticker avatar-vishnu" title="Supreme Memory Preserver ☸️✨">
+          <img src="assets/avatar-vishnu.png" alt="Cosmic Vishnu Nandhish">
+          <div class="avatar-badge">Memory Preserver ☸️</div>
+        </div>
+
+        <!-- 3. Welcoming Shepherd Nandhish (Celebrating Shaaaw) -->
+        <div class="avatar-sticker avatar-shepherd" title="Welcome to Shaaaw Day! 🕊️💖">
+          <img src="assets/avatar-shepherd.png" alt="Welcoming Shepherd Nandhish">
+          <div class="avatar-badge">Welcome Queen Shaaaw! 🕊️</div>
         </div>
 
         <!-- ==============================================
