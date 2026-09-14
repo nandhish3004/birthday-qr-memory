@@ -1,14 +1,29 @@
+param(
+    [string]$TargetDir = ""
+)
+
 # ==============================================================================
 # 🎨 ULTRA-FAST 8x10 KODAK PHOTO PRINT & ASSET ENGINE (300 DPI)
 # ==============================================================================
-# Fast C# byte-buffer LockBits processing: 0.05 seconds!
-# 1. Extracts & turns Lord Nandhish caricature into transparent PNG.
-# 2. Generates 2400 x 3000 @ 300 DPI master print for 8"x10" Kodak paper.
-# ==============================================================================
-
 Add-Type -AssemblyName System.Drawing
 
-# High-performance C# image byte processor (executes in 20-40ms vs 15 minutes in PowerShell)
+if (-not $TargetDir -or -not (Test-Path $TargetDir)) {
+    $TargetDir = if ($PSScriptRoot) { Split-Path -Parent $PSScriptRoot } else { (Get-Location).Path }
+}
+$rootDir = (Resolve-Path $TargetDir).Path
+$assetsDir = Join-Path $rootDir "public\assets"
+$docsDir = Join-Path $rootDir "docs"
+$docsAssetsDir = Join-Path $docsDir "assets"
+
+if (-not (Test-Path $assetsDir)) { New-Item -ItemType Directory -Path $assetsDir -Force | Out-Null }
+if (-not (Test-Path $docsAssetsDir)) { New-Item -ItemType Directory -Path $docsAssetsDir -Force | Out-Null }
+
+Write-Host "`n========================================================" -ForegroundColor Cyan
+Write-Host "📸 KODAK 8x10 PRINT ENGINE & LORD NANDHISH ASSET SETUP" -ForegroundColor Yellow
+Write-Host "Target Root: $rootDir" -ForegroundColor Green
+Write-Host "========================================================`n" -ForegroundColor Cyan
+
+# High-performance C# image byte processor
 $csharpCode = @"
 using System;
 using System.Drawing;
@@ -34,7 +49,7 @@ public class FastImageProcessor {
                 bool isGrey = (r >= 155 && r <= 225 && g >= 155 && g <= 225 && b >= 155 && b <= 225 && diff <= 16);
                 bool isWhite = (r >= 235 && g >= 235 && b >= 235);
                 if (isGrey || isWhite) {
-                    rgba[i+3] = 0; // Alpha 0
+                    rgba[i+3] = 0;
                 }
             }
             Marshal.Copy(rgba, 0, data.Scan0, bytes);
@@ -48,18 +63,6 @@ public class FastImageProcessor {
 try {
     Add-Type -TypeDefinition $csharpCode -ReferencedAssemblies "System.Drawing" -ErrorAction SilentlyContinue
 } catch {}
-
-$rootDir = Split-Path -Parent $PSScriptRoot
-$assetsDir = Join-Path $rootDir "public\assets"
-$docsDir = Join-Path $rootDir "docs"
-$docsAssetsDir = Join-Path $docsDir "assets"
-
-if (-not (Test-Path $assetsDir)) { New-Item -ItemType Directory -Path $assetsDir -Force | Out-Null }
-if (-not (Test-Path $docsAssetsDir)) { New-Item -ItemType Directory -Path $docsAssetsDir -Force | Out-Null }
-
-Write-Host "`n========================================================" -ForegroundColor Cyan
-Write-Host "📸 KODAK 8x10 PRINT ENGINE & LORD NANDHISH ASSET SETUP" -ForegroundColor Yellow
-Write-Host "========================================================`n" -ForegroundColor Cyan
 
 # ------------------------------------------------------------------------------
 # STEP 1: Process Lord Nandhish (Supreme Celestial Preserver)
@@ -94,9 +97,9 @@ if ($lordSource) {
         [FastImageProcessor]::MakeCheckerboardTransparent($lordSource, $lordPngOutput)
         Copy-Item $lordPngOutput $docsLordPng -Force
         $converted = $true
-        Write-Host "   ✅ Instantly generated transparent Lord Nandhish (0.03s)!" -ForegroundColor Green
+        Write-Host "   ✅ Instantly generated transparent Lord Nandhish!" -ForegroundColor Green
     } catch {
-        Write-Host "   ⚠️ Fast processor notice: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-Host "   ⚠️ Fast processor note: $($_.Exception.Message)" -ForegroundColor Yellow
     }
 
     if (-not $converted) {
@@ -193,7 +196,7 @@ if ($posterSource) {
         $bmpMat.Dispose()
         $origBmp.Dispose()
 
-        Write-Host "   ✅ MASTER KODAK 8x10 PRINT GENERATED (0.15s)!" -ForegroundColor Green
+        Write-Host "   ✅ MASTER KODAK 8x10 PRINT GENERATED!" -ForegroundColor Green
         Write-Host "      📁 JPEG (300 DPI): $outJpg" -ForegroundColor Green
         Write-Host "      📁 PNG  (300 DPI): $outPng" -ForegroundColor Green
     } catch {
