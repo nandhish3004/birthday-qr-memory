@@ -599,14 +599,14 @@
           <div style="display: flex; gap: 8px; margin-bottom: 14px;">
             <button class="style-option-btn active" id="btnModeSeamless" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setPolaroidMode('seamless')">
               <div>
-                <span class="style-btn-title" style="font-size: 0.82rem;">✨ Seamless Aperture</span>
-                <span class="style-btn-desc" style="font-size: 0.72rem;">Clips inside original frame. Keeps original washi tape & doodle hearts!</span>
+                <span class="style-btn-title" style="font-size: 0.82rem;">✨ Seamless Aperture (Zero Overlay)</span>
+                <span class="style-btn-desc" style="font-size: 0.72rem;">Clips photos directly inside real poster frames. No double-card overlays or ghost borders!</span>
               </div>
             </button>
             <button class="style-option-btn" id="btnModeStudio" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setPolaroidMode('studio-card')">
               <div>
-                <span class="style-btn-title" style="font-size: 0.82rem;">🖼️ Studio Card</span>
-                <span class="style-btn-desc" style="font-size: 0.72rem;">Brand new crisp 4K Polaroid frame card overlay.</span>
+                <span class="style-btn-title" style="font-size: 0.82rem;">🖼️ Calibrated Studio Card</span>
+                <span class="style-btn-desc" style="font-size: 0.72rem;">Precision-aligned 4K archival Polaroid cardstock overlay.</span>
               </div>
             </button>
           </div>
@@ -650,9 +650,9 @@
                 <div>
                   <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
                     <span>Frame Tilt Angle:</span>
-                    <span id="tiltVal" style="color: #f472b6; font-weight: 700;">-2.6° (Poster Aligned)</span>
+                    <span id="tiltVal" style="color: #f472b6; font-weight: 700;">-2.0° (Poster Aligned)</span>
                   </div>
-                  <input type="range" id="sliderTilt" min="-60" max="20" value="-26" step="1" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawTilt(this.value)">
+                  <input type="range" id="sliderTilt" min="-60" max="20" value="-20" step="1" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawTilt(this.value)">
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
@@ -808,7 +808,7 @@
     let shaawPanY = 0.18;
     let shaawPanX = 0.00;
     let shaawZoom = 1.05;
-    let polaroidTilt = -2.60;
+    let polaroidTilt = -2.00;
     let centerWidthScale = 1.00;
     let centerHeightScale = 1.00;
     let qrScaleMultiplier = 1.00;
@@ -898,7 +898,7 @@
       shaawPanY = 0.18;
       shaawPanX = 0.00;
       shaawZoom = 1.05;
-      polaroidTilt = -2.60;
+      polaroidTilt = -2.00;
       centerWidthScale = 1.00;
       centerHeightScale = 1.00;
       qrScaleMultiplier = 1.00;
@@ -909,8 +909,8 @@
       document.getElementById('panXVal').textContent = '0% (Centered)';
       document.getElementById('sliderZoom').value = 105;
       document.getElementById('zoomVal').textContent = '1.05x';
-      document.getElementById('sliderTilt').value = -26;
-      document.getElementById('tiltVal').textContent = '-2.6° (Poster Aligned)';
+      document.getElementById('sliderTilt').value = -20;
+      document.getElementById('tiltVal').textContent = '-2.0° (Poster Aligned)';
       document.getElementById('sliderWidthScale').value = 100;
       document.getElementById('widthScaleVal').textContent = '100%';
       document.getElementById('sliderHeightScale').value = 100;
@@ -1075,29 +1075,31 @@
 
         ctx.drawImage(photoImg, cropX, cropY, cropW, cropH, destX, destY, destW, destH);
       } else {
-        // Romantic placeholder art when no custom photo uploaded yet
-        ctx.fillStyle = '#f8f1e9';
-        ctx.fillRect(destX, destY, destW, destH);
-        
-        // Diagonal hatching
-        ctx.strokeStyle = 'rgba(235, 190, 200, 0.45)';
-        ctx.lineWidth = 1.5;
-        for (let i = destX - destH; i < destX + destW + destH; i += 22) {
-          ctx.beginPath();
-          ctx.moveTo(i, destY);
-          ctx.lineTo(i + destH, destY + destH);
-          ctx.stroke();
+        // Romantic placeholder art when no custom photo uploaded yet (only in Studio Card overlay mode)
+        if (polaroidMode === 'studio-card') {
+          ctx.fillStyle = '#f8f1e9';
+          ctx.fillRect(destX, destY, destW, destH);
+          
+          // Diagonal hatching
+          ctx.strokeStyle = 'rgba(235, 190, 200, 0.45)';
+          ctx.lineWidth = 1.5;
+          for (let i = destX - destH; i < destX + destW + destH; i += 22) {
+            ctx.beginPath();
+            ctx.moveTo(i, destY);
+            ctx.lineTo(i + destH, destY + destH);
+            ctx.stroke();
+          }
+
+          ctx.fillStyle = '#db2777';
+          ctx.font = 'bold ' + Math.round(scaleW * 0.16) + 'px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('♡', destX + destW / 2, destY + destH / 2 - 8);
+
+          ctx.fillStyle = '#831843';
+          ctx.font = '600 ' + Math.round(scaleW * 0.08) + 'px sans-serif';
+          ctx.fillText(labelText || 'Add Photo', destX + destW / 2, destY + destH / 2 + 18);
         }
-
-        ctx.fillStyle = '#db2777';
-        ctx.font = 'bold ' + Math.round(scaleW * 0.16) + 'px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('♡', destX + destW / 2, destY + destH / 2 - 8);
-
-        ctx.fillStyle = '#831843';
-        ctx.font = '600 ' + Math.round(scaleW * 0.08) + 'px sans-serif';
-        ctx.fillText(labelText || 'Add Photo', destX + destW / 2, destY + destH / 2 + 18);
       }
     }
 
@@ -1337,14 +1339,14 @@
       }
 
       // --- FRAME 0: CENTER MAIN POLAROID (SHAAAW) ---
-      const centerPhotoW = Math.round(drawW * 0.322 * centerWidthScale);
-      const centerPhotoH = Math.round(drawW * 0.328 * centerHeightScale);
-      const centerCardW = Math.round(drawW * 0.395 * centerWidthScale);
-      const centerCardH = Math.round(centerCardW * 1.21 * centerHeightScale);
+      const centerPhotoW = Math.round(drawW * 0.320 * centerWidthScale);
+      const centerPhotoH = Math.round(drawW * 0.322 * centerHeightScale);
+      const centerCardW = Math.round(drawW * 0.370 * centerWidthScale);
+      const centerCardH = Math.round(centerCardW * 1.16 * centerHeightScale);
 
       renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.5055),
-        cy: drawY + Math.round(drawH * 0.3555),
+        cx: drawX + Math.round(drawW * 0.504),
+        cy: drawY + Math.round(drawH * 0.338),
         apertureW: centerPhotoW,
         apertureH: centerPhotoH,
         cardW: centerCardW,
@@ -1359,85 +1361,85 @@
       });
 
       // --- FRAME 1: TOP-LEFT POLAROID ---
-      const f1W = Math.round(drawW * 0.205);
+      const f1W = Math.round(drawW * 0.185);
       renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.205),
-        cy: drawY + Math.round(drawH * 0.188),
+        cx: drawX + Math.round(drawW * 0.222),
+        cy: drawY + Math.round(drawH * 0.178),
         apertureW: f1W,
         apertureH: f1W,
-        cardW: Math.round(drawW * 0.240),
-        cardH: Math.round(drawW * 0.240 * 1.20),
-        rotDeg: 4.6,
+        cardW: Math.round(drawW * 0.210),
+        cardH: Math.round(drawW * 0.210 * 1.18),
+        rotDeg: 7.5,
         photoImg: extraPhotos[1],
         labelText: '01. Memory 💗'
       });
 
       // --- FRAME 2: MID-LEFT POLAROID ---
-      const f2W = Math.round(drawW * 0.218);
+      const f2W = Math.round(drawW * 0.195);
       renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.170),
-        cy: drawY + Math.round(drawH * 0.442),
+        cx: drawX + Math.round(drawW * 0.165),
+        cy: drawY + Math.round(drawH * 0.430),
         apertureW: f2W,
         apertureH: f2W,
-        cardW: Math.round(drawW * 0.255),
-        cardH: Math.round(drawW * 0.255 * 1.20),
-        rotDeg: -6.2,
+        cardW: Math.round(drawW * 0.220),
+        cardH: Math.round(drawW * 0.220 * 1.18),
+        rotDeg: -6.8,
         photoImg: extraPhotos[2],
         labelText: '02. Smiles ✨'
       });
 
       // --- FRAME 3: BOTTOM-LEFT POLAROID ---
-      const f3W = Math.round(drawW * 0.205);
+      const f3W = Math.round(drawW * 0.190);
       renderPolaroidSlot({
         cx: drawX + Math.round(drawW * 0.355),
-        cy: drawY + Math.round(drawH * 0.648),
+        cy: drawY + Math.round(drawH * 0.630),
         apertureW: f3W,
         apertureH: f3W,
-        cardW: Math.round(drawW * 0.240),
-        cardH: Math.round(drawW * 0.240 * 1.20),
-        rotDeg: -2.2,
+        cardW: Math.round(drawW * 0.215),
+        cardH: Math.round(drawW * 0.215 * 1.18),
+        rotDeg: -3.2,
         photoImg: extraPhotos[3],
         labelText: '03. Melody 🎵'
       });
 
       // --- FRAME 4: BOTTOM-RIGHT POLAROID ---
-      const f4W = Math.round(drawW * 0.205);
+      const f4W = Math.round(drawW * 0.190);
       renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.655),
-        cy: drawY + Math.round(drawH * 0.638),
+        cx: drawX + Math.round(drawW * 0.645),
+        cy: drawY + Math.round(drawH * 0.622),
         apertureW: f4W,
         apertureH: f4W,
-        cardW: Math.round(drawW * 0.240),
-        cardH: Math.round(drawW * 0.240 * 1.20),
-        rotDeg: 2.5,
+        cardW: Math.round(drawW * 0.215),
+        cardH: Math.round(drawW * 0.215 * 1.18),
+        rotDeg: 3.2,
         photoImg: extraPhotos[4],
         labelText: '04. Moments 🧇'
       });
 
       // --- FRAME 5: TOP-RIGHT POLAROID ---
-      const f5W = Math.round(drawW * 0.198);
+      const f5W = Math.round(drawW * 0.185);
       renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.795),
-        cy: drawY + Math.round(drawH * 0.210),
+        cx: drawX + Math.round(drawW * 0.785),
+        cy: drawY + Math.round(drawH * 0.208),
         apertureW: f5W,
         apertureH: f5W,
-        cardW: Math.round(drawW * 0.235),
-        cardH: Math.round(drawW * 0.235 * 1.20),
-        rotDeg: -4.0,
+        cardW: Math.round(drawW * 0.210),
+        cardH: Math.round(drawW * 0.210 * 1.18),
+        rotDeg: -6.2,
         photoImg: extraPhotos[5],
         labelText: '05. Fairytale 🏰'
       });
 
       // --- FRAME 6: MID-RIGHT POLAROID ---
-      const f6W = Math.round(drawW * 0.218);
+      const f6W = Math.round(drawW * 0.195);
       renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.845),
-        cy: drawY + Math.round(drawH * 0.495),
+        cx: drawX + Math.round(drawW * 0.840),
+        cy: drawY + Math.round(drawH * 0.468),
         apertureW: f6W,
         apertureH: f6W,
-        cardW: Math.round(drawW * 0.255),
-        cardH: Math.round(drawW * 0.255 * 1.20),
-        rotDeg: 6.2,
+        cardW: Math.round(drawW * 0.220),
+        cardH: Math.round(drawW * 0.220 * 1.18),
+        rotDeg: 6.5,
         photoImg: extraPhotos[6],
         labelText: '06. Forever 🌸'
       });
@@ -1447,15 +1449,15 @@
       // ====================================================================
       const QR_PLACEMENTS = [
         // Left column (3 QRs)
-        { id: 1, label: "Tape 01 💗", cxPct: 0.098, cyPct: 0.076, sizePct: 0.106, rotDeg: 0.0 },
-        { id: 2, label: "Tape 02 ✨", cxPct: 0.092, cyPct: 0.327, sizePct: 0.104, rotDeg: -1.5 },
-        { id: 3, label: "Tape 03 🎵", cxPct: 0.088, cyPct: 0.615, sizePct: 0.104, rotDeg: 0.0 },
+        { id: 1, label: "Tape 01 💗", cxPct: 0.095, cyPct: 0.072, sizePct: 0.098, rotDeg: 0.0 },
+        { id: 2, label: "Tape 02 ✨", cxPct: 0.092, cyPct: 0.324, sizePct: 0.096, rotDeg: -1.5 },
+        { id: 3, label: "Tape 03 🎵", cxPct: 0.088, cyPct: 0.612, sizePct: 0.096, rotDeg: 0.0 },
         // Right column (5 QRs)
-        { id: 4, label: "Tape 04 💌", cxPct: 0.934, cyPct: 0.126, sizePct: 0.098, rotDeg: 0.0 },
-        { id: 5, label: "Tape 05 🌸", cxPct: 0.934, cyPct: 0.328, sizePct: 0.098, rotDeg: -1.0 },
-        { id: 6, label: "Tape 06 🎶", cxPct: 0.916, cyPct: 0.615, sizePct: 0.098, rotDeg: 1.0 },
-        { id: 7, label: "Tape 07 🎸", cxPct: 0.908, cyPct: 0.745, sizePct: 0.098, rotDeg: -0.8 },
-        { id: 8, label: "Tape 08 💫", cxPct: 0.893, cyPct: 0.892, sizePct: 0.098, rotDeg: 0.8 }
+        { id: 4, label: "Tape 04 💌", cxPct: 0.925, cyPct: 0.120, sizePct: 0.096, rotDeg: 0.0 },
+        { id: 5, label: "Tape 05 🌸", cxPct: 0.925, cyPct: 0.322, sizePct: 0.096, rotDeg: -1.0 },
+        { id: 6, label: "Tape 06 🎶", cxPct: 0.915, cyPct: 0.608, sizePct: 0.096, rotDeg: 1.0 },
+        { id: 7, label: "Tape 07 🎸", cxPct: 0.908, cyPct: 0.738, sizePct: 0.096, rotDeg: -0.8 },
+        { id: 8, label: "Tape 08 💫", cxPct: 0.890, cyPct: 0.885, sizePct: 0.096, rotDeg: 0.8 }
       ];
 
       QR_PLACEMENTS.forEach(p => {
