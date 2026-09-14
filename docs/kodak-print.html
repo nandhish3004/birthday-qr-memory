@@ -1208,13 +1208,18 @@
           ctx.shadowOffsetX = 0;
           ctx.shadowOffsetY = isMain ? 10 : 6;
 
-          // Archival white card
-          ctx.fillStyle = '#fdfcf9';
+          // Archival Silk Warm Ivory Polaroid Paper
+          const cardGrad = ctx.createLinearGradient(-cardW / 2, -cardH / 2, cardW / 2, cardH / 2);
+          cardGrad.addColorStop(0, '#ffffff');
+          cardGrad.addColorStop(0.38, '#faf8f4');
+          cardGrad.addColorStop(0.78, '#f5eee2');
+          cardGrad.addColorStop(1, '#ebe2d1');
+          ctx.fillStyle = cardGrad;
           drawRoundedRect(ctx, -cardW / 2, -cardH / 2, cardW, cardH, 4);
           ctx.fill();
 
           ctx.shadowColor = 'transparent';
-          ctx.strokeStyle = 'rgba(70, 45, 40, 0.12)';
+          ctx.strokeStyle = 'rgba(160, 130, 110, 0.25)';
           ctx.lineWidth = 1.5;
           drawRoundedRect(ctx, -cardW / 2, -cardH / 2, cardW, cardH, 4);
           ctx.stroke();
