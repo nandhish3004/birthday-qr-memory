@@ -28,20 +28,22 @@ if exist "public\assets\original-poster.jpg" (
     copy /Y "public\assets\original-poster.jpg" "docs\assets\original-poster.jpg" >nul
     echo    - Original poster copied to docs\assets\
 )
-if exist "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789368265793.jpg" (
-    copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789368265793.jpg" "public\assets\original-poster.jpg" >nul
-    copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\.user_uploaded\media_1789368265793.jpg" "docs\assets\original-poster.jpg" >nul
-    echo    - Master user-uploaded poster synced to public\assets\ and docs\assets\
+if exist "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\clean_scrapbook_bg_1789392487236.jpg" (
+    copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\clean_scrapbook_bg_1789392487236.jpg" "public\assets\original-poster.jpg" >nul
+    copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\clean_scrapbook_bg_1789392487236.jpg" "docs\assets\original-poster.jpg" >nul
+    copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\clean_scrapbook_bg_1789392487236.jpg" "public\assets\clean-poster-bg.jpg" >nul
+    copy /Y "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\clean_scrapbook_bg_1789392487236.jpg" "docs\assets\clean-poster-bg.jpg" >nul
+    echo    - Reworked clean scrapbook background synced to public and docs assets
 )
 
-echo 3. Running 4K Ultra-HD 9x10.9 Kodak print engine and asset processor...
-powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\prepare-kodak-and-assets.ps1" -TargetDir "%~dp0"
+echo 3. Running 4K Ultra-HD asset sync...
+node "%~dp0scripts\prepare-9x10.9-kodak.js"
 
 echo 4. Staging modified files...
 git add .
 
 echo 5. Committing changes...
-git commit -m "Add Shaaaw 4K center polaroid photo, 9x10.9 Kodak print engine, and permanent QRs"
+git commit -m "Update clean background and adjust Frame 1 and QR 1 to clear Happy Birthday"
 
 echo 6. Setting main branch...
 git branch -M main

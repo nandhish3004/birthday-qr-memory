@@ -1332,16 +1332,17 @@
         labelText: 'Shaaaw 💖'
       });
 
-      // --- FRAME 1: TOP-LEFT POLAROID ---
-      const f1W = Math.round(drawW * 0.185);
+      // --- FRAME 1: TOP-LEFT POLAROID (01. Memory) ---
+      // Shifted down & left to guarantee 100% unobstructed visibility of 'Happy Birthday Shaaaw!!!'
+      const f1W = Math.round(drawW * 0.180);
       renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.222),
-        cy: drawY + Math.round(drawH * 0.178),
+        cx: drawX + Math.round(drawW * 0.180),
+        cy: drawY + Math.round(drawH * 0.218),
         apertureW: f1W,
         apertureH: f1W,
-        cardW: Math.round(drawW * 0.210),
-        cardH: Math.round(drawW * 0.210 * 1.18),
-        rotDeg: 7.5,
+        cardW: Math.round(drawW * 0.200),
+        cardH: Math.round(drawW * 0.200 * 1.18),
+        rotDeg: 4.5,
         photoImg: extraPhotos[1],
         labelText: '01. Memory 💗'
       });
@@ -1420,8 +1421,8 @@
       // 🌟 REDESIGNED QR CODES (CALIBRATED DUMMY REPLACEMENT - ALL 8 QRs)
       // ====================================================================
       const QR_PLACEMENTS = [
-        // Left column (3 QRs)
-        { id: 1, label: "Tape 01 💗", cxPct: 0.095, cyPct: 0.072, sizePct: 0.098, rotDeg: 0.0 },
+        // Left column (3 QRs) - QR 1 tucked into top corner away from Happy Birthday title
+        { id: 1, label: "Tape 01 💗", cxPct: 0.078, cyPct: 0.068, sizePct: 0.088, rotDeg: 0.0 },
         { id: 2, label: "Tape 02 ✨", cxPct: 0.092, cyPct: 0.324, sizePct: 0.096, rotDeg: -1.5 },
         { id: 3, label: "Tape 03 🎵", cxPct: 0.088, cyPct: 0.612, sizePct: 0.096, rotDeg: 0.0 },
         // Right column (5 QRs)

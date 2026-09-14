@@ -5,7 +5,8 @@ const ROOT_DIR = path.join(__dirname, '..');
 const ASSETS_DIR = path.join(ROOT_DIR, 'public', 'assets');
 const DOCS_ASSETS_DIR = path.join(ROOT_DIR, 'docs', 'assets');
 const USER_LORD = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789372775279.jpg";
-const USER_POSTER = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789368265793.jpg";
+const USER_POSTER = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\clean_scrapbook_bg_1789392487236.jpg";
+const USER_ORIGINAL_BACKUP = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789368265793.jpg";
 const USER_SHAAW_CENTER = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789381931433.jpg";
 
 console.log('--- 9x10.9 4K Ultra-HD Kodak Print & Asset Setup ---');
@@ -30,11 +31,13 @@ if (fs.existsSync(USER_SHAAW_CENTER)) {
   console.log('✅ Copied Shaaaw center polaroid photo to public/assets/shaaw-center.jpg');
 }
 
-// 4. Poster asset
+// 4. Poster asset: Reworked Clean Scrapbook Background (No baked-in polaroids, no old QRs)
 if (fs.existsSync(USER_POSTER)) {
   fs.copyFileSync(USER_POSTER, path.join(ASSETS_DIR, 'original-poster.jpg'));
   fs.copyFileSync(USER_POSTER, path.join(DOCS_ASSETS_DIR, 'original-poster.jpg'));
-  console.log('✅ Updated original-poster.jpg with latest uploaded collage');
+  fs.copyFileSync(USER_POSTER, path.join(ASSETS_DIR, 'clean-poster-bg.jpg'));
+  fs.copyFileSync(USER_POSTER, path.join(DOCS_ASSETS_DIR, 'clean-poster-bg.jpg'));
+  console.log('✅ Updated with Reworked Clean Scrapbook Background (Zero overstacking/overlay issues)');
 }
 
 console.log('Done! Now run create-9x10.9-kodak-print.bat or open public/kodak-print.html in your browser.');

@@ -25,7 +25,7 @@ const SHAAW_PHOTO = path.join(ASSETS_DIR, 'shaaw-center.jpg');
  * paperclips, washi tape, and cute hand-drawn hearts (♡).
  */
 const QR_PLACEMENTS = [
-  { id: 1, label: "Tape 01 💗", cxPct: 0.095, cyPct: 0.072, sizePct: 0.078 }, // Top-Left pink scrap
+  { id: 1, label: "Tape 01 💗", cxPct: 0.078, cyPct: 0.068, sizePct: 0.078 }, // Top-Left corner away from Happy Birthday title
   { id: 2, label: "Tape 02 ✨", cxPct: 0.092, cyPct: 0.324, sizePct: 0.076 }, // Mid-Left pink scrap
   { id: 3, label: "Tape 03 🎵", cxPct: 0.088, cyPct: 0.612, sizePct: 0.076 }, // Bottom-Left pink scrap
   { id: 4, label: "Tape 04 🧇", cxPct: 0.925, cyPct: 0.120, sizePct: 0.076 }, // Top-Right pink scrap
