@@ -10,8 +10,8 @@ if (!(Test-Path "public\assets")) { New-Item -ItemType Directory -Path "public\a
 if (!(Test-Path "public\assets\qr")) { New-Item -ItemType Directory -Path "public\assets\qr" -Force }
 if (!(Test-Path "docs")) { New-Item -ItemType Directory -Path "docs" -Force }
 
-Write-Host "2. Processing Lord Nandhish caricature & generating permanent QRs..." -ForegroundColor Green
-try { node scripts/process-lord-nandhish.js } catch {}
+Write-Host "2. Processing Lord Nandhish caricature & generating 8x10 Kodak prints..." -ForegroundColor Green
+try { & "$PSScriptRoot\scripts\prepare-kodak-and-assets.ps1" } catch {}
 try { node scripts/generate-qrs.js } catch {}
 
 Write-Host "3. Staging modified files..." -ForegroundColor Green

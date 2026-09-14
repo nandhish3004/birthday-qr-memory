@@ -340,14 +340,75 @@ class LordNandhishCosmicEngine {
 
   // Client-side Flood Fill Background Cleaner fallback:
   // Guarantees that any residual faux-checkerboard is made 100% transparent on any device
+  getCelestialFallbackSvg() {
+    return 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400">
+        <defs>
+          <radialGradient id="haloGrad" cx="50%" cy="40%" r="50%">
+            <stop offset="0%" stop-color="#fde047" stop-opacity="0.9"/>
+            <stop offset="60%" stop-color="#f59e0b" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="150" cy="150" r="130" fill="url(#haloGrad)"/>
+        <!-- Golden Sudarshana Chakra rotating effect -->
+        <circle cx="65" cy="110" r="32" fill="none" stroke="#fbbf24" stroke-width="6" stroke-dasharray="8 6"/>
+        <!-- Conch / Shankha -->
+        <circle cx="235" cy="110" r="24" fill="#ffffff" stroke="#38bdf8" stroke-width="4"/>
+        <text x="235" y="118" font-size="22" text-anchor="middle">🐚</text>
+        <text x="65" y="118" font-size="22" text-anchor="middle">🌀</text>
+        <!-- Celestial Avatar Figure -->
+        <circle cx="150" cy="115" r="45" fill="#38bdf8" stroke="#f59e0b" stroke-width="4"/>
+        <!-- Tilak -->
+        <path d="M 150 90 L 150 115" stroke="#ef4444" stroke-width="4"/>
+        <path d="M 145 95 Q 150 120 155 95" fill="none" stroke="#ffffff" stroke-width="3"/>
+        <!-- Eyes & Smile -->
+        <circle cx="138" cy="115" r="4" fill="#0f172a"/>
+        <circle cx="162" cy="115" r="4" fill="#0f172a"/>
+        <path d="M 142 128 Q 150 135 158 128" fill="none" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+        <!-- Hair Crown -->
+        <path d="M 115 95 C 120 60, 180 60, 185 95" fill="#1e1b4b"/>
+        <polygon points="150,55 162,80 138,80" fill="#facc15" stroke="#ca8a04" stroke-width="2"/>
+        <!-- Body & Pitambara -->
+        <path d="M 110 160 Q 150 180 190 160 L 175 290 Q 150 310 125 290 Z" fill="#eab308" stroke="#ca8a04" stroke-width="3"/>
+        <path d="M 125 160 Q 150 200 175 160" fill="#38bdf8"/>
+        <!-- Garland -->
+        <path d="M 120 160 Q 150 240 180 160" fill="none" stroke="#f43f5e" stroke-width="8" stroke-dasharray="10 4"/>
+        <text x="150" y="340" font-family="sans-serif" font-weight="900" font-size="16" fill="#fef08a" text-anchor="middle">🕉️ LORD NANDHISH</text>
+        <text x="150" y="365" font-family="sans-serif" font-weight="600" font-size="12" fill="#38bdf8" text-anchor="middle">Supreme Cosmic Preserver</text>
+      </svg>
+    `);
+  }
+
   ensureTransparentAvatar() {
     const imgs = [
       document.getElementById('lordPillAvatarImg'),
       document.getElementById('lordMainFigure')
     ];
 
+    const candidateUrls = [
+      '/assets/lord-nandhish.png',
+      'assets/lord-nandhish.png',
+      '../public/assets/lord-nandhish.png',
+      '/assets/lord-nandhish-raw.jpg',
+      'assets/lord-nandhish-raw.jpg',
+      '/assets/caricature.png',
+      'assets/caricature.png'
+    ];
+
     imgs.forEach(img => {
       if (!img) return;
+
+      let tryIndex = 0;
+      img.onerror = () => {
+        tryIndex++;
+        if (tryIndex < candidateUrls.length) {
+          img.src = candidateUrls[tryIndex];
+        } else {
+          img.onerror = null;
+          img.src = this.getCelestialFallbackSvg();
+        }
+      };
 
       const cleanCanvas = () => {
         try {

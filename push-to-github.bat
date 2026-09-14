@@ -11,9 +11,9 @@ if not exist "public\assets" mkdir "public\assets"
 if not exist "public\assets\qr" mkdir "public\assets\qr"
 if not exist "docs" mkdir "docs"
 
-echo 2. Processing Lord Nandhish caricature & generating permanent QRs...
-node scripts\process-lord-nandhish.js 2>nul
-node scripts\generate-qrs.js
+echo 2. Processing Lord Nandhish caricature & generating 8x10 Kodak prints...
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\prepare-kodak-and-assets.ps1"
+node scripts\generate-qrs.js 2>nul
 
 echo 3. Staging modified files...
 git add .
