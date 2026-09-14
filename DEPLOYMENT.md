@@ -4,52 +4,50 @@ This guide explains how to deploy the application so that the 8 QR codes work on
 
 ---
 
-## Method 1: Render.com (Recommended — 100% Free & Fast)
+## 🔒 Lifetime Permanence Architecture (Option A: GitHub Pages Resolver)
 
-[Render](https://render.com) is free, includes SSL/HTTPS automatically, and supports persistent storage.
+### Why this lasts "Till Death":
+Physical ink on paper cannot be re-written. If you print a direct cloud URL (e.g. `render.com`), and in 10 years that cloud service rebrands, moves, or shuts down, the physical poster would break.
+Instead, your physical QR codes point to **GitHub Pages** (`https://nandhish3004.github.io/birthday-qr-memory/m/1` to `8`).
+- GitHub Pages is backed by Microsoft/GitHub, 100% free, and never expires.
+- When scanned, it instantly forwards the scanner to your active backend (e.g. Render).
+- **If your hosting ever changes in 2035**, you only change **one URL** in `docs/config.json` on GitHub. The printed QR codes on the physical poster NEVER need reprinting!
 
-### Steps:
-1. **Push your code to GitHub**:
-   ```bash
-   git init
-   git add .
-   git commit -m "Birthday QR Memory System"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/birthday-qr-memory.git
-   git push -u origin main
-   ```
+---
 
-2. **Create a new Web Service**:
-   - Log in to [Render Dashboard](https://dashboard.render.com).
-   - Click **New +** > **Web Service**.
-   - Select your GitHub repository.
+## Step 1: Enable GitHub Pages in your Repository
+1. Go to your GitHub repository: `https://github.com/nandhish3004/birthday-qr-memory`.
+2. Click **Settings** (top tab) > **Pages** (left sidebar).
+3. Under **Build and deployment** > **Branch**:
+   - Select Branch: `main`
+   - Select Folder: `/docs`
+   - Click **Save**.
+4. In ~60 seconds, your permanent resolver will be live at:
+   `https://nandhish3004.github.io/birthday-qr-memory`
 
-3. **Configure the Service**:
-   - **Name**: `shaaaw-birthday-memories`
-   - **Region**: Closest to you (e.g., Singapore, Frankfurt, Oregon)
+---
+
+## Step 2: Deploy Web Service on Render.com (Hosts Your Videos & Audio)
+1. In [Render Dashboard](https://dashboard.render.com), click **New +** > **Web Service**.
+2. Connect your `birthday-qr-memory` GitHub repository.
+3. Settings:
+   - **Name**: `birthday-qr-memory-system` (or custom name)
    - **Branch**: `main`
    - **Runtime**: `Node`
    - **Build Command**: `npm install`
    - **Start Command**: `npm start`
-   - **Instance Type**: `Free`
+   - **Plan**: `Free`
+   - **Environment Variable**: `ADMIN_PIN=shaaaw2026`
+4. Click **Create Web Service**. Render gives you a live HTTPS URL (e.g. `https://birthday-qr-memory-system.onrender.com`).
 
-4. **Environment Variables** (Under "Advanced"):
-   - `ADMIN_PIN`: `shaaaw2026` (or any PIN you choose)
-   - `NODE_ENV`: `production`
+---
 
-5. **Deploy**:
-   - Click **Create Web Service**.
-   - In 1–2 minutes, Render will provide your public URL:
-     `https://shaaaw-birthday-memories.onrender.com`
-
-6. **Generate Your Final Printable Poster**:
-   - Open `https://shaaaw-birthday-memories.onrender.com/admin` on your browser.
-   - Enter your PIN.
-   - In the top banner, set the Base URL to:
-     `https://shaaaw-birthday-memories.onrender.com`
-   - Click **Update & Regenerate QRs + Poster**.
-   - Click **Download Print-Ready Poster**.
-   - Done! Print this poster and all 8 QR codes will directly open your live website from any phone!
+## Step 3: Connect GitHub Pages to Render (1-Time Setup)
+1. Open your admin dashboard: `https://birthday-qr-memory-system.onrender.com/admin` (or `http://localhost:3000/admin`).
+2. Enter your Admin PIN.
+3. In the **Target Server Settings** panel, verify your Render URL is saved.
+4. Download your Master QR Pack or Print Sheet.
+5. You're done! All 8 QR codes are generated once, verified, and locked forever.
 
 ---
 

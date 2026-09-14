@@ -97,9 +97,20 @@ async function loadDashboard() {
     const memoriesData = await memoriesRes.json();
     const configData = await configRes.json();
 
-    const baseUrlInput = document.getElementById('baseUrlInput');
-    if (baseUrlInput && !baseUrlInput.value) {
-      baseUrlInput.value = configData.baseUrl || window.location.origin;
+    // Populate Permanent Vault Banner
+    const permanentDomainDisplay = document.getElementById('permanentDomainDisplay');
+    if (permanentDomainDisplay && configData.permanentDomain) {
+      permanentDomainDisplay.textContent = configData.permanentDomain;
+    }
+
+    const lockedTimestamp = document.getElementById('lockedTimestamp');
+    if (lockedTimestamp && configData.lockedAt) {
+      lockedTimestamp.textContent = `Locked & Frozen: ${new Date(configData.lockedAt).toLocaleDateString()}`;
+    }
+
+    const targetServerInput = document.getElementById('targetServerInput');
+    if (targetServerInput) {
+      targetServerInput.value = configData.targetServerUrl || configData.baseUrl || '';
     }
 
     renderMemoriesGrid(memoriesData.memories);
@@ -296,49 +307,61 @@ document.getElementById('modalCloseBtn').onclick = () => {
   modal.style.display = 'none';
 };
 
-// Update Base URL & Regenerate All 8 QRs
-document.getElementById('updateBaseUrlBtn').addEventListener('click', async () => {
-  const baseUrlInput = document.getElementById('baseUrlInput');
-  const baseUrl = baseUrlInput.value.trim();
-
-  if (!baseUrl.startsWith('http://') && !baseUrl.startsWith('https://')) {
-    alert('Please enter a valid URL starting with http:// or https://');
-    return;
-  }
-
-  const btn = document.getElementById('updateBaseUrlBtn');
-  btn.textContent = '⏳ Regenerating 8 QRs...';
-  btn.disabled = true;
-
-  try {
-    const res = await fetch('/api/admin/set-base-url', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ baseUrl })
-    });
-    const data = await res.json();
-
-    if (data.success) {
-      showToast('All 8 QRs regenerated with your Live URL! 📱✨');
-      loadDashboard();
-      if (window.guruInstance) {
-        window.guruInstance.speak("✨ All 8 QR codes regenerated with 100% mobile scanner accuracy!");
-      }
-    } else {
-      showToast(`Error: ${data.error}`);
+// Toggle Target Server Settings Panel
+const toggleSettingsBtn = document.getElementById('toggleServerSettingsBtn');
+if (toggleSettingsBtn) {
+  toggleSettingsBtn.addEventListener('click', () => {
+    const panel = document.getElementById('serverSettingsPanel');
+    if (panel) {
+      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
     }
-  } catch (err) {
-    showToast('Error updating Base URL.');
-  } finally {
-    btn.textContent = '⚡ Apply & Regenerate 8 QRs';
-    btn.disabled = false;
-  }
-});
+  });
+}
 
-// Download All QRs (ZIP)
-document.getElementById('downloadAllQrsBtn').onclick = () => {
-  window.location.href = '/api/admin/download-all-qrs';
-};
+// Update Active Target Server (Does not alter physical QR codes)
+const updateTargetBtn = document.getElementById('updateTargetServerBtn');
+if (updateTargetBtn) {
+  updateTargetBtn.addEventListener('click', async () => {
+    const targetInput = document.getElementById('targetServerInput');
+    const targetServerUrl = targetInput.value.trim();
+
+    if (!targetServerUrl.startsWith('http://') && !targetServerUrl.startsWith('https://')) {
+      alert('Please enter a valid URL starting with http:// or https:// (e.g., https://your-app.onrender.com)');
+      return;
+    }
+
+    updateTargetBtn.textContent = '⏳ Updating Destination...';
+    updateTargetBtn.disabled = true;
+
+    try {
+      const res = await fetch('/api/admin/update-target-server', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ targetServerUrl })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast('Target destination updated! Printed QR codes remain permanent. 🔒✨');
+        loadDashboard();
+      } else {
+        showToast(`Error: ${data.error}`);
+      }
+    } catch (err) {
+      showToast('Error updating target server.');
+    } finally {
+      updateTargetBtn.textContent = 'Save Target Destination';
+      updateTargetBtn.disabled = false;
+    }
+  });
+}
+
+// Download All Permanent QRs Master Pack (ZIP)
+const downloadAllBtn = document.getElementById('downloadAllQrsBtn');
+if (downloadAllBtn) {
+  downloadAllBtn.onclick = () => {
+    window.location.href = '/api/admin/download-all-qrs';
+  };
+}
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {

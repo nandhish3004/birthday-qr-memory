@@ -50,33 +50,69 @@
       </div>
     </header>
 
-    <!-- Physical Card QR Generator Banner -->
-    <section class="admin-config-card">
-      <span class="config-tag-badge">📱 100% MOBILE SCANNER READY &bull; HIGH PRINT QUALITY</span>
-      <h2>Physical Card QR Code Generator</h2>
-      <p>
-        All QR codes encode <strong>permanent web permalinks</strong> (<code>/memory/1</code> through <code>/memory/8</code>). You can print or download your cards right now. Whatever media you upload, replace, or edit in the future will play automatically when the QR is scanned—the printed QR codes never change or expire!
-      </p>
-      <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:10px 14px; margin-bottom:16px; font-size:0.84rem; color:#065f46;">
-        🔒 <strong>Permanent QR Guarantee:</strong> Scans from another phone's camera (or from a downloaded gallery photo) will permanently connect to that tape's video/audio.
+    <!-- Permanent QR Code Vault & Lifetime Lock Banner -->
+    <section class="admin-config-card" style="border: 2px solid #10b981; background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+        <span class="config-tag-badge" id="vaultStatusBadge" style="background:#059669; color:#fff; font-size:0.8rem; letter-spacing:1px;">
+          🔒 PERMANENT QR CODES &bull; LOCKED FOREVER (LIFETIME GUARANTEE)
+        </span>
+        <span style="font-size:0.78rem; color:#065f46; font-weight:700;" id="lockedTimestamp"></span>
       </div>
-      <div class="url-control-row">
-        <div class="url-input-wrap">
-          <label for="baseUrlInput">Current Live Public Domain:</label>
-          <input type="url" id="baseUrlInput" placeholder="https://birthday-qr-memory-xxxx.onrender.com" value="">
+
+      <h2 style="color:#064e3b; display:flex; align-items:center; gap:8px;">
+        <span>🛡️ Permanent QR Vault & Lifetime Guarantee</span>
+      </h2>
+
+      <p style="color:#1e293b; font-size:0.92rem; line-height:1.6; margin-bottom:14px;">
+        Your physical QR codes are generated <strong>once</strong> and permanently locked to:
+        <code id="permanentDomainDisplay" style="background:#dcfce7; color:#15803d; padding:2px 8px; border-radius:6px; font-weight:800;">https://nandhish3004.github.io/birthday-qr-memory</code>.
+        They will <strong>never change or expire</strong>. You can print the scrapbook poster and cards right now. You can update, replace, or add videos and audios for each chapter below at any time!
+      </p>
+
+      <!-- Lifetime Architecture Highlights -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px; margin-bottom:18px;">
+        <div style="background:rgba(255,255,255,0.85); border:1px solid #bbf7d0; border-radius:12px; padding:12px; font-size:0.82rem;">
+          <div style="font-weight:800; color:#166534; margin-bottom:4px;">✨ Print Once, Valid for Life</div>
+          <div style="color:#475569;">Physical ink never changes. Encodes permanent GitHub Pages resolvers (<code>/m/1</code> to <code>/m/8</code>).</div>
         </div>
-        <button class="btn-primary" id="updateBaseUrlBtn">
-          ⚡ Apply & Regenerate 8 QRs
-        </button>
-        <button class="btn-secondary" id="downloadAllQrsBtn">
-          📦 Download All 8 QRs (ZIP)
+        <div style="background:rgba(255,255,255,0.85); border:1px solid #bbf7d0; border-radius:12px; padding:12px; font-size:0.82rem;">
+          <div style="font-weight:800; color:#166534; margin-bottom:4px;">⚡ Dynamic Media Swapping</div>
+          <div style="color:#475569;">Upload new videos, audio songs, or love letters anytime. The printed QR will seamlessly play the newest media!</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.85); border:1px solid #bbf7d0; border-radius:12px; padding:12px; font-size:0.82rem;">
+          <div style="font-weight:800; color:#166534; margin-bottom:4px;">🎯 100% Mobile Scanner Safe</div>
+          <div style="color:#475569;">Error Correction Level H (30% redundancy). Instant lock on iPhone, Samsung, Xiaomi, and Google Lens.</div>
+        </div>
+      </div>
+
+      <!-- Action Row -->
+      <div class="url-control-row" style="margin-bottom:14px;">
+        <button class="btn-primary" id="downloadAllQrsBtn" style="background:linear-gradient(135deg,#059669,#10b981);">
+          📦 Download Master QR Pack (PNG + SVG)
         </button>
         <a href="/admin/poster-studio" class="btn-primary" target="_blank" style="background:linear-gradient(135deg,#e11d48,#f43f5e);">
-          🖼️ Poster with Real QRs
+          🖼️ Poster Studio (Real QRs)
         </a>
-        <a href="/admin/printable-sheet" class="btn-primary" target="_blank" style="background:linear-gradient(135deg,#059669,#10b981);">
-          🖨️ Print Card Sheet
+        <a href="/admin/printable-sheet" class="btn-secondary" target="_blank">
+          🖨️ Print Card Sheet (A4)
         </a>
+        <button class="btn-secondary" id="toggleServerSettingsBtn" style="font-size:0.84rem;">
+          ⚙️ Target Server Settings
+        </button>
+      </div>
+
+      <!-- Target Server Destination Settings (Collapsible) -->
+      <div id="serverSettingsPanel" style="display:none; background:#ffffff; border:1px solid #cbd5e1; border-radius:14px; padding:16px; margin-top:10px;">
+        <h4 style="font-size:0.92rem; color:#0f172a; margin-bottom:6px;">🚀 Active Target Server (Where Scans Redirect To)</h4>
+        <p style="font-size:0.8rem; color:#64748b; margin-bottom:12px;">
+          The physical QR codes always point to your permanent hub. You can change this destination URL whenever your hosting changes (e.g., Render URL) without reprinting the QR codes!
+        </p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <input type="url" id="targetServerInput" placeholder="https://shaaaw-memories.onrender.com" style="flex:1; min-width:240px; padding:8px 14px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:0.88rem;">
+          <button class="btn-primary" id="updateTargetServerBtn" style="font-size:0.85rem; padding:8px 16px;">
+            Save Target Destination
+          </button>
+        </div>
       </div>
     </section>
 

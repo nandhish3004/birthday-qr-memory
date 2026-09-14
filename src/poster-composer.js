@@ -43,13 +43,13 @@ function ensureOriginalPoster() {
 /**
  * Composite 8 QR codes onto the poster using Jimp
  */
-async function composePoster(baseUrl = 'http://localhost:3000') {
+async function composePoster(baseUrl = 'https://nandhish3004.github.io/birthday-qr-memory') {
   ensureOriginalPoster();
   if (!fs.existsSync(POSTER_SRC)) {
     throw new Error('Original poster not found. Please place original-poster.jpg in public/assets/');
   }
 
-  // 1. Ensure all QR codes are freshly generated with the target baseUrl
+  // 1. Ensure all QR codes are generated with the target baseUrl
   await generateAllQRCodes(baseUrl);
 
   // 2. Load the base poster image & upscale to 4K Ultra-HD
@@ -75,7 +75,7 @@ async function composePoster(baseUrl = 'http://localhost:3000') {
   for (const placement of QR_PLACEMENTS) {
     const targetSize = Math.round(posterWidth * placement.sizePct);
     const domain = baseUrl.replace(/\/+$/, '');
-    const targetUrl = `${domain}/memory/${placement.id}`;
+    const targetUrl = domain.includes('github.io') ? `${domain}/m/${placement.id}` : `${domain}/memory/${placement.id}`;
 
     // Direct exact-pixel QR generation with tight margin for maximum module size & optical contrast
     const qrBuffer = await QRCode.toBuffer(targetUrl, {

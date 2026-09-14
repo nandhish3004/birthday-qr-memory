@@ -192,146 +192,243 @@ app.delete('/api/memories/:id', requireAdmin, (req, res) => {
 });
 
 const CONFIG_FILE = path.join(__dirname, '..', 'data', 'config.json');
+const { verifyQRCodes } = require('./qr-generator');
+const { buildGitHubPages } = require('../scripts/build-github-pages');
 
-function loadSavedConfig() {
+function loadFullConfig() {
   try {
     if (fs.existsSync(CONFIG_FILE)) {
       const data = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
-      if (data && data.baseUrl && !data.baseUrl.includes('localhost')) {
-        return data.baseUrl.replace(/\/+$/, '');
+      if (data && typeof data === 'object') {
+        return {
+          permanentDomain: data.permanentDomain || 'https://nandhish3004.github.io/birthday-qr-memory',
+          isLocked: data.isLocked !== false, // default to true once set
+          lockedAt: data.lockedAt || new Date().toISOString(),
+          targetServerUrl: data.targetServerUrl || BASE_URL,
+          hubType: data.hubType || 'github-pages'
+        };
       }
     }
   } catch (err) {}
-  return null;
+  return {
+    permanentDomain: 'https://nandhish3004.github.io/birthday-qr-memory',
+    isLocked: true,
+    lockedAt: new Date().toISOString(),
+    targetServerUrl: BASE_URL,
+    hubType: 'github-pages'
+  };
 }
 
-function saveConfig(baseUrl) {
+function saveFullConfig(config) {
   try {
     const dir = path.dirname(CONFIG_FILE);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(CONFIG_FILE, JSON.stringify({ baseUrl }, null, 2));
-  } catch (err) {}
-}
-
-// Helper to determine effective public base URL (Permanent Live Domain)
-function getEffectiveBaseUrl(req) {
-  // 1. Saved permanent domain in config.json
-  const saved = loadSavedConfig();
-  if (saved) return saved;
-
-  // 2. BASE_URL env variable if not localhost
-  if (BASE_URL && !BASE_URL.includes('localhost')) {
-    return BASE_URL.replace(/\/+$/, '');
+    fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
+  } catch (err) {
+    console.error('Error saving config:', err);
   }
-
-  // 3. Render environment variable
-  if (process.env.RENDER_EXTERNAL_URL) {
-    return process.env.RENDER_EXTERNAL_URL.replace(/\/+$/, '');
-  }
-
-  // 4. Incoming request host if not localhost
-  if (req) {
-    const proto = req.headers['x-forwarded-proto'] || req.protocol || 'https';
-    const host = req.headers['x-forwarded-host'] || req.get('host');
-    if (host && !host.includes('localhost')) {
-      return `${proto}://${host}`.replace(/\/+$/, '');
-    }
-  }
-
-  return BASE_URL.replace(/\/+$/, '');
 }
 
 // ----------------------
 // Configuration & Poster API
 // ----------------------
 
-// Get current system configuration
+// Get current system configuration and permanent lock status
 app.get('/api/config', (req, res) => {
-  const currentBase = getEffectiveBaseUrl(req);
+  const config = loadFullConfig();
+  const verification = verifyQRCodes();
   res.json({
-    baseUrl: currentBase,
+    baseUrl: config.targetServerUrl || BASE_URL,
+    permanentDomain: config.permanentDomain,
+    isLocked: config.isLocked,
+    lockedAt: config.lockedAt,
+    targetServerUrl: config.targetServerUrl,
     storageType: process.env.STORAGE_TYPE || 'local',
     nodeEnv: process.env.NODE_ENV || 'development',
-    placements: QR_PLACEMENTS
+    placements: QR_PLACEMENTS,
+    verification
   });
 });
 
-// Update Base URL manually & persist permanently
+// Check permanent status
+app.get('/api/admin/permanent-status', requireAdmin, (req, res) => {
+  const config = loadFullConfig();
+  const verification = verifyQRCodes();
+  const cleanBase = config.permanentDomain.replace(/\/+$/, '');
+  const items = verification.items.map(item => ({
+    ...item,
+    url: cleanBase.includes('github.io') ? `${cleanBase}/m/${item.id}` : `${cleanBase}/memory/${item.id}`
+  }));
+
+  res.json({
+    permanentDomain: config.permanentDomain,
+    isLocked: config.isLocked,
+    lockedAt: config.lockedAt,
+    targetServerUrl: config.targetServerUrl,
+    hubType: config.hubType,
+    allValid: verification.allValid,
+    items
+  });
+});
+
+// Lock Permanent QR Codes (Single-time generation)
+app.post('/api/admin/lock-permanent-qr', requireAdmin, async (req, res) => {
+  try {
+    const { permanentDomain, targetServerUrl } = req.body;
+    const domain = (permanentDomain || 'https://nandhish3004.github.io/birthday-qr-memory').trim().replace(/\/+$/, '');
+    const activeTarget = (targetServerUrl || BASE_URL).trim().replace(/\/+$/, '');
+
+    // 1. Generate all 8 permanent QRs (PNG + SVG)
+    console.log('🔒 Generating and permanently locking 8 QR codes for:', domain);
+    await generateAllQRCodes(domain);
+
+    // 2. Build GitHub Pages redirect hub if applicable
+    if (domain.includes('github.io')) {
+      buildGitHubPages(activeTarget);
+    }
+
+    // 3. Save config with isLocked = true
+    const config = {
+      permanentDomain: domain,
+      isLocked: true,
+      lockedAt: new Date().toISOString(),
+      targetServerUrl: activeTarget,
+      hubType: domain.includes('github.io') ? 'github-pages' : 'direct'
+    };
+    saveFullConfig(config);
+
+    // 4. Update poster
+    try {
+      await composePoster(domain);
+    } catch (e) {
+      console.warn('Poster update notice:', e.message);
+    }
+
+    const verification = verifyQRCodes();
+
+    res.json({
+      success: true,
+      message: 'Permanent QR codes generated and locked forever! 🔒✨',
+      config,
+      verification
+    });
+  } catch (err) {
+    console.error('Lock error:', err);
+    res.status(500).json({ error: 'Failed to lock QR codes: ' + err.message });
+  }
+});
+
+// Unlock QR Codes (Only if explicitly needed before printing)
+app.post('/api/admin/unlock-qr', requireAdmin, (req, res) => {
+  const config = loadFullConfig();
+  config.isLocked = false;
+  saveFullConfig(config);
+  res.json({ success: true, message: 'QR codes unlocked for reconfiguration. Remember to re-lock before printing!' });
+});
+
+// Update Target Live Server URL (without altering the printed physical QR codes)
+app.post('/api/admin/update-target-server', requireAdmin, (req, res) => {
+  const { targetServerUrl } = req.body;
+  if (!targetServerUrl || !targetServerUrl.startsWith('http')) {
+    return res.status(400).json({ error: 'Valid URL starting with http:// or https:// is required' });
+  }
+
+  const config = loadFullConfig();
+  config.targetServerUrl = targetServerUrl.replace(/\/+$/, '');
+  saveFullConfig(config);
+
+  if (config.permanentDomain.includes('github.io')) {
+    buildGitHubPages(config.targetServerUrl);
+  }
+
+  res.json({
+    success: true,
+    message: 'Active server destination updated! The printed physical QR codes remain permanently valid.',
+    targetServerUrl: config.targetServerUrl
+  });
+});
+
+// Legacy set-base-url redirect to permanent lock
 app.post('/api/admin/set-base-url', requireAdmin, async (req, res) => {
   const { baseUrl } = req.body;
   if (!baseUrl || !baseUrl.startsWith('http')) {
     return res.status(400).json({ error: 'Valid URL starting with http:// or https:// is required' });
   }
-
-  BASE_URL = baseUrl.replace(/\/+$/, '');
-  saveConfig(BASE_URL);
-
-  try {
-    await generateAllQRCodes(BASE_URL);
-    await composePoster(BASE_URL);
-    res.json({ success: true, baseUrl: BASE_URL, message: 'Permanent live domain saved! All QRs updated.' });
-  } catch (err) {
-    console.warn('Poster generation error during base URL update:', err.message);
-    res.json({ success: true, baseUrl: BASE_URL, warning: err.message });
+  const config = loadFullConfig();
+  config.targetServerUrl = baseUrl.replace(/\/+$/, '');
+  saveFullConfig(config);
+  if (config.permanentDomain.includes('github.io')) {
+    buildGitHubPages(config.targetServerUrl);
   }
+  res.json({ success: true, baseUrl: config.targetServerUrl, message: 'Server URL updated successfully.' });
 });
 
-// Dynamic live QR code thumbnail endpoint
+// Serve permanent locked static QR code image
 app.get('/api/qr/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
-    const domain = getEffectiveBaseUrl(req);
-    const targetUrl = `${domain}/memory/${id}`;
-    const QRCode = require('qrcode');
+    if (isNaN(id) || id < 1 || id > 8) {
+      return res.status(404).send('Invalid QR ID');
+    }
 
-    // 1600px Ultra-HD razor-sharp QR with tight margin for maximum module size
-    const buffer = await QRCode.toBuffer(targetUrl, {
-      errorCorrectionLevel: 'H',
-      margin: 1,
-      width: 1600,
-      color: { dark: '#000000', light: '#ffffff' }
-    });
+    const format = req.query.format === 'svg' ? 'svg' : 'png';
+    const filePath = path.join(QR_OUTPUT_DIR, `${id}.${format}`);
 
-    res.setHeader('Content-Type', 'image/png');
-    res.setHeader('Cache-Control', 'public, max-age=3600');
-    res.send(buffer);
+    // If file does not exist yet, generate it once
+    if (!fs.existsSync(filePath)) {
+      const config = loadFullConfig();
+      await generateQRCode(id, config.permanentDomain);
+    }
+
+    if (format === 'svg') {
+      res.setHeader('Content-Type', 'image/svg+xml');
+    } else {
+      res.setHeader('Content-Type', 'image/png');
+    }
+    res.setHeader('Cache-Control', 'public, max-age=86400'); // Cache for 24h
+    res.sendFile(filePath);
   } catch (err) {
-    res.status(500).send('Error generating QR');
+    console.error('Error serving QR:', err);
+    res.status(500).send('Error serving permanent QR');
   }
 });
 
-// Download individual QR code (Generated live on the fly with the exact current domain)
+// Download individual permanent QR code (PNG or SVG)
 app.get('/api/admin/download-qr/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
-    const domain = getEffectiveBaseUrl(req);
-    const targetUrl = `${domain}/memory/${id}`;
-    const QRCode = require('qrcode');
+    if (isNaN(id) || id < 1 || id > 8) {
+      return res.status(400).json({ error: 'Invalid QR ID' });
+    }
 
-    const qrBuffer = await QRCode.toBuffer(targetUrl, {
-      errorCorrectionLevel: 'H',
-      margin: 4,
-      width: 1400,
-      color: { dark: '#000000', light: '#ffffff' }
-    });
+    const format = req.query.format === 'svg' ? 'svg' : 'png';
+    const filename = `${id}.${format}`;
+    const filePath = path.join(QR_OUTPUT_DIR, filename);
 
-    res.setHeader('Content-Type', 'image/png');
-    res.setHeader('Content-Disposition', `attachment; filename="shaaaw_qr_memory_${id}.png"`);
-    res.send(qrBuffer);
+    if (!fs.existsSync(filePath)) {
+      const config = loadFullConfig();
+      await generateQRCode(id, config.permanentDomain);
+    }
+
+    const downloadName = `shaaaw_permanent_qr_memory_${id}.${format}`;
+    res.download(filePath, downloadName);
   } catch (err) {
-    console.error('Error generating download QR:', err);
+    console.error('Error downloading QR:', err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Download all 8 QR codes as a ZIP (Generated live on the fly with the exact current domain)
+// Download all 8 permanent QR codes as a ZIP (Includes Ultra-HD PNGs + Scalable Vector SVGs)
 app.get('/api/admin/download-all-qrs', async (req, res) => {
   try {
-    const domain = getEffectiveBaseUrl(req);
-    const QRCode = require('qrcode');
-    const archive = archiver('zip', { zlib: { level: 9 } });
+    const config = loadFullConfig();
+    const verification = verifyQRCodes();
+    if (!verification.allValid) {
+      await generateAllQRCodes(config.permanentDomain);
+    }
 
-    res.attachment('shaaaw_birthday_all_8_qrs.zip');
+    const archive = archiver('zip', { zlib: { level: 9 } });
+    res.attachment('shaaaw_permanent_all_8_qrs_master_pack.zip');
 
     archive.on('error', (err) => {
       res.status(500).send({ error: err.message });
@@ -339,17 +436,47 @@ app.get('/api/admin/download-all-qrs', async (req, res) => {
 
     archive.pipe(res);
 
+    // Add PNGs and SVGs
     for (let i = 1; i <= 8; i++) {
-      const targetUrl = `${domain}/memory/${i}`;
-      const buffer = await QRCode.toBuffer(targetUrl, {
-        errorCorrectionLevel: 'H',
-        margin: 4,
-        width: 1400,
-        color: { dark: '#000000', light: '#ffffff' }
-      });
-      archive.append(buffer, { name: `qr_memory_${i}.png` });
+      const pngPath = path.join(QR_OUTPUT_DIR, `${i}.png`);
+      const svgPath = path.join(QR_OUTPUT_DIR, `${i}.svg`);
+      if (fs.existsSync(pngPath)) {
+        archive.append(fs.createReadStream(pngPath), { name: `png/tape_0${i}_1600px.png` });
+      }
+      if (fs.existsSync(svgPath)) {
+        archive.append(fs.createReadStream(svgPath), { name: `svg_vector/tape_0${i}_lossless.svg` });
+      }
     }
 
+    // Add README info file inside ZIP
+    const infoText = `======================================================
+🎁 SHAAAW'S BIRTHDAY QR CODES — PERMANENT MASTER PACK
+======================================================
+Status: LOCKED FOREVER (Lifetime Guarantee)
+Permanent Hub URL: ${config.permanentDomain}
+Locked At: ${config.lockedAt}
+
+RESOLVER URLS ENCODED IN THESE PHYSICAL QR CODES:
+Tape 01: ${config.permanentDomain}/m/1
+Tape 02: ${config.permanentDomain}/m/2
+Tape 03: ${config.permanentDomain}/m/3
+Tape 04: ${config.permanentDomain}/m/4
+Tape 05: ${config.permanentDomain}/m/5
+Tape 06: ${config.permanentDomain}/m/6
+Tape 07: ${config.permanentDomain}/m/7
+Tape 08: ${config.permanentDomain}/m/8
+
+PRINTING INSTRUCTIONS:
+- For posters, scrapbooks, or photo paper: Use the 1600x1600 PNGs in the png/ folder (300+ DPI, razor-sharp).
+- For large vinyl banners or laser engraving: Use the lossless SVGs in svg_vector/ (infinite resolution).
+- Error Correction Level: High (30% redundancy) — mobile phones can scan even if folded or slightly scratched.
+
+CHANGING MEMORIES IN THE FUTURE:
+You can replace videos, audio songs, and notes in the Admin Dashboard at any time.
+These physical QR codes NEVER expire and NEVER need to be reprinted!
+======================================================`;
+
+    archive.append(infoText, { name: 'PERMANENT_QR_GUIDE.txt' });
     archive.finalize();
   } catch (err) {
     console.error('ZIP generation error:', err);
@@ -382,13 +509,14 @@ app.get('/api/admin/download-poster', async (req, res) => {
 // Printable Sheet: Renders a print-ready A4 grid with all 8 QR codes, titles, and cutting lines
 app.get('/admin/printable-sheet', async (req, res) => {
   try {
-    const domain = getEffectiveBaseUrl(req);
+    const config = loadFullConfig();
+    const cleanDomain = config.permanentDomain.replace(/\/+$/, '');
     const QRCode = require('qrcode');
     const memories = db.getAllMemories();
 
     const qrCards = [];
     for (const mem of memories) {
-      const targetUrl = `${domain}/memory/${mem.id}`;
+      const targetUrl = cleanDomain.includes('github.io') ? `${cleanDomain}/m/${mem.id}` : `${cleanDomain}/memory/${mem.id}`;
       const dataUrl = await QRCode.toDataURL(targetUrl, {
         errorCorrectionLevel: 'H',
         margin: 4,
@@ -508,7 +636,7 @@ app.get('/admin/printable-sheet', async (req, res) => {
   <div class="print-header">
     <div class="print-title">
       <h1>🖨️ Physical QR Card Sheet for Shaaaw</h1>
-      <p>Domain: <strong>${domain}</strong> &bull; Error Correction: High (30%) &bull; Margin: 4 (100% Mobile Scanner Safe)</p>
+      <p>Permanent Domain: <strong>${cleanDomain}</strong> &bull; Error Correction: High (30%) &bull; Status: Locked Forever</p>
     </div>
     <button class="print-btn" onclick="window.print()">Print Cards (Ctrl + P)</button>
   </div>
@@ -537,23 +665,34 @@ app.get('/admin/printable-sheet', async (req, res) => {
 // Server Initialization
 async function initServer() {
   ensureOriginalPoster();
-  const savedBase = loadSavedConfig();
-  if (savedBase) {
-    BASE_URL = savedBase;
-    console.log('Loaded permanent domain from config:', BASE_URL);
-  }
-  try {
-    console.log('Generating initial QR codes for Base URL:', BASE_URL);
-    await generateAllQRCodes(BASE_URL);
-    console.log('All 8 QR codes ready.');
-  } catch (err) {
-    console.warn('Initial QR code generation notice:', err.message);
+  const config = loadFullConfig();
+  BASE_URL = config.targetServerUrl || BASE_URL;
+
+  const verification = verifyQRCodes();
+  if (config.isLocked && verification.allValid) {
+    console.log('=======================================================');
+    console.log('🔒 Permanent QR codes are LOCKED & VERIFIED (Lifetime Mode)');
+    console.log(`📱 Encoded Permanent Domain: ${config.permanentDomain}`);
+    console.log(`🚀 Forwarding Target Server:  ${config.targetServerUrl}`);
+    console.log('=======================================================');
+  } else {
+    try {
+      console.log('Generating permanent QR codes for:', config.permanentDomain);
+      await generateAllQRCodes(config.permanentDomain);
+      if (config.permanentDomain.includes('github.io')) {
+        buildGitHubPages(config.targetServerUrl);
+      }
+      console.log('All 8 permanent QR codes generated and locked.');
+    } catch (err) {
+      console.warn('Initial QR code generation notice:', err.message);
+    }
   }
 
   app.listen(PORT, () => {
     console.log(`=======================================================`);
     console.log(`🎉 Birthday QR-Code Memory System is Running!`);
-    console.log(`📱 Base URL: ${BASE_URL}`);
+    console.log(`📱 Permanent Domain:     ${config.permanentDomain}`);
+    console.log(`🚀 Active Server Target: ${BASE_URL}`);
     console.log(`🌐 Home / Poster Preview: http://localhost:${PORT}`);
     console.log(`🔐 Admin Dashboard:      http://localhost:${PORT}/admin`);
     console.log(`🔑 Admin PIN:             ${ADMIN_PIN}`);
@@ -563,3 +702,4 @@ async function initServer() {
 }
 
 initServer();
+
