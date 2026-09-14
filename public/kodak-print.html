@@ -593,22 +593,60 @@
             <span>📸 Center Polaroid Photo (Shaaaw)</span>
           </h3>
           <p style="font-size: 0.82rem; color: #cbd5e1; margin-top: -6px; margin-bottom: 14px;">
-            Shaaaw's photo is placed in the center Polaroid in 4K clarity. Fine-tune framing:
+            Shaaaw's photo is calibrated to the Polaroid's natural <strong>-2.6° tilt</strong>. Adjust framing below:
           </p>
           <div style="display: flex; flex-direction: column; gap: 12px;">
             <div>
               <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
-                <span>Vertical Position (Pan):</span>
-                <span id="panVal" style="color: #f472b6; font-weight: 700;">Face Focus (16%)</span>
+                <span>Vertical Position (Pan Y):</span>
+                <span id="panVal" style="color: #f472b6; font-weight: 700;">Face Focus (18%)</span>
               </div>
-              <input type="range" id="sliderPanY" min="0" max="100" value="16" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawPan(this.value)">
+              <input type="range" id="sliderPanY" min="0" max="100" value="18" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawPanY(this.value)">
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
+                <span>Horizontal Position (Pan X):</span>
+                <span id="panXVal" style="color: #f472b6; font-weight: 700;">Center (0%)</span>
+              </div>
+              <input type="range" id="sliderPanX" min="-40" max="40" value="0" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawPanX(this.value)">
             </div>
             <div>
               <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
                 <span>Zoom Level:</span>
-                <span id="zoomVal" style="color: #f472b6; font-weight: 700;">1.00x</span>
+                <span id="zoomVal" style="color: #f472b6; font-weight: 700;">1.05x</span>
               </div>
-              <input type="range" id="sliderZoom" min="100" max="180" value="100" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawZoom(this.value)">
+              <input type="range" id="sliderZoom" min="100" max="180" value="105" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawZoom(this.value)">
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
+                <span>Polaroid Frame Tilt Angle:</span>
+                <span id="tiltVal" style="color: #f472b6; font-weight: 700;">-2.6° (Perfect Fit)</span>
+              </div>
+              <input type="range" id="sliderTilt" min="-50" max="10" value="-26" step="1" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawTilt(this.value)">
+            </div>
+          </div>
+        </div>
+
+        <!-- QR Code Integration Fine-Tuning -->
+        <div class="panel-card">
+          <h3 class="panel-title">🏷️ QR Code Scrapbook Integration</h3>
+          <p style="font-size: 0.82rem; color: #94a3b8; margin-top: -6px; margin-bottom: 12px;">
+            Replaces only the dummy QR code squares. Hand-drawn hearts, torn paper edges, and paperclips remain 100% visible.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
+                <span>QR Size Scale:</span>
+                <span id="qrScaleVal" style="color: #fbbf24; font-weight: 700;">100% (Flush Fit)</span>
+              </div>
+              <input type="range" id="sliderQrScale" min="85" max="115" value="100" style="width: 100%; accent-color: #fbbf24;" oninput="updateQrScale(this.value)">
+            </div>
+            <div class="toggle-row" style="padding-top: 6px;">
+              <span>Warm Archival Paper Backing</span>
+              <label class="switch">
+                <input type="checkbox" id="toggleWarmQr" checked onchange="toggleWarmPaper(this.checked)">
+                <span class="slider"></span>
+              </label>
             </div>
           </div>
         </div>
@@ -651,8 +689,16 @@
     let currentStyle = 'mat';
     const sourceImage = new Image();
     const shaawImage = new Image();
-    let shaawPanY = 0.16;
-    let shaawZoom = 1.0;
+    
+    let shaawPanY = 0.18;
+    let shaawPanX = 0.00;
+    let shaawZoom = 1.05;
+    let polaroidTilt = -2.60;
+    let qrScaleMultiplier = 1.00;
+    let useWarmPaper = true;
+
+    // Cache pre-rendered QR canvases so re-rendering is instantaneous
+    const qrCanvasCache = {};
 
     const shaawCandidates = [
       '/assets/shaaw-center.jpg',
@@ -669,15 +715,38 @@
     shaawImage.onerror = tryLoadNextShaaw;
     tryLoadNextShaaw();
 
-    function updateShaawPan(val) {
+    function updateShaawPanY(val) {
       shaawPanY = val / 100;
       document.getElementById('panVal').textContent = Math.round(val) + '%';
+      render9x10_9Poster();
+    }
+
+    function updateShaawPanX(val) {
+      shaawPanX = val / 100;
+      document.getElementById('panXVal').textContent = (val > 0 ? '+' : '') + Math.round(val) + '%';
       render9x10_9Poster();
     }
 
     function updateShaawZoom(val) {
       shaawZoom = val / 100;
       document.getElementById('zoomVal').textContent = (val / 100).toFixed(2) + 'x';
+      render9x10_9Poster();
+    }
+
+    function updateShaawTilt(val) {
+      polaroidTilt = val / 10;
+      document.getElementById('tiltVal').textContent = (val / 10).toFixed(1) + '°';
+      render9x10_9Poster();
+    }
+
+    function updateQrScale(val) {
+      qrScaleMultiplier = val / 100;
+      document.getElementById('qrScaleVal').textContent = Math.round(val) + '%';
+      render9x10_9Poster();
+    }
+
+    function toggleWarmPaper(val) {
+      useWarmPaper = val;
       render9x10_9Poster();
     }
 
@@ -692,8 +761,6 @@
     let candidateIdx = 0;
     function tryLoadNextPoster() {
       if (candidateIdx >= posterCandidates.length) {
-        console.warn('All poster candidate paths exhausted, using procedural generator.');
-        renderProceduralCollage();
         return;
       }
       sourceImage.src = posterCandidates[candidateIdx++];
@@ -723,6 +790,51 @@
       }
     }
 
+    // Helper for rounded rectangle
+    function drawRoundedRect(c, x, y, width, height, radius) {
+      c.beginPath();
+      c.moveTo(x + radius, y);
+      c.lineTo(x + width - radius, y);
+      c.quadraticCurveTo(x + width, y, x + width, y + radius);
+      c.lineTo(x + width, y + height - radius);
+      c.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      c.lineTo(x + radius, y + height);
+      c.quadraticCurveTo(x, y + height, x, y + height - radius);
+      c.lineTo(x, y + radius);
+      c.quadraticCurveTo(x, y, x + radius, y);
+      c.closePath();
+    }
+
+    // Pre-generate QR canvases for crisp rendering
+    function getQRCodeCanvas(targetUrl, size) {
+      const key = targetUrl + '_' + size;
+      if (qrCanvasCache[key]) {
+        return qrCanvasCache[key];
+      }
+      if (window.QRCode && typeof QRCode.toCanvas === 'function') {
+        const offCanvas = document.createElement('canvas');
+        QRCode.toCanvas(offCanvas, targetUrl, {
+          errorCorrectionLevel: 'H',
+          margin: 1,
+          width: size,
+          color: { 
+            dark: '#1a1416', // Warm deep espresso ink instead of harsh #000000
+            light: useWarmPaper ? '#fdfbf7' : '#ffffff' 
+          }
+        }, function (err) {
+          if (!err) {
+            qrCanvasCache[key] = offCanvas;
+            render9x10_9Poster();
+          }
+        });
+        return offCanvas;
+      }
+      return null;
+    }
+
+    // ========================================================================
+    // MASTER 9x10.9 KODAK RENDER ENGINE
+    // ========================================================================
     function render9x10_9Poster() {
       const targetW = 2700;
       const targetH = 3270;
@@ -741,7 +853,7 @@
       let drawX, drawY, drawW, drawH;
 
       if (currentStyle === 'mat') {
-        // Style A: Archival Parchment Mat with Rose-Gold Border
+        // Archival Kodak Warm Mat
         ctx.fillStyle = '#fbf6ee';
         ctx.fillRect(0, 0, targetW, targetH);
 
@@ -751,6 +863,7 @@
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, targetW, targetH);
 
+        // Archival rose-gold & blush double pinstripe
         ctx.strokeStyle = '#da8ca0';
         ctx.lineWidth = 5;
         ctx.strokeRect(55, 55, targetW - 110, targetH - 110);
@@ -767,6 +880,7 @@
         drawX = Math.round((targetW - drawW) / 2);
         drawY = safeMarginY;
 
+        // Subtle shadow behind the scrapbook collage
         ctx.shadowColor = 'rgba(40, 15, 25, 0.25)';
         ctx.shadowBlur = 40;
         ctx.shadowOffsetX = 0;
@@ -814,8 +928,7 @@
 
         const borderMargin = 75;
         const availW = targetW - (borderMargin * 2);
-        const availH = targetH - (borderMargin * 2);
-        const scale = Math.min(availW / origW, availH / origH);
+        const scale = Math.min(availW / origW, (targetH - borderMargin * 2) / origH);
         drawW = Math.round(origW * scale);
         drawH = Math.round(origH * scale);
         drawX = Math.round((targetW - drawW) / 2);
@@ -825,17 +938,24 @@
       }
 
       // ====================================================================
-      // 🌸 COMPOSITE SHAAAW PHOTO INTO CENTER POLAROID (4K CLARITY)
+      // 🌸 PRECISION POLAROID PHOTO EMBEDDING (MATCHES -2.6° TILT)
       // ====================================================================
       if (shaawImage.complete && shaawImage.naturalWidth) {
-        const px = drawX + Math.round(drawW * 0.338);
-        const py = drawY + Math.round(drawH * 0.244);
-        const pw = Math.round(drawW * 0.334);
-        const ph = Math.round(drawH * 0.229);
+        // Geometric center of inner grey opening in original poster
+        const centerX = drawX + drawW * 0.5055;
+        const centerY = drawY + drawH * 0.3450;
+        
+        // Exact inner opening width and height
+        const pw = Math.round(drawW * 0.3180);
+        const ph = Math.round(drawH * 0.2205);
 
         ctx.save();
-        ctx.beginPath();
-        ctx.rect(px, py, pw, ph);
+        // Translate to the center of the Polaroid aperture and apply tilt rotation
+        ctx.translate(centerX, centerY);
+        ctx.rotate(polaroidTilt * Math.PI / 180);
+
+        // Clip strictly inside the Polaroid frame with gentle rounded corners
+        drawRoundedRect(ctx, -pw / 2, -ph / 2, pw, ph, 4);
         ctx.clip();
 
         ctx.imageSmoothingEnabled = true;
@@ -849,79 +969,91 @@
         
         const cropW = baseCropW / shaawZoom;
         const cropH = baseCropH / shaawZoom;
-        const cropX = (imgW - cropW) / 2;
-        const cropY = Math.max(0, Math.min(imgH - cropH, (imgH - cropH) * shaawPanY));
+        
+        // Horizontal and Vertical pan calculations
+        const maxPanX = (imgW - cropW);
+        const maxPanY = (imgH - cropH);
+        const cropX = Math.max(0, Math.min(maxPanX, maxPanX / 2 + shaawPanX * maxPanX));
+        const cropY = Math.max(0, Math.min(maxPanY, maxPanY * shaawPanY));
 
-        ctx.drawImage(shaawImage, cropX, cropY, cropW, cropH, px, py, pw, ph);
+        // Draw high-clarity photo (slight 1px overlap to ensure zero seam with frame)
+        ctx.drawImage(shaawImage, cropX, cropY, cropW, cropH, -pw / 2 - 1, -ph / 2 - 1, pw + 2, ph + 2);
 
-        // Soft inner border for realistic polaroid depth
-        ctx.strokeStyle = 'rgba(60, 40, 30, 0.25)';
+        // Authentic polaroid inner photo depth bevel
+        ctx.strokeStyle = 'rgba(60, 30, 40, 0.22)';
         ctx.lineWidth = 2.5;
-        ctx.strokeRect(px, py, pw, ph);
-
-        // Redraw hand-drawn heart at bottom-right of photo
-        ctx.font = 'bold ' + Math.round(pw * 0.08) + 'px Arial, sans-serif';
-        ctx.fillStyle = 'rgba(20, 20, 20, 0.85)';
-        ctx.fillText('♡', px + pw - (pw * 0.12), py + ph - (ph * 0.08));
+        drawRoundedRect(ctx, -pw / 2, -ph / 2, pw, ph, 4);
+        ctx.stroke();
 
         ctx.restore();
       }
 
       // ====================================================================
-      // 🌟 OVERLAY ALL 8 GENUINE PERMANENT BIRTHDAY QR CODES (SCANNABLE!)
+      // 🌟 ORGANIC QR CODE SCRAP EMBEDDING (PRESERVES HEARTS & PAPERCLIPS)
       // ====================================================================
+      // Calibrated to replace ONLY the dummy QR square, leaving all torn edges,
+      // paperclips, tape, and hand-drawn hearts (♡) 100% visible!
       const QR_PLACEMENTS = [
-        { id: 1, label: "Tape 01 💗", xPct: 0.045, yPct: 0.042, sizePct: 0.105 },
-        { id: 2, label: "Tape 02 ✨", xPct: 0.042, yPct: 0.292, sizePct: 0.105 },
-        { id: 3, label: "Tape 03 🎵", xPct: 0.038, yPct: 0.580, sizePct: 0.105 },
-        { id: 4, label: "Tape 04 🧇", xPct: 0.885, yPct: 0.092, sizePct: 0.095 },
-        { id: 5, label: "Tape 05 🏰", xPct: 0.885, yPct: 0.298, sizePct: 0.095 },
-        { id: 6, label: "Tape 06 ⚔️", xPct: 0.870, yPct: 0.585, sizePct: 0.095 },
-        { id: 7, label: "Tape 07 🎯", xPct: 0.860, yPct: 0.715, sizePct: 0.095 },
-        { id: 8, label: "Tape 08 📻", xPct: 0.845, yPct: 0.862, sizePct: 0.095 }
+        // Left column (3 QRs)
+        { id: 1, cxPct: 0.096, cyPct: 0.076, baseSizePct: 0.076, rotDeg: 0.0 },
+        { id: 2, cxPct: 0.092, cyPct: 0.324, baseSizePct: 0.076, rotDeg: -1.2 },
+        { id: 3, cxPct: 0.088, cyPct: 0.614, baseSizePct: 0.076, rotDeg: 0.5 },
+        // Right column (5 QRs)
+        { id: 4, cxPct: 0.931, cyPct: 0.126, baseSizePct: 0.072, rotDeg: 0.0 },
+        { id: 5, cxPct: 0.931, cyPct: 0.328, baseSizePct: 0.072, rotDeg: -0.8 },
+        { id: 6, cxPct: 0.916, cyPct: 0.615, baseSizePct: 0.072, rotDeg: 1.0 },
+        { id: 7, cxPct: 0.908, cyPct: 0.745, baseSizePct: 0.072, rotDeg: -0.5 },
+        { id: 8, cxPct: 0.893, cyPct: 0.892, baseSizePct: 0.072, rotDeg: 0.8 }
       ];
 
       QR_PLACEMENTS.forEach(p => {
-        const qx = drawX + Math.round(drawW * p.xPct);
-        const qy = drawY + Math.round(drawH * p.yPct);
-        const qs = Math.round(drawW * p.sizePct);
+        const qx = drawX + Math.round(drawW * p.cxPct);
+        const qy = drawY + Math.round(drawH * p.cyPct);
+        const qs = Math.round(drawW * p.baseSizePct * qrScaleMultiplier);
         const targetUrl = 'https://nandhish3004.github.io/birthday-qr-memory/m/' + p.id;
 
-        // 1. Clean white backing card (erases dummy QR completely)
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(qx - 3, qy - 3, qs + 6, qs + 6);
-        ctx.strokeStyle = '#e2e8f0';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(qx - 3, qy - 3, qs + 6, qs + 6);
+        ctx.save();
+        ctx.translate(qx, qy);
+        ctx.rotate(p.rotDeg * Math.PI / 180);
 
-        // 2. Generate and draw real working QR code
-        if (window.QRCode && typeof QRCode.toCanvas === 'function') {
-          const offCanvas = document.createElement('canvas');
-          QRCode.toCanvas(offCanvas, targetUrl, {
-            errorCorrectionLevel: 'H',
-            margin: 1,
-            width: qs,
-            color: { dark: '#000000', light: '#ffffff' }
-          }, function (err) {
-            if (!err) {
-              ctx.drawImage(offCanvas, qx, qy, qs, qs);
-            }
-          });
+        // 1. Warm archival paper backing that blends into the vintage scrap
+        ctx.fillStyle = useWarmPaper ? '#fcfbf8' : '#ffffff';
+        drawRoundedRect(ctx, -qs / 2, -qs / 2, qs, qs, 3);
+        ctx.fill();
+
+        // 2. Delicate antique border (1px)
+        ctx.strokeStyle = 'rgba(70, 45, 40, 0.16)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // 3. Render verified permanent QR code
+        const qrCanvas = getQRCodeCanvas(targetUrl, qs);
+        if (qrCanvas && qrCanvas.width > 0) {
+          ctx.drawImage(qrCanvas, -qs / 2, -qs / 2, qs, qs);
         } else {
+          // Fallback image loader if canvas library is still rendering
           const qrImg = new Image();
           qrImg.onload = () => {
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(qx - 3, qy - 3, qs + 6, qs + 6);
-            ctx.drawImage(qrImg, qx, qy, qs, qs);
+            ctx.save();
+            ctx.translate(qx, qy);
+            ctx.rotate(p.rotDeg * Math.PI / 180);
+            ctx.drawImage(qrImg, -qs / 2, -qs / 2, qs, qs);
+            ctx.restore();
           };
-          qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&margin=2&data=${encodeURIComponent(targetUrl)}`;
+          qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&margin=1&data=${encodeURIComponent(targetUrl)}`;
         }
+
+        ctx.restore();
       });
     }
 
+    // ========================================================================
+    // 4K & KODAK PRINT EXPORT ENGINE
+    // ========================================================================
     function downloadMasterImage(format = 'jpeg', is4K = false) {
       let exportCanvas = canvas;
       if (is4K) {
+        // High-definition 4K Ultra-HD Master (3840 x 4650 px @ 426 DPI)
         exportCanvas = document.createElement('canvas');
         exportCanvas.width = 3840;
         exportCanvas.height = 4650;

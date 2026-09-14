@@ -17,15 +17,22 @@ const USER_UPLOADED_POSTER = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-i
  * Left column: 3 QRs (Top-Left, Mid-Left, Bottom-Left)
  * Right column: 5 QRs (Top-Right, Mid-Right, Lower-Mid, Lower-Right, Bottom-Right)
  */
+const SHAAW_PHOTO = path.join(ASSETS_DIR, 'shaaw-center.jpg');
+
+/**
+ * Aesthetic placement coordinates for 8 QR codes on the Shaaaw Scrapbook Poster
+ * Calibrated to replace ONLY the dummy QR square, preserving torn deckle edges,
+ * paperclips, washi tape, and cute hand-drawn hearts (♡).
+ */
 const QR_PLACEMENTS = [
-  { id: 1, label: "Tape 01 💗", xPct: 0.045, yPct: 0.042, sizePct: 0.105, rotation: 0 }, // Top-Left pink scrap
-  { id: 2, label: "Tape 02 ✨", xPct: 0.042, yPct: 0.292, sizePct: 0.105, rotation: 0 }, // Mid-Left pink scrap
-  { id: 3, label: "Tape 03 🎵", xPct: 0.038, yPct: 0.580, sizePct: 0.105, rotation: 0 }, // Bottom-Left pink scrap
-  { id: 4, label: "Tape 04 🧇", xPct: 0.885, yPct: 0.092, sizePct: 0.095, rotation: 0 }, // Top-Right pink scrap
-  { id: 5, label: "Tape 05 🏰", xPct: 0.885, yPct: 0.298, sizePct: 0.095, rotation: 0 }, // Mid-Right purple scrap
-  { id: 6, label: "Tape 06 ⚔️", xPct: 0.870, yPct: 0.585, sizePct: 0.095, rotation: 0 }, // Lower-Mid-Right beige scrap
-  { id: 7, label: "Tape 07 🎯", xPct: 0.860, yPct: 0.715, sizePct: 0.095, rotation: 0 }, // Lower-Right kraft scrap
-  { id: 8, label: "Tape 08 📻", xPct: 0.845, yPct: 0.862, sizePct: 0.095, rotation: 0 }  // Bottom-Right pink scrap
+  { id: 1, label: "Tape 01 💗", cxPct: 0.096, cyPct: 0.076, sizePct: 0.076 }, // Top-Left pink scrap
+  { id: 2, label: "Tape 02 ✨", cxPct: 0.092, cyPct: 0.324, sizePct: 0.076 }, // Mid-Left pink scrap
+  { id: 3, label: "Tape 03 🎵", cxPct: 0.088, cyPct: 0.614, sizePct: 0.076 }, // Bottom-Left pink scrap
+  { id: 4, label: "Tape 04 🧇", cxPct: 0.931, cyPct: 0.126, sizePct: 0.072 }, // Top-Right pink scrap
+  { id: 5, label: "Tape 05 🏰", cxPct: 0.931, cyPct: 0.328, sizePct: 0.072 }, // Mid-Right purple scrap
+  { id: 6, label: "Tape 06 ⚔️", cxPct: 0.916, cyPct: 0.615, sizePct: 0.072 }, // Lower-Mid-Right beige scrap
+  { id: 7, label: "Tape 07 🎯", cxPct: 0.908, cyPct: 0.745, sizePct: 0.072 }, // Lower-Right kraft scrap
+  { id: 8, label: "Tape 08 📻", cxPct: 0.893, cyPct: 0.892, sizePct: 0.072 }  // Bottom-Right pink scrap
 ];
 
 // Ensure original poster exists in public/assets
@@ -41,7 +48,7 @@ function ensureOriginalPoster() {
 }
 
 /**
- * Composite 8 QR codes onto the poster using Jimp
+ * Composite Shaaaw photo and 8 genuine QR codes onto the poster using Jimp
  */
 async function composePoster(baseUrl = 'https://nandhish3004.github.io/birthday-qr-memory') {
   ensureOriginalPoster();
@@ -69,29 +76,62 @@ async function composePoster(baseUrl = 'https://nandhish3004.github.io/birthday-
 
   const posterWidth = poster.bitmap.width;
   const posterHeight = poster.bitmap.height;
+
+  // 3. Composite Shaaaw's Photo into Center Polaroid Aperture (-2.6° tilt)
+  if (fs.existsSync(SHAAW_PHOTO)) {
+    try {
+      const shaaw = await Jimp.read(SHAAW_PHOTO);
+      const pw = Math.round(posterWidth * 0.3180);
+      const ph = Math.round(posterHeight * 0.2205);
+      const destAspect = pw / ph;
+
+      const baseW = shaaw.bitmap.width;
+      const baseH = Math.round(baseW / destAspect);
+      const cropW = Math.round(baseW / 1.05);
+      const cropH = Math.round(baseH / 1.05);
+      const srcX = Math.round((shaaw.bitmap.width - cropW) / 2);
+      const srcY = Math.round((shaaw.bitmap.height - cropH) * 0.18);
+
+      shaaw.crop(srcX, srcY, cropW, cropH);
+      shaaw.resize(pw, ph, Jimp.RESIZE_BICUBIC);
+      shaaw.rotate(2.6); // Jimp rotates counter-clockwise for positive degrees
+
+      const posX = Math.round(posterWidth * 0.5055 - pw / 2);
+      const posY = Math.round(posterHeight * 0.3450 - ph / 2);
+
+      poster.composite(shaaw, posX, posY, {
+        mode: Jimp.BLEND_SOURCE_OVER,
+        opacitySource: 1.0,
+        opacityDest: 1.0
+      });
+      console.log('Composited Shaaaw center photo with -2.6° tilt into center polaroid.');
+    } catch (err) {
+      console.warn('Could not composite Shaaaw photo in Node:', err.message);
+    }
+  }
+
   const QRCode = require('qrcode');
 
-  // 3. Composite each QR code generated directly at exact target size (NO resizing blur!)
+  // 4. Composite each QR code replacing ONLY the dummy QR square
   for (const placement of QR_PLACEMENTS) {
     const targetSize = Math.round(posterWidth * placement.sizePct);
     const domain = baseUrl.replace(/\/+$/, '');
     const targetUrl = domain.includes('github.io') ? `${domain}/m/${placement.id}` : `${domain}/memory/${placement.id}`;
 
-    // Direct exact-pixel QR generation with tight margin for maximum module size & optical contrast
+    // Generate with warm ivory background & deep espresso ink for seamless integration
     const qrBuffer = await QRCode.toBuffer(targetUrl, {
       errorCorrectionLevel: 'H',
       margin: 1,
       width: targetSize,
-      color: { dark: '#000000', light: '#ffffff' }
+      color: { dark: '#1a1416', light: '#fcfbf8' }
     });
 
     const qrImage = await Jimp.read(qrBuffer);
 
-    // Coordinates on poster
-    const posX = Math.round(posterWidth * placement.xPct);
-    const posY = Math.round(posterHeight * placement.yPct);
+    // Coordinates on poster (centered on dummy QR)
+    const posX = Math.round(posterWidth * placement.cxPct - targetSize / 2);
+    const posY = Math.round(posterHeight * placement.cyPct - targetSize / 2);
 
-    // Composite real QR code with 100% crisp, pure black pixels
     poster.composite(qrImage, posX, posY, {
       mode: Jimp.BLEND_SOURCE_OVER,
       opacitySource: 1.0,

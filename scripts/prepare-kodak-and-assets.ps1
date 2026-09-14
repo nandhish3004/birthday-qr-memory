@@ -36,6 +36,7 @@ Write-Host "========================================================`n" -Foregro
 # High-performance C# image byte processor
 $csharpCode = @"
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
@@ -65,6 +66,157 @@ public class FastImageProcessor {
             Marshal.Copy(rgba, 0, data.Scan0, bytes);
             bmp.UnlockBits(data);
             bmp.Save(outputPath, ImageFormat.Png);
+        }
+    }
+
+    public static void FitShaawPhotoIntoCenterPolaroid(string posterPath, string shaawPhotoPath, string outputPath, double panY, double zoom) {
+        using (Bitmap poster = new Bitmap(posterPath))
+        using (Bitmap photo = new Bitmap(shaawPhotoPath)) {
+            int W = poster.Width;
+            int H = poster.Height;
+
+            BitmapData pData = poster.LockBits(new Rectangle(0, 0, W, H), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int pStride = pData.Stride;
+            byte[] pBytes = new byte[Math.Abs(pStride) * H];
+            Marshal.Copy(pData.Scan0, pBytes, 0, pBytes.Length);
+
+            int photoW = photo.Width;
+            int photoH = photo.Height;
+            BitmapData phData = photo.LockBits(new Rectangle(0, 0, photoW, photoH), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            int phStride = phData.Stride;
+            byte[] phBytes = new byte[Math.Abs(phStride) * photoH];
+            Marshal.Copy(phData.Scan0, phBytes, 0, phBytes.Length);
+
+            int searchLeft = (int)(W * 0.28);
+            int searchRight = (int)(W * 0.72);
+            int searchTop = (int)(H * 0.20);
+            int searchBottom = (int)(H * 0.52);
+
+            int seedX = (int)(W * 0.50);
+            int seedY = (int)(H * 0.35);
+            int seedIdx = seedY * pStride + seedX * 4;
+            int targetB = pBytes[seedIdx];
+            int targetG = pBytes[seedIdx + 1];
+            int targetR = pBytes[seedIdx + 2];
+
+            int seedDiff = Math.Max(Math.Abs(targetR - targetG), Math.Max(Math.Abs(targetR - targetB), Math.Abs(targetG - targetB)));
+            if (seedDiff > 15) {
+                for (int dy = -15; dy <= 15; dy += 5) {
+                    for (int dx = -15; dx <= 15; dx += 5) {
+                        int testIdx = (seedY + dy) * pStride + (seedX + dx) * 4;
+                        int tb = pBytes[testIdx]; int tg = pBytes[testIdx + 1]; int tr = pBytes[testIdx + 2];
+                        if (Math.Max(Math.Abs(tr - tg), Math.Max(Math.Abs(tr - tb), Math.Abs(tg - tb))) <= 12) {
+                            targetB = tb; targetG = tg; targetR = tr;
+                            seedX += dx; seedY += dy;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            bool[] visited = new bool[W * H];
+            Queue<int> q = new Queue<int>();
+            int seedPixel = seedY * W + seedX;
+            q.Enqueue(seedPixel);
+            visited[seedPixel] = true;
+
+            int minX = W, maxX = 0, minY = H, maxY = 0;
+            List<int> maskedPixels = new List<int>(W * H / 10);
+
+            while (q.Count > 0) {
+                int curr = q.Dequeue();
+                int cy = curr / W;
+                int cx = curr % W;
+
+                maskedPixels.Add(curr);
+                if (cx < minX) minX = cx;
+                if (cx > maxX) maxX = cx;
+                if (cy < minY) minY = cy;
+                if (cy > maxY) maxY = cy;
+
+                int[] dx = { 0, 0, -1, 1 };
+                int[] dy = { -1, 1, 0, 0 };
+                for (int i = 0; i < 4; i++) {
+                    int nx = cx + dx[i];
+                    int ny = cy + dy[i];
+
+                    if (nx < searchLeft || nx > searchRight || ny < searchTop || ny > searchBottom) continue;
+
+                    int nIdx = ny * W + nx;
+                    if (visited[nIdx]) continue;
+
+                    int bIdx = ny * pStride + nx * 4;
+                    int b = pBytes[bIdx];
+                    int g = pBytes[bIdx + 1];
+                    int r = pBytes[bIdx + 2];
+
+                    int dR = r - targetR;
+                    int dG = g - targetG;
+                    int dB = b - targetB;
+                    int distSq = dR * dR + dG * dG + dB * dB;
+                    int diff = Math.Max(Math.Abs(r - g), Math.Max(Math.Abs(r - b), Math.Abs(g - b)));
+
+                    if (distSq <= 1800 && diff <= 22) {
+                        visited[nIdx] = true;
+                        q.Enqueue(nIdx);
+                    }
+                }
+            }
+
+            int pw = maxX - minX + 1;
+            int ph = maxY - minY + 1;
+
+            if (pw > 40 && ph > 40 && maskedPixels.Count > 1000) {
+                double destAspect = (double)pw / (double)ph;
+                double baseCropW = photoW;
+                double baseCropH = photoW / destAspect;
+                double cropW = baseCropW / zoom;
+                double cropH = baseCropH / zoom;
+                double cropX = (photoW - cropW) / 2.0;
+                double cropY = (photoH - cropH) * panY;
+                if (cropY < 0) cropY = 0;
+                if (cropY + cropH > photoH) cropY = photoH - cropH;
+
+                foreach (int pixel in maskedPixels) {
+                    int y = pixel / W;
+                    int x = pixel % W;
+
+                    double u = (double)(x - minX) / (double)pw;
+                    double v = (double)(y - minY) / (double)ph;
+
+                    double sx = cropX + u * cropW;
+                    double sy = cropY + v * cropH;
+
+                    int x0 = (int)sx;
+                    int y0 = (int)sy;
+                    int x1 = Math.Min(x0 + 1, photoW - 1);
+                    int y1 = Math.Min(y0 + 1, photoH - 1);
+
+                    double fx = sx - x0;
+                    double fy = sy - y0;
+
+                    int idx00 = y0 * phStride + x0 * 4;
+                    int idx10 = y0 * phStride + x1 * 4;
+                    int idx01 = y1 * phStride + x0 * 4;
+                    int idx11 = y1 * phStride + x1 * 4;
+
+                    byte b = (byte)((1 - fx) * (1 - fy) * phBytes[idx00] + fx * (1 - fy) * phBytes[idx10] + (1 - fx) * fy * phBytes[idx01] + fx * fy * phBytes[idx11]);
+                    byte g = (byte)((1 - fx) * (1 - fy) * phBytes[idx00 + 1] + fx * (1 - fy) * phBytes[idx10 + 1] + (1 - fx) * fy * phBytes[idx01 + 1] + fx * fy * phBytes[idx11 + 1]);
+                    byte r = (byte)((1 - fx) * (1 - fy) * phBytes[idx00 + 2] + fx * (1 - fy) * phBytes[idx10 + 2] + (1 - fx) * fy * phBytes[idx01 + 2] + fx * fy * phBytes[idx11 + 2]);
+
+                    int pIdx = y * pStride + x * 4;
+                    pBytes[pIdx]     = b;
+                    pBytes[pIdx + 1] = g;
+                    pBytes[pIdx + 2] = r;
+                    pBytes[pIdx + 3] = 255;
+                }
+            }
+
+            photo.UnlockBits(phData);
+            Marshal.Copy(pBytes, 0, pData.Scan0, pBytes.Length);
+            poster.UnlockBits(pData);
+
+            poster.Save(outputPath, ImageFormat.Png);
         }
     }
 }
@@ -169,20 +321,36 @@ for ($i = 1; $i -le 8; $i++) {
     }
 
     if ($needGen) {
-        try {
-            Write-Host "   -> Fetching genuine QR #$i -> $targetUrl" -ForegroundColor Green
-            $apiUrl = "https://api.qrserver.com/v1/create-qr-code/?size=800x800&ecc=H&margin=2&data=$([Uri]::EscapeDataString($targetUrl))"
-            $webClient = New-Object System.Net.WebClient
-            $webClient.DownloadFile($apiUrl, $qrPath)
-            $webClient.Dispose()
-            Copy-Item $qrPath $docsQrPath -Force
-        } catch {
+        Write-Host "   -> Fetching genuine QR #$i -> $targetUrl" -ForegroundColor Green
+        $encodedUrl = [Uri]::EscapeDataString($targetUrl)
+        $urlsToTry = @(
+            "https://quickchart.io/qr?text=$encodedUrl&size=800&ecLevel=H&margin=1",
+            "https://api.qrserver.com/v1/create-qr-code/?size=800x800&ecc=H&margin=1&data=$encodedUrl"
+        )
+        $success = $false
+        foreach ($apiUrl in $urlsToTry) {
             try {
-                Invoke-WebRequest -Uri $apiUrl -OutFile $qrPath -UseBasicParsing -TimeoutSec 15
-                Copy-Item $qrPath $docsQrPath -Force
+                $req = [System.Net.HttpWebRequest]::Create($apiUrl)
+                $req.Timeout = 7000
+                $req.UserAgent = "Mozilla/5.0"
+                $resp = $req.GetResponse()
+                $stream = $resp.GetResponseStream()
+                $fileStream = [System.IO.File]::Create($qrPath)
+                $stream.CopyTo($fileStream)
+                $fileStream.Close()
+                $stream.Close()
+                $resp.Close()
+                if ((Get-Item $qrPath).Length -gt 1500) {
+                    $success = $true
+                    Copy-Item $qrPath $docsQrPath -Force
+                    break
+                }
             } catch {
-                Write-Host "   ⚠️ Could not fetch QR #$i from API: $($_.Exception.Message)" -ForegroundColor Yellow
+                Start-Sleep -Milliseconds 200
             }
+        }
+        if (-not $success) {
+            Write-Host "   ⚠️ Could not fetch QR #$i from online API, will use canvas generation." -ForegroundColor Yellow
         }
     } else {
         Copy-Item $qrPath $docsQrPath -Force
@@ -254,86 +422,99 @@ if ($posterSource) {
         $g.DrawImage($origBmp, $drawX, $drawY, $drawW, $drawH)
 
         # ----------------------------------------------------------------------
-        # COMPOSITE SHAAAW PHOTO INTO CENTER POLAROID FRAME (4K CLARITY)
+        # COMPOSITE SHAAAW PHOTO INTO CENTER POLAROID (CALIBRATED -2.6° TILT)
         # ----------------------------------------------------------------------
         if ($shaawSource -and (Test-Path $shaawSource)) {
             try {
                 $shaawBmp = [System.Drawing.Bitmap]::FromFile($shaawSource)
                 
-                # Center Polaroid photo window relative to collage:
-                # xPct = 0.338, yPct = 0.244, wPct = 0.334, hPct = 0.229
-                $px = $drawX + [int]($drawW * 0.338)
-                $py = $drawY + [int]($drawH * 0.244)
-                $pw = [int]($drawW * 0.334)
-                $ph = [int]($drawH * 0.229)
+                # Geometric center of inner Polaroid opening in original poster
+                $centerX = $drawX + [int]($drawW * 0.5055)
+                $centerY = $drawY + [int]($drawH * 0.3450)
+                $pw = [int]($drawW * 0.3180)
+                $ph = [int]($drawH * 0.2205)
 
-                # Focus crop on Shaaaw's face & upper body (maintains original photo resolution)
+                # Focus crop on Shaaaw's face & smile (18% vertical pan, 1.05x zoom)
                 $destAspect = [double]$pw / [double]$ph
-                $srcW = $shaawBmp.Width
-                $srcH = [int]($shaawBmp.Width / $destAspect)
-                $srcX = 0
-                # Offset by 16% of extra vertical space to keep hair and face perfectly framed
-                $srcY = [int](($shaawBmp.Height - $srcH) * 0.16)
+                $baseW = $shaawBmp.Width
+                $baseH = [int]($shaawBmp.Width / $destAspect)
+                $cropW = [int]($baseW / 1.05)
+                $cropH = [int]($baseH / 1.05)
+                $srcX = [int](($shaawBmp.Width - $cropW) / 2)
+                $srcY = [int](($shaawBmp.Height - $cropH) * 0.18)
+                if ($srcX -lt 0) { $srcX = 0 }
                 if ($srcY -lt 0) { $srcY = 0 }
-                if ($srcY + $srcH -gt $shaawBmp.Height) { $srcH = $shaawBmp.Height - $srcY }
+                if ($srcX + $cropW -gt $shaawBmp.Width) { $cropW = $shaawBmp.Width - $srcX }
+                if ($srcY + $cropH -gt $shaawBmp.Height) { $cropH = $shaawBmp.Height - $srcY }
 
-                # Draw high-clarity photo
-                $destRect = New-Object System.Drawing.Rectangle($px, $py, $pw, $ph)
-                $g.DrawImage($shaawBmp, $destRect, $srcX, $srcY, $srcW, $srcH, [System.Drawing.GraphicsUnit]::Pixel)
+                # Apply exact -2.6 degree rotation transform so photo aligns with Polaroid
+                $g.TranslateTransform($centerX, $centerY)
+                $g.RotateTransform(-2.6)
 
-                # Subtle authentic polaroid inner photo border
-                $innerPhotoPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(60, 40, 30, 20), 2.0)
-                $g.DrawRectangle($innerPhotoPen, $px, $py, $pw, $ph)
+                $destRect = New-Object System.Drawing.Rectangle([int](-$pw / 2), [int](-$ph / 2), $pw, $ph)
+                $g.DrawImage($shaawBmp, $destRect, $srcX, $srcY, $cropW, $cropH, [System.Drawing.GraphicsUnit]::Pixel)
 
-                # Redraw cute handwritten heart at bottom-right corner of the photo
-                $heartFont = New-Object System.Drawing.Font("Arial", [float]($pw * 0.08), [System.Drawing.FontStyle]::Bold)
-                $heartBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(230, 20, 20, 20))
-                $g.DrawString("♡", $heartFont, $heartBrush, [float]($px + $pw - ($pw * 0.12)), [float]($py + $ph - ($ph * 0.18)))
+                # Delicate authentic polaroid inner photo border
+                $innerPhotoPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(50, 40, 30, 20), 2.0)
+                $g.DrawRectangle($innerPhotoPen, [int](-$pw / 2), [int](-$ph / 2), $pw, $ph)
+                $innerPhotoPen.Dispose()
+
+                $g.ResetTransform()
 
                 $shaawBmp.Dispose()
-                Write-Host "   ✅ Beautifully composited Shaaaw into Center Polaroid Photo Frame!" -ForegroundColor Green
+                Write-Host "   ✅ Beautifully fitted Shaaaw into Center Polaroid with -2.6° tilt alignment!" -ForegroundColor Green
             } catch {
                 Write-Host "   ⚠️ Could not composite Shaaaw photo: $($_.Exception.Message)" -ForegroundColor Yellow
             }
         }
 
         # ----------------------------------------------------------------------
-        # CRITICAL: OVERLAY ALL 8 WORKING PERMANENT QR CODES ON TOP OF DUMMY ONES
+        # COMPOSITE 8 PERMANENT QR CODES (CALIBRATED DUMMY SQUARE FIT)
         # ----------------------------------------------------------------------
+        # Replaces only the dummy QR code squares, preserving the torn paper edges,
+        # paperclips, washi tape, and cute hand-drawn hearts (♡)!
         $qrPlacements = @(
-            @{ id = 1; xPct = 0.045; yPct = 0.042; sizePct = 0.105 }, # Top-Left pink scrap
-            @{ id = 2; xPct = 0.042; yPct = 0.292; sizePct = 0.105 }, # Mid-Left pink scrap
-            @{ id = 3; xPct = 0.038; yPct = 0.580; sizePct = 0.105 }, # Bottom-Left pink scrap
-            @{ id = 4; xPct = 0.885; yPct = 0.092; sizePct = 0.095 }, # Top-Right pink scrap
-            @{ id = 5; xPct = 0.885; yPct = 0.298; sizePct = 0.095 }, # Mid-Right purple scrap
-            @{ id = 6; xPct = 0.870; yPct = 0.585; sizePct = 0.095 }, # Lower-Mid-Right beige scrap
-            @{ id = 7; xPct = 0.860; yPct = 0.715; sizePct = 0.095 }, # Lower-Right kraft scrap
-            @{ id = 8; xPct = 0.845; yPct = 0.862; sizePct = 0.095 }  # Bottom-Right pink scrap
+            @{ id = 1; cxPct = 0.096; cyPct = 0.076; sizePct = 0.076; rot = 0.0 },
+            @{ id = 2; cxPct = 0.092; cyPct = 0.324; sizePct = 0.076; rot = -1.2 },
+            @{ id = 3; cxPct = 0.088; cyPct = 0.614; sizePct = 0.076; rot = 0.5 },
+            @{ id = 4; cxPct = 0.931; cyPct = 0.126; sizePct = 0.072; rot = 0.0 },
+            @{ id = 5; cxPct = 0.931; cyPct = 0.328; sizePct = 0.072; rot = -0.8 },
+            @{ id = 6; cxPct = 0.916; cyPct = 0.615; sizePct = 0.072; rot = 1.0 },
+            @{ id = 7; cxPct = 0.908; cyPct = 0.745; sizePct = 0.072; rot = -0.5 },
+            @{ id = 8; cxPct = 0.893; cyPct = 0.892; sizePct = 0.072; rot = 0.8 }
         )
 
-        $whiteBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::White)
-        $qrBorderPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(235, 225, 220), 2.0)
+        $ivoryBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(252, 251, 248))
+        $antiqueBorderPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(40, 70, 45, 40), 1.5)
 
         foreach ($p in $qrPlacements) {
             $qrFile = Join-Path $qrDir "$($p.id).png"
             if (Test-Path $qrFile) {
-                $qx = $drawX + [int]($drawW * $p.xPct)
-                $qy = $drawY + [int]($drawH * $p.yPct)
+                $qx = $drawX + [int]($drawW * $p.cxPct)
+                $qy = $drawY + [int]($drawH * $p.cyPct)
                 $qs = [int]($drawW * $p.sizePct)
 
-                # 1. Clean white backing square (completely erases dummy QR underneath)
-                $g.FillRectangle($whiteBrush, $qx - 3, $qy - 3, $qs + 6, $qs + 6)
-                $g.DrawRectangle($qrBorderPen, $qx - 3, $qy - 3, $qs + 6, $qs + 6)
+                $g.TranslateTransform($qx, $qy)
+                $g.RotateTransform($p.rot)
 
-                # 2. Draw the real, verified permanent QR code
+                # 1. Warm archival ivory backing (replaces only the dummy QR square)
+                $g.FillRectangle($ivoryBrush, [int](-$qs / 2), [int](-$qs / 2), $qs, $qs)
+                $g.DrawRectangle($antiqueBorderPen, [int](-$qs / 2), [int](-$qs / 2), $qs, $qs)
+
+                # 2. Draw the genuine scannable QR code
                 $qrImg = [System.Drawing.Bitmap]::FromFile($qrFile)
-                $g.DrawImage($qrImg, $qx, $qy, $qs, $qs)
+                $g.DrawImage($qrImg, [int](-$qs / 2), [int](-$qs / 2), $qs, $qs)
                 $qrImg.Dispose()
-                Write-Host "   ✅ Replaced QR #$($p.id) at (${qx}, ${qy}) with genuine permanent code." -ForegroundColor Green
+
+                $g.ResetTransform()
+                Write-Host "   ✅ Embedded scannable QR #$($p.id) flush inside scrap." -ForegroundColor Green
             } else {
                 Write-Host "   ⚠️ QR file missing: $qrFile" -ForegroundColor Yellow
             }
         }
+
+        $ivoryBrush.Dispose()
+        $antiqueBorderPen.Dispose()
 
         # Inner frame border
         $borderPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(245, 235, 230), 3.0)
