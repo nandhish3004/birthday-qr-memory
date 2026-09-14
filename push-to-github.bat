@@ -11,7 +11,8 @@ if not exist "public\assets" mkdir "public\assets"
 if not exist "public\assets\qr" mkdir "public\assets\qr"
 if not exist "docs" mkdir "docs"
 
-echo 2. Generating permanent QRs and composite poster...
+echo 2. Processing Lord Nandhish caricature & generating permanent QRs...
+node scripts\process-lord-nandhish.js 2>nul
 node scripts\generate-qrs.js
 
 echo 3. Staging modified files...

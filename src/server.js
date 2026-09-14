@@ -47,6 +47,43 @@ app.get('/assets/caricature.png', (req, res) => {
   res.status(404).send('Caricature not found');
 });
 
+// Lord Nandhish (The Supreme Cosmic Preserver) asset handler
+const USER_UPLOADED_LORD = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789364766184.jpg";
+const LORD_PNG = path.join(__dirname, '..', 'public', 'assets', 'lord-nandhish.png');
+const LORD_RAW = path.join(__dirname, '..', 'public', 'assets', 'lord-nandhish-raw.jpg');
+
+async function ensureLordNandhishAsset() {
+  try {
+    if (!fs.existsSync(LORD_RAW) && fs.existsSync(USER_UPLOADED_LORD)) {
+      fs.copyFileSync(USER_UPLOADED_LORD, LORD_RAW);
+    }
+    if (!fs.existsSync(LORD_PNG)) {
+      const { processLordNandhish } = require('../scripts/process-lord-nandhish');
+      const src = fs.existsSync(LORD_RAW) ? LORD_RAW : (fs.existsSync(USER_UPLOADED_LORD) ? USER_UPLOADED_LORD : null);
+      if (src) {
+        await processLordNandhish(src, LORD_PNG);
+      }
+    }
+  } catch (err) {
+    console.warn('Lord Nandhish processing notice:', err.message);
+  }
+}
+
+app.get('/assets/lord-nandhish.png', async (req, res) => {
+  await ensureLordNandhishAsset();
+  if (fs.existsSync(LORD_PNG)) {
+    res.setHeader('Content-Type', 'image/png');
+    return res.sendFile(LORD_PNG);
+  }
+  if (fs.existsSync(LORD_RAW)) {
+    return res.sendFile(LORD_RAW);
+  }
+  if (fs.existsSync(USER_UPLOADED_LORD)) {
+    return res.sendFile(USER_UPLOADED_LORD);
+  }
+  res.status(404).send('Lord Nandhish asset not found');
+});
+
 app.use('/uploads', express.static(UPLOADS_DIR));
 app.use('/assets', express.static(path.join(__dirname, '..', 'public', 'assets')));
 app.use(express.static(path.join(__dirname, '..', 'public')));
@@ -665,6 +702,7 @@ app.get('/admin/printable-sheet', async (req, res) => {
 // Server Initialization
 async function initServer() {
   ensureOriginalPoster();
+  await ensureLordNandhishAsset();
   const config = loadFullConfig();
   BASE_URL = config.targetServerUrl || BASE_URL;
 

@@ -10,7 +10,8 @@ if (!(Test-Path "public\assets")) { New-Item -ItemType Directory -Path "public\a
 if (!(Test-Path "public\assets\qr")) { New-Item -ItemType Directory -Path "public\assets\qr" -Force }
 if (!(Test-Path "docs")) { New-Item -ItemType Directory -Path "docs" -Force }
 
-Write-Host "2. Generating permanent QRs and composite poster..." -ForegroundColor Green
+Write-Host "2. Processing Lord Nandhish caricature & generating permanent QRs..." -ForegroundColor Green
+try { node scripts/process-lord-nandhish.js } catch {}
 try { node scripts/generate-qrs.js } catch {}
 
 Write-Host "3. Staging modified files..." -ForegroundColor Green
