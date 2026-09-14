@@ -11,7 +11,17 @@ if (!(Test-Path "public\assets\qr")) { New-Item -ItemType Directory -Path "publi
 if (!(Test-Path "docs\assets")) { New-Item -ItemType Directory -Path "docs\assets" -Force | Out-Null }
 if (!(Test-Path "docs\assets\qr")) { New-Item -ItemType Directory -Path "docs\assets\qr" -Force | Out-Null }
 
-Write-Host "2. Synchronizing HTML Studios between docs/ and public/..." -ForegroundColor Green
+Write-Host "2. Copying user-embedded scrapbook poster (media_1789417290826.jpg)..." -ForegroundColor Green
+$UserPoster = "C:\Users\Nandheesaprasad\.gemini\antigravity-ide\brain\6ea84756-37a6-43a8-8392-c3735cd7d754\.user_uploaded\media_1789417290826.jpg"
+if (Test-Path $UserPoster) {
+    Copy-Item -Path $UserPoster -Destination "public\assets\original-poster.jpg" -Force
+    Copy-Item -Path $UserPoster -Destination "docs\assets\original-poster.jpg" -Force
+    Copy-Item -Path $UserPoster -Destination "public\assets\clean-poster-bg.jpg" -Force
+    Copy-Item -Path $UserPoster -Destination "docs\assets\clean-poster-bg.jpg" -Force
+    Write-Host "   - Composite poster copied to assets!" -ForegroundColor Yellow
+}
+
+Write-Host "3. Synchronizing HTML Studios between docs/ and public/..." -ForegroundColor Green
 Copy-Item -Path "docs\kodak-print.html" -Destination "public\kodak-print.html" -Force
 Copy-Item -Path "docs\new-poster.html" -Destination "public\new-poster.html" -Force
 
@@ -19,7 +29,7 @@ Write-Host "3. Staging modified files..." -ForegroundColor Green
 git add -A
 
 Write-Host "4. Committing changes..." -ForegroundColor Green
-git commit -m "feat: Restore authentic scrapbook, embedded polaroid apertures, embedded QRs, and transparent storytelling avatars"
+git commit -m "feat: Use composite scrapbook poster, disable duplicate QRs/avatars, enable Shaaaw photo studio"
 
 Write-Host "5. Setting main branch & pushing to GitHub..." -ForegroundColor Green
 git branch -M main

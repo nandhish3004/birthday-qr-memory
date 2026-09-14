@@ -6,23 +6,26 @@ const ROOT_DIR = path.join(__dirname, '..');
 const PUBLIC_ASSETS = path.join(ROOT_DIR, 'public', 'assets');
 const DOCS_ASSETS = path.join(ROOT_DIR, 'docs', 'assets');
 
+// Authentic Scrapbook Poster with embedded QRs and avatars
+const REAL_POSTER_SRC = 'C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\6ea84756-37a6-43a8-8392-c3735cd7d754\\.user_uploaded\\media_1789417290826.jpg';
+
 // Raw avatar candidates
 const BUDDHA_RAW = [
+  'C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789393871771.jpg',
   path.join(PUBLIC_ASSETS, 'avatar-buddha-raw.jpg'),
-  path.join(DOCS_ASSETS, 'avatar-buddha-raw.jpg'),
-  'C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789393871771.jpg'
+  path.join(DOCS_ASSETS, 'avatar-buddha-raw.jpg')
 ];
 
 const VISHNU_RAW = [
+  'C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789393854751.jpg',
   path.join(PUBLIC_ASSETS, 'avatar-vishnu-raw.jpg'),
-  path.join(DOCS_ASSETS, 'avatar-vishnu-raw.jpg'),
-  'C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789393854751.jpg'
+  path.join(DOCS_ASSETS, 'avatar-vishnu-raw.jpg')
 ];
 
 const SHEPHERD_RAW = [
+  'C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789393837249.png',
   path.join(PUBLIC_ASSETS, 'avatar-shepherd-raw.png'),
-  path.join(DOCS_ASSETS, 'avatar-shepherd-raw.png'),
-  'C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789393837249.png'
+  path.join(DOCS_ASSETS, 'avatar-shepherd-raw.png')
 ];
 
 function findExisting(list) {
@@ -33,7 +36,29 @@ function findExisting(list) {
 }
 
 /**
- * 1. Clean Buddha (Solid Black Background)
+ * 1. Restore Authentic Scrapbook Poster
+ */
+function restoreAuthenticPoster() {
+  console.log('Restoring authentic scrapbook poster from:', REAL_POSTER_SRC);
+  if (fs.existsSync(REAL_POSTER_SRC)) {
+    const targets = [
+      path.join(PUBLIC_ASSETS, 'original-poster.jpg'),
+      path.join(DOCS_ASSETS, 'original-poster.jpg'),
+      path.join(PUBLIC_ASSETS, 'clean-poster-bg.jpg'),
+      path.join(DOCS_ASSETS, 'clean-poster-bg.jpg')
+    ];
+    for (const t of targets) {
+      fs.copyFileSync(REAL_POSTER_SRC, t);
+      console.log('  -> Copied to:', t);
+    }
+    console.log('✅ Authentic Scrapbook Poster restored successfully!');
+  } else {
+    console.warn('⚠️ Real poster source not found at:', REAL_POSTER_SRC);
+  }
+}
+
+/**
+ * 2. Clean Buddha (Solid Black Background outside white sticker border)
  */
 async function cleanBuddha() {
   const src = findExisting(BUDDHA_RAW);
@@ -76,13 +101,13 @@ async function cleanBuddha() {
       if (visited[nIdx]) continue;
       const np = nIdx * 4;
       const r = data[np], g = data[np+1], b = data[np+2];
-      if (r <= 45 && g <= 45 && b <= 45) {
+      if (r <= 48 && g <= 48 && b <= 48) {
         visited[nIdx] = 1;
         queue[tail++] = nIdx;
-      } else if (r <= 75 && g <= 75 && b <= 75) {
+      } else if (r <= 78 && g <= 78 && b <= 78) {
         visited[nIdx] = 1;
         const avg = (r + g + b) / 3;
-        data[np + 3] = Math.max(0, Math.min(255, Math.round((avg - 45) * 8.5)));
+        data[np + 3] = Math.max(0, Math.min(255, Math.round((avg - 48) * 8.5)));
       }
     }
   }
@@ -91,11 +116,11 @@ async function cleanBuddha() {
   const outDocs = path.join(DOCS_ASSETS, 'avatar-buddha.png');
   await img.writeAsync(outPub);
   fs.copyFileSync(outPub, outDocs);
-  console.log('✅ Buddha saved cleanly to public & docs assets');
+  console.log('✅ Transparent Buddha saved to public & docs assets');
 }
 
 /**
- * 2. Clean Lord Vishnu (Checkerboard Background)
+ * 3. Clean Lord Vishnu (Checkerboard Background outside white sticker border)
  */
 async function cleanVishnu() {
   const src = findExisting(VISHNU_RAW);
@@ -114,8 +139,8 @@ async function cleanVishnu() {
 
   function isChecker(r, g, b) {
     const diff = Math.max(Math.abs(r - g), Math.max(Math.abs(r - b), Math.abs(g - b)));
-    const isGreySquare = (r >= 155 && r <= 235 && diff <= 15);
-    const isWhiteSquare = (r >= 235 && g >= 235 && b >= 235);
+    const isGreySquare = (r >= 150 && r <= 235 && diff <= 16);
+    const isWhiteSquare = (r >= 235 && g >= 235 && b >= 235 && diff <= 12);
     return isGreySquare || isWhiteSquare;
   }
 
@@ -159,9 +184,7 @@ async function cleanVishnu() {
       if (visited[idx]) continue;
       const p = idx * 4;
       const r = data[p], g = data[p+1], b = data[p+2];
-      const diff = Math.max(Math.abs(r - g), Math.max(Math.abs(r - b), Math.abs(g - b)));
-      // Very specific grey or pure white checker pocket
-      if ((r >= 165 && r <= 228 && diff <= 8) || (r >= 245 && g >= 245 && b >= 245)) {
+      if (isChecker(r, g, b)) {
         let pHead = tail;
         visited[idx] = 1;
         queue[tail++] = idx;
@@ -190,11 +213,11 @@ async function cleanVishnu() {
   const outDocs = path.join(DOCS_ASSETS, 'avatar-vishnu.png');
   await img.writeAsync(outPub);
   fs.copyFileSync(outPub, outDocs);
-  console.log('✅ Vishnu saved cleanly to public & docs assets');
+  console.log('✅ Transparent Vishnu saved to public & docs assets');
 }
 
 /**
- * 3. Clean Shepherd (White Background)
+ * 4. Clean Shepherd (White Background)
  */
 async function cleanShepherd() {
   const src = findExisting(SHEPHERD_RAW);
@@ -213,7 +236,7 @@ async function cleanShepherd() {
 
   function isWhite(r, g, b) {
     const diff = Math.max(Math.abs(r - g), Math.max(Math.abs(r - b), Math.abs(g - b)));
-    return r >= 220 && g >= 220 && b >= 220 && diff <= 22;
+    return r >= 220 && g >= 220 && b >= 220 && diff <= 25;
   }
 
   for (let x = 0; x < w; x++) { seed(x, 0); seed(x, h - 1); }
@@ -247,7 +270,7 @@ async function cleanShepherd() {
         queue[tail++] = nIdx;
       } else {
         const diff = Math.max(Math.abs(r - g), Math.max(Math.abs(r - b), Math.abs(g - b)));
-        if (r >= 200 && g >= 200 && b >= 200 && diff <= 14) {
+        if (r >= 200 && g >= 200 && b >= 200 && diff <= 16) {
           visited[nIdx] = 1;
           const avg = (r + g + b) / 3;
           data[np + 3] = Math.max(0, Math.min(255, Math.round((255 - avg) * 7.5)));
@@ -260,44 +283,17 @@ async function cleanShepherd() {
   const outDocs = path.join(DOCS_ASSETS, 'avatar-shepherd.png');
   await img.writeAsync(outPub);
   fs.copyFileSync(outPub, outDocs);
-  console.log('✅ Shepherd saved cleanly to public & docs assets');
-}
-
-/**
- * 4. Inspect Poster Candidates to confirm authentic scrapbook
- */
-async function inspectPosters() {
-  const posters = [
-    { label: 'Public original-poster.jpg', path: path.join(PUBLIC_ASSETS, 'original-poster.jpg') },
-    { label: 'Docs original-poster.jpg', path: path.join(DOCS_ASSETS, 'original-poster.jpg') },
-    { label: 'Public clean-poster-bg.jpg', path: path.join(PUBLIC_ASSETS, 'clean-poster-bg.jpg') },
-    { label: 'Brain 4d15 media_1789368265793.jpg', path: 'C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789368265793.jpg' },
-    { label: 'Brain e6a1 media_1789324183044.jpg', path: 'C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\e6a1bd95-2328-4114-a602-d70aeb13f4f0\\.user_uploaded\\media_1789324183044.jpg' }
-  ];
-
-  console.log('\n--- Poster Candidates Inspection ---');
-  for (const p of posters) {
-    if (fs.existsSync(p.path)) {
-      try {
-        const stats = fs.statSync(p.path);
-        const img = await Jimp.read(p.path);
-        console.log(`[${p.label}]: ${img.bitmap.width}x${img.bitmap.height} (${stats.size} bytes)`);
-      } catch (e) {
-        console.log(`[${p.label}]: Error reading: ${e.message}`);
-      }
-    } else {
-      console.log(`[${p.label}]: File not found`);
-    }
-  }
+  console.log('✅ Transparent Shepherd saved to public & docs assets');
 }
 
 async function main() {
-  console.log('=== Starting Clean Avatar Processing ===');
+  console.log('=== Step 1: Restoring Authentic Scrapbook Poster ===');
+  restoreAuthenticPoster();
+  console.log('=== Step 2: Processing Transparent Avatars ===');
   await cleanBuddha();
   await cleanVishnu();
   await cleanShepherd();
-  await inspectPosters();
-  console.log('=== Clean Avatar Processing Finished ===');
+  console.log('=== All Assets Restored & Cleaned! ===');
 }
 
 main().catch(console.error);

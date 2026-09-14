@@ -467,19 +467,21 @@
       <a href="./" class="studio-back-link">
         <span>← Back to Vault Hub</span>
       </a>
-      <a href="new-poster.html" class="studio-back-link" style="background: linear-gradient(135deg, rgba(244,63,94,0.35), rgba(219,39,119,0.35)); border-color: #f43f5e; color: #fff; font-weight: 700;">
-        <span>💖 Switch to New 9×10.9 Scrapbook Studio (7 Polaroids & 8 QRs) →</span>
-      </a>
-      <div class="kodak-badge">
-        📸 Kodak 9×10.9 Master Studio (300 DPI)
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span class="paper-spec-tag" id="posterStatusTag" style="background: rgba(236,72,153,0.25); color: #fbcfe8; font-weight: 700;">
+          ✨ Shaaaw Scrapbook Composite (QRs & Avatars Embedded)
+        </span>
+        <div class="kodak-badge">
+          📸 Kodak 9×10.9 Master Studio (300 DPI)
+        </div>
       </div>
     </nav>
 
     <header class="studio-header">
       <h1 class="studio-title">Shaaaw's 9×10.9 Kodak Photo Paper Studio</h1>
       <p class="studio-sub">
-        Modified specifically for <strong>9" × 10.9" Kodak Photo Paper</strong> at <strong>300 DPI</strong> (2700 × 3270 pixels). 
-        Safe zones prevent photo frame lips and print trimming blades from cutting off your 8 QR codes!
+        Modified for <strong>9" × 10.9" Kodak Photo Paper</strong> at <strong>300 DPI</strong> (2700 × 3270 pixels). 
+        QR codes and avatars are already embedded in the artwork — insert Shaaaw's photos into the polaroids and print!
       </p>
     </header>
 
@@ -487,12 +489,16 @@
       <div class="preview-stage-wrap">
         <div class="preview-header-bar">
           <span>Target: <span class="paper-spec-tag">9.0 × 10.9 Inches (Kodak Paper)</span></span>
+          <label class="btn-download-sub" style="padding: 4px 12px; font-size: 0.75rem; cursor: pointer; width: auto; margin: 0; background: rgba(255,255,255,0.12);">
+            <span>🖼️ Change Poster Image</span>
+            <input type="file" accept="image/*" style="display: none;" onchange="uploadCustomPoster(event)">
+          </label>
           <span>Resolution: <span class="paper-spec-tag">2700 × 3270 px @ 300 DPI</span></span>
         </div>
 
         <div class="canvas-viewport" id="canvasViewport">
           <!-- 300 DPI Master 9x10.9 Canvas -->
-          <canvas id="kodakCanvas" width="2700" height="3270"></canvas>
+          <canvas id="kodakCanvas" width="2700" height="3270" style="cursor: pointer;" title="Click any frame on the poster to upload a photo!"></canvas>
           <div class="guide-overlay" id="guideOverlay">
             <div class="guide-bleed-line">
               <span class="guide-bleed-label">✂️ 1/8" Lab Cut Trim Line</span>
@@ -503,8 +509,9 @@
           </div>
         </div>
 
-        <div style="margin-top: 14px; font-size: 0.85rem; color: #94a3b8;">
-          ✨ All 8 QR codes are verified inside the safe zone with proper white margins for instant scanning!
+        <div style="margin-top: 14px; font-size: 0.85rem; color: #cbd5e1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <span>💡 <strong>Interactive:</strong> Click directly on any polaroid frame on the canvas to place a photo!</span>
+          <span style="color: #f472b6;">🎨 7 Photo Frames Ready</span>
         </div>
       </div>
 
@@ -549,7 +556,7 @@
           <ul class="checklist-list">
             <li class="checklist-item">
               <span class="check-icon">✓</span>
-              <span><strong>Exact 9:10.9 Ratio:</strong> Fits 9"×10.9" without stretching or squishing</span>
+              <span><strong>Exact 9:10.9 Ratio:</strong> Fits 9"×10.9" Kodak paper without distortion</span>
             </li>
             <li class="checklist-item">
               <span class="check-icon">✓</span>
@@ -557,226 +564,157 @@
             </li>
             <li class="checklist-item">
               <span class="check-icon">✓</span>
-              <span><strong>8 QR Codes Protected:</strong> All 8 codes are inside the 1/4" safe zone</span>
+              <span><strong>8 QR Codes Embedded:</strong> Scannable codes are permanently part of the poster artwork</span>
             </li>
             <li class="checklist-item">
+              <span class="check-icon">✓</span>
+              <span><strong>3 Avatars Embedded:</strong> Vishnu, Buddha & Shepherd seamlessly integrated into the design</span>
+            </li>
           </ul>
         </div>
 
-        <!-- Redesigned Polaroid Frames & Photo Controls -->
-        <div class="panel-card" style="border-color: #f472b6; background: rgba(36, 16, 42, 0.85);">
-          <h3 class="panel-title" style="color: #fbcfe8;">
-            <span>📸 Redesigned Polaroid Frames (Precision Fit)</span>
-          </h3>
-          <p style="font-size: 0.82rem; color: #cbd5e1; margin-top: -6px; margin-bottom: 12px;">
-            Corrected dimensions and aspect ratios prevent photo spill. Choose how photos sit in the frames:
+        <!-- Shaaaw's Polaroid Photo Placements & Controls (Dedicated Photo Studio) -->
+        <div class="panel-card" style="border-color: #ec4899; background: rgba(36, 16, 42, 0.9);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h3 class="panel-title" style="color: #fbcfe8; margin-bottom: 0;">
+              <span>📸 Polaroid Photo Studio (All 7 Frames)</span>
+            </h3>
+            <span class="paper-spec-tag" style="font-size: 0.75rem; background: rgba(236,72,153,0.2); padding: 3px 8px; border-radius: 6px;">Photo Only Mode</span>
+          </div>
+          <p style="font-size: 0.82rem; color: #cbd5e1; margin-top: 4px; margin-bottom: 12px; line-height: 1.4;">
+            All QR codes and avatars are already integrated into the poster. Choose a frame below (or click directly on the canvas) to place Shaaaw's pictures:
           </p>
 
-          <!-- Framing Integration Mode -->
-          <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-            <button class="style-option-btn active" id="btnModeSeamless" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setPolaroidMode('seamless')">
-              <div>
-                <span class="style-btn-title" style="font-size: 0.82rem;">✨ Embedded Frame Aperture (Recommended)</span>
-                <span class="style-btn-desc" style="font-size: 0.72rem;">Embeds photos into the scrapbook's built-in frames without fake glued cards.</span>
+          <!-- Frame Selector Tabs -->
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;">
+            <button class="style-option-btn active" id="tabFrame0" style="flex: 1 1 100%; padding: 8px 12px; font-size: 0.82rem;" onclick="selectActiveFrame(0)">
+              <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                <span class="style-btn-title" style="font-size: 0.86rem; margin-bottom: 0;">🌟 Frame 0: Center Main (Shaaaw)</span>
+                <span id="badgeFrame0" style="font-size: 0.72rem; color: #10b981; font-weight: 700;">Active</span>
               </div>
             </button>
-            <button class="style-option-btn" id="btnModeStudio" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setPolaroidMode('studio-card')">
-              <div>
-                <span class="style-btn-title" style="font-size: 0.82rem;">🖼️ Studio Card Overlay</span>
-                <span class="style-btn-desc" style="font-size: 0.72rem;">Full white polaroid frames & chins.</span>
-              </div>
+            <button class="style-option-btn" id="tabFrame1" style="flex: 1 1 calc(33.3% - 4px); padding: 6px 8px; font-size: 0.76rem; text-align: center;" onclick="selectActiveFrame(1)">
+              <div><span class="style-btn-title" style="font-size: 0.78rem;">🖼️ Top-L</span><span id="badgeFrame1" style="font-size: 0.68rem; color: #94a3b8;">Empty</span></div>
             </button>
-          </div>
-
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <!-- Center Polaroid Photo Adjustments -->
-            <div style="background: rgba(255, 255, 255, 0.04); border-radius: 10px; padding: 12px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-weight: 700; font-size: 0.88rem; color: #f472b6;">🌟 Center Main Polaroid (Shaaaw)</span>
-                <label class="btn-download-sub" style="padding: 3px 8px; font-size: 0.74rem; cursor: pointer;">
-                  <span>Change Photo</span>
-                  <input type="file" accept="image/*" style="display: none;" onchange="uploadMainPhoto(event)">
-                </label>
-              </div>
-
-              <div style="display: flex; flex-direction: column; gap: 8px;">
-                <div>
-                  <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
-                    <span>Vertical Focus (Pan Y):</span>
-                    <span id="panVal" style="color: #f472b6; font-weight: 700;">18% (Face Focus)</span>
-                  </div>
-                  <input type="range" id="sliderPanY" min="0" max="100" value="18" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawPanY(this.value)">
-                </div>
-
-                <div>
-                  <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
-                    <span>Horizontal Center (Pan X):</span>
-                    <span id="panXVal" style="color: #f472b6; font-weight: 700;">0% (Centered)</span>
-                  </div>
-                  <input type="range" id="sliderPanX" min="-40" max="40" value="0" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawPanX(this.value)">
-                </div>
-
-                <div>
-                  <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
-                    <span>Photo Zoom:</span>
-                    <span id="zoomVal" style="color: #f472b6; font-weight: 700;">1.05x</span>
-                  </div>
-                  <input type="range" id="sliderZoom" min="100" max="200" value="105" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawZoom(this.value)">
-                </div>
-
-                <div>
-                  <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
-                    <span>Frame Tilt Angle:</span>
-                    <span id="tiltVal" style="color: #f472b6; font-weight: 700;">-2.0° (Poster Aligned)</span>
-                  </div>
-                  <input type="range" id="sliderTilt" min="-60" max="20" value="-20" step="1" style="width: 100%; accent-color: #ec4899;" oninput="updateShaawTilt(this.value)">
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                  <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.76rem; margin-bottom: 2px;">
-                      <span>Width Scale:</span>
-                      <span id="widthScaleVal" style="color: #f472b6; font-weight: 700;">100%</span>
-                    </div>
-                    <input type="range" id="sliderWidthScale" min="85" max="115" value="100" style="width: 100%; accent-color: #ec4899;" oninput="updateWidthScale(this.value)">
-                  </div>
-                  <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.76rem; margin-bottom: 2px;">
-                      <span>Height Scale:</span>
-                      <span id="heightScaleVal" style="color: #f472b6; font-weight: 700;">100%</span>
-                    </div>
-                    <input type="range" id="sliderHeightScale" min="85" max="115" value="100" style="width: 100%; accent-color: #ec4899;" oninput="updateHeightScale(this.value)">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Additional Frames Customizer -->
-            <div style="background: rgba(255, 255, 255, 0.04); border-radius: 10px; padding: 10px;">
-              <div style="font-weight: 700; font-size: 0.85rem; color: #38bdf8; margin-bottom: 6px;">
-                📷 Extra Polaroid Frames (6 Surrounding Slots)
-              </div>
-              <p style="font-size: 0.78rem; color: #94a3b8; margin: 0 0 8px;">
-                Calibrated to exact poster angles. Upload photos for any frame:
-              </p>
-              <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                <label class="btn-download-sub" style="padding: 6px 10px; font-size: 0.78rem; cursor: pointer; flex: 1 1 calc(50% - 6px); justify-content: center;">
-                  <span>🖼️ Upload Frame 1 (Top-L)</span>
-                  <input type="file" accept="image/*" style="display: none;" onchange="uploadExtraPhoto(1, event)">
-                </label>
-                <label class="btn-download-sub" style="padding: 6px 10px; font-size: 0.78rem; cursor: pointer; flex: 1 1 calc(50% - 6px); justify-content: center;">
-                  <span>🖼️ Upload Frame 2 (Mid-L)</span>
-                  <input type="file" accept="image/*" style="display: none;" onchange="uploadExtraPhoto(2, event)">
-                </label>
-                <label class="btn-download-sub" style="padding: 6px 10px; font-size: 0.78rem; cursor: pointer; flex: 1 1 calc(50% - 6px); justify-content: center;">
-                  <span>🖼️ Upload Frame 3 (Btm-L)</span>
-                  <input type="file" accept="image/*" style="display: none;" onchange="uploadExtraPhoto(3, event)">
-                </label>
-                <label class="btn-download-sub" style="padding: 6px 10px; font-size: 0.78rem; cursor: pointer; flex: 1 1 calc(50% - 6px); justify-content: center;">
-                  <span>🖼️ Upload Frame 4 (Btm-R)</span>
-                  <input type="file" accept="image/*" style="display: none;" onchange="uploadExtraPhoto(4, event)">
-                </label>
-                <label class="btn-download-sub" style="padding: 6px 10px; font-size: 0.78rem; cursor: pointer; flex: 1 1 calc(50% - 6px); justify-content: center;">
-                  <span>🖼️ Upload Frame 5 (Top-R)</span>
-                  <input type="file" accept="image/*" style="display: none;" onchange="uploadExtraPhoto(5, event)">
-                </label>
-                <label class="btn-download-sub" style="padding: 6px 10px; font-size: 0.78rem; cursor: pointer; flex: 1 1 calc(50% - 6px); justify-content: center;">
-                  <span>🖼️ Upload Frame 6 (Mid-R)</span>
-                  <input type="file" accept="image/*" style="display: none;" onchange="uploadExtraPhoto(6, event)">
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Redesigned QR Scrapbook Badges -->
-        <div class="panel-card">
-          <h3 class="panel-title">🏷️ Redesigned QR Code Fit (All 8 QRs)</h3>
-          <p style="font-size: 0.82rem; color: #94a3b8; margin-top: -6px; margin-bottom: 12px;">
-            Choose how QR codes are encased on the scrapbook poster:
-          </p>
-
-          <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-            <button class="style-option-btn active" id="btnQrBadge" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setQrStyleMode('badge')">
-              <div>
-                <span class="style-btn-title" style="font-size: 0.82rem;">🏷️ Keepsake Mini Cards (Recommended)</span>
-                <span class="style-btn-desc" style="font-size: 0.72rem;">Encased inside cute polaroid cards with washi tape &amp; track labels!</span>
-              </div>
+            <button class="style-option-btn" id="tabFrame2" style="flex: 1 1 calc(33.3% - 4px); padding: 6px 8px; font-size: 0.76rem; text-align: center;" onclick="selectActiveFrame(2)">
+              <div><span class="style-btn-title" style="font-size: 0.78rem;">🦋 Mid-L</span><span id="badgeFrame2" style="font-size: 0.68rem; color: #94a3b8;">Empty</span></div>
             </button>
-            <button class="style-option-btn" id="btnQrFlush" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setQrStyleMode('flush')">
-              <div>
-                <span class="style-btn-title" style="font-size: 0.82rem;">🎯 Flush Fit (Bare)</span>
-                <span class="style-btn-desc" style="font-size: 0.72rem;">Flush borderless QR code square.</span>
-              </div>
+            <button class="style-option-btn" id="tabFrame3" style="flex: 1 1 calc(33.3% - 4px); padding: 6px 8px; font-size: 0.76rem; text-align: center;" onclick="selectActiveFrame(3)">
+              <div><span class="style-btn-title" style="font-size: 0.78rem;">🎀 Btm-L</span><span id="badgeFrame3" style="font-size: 0.68rem; color: #94a3b8;">Empty</span></div>
+            </button>
+            <button class="style-option-btn" id="tabFrame4" style="flex: 1 1 calc(33.3% - 4px); padding: 6px 8px; font-size: 0.76rem; text-align: center;" onclick="selectActiveFrame(4)">
+              <div><span class="style-btn-title" style="font-size: 0.78rem;">🎀 Btm-R</span><span id="badgeFrame4" style="font-size: 0.68rem; color: #94a3b8;">Empty</span></div>
+            </button>
+            <button class="style-option-btn" id="tabFrame5" style="flex: 1 1 calc(33.3% - 4px); padding: 6px 8px; font-size: 0.76rem; text-align: center;" onclick="selectActiveFrame(5)">
+              <div><span class="style-btn-title" style="font-size: 0.78rem;">🏰 Top-R</span><span id="badgeFrame5" style="font-size: 0.68rem; color: #94a3b8;">Empty</span></div>
+            </button>
+            <button class="style-option-btn" id="tabFrame6" style="flex: 1 1 calc(33.3% - 4px); padding: 6px 8px; font-size: 0.76rem; text-align: center;" onclick="selectActiveFrame(6)">
+              <div><span class="style-btn-title" style="font-size: 0.78rem;">✨ Mid-R</span><span id="badgeFrame6" style="font-size: 0.68rem; color: #94a3b8;">Empty</span></div>
             </button>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
-                <span>QR Code Scale / Size:</span>
-                <span id="qrScaleVal" style="color: #fbbf24; font-weight: 700;">100%</span>
+          <!-- Active Frame Adjustment Box -->
+          <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(244, 114, 182, 0.25); border-radius: 12px; padding: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+              <span id="activeFrameTitle" style="font-weight: 700; font-size: 0.92rem; color: #f472b6;">🌟 Center Main Polaroid (Shaaaw)</span>
+              <div style="display: flex; gap: 6px;">
+                <label class="btn-download-sub" style="padding: 4px 10px; font-size: 0.76rem; cursor: pointer; background: #ec4899; color: #fff; border: none; width: auto;">
+                  <span>🖼️ Choose Photo</span>
+                  <input type="file" id="activeFrameFileInput" accept="image/*" style="display: none;" onchange="handleActiveFrameUpload(event)">
+                </label>
+                <button class="btn-download-sub" id="btnRemoveActivePhoto" style="padding: 4px 8px; font-size: 0.76rem; color: #fca5a5; display: none; width: auto;" onclick="removeActiveFramePhoto()">
+                  <span>🗑️ Clear</span>
+                </button>
               </div>
-              <input type="range" id="sliderQrScale" min="80" max="115" value="100" style="width: 100%; accent-color: #fbbf24;" oninput="updateQrScale(this.value)">
             </div>
 
-            <div class="toggle-row" style="padding-top: 6px;">
-              <span>🔍 Live Alignment Inspector Guides</span>
-              <label class="switch">
-                <input type="checkbox" id="toggleInspector" onchange="toggleAlignmentGuides(this.checked)">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                  <span>Vertical Focus (Pan Y):</span>
+                  <span id="panVal" style="color: #f472b6; font-weight: 700;">18% (Face Focus)</span>
+                </div>
+                <input type="range" id="sliderPanY" min="0" max="100" value="18" style="width: 100%; accent-color: #ec4899;" oninput="updateActivePanY(this.value)">
+              </div>
 
-            <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
-              <button class="btn-download-sub" style="padding: 6px 12px; font-size: 0.76rem;" onclick="resetCalibratedDefaults()">
-                <span>🔄 Reset to Calibrated Defaults</span>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                  <span>Horizontal Center (Pan X):</span>
+                  <span id="panXVal" style="color: #f472b6; font-weight: 700;">0% (Centered)</span>
+                </div>
+                <input type="range" id="sliderPanX" min="-50" max="50" value="0" style="width: 100%; accent-color: #ec4899;" oninput="updateActivePanX(this.value)">
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                  <span>Photo Zoom:</span>
+                  <span id="zoomVal" style="color: #f472b6; font-weight: 700;">1.05x</span>
+                </div>
+                <input type="range" id="sliderZoom" min="100" max="250" value="105" style="width: 100%; accent-color: #ec4899;" oninput="updateActiveZoom(this.value)">
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.76rem; margin-bottom: 2px;">
+                    <span>Tilt Angle:</span>
+                    <span id="tiltVal" style="color: #f472b6; font-weight: 700;">-2.0°</span>
+                  </div>
+                  <input type="range" id="sliderTilt" min="-120" max="120" value="-20" step="1" style="width: 100%; accent-color: #ec4899;" oninput="updateActiveTilt(this.value)">
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.76rem; margin-bottom: 2px;">
+                    <span>Slot Size Scale:</span>
+                    <span id="scaleVal" style="color: #f472b6; font-weight: 700;">100%</span>
+                  </div>
+                  <input type="range" id="sliderScale" min="85" max="115" value="100" style="width: 100%; accent-color: #ec4899;" oninput="updateActiveScale(this.value)">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Upload Matrix for Surrounding Frames 1-6 -->
+          <div style="background: rgba(255, 255, 255, 0.03); border-radius: 10px; padding: 10px; margin-top: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-weight: 700; font-size: 0.82rem; color: #38bdf8;">⚡ Quick Upload (Frames 1–6)</span>
+              <button class="btn-download-sub" style="padding: 2px 8px; font-size: 0.72rem; width: auto;" onclick="resetAllFrameDefaults()">
+                <span>🔄 Reset Defaults</span>
               </button>
             </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+              <label class="btn-download-sub" style="padding: 6px 8px; font-size: 0.75rem; cursor: pointer; justify-content: center;">
+                <span id="btnLbl1">🖼️ Upload Frame 1 (Top-L)</span>
+                <input type="file" accept="image/*" style="display: none;" onchange="uploadDirectFrame(1, event)">
+              </label>
+              <label class="btn-download-sub" style="padding: 6px 8px; font-size: 0.75rem; cursor: pointer; justify-content: center;">
+                <span id="btnLbl2">🖼️ Upload Frame 2 (Mid-L)</span>
+                <input type="file" accept="image/*" style="display: none;" onchange="uploadDirectFrame(2, event)">
+              </label>
+              <label class="btn-download-sub" style="padding: 6px 8px; font-size: 0.75rem; cursor: pointer; justify-content: center;">
+                <span id="btnLbl3">🖼️ Upload Frame 3 (Btm-L)</span>
+                <input type="file" accept="image/*" style="display: none;" onchange="uploadDirectFrame(3, event)">
+              </label>
+              <label class="btn-download-sub" style="padding: 6px 8px; font-size: 0.75rem; cursor: pointer; justify-content: center;">
+                <span id="btnLbl4">🖼️ Upload Frame 4 (Btm-R)</span>
+                <input type="file" accept="image/*" style="display: none;" onchange="uploadDirectFrame(4, event)">
+              </label>
+              <label class="btn-download-sub" style="padding: 6px 8px; font-size: 0.75rem; cursor: pointer; justify-content: center;">
+                <span id="btnLbl5">🖼️ Upload Frame 5 (Top-R)</span>
+                <input type="file" accept="image/*" style="display: none;" onchange="uploadDirectFrame(5, event)">
+              </label>
+              <label class="btn-download-sub" style="padding: 6px 8px; font-size: 0.75rem; cursor: pointer; justify-content: center;">
+                <span id="btnLbl6">🖼️ Upload Frame 6 (Mid-R)</span>
+                <input type="file" accept="image/*" style="display: none;" onchange="uploadDirectFrame(6, event)">
+              </label>
+            </div>
           </div>
-        </div>
 
-        <!-- Meaningful Nandhish Avatars Storytelling Panel -->
-        <div class="panel-card" style="border-color: #a855f7; background: rgba(28, 16, 44, 0.85);">
-          <h3 class="panel-title" style="color: #e9d5ff;">
-            <span>🎭 Meaningful Avatars (Storytelling Roles)</span>
-          </h3>
-          <p style="font-size: 0.82rem; color: #cbd5e1; margin-top: -6px; margin-bottom: 12px;">
-            Clean transparent figures integrated purposefully into the scrapbook memories:
-          </p>
-
-          <div style="display: flex; flex-direction: column; gap: 10px;">
-            <div class="toggle-row">
-              <span style="font-size: 0.84rem;">🧘‍♂️ Buddha Nandhish (Music & Peace on Vinyl)</span>
-              <label class="switch">
-                <input type="checkbox" id="toggleBuddha" checked onchange="toggleAvatar('buddha', this.checked)">
-                <span class="slider"></span>
-              </label>
-            </div>
-
-            <div class="toggle-row">
-              <span style="font-size: 0.84rem;">☸️ Lord Vishnu Nandhish (Celestial Guardian of Shaaaw)</span>
-              <label class="switch">
-                <input type="checkbox" id="toggleVishnu" checked onchange="toggleAvatar('vishnu', this.checked)">
-                <span class="slider"></span>
-              </label>
-            </div>
-
-            <div class="toggle-row">
-              <span style="font-size: 0.84rem;">🕊️ Shepherd Nandhish (Birthday Greetings & Celebration)</span>
-              <label class="switch">
-                <input type="checkbox" id="toggleShepherd" checked onchange="toggleAvatar('shepherd', this.checked)">
-                <span class="slider"></span>
-              </label>
-            </div>
-
-            <div style="margin-top: 6px;">
-              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
-                <span>Avatar Sticker Scale:</span>
-                <span id="avatarScaleVal" style="color: #c084fc; font-weight: 700;">100%</span>
-              </div>
-              <input type="range" id="sliderAvatarScale" min="60" max="140" value="100" style="width: 100%; accent-color: #a855f7;" oninput="updateAvatarScale(this.value)">
-            </div>
+          <!-- Alignment Guides Toggle -->
+          <div class="toggle-row" style="margin-top: 10px; padding: 8px 0 0;">
+            <span style="font-size: 0.82rem;">🔍 Show Polaroid Aperture Guides on Canvas</span>
+            <label class="switch">
+              <input type="checkbox" id="toggleInspector" onchange="toggleAlignmentGuides(this.checked)">
+              <span class="slider"></span>
+            </label>
           </div>
         </div>
 
@@ -813,473 +751,76 @@
     const ctx = canvas.getContext('2d');
     let currentStyle = 'mat';
     const sourceImage = new Image();
-    const shaawImage = new Image();
-    
-    // Additional photos for frames 1-6
-    const extraPhotos = {};
-    const qrCanvasCache = {};
-
-    // Precision Framing & QR Alignment State
-    let polaroidMode = 'seamless';    // 'seamless' (embedded in scrapbook frames) or 'studio-card'
-    let qrStyleMode = 'flush';        // 'flush' (embedded on paper notes) or 'badge'
-    
-    let shaawPanY = 0.18;
-    let shaawPanX = 0.00;
-    let shaawZoom = 1.05;
-    let polaroidTilt = -2.00;
-    let centerWidthScale = 1.00;
-    let centerHeightScale = 1.00;
-    let qrScaleMultiplier = 1.00;
     let showAlignmentOutlines = false;
 
-    // Meaningful Storytelling Avatar Figures State & Loaders
-    let showBuddhaAvatar = true;
-    let showVishnuAvatar = true;
-    let showShepherdAvatar = true;
-    let avatarScale = 1.00;
-
-    const avatarBuddhaImg = new Image();
-    const avatarVishnuImg = new Image();
-    const avatarShepherdImg = new Image();
-
-    // High-performance boundary & enclosed pocket transparency filter
-    function makeTransparentCanvas(sourceImg, type) {
-      if (!sourceImg || !sourceImg.width || !sourceImg.height) return sourceImg;
-      const off = document.createElement('canvas');
-      const w = sourceImg.naturalWidth || sourceImg.width;
-      const h = sourceImg.naturalHeight || sourceImg.height;
-      off.width = w;
-      off.height = h;
-      const oCtx = off.getContext('2d');
-      oCtx.drawImage(sourceImg, 0, 0);
-
-      try {
-        const imgData = oCtx.getImageData(0, 0, w, h);
-        const data = imgData.data;
-        const n = w * h;
-
-        if (type === 'checkerboard') {
-          // Vishnu: Remove all checkerboard background (grey and white squares)
-          // including trapped pockets between arms, weapons, crown & hair
-          const visited = new Uint8Array(n);
-          const queue = new Int32Array(n);
-          let head = 0, tail = 0;
-
-          function isChecker(r, g, b) {
-            const diff = Math.max(Math.abs(r - g), Math.max(Math.abs(r - b), Math.abs(g - b)));
-            // Grey squares: r,g,b in 150..235, low saturation diff
-            // White squares: r,g,b >= 235
-            return (r >= 150 && r <= 235 && diff <= 16) || (r >= 235 && g >= 235 && b >= 235 && diff <= 12);
-          }
-
-          // Pass 1: Seed from outer image borders
-          for (let x = 0; x < w; x++) { seed(x, 0); seed(x, h - 1); }
-          for (let y = 0; y < h; y++) { seed(0, y); seed(w - 1, y); }
-
-          function seed(x, y) {
-            const idx = y * w + x;
-            if (visited[idx]) return;
-            const p = idx * 4;
-            if (isChecker(data[p], data[p + 1], data[p + 2])) {
-              visited[idx] = 1;
-              queue[tail++] = idx;
-            }
-          }
-
-          while (head < tail) {
-            const idx = queue[head++];
-            data[idx * 4 + 3] = 0; // Set transparent
-            const x = idx % w;
-            const y = (idx / w) | 0;
-
-            const neighbors = [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]];
-            for (const [nx, ny] of neighbors) {
-              if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
-              const nIdx = ny * w + nx;
-              if (visited[nIdx]) continue;
-              const np = nIdx * 4;
-              if (isChecker(data[np], data[np + 1], data[np + 2])) {
-                visited[nIdx] = 1;
-                queue[tail++] = nIdx;
-              }
-            }
-          }
-
-          // Pass 2: Enclosed checkerboard pockets between Vishnu's arms, crown & torso
-          for (let y = 0; y < h; y++) {
-            for (let x = 0; x < w; x++) {
-              const idx = y * w + x;
-              if (visited[idx]) continue;
-              const p = idx * 4;
-              const r = data[p], g = data[p + 1], b = data[p + 2];
-              if (isChecker(r, g, b)) {
-                let pHead = tail;
-                visited[idx] = 1;
-                queue[tail++] = idx;
-                while (pHead < tail) {
-                  const cur = queue[pHead++];
-                  data[cur * 4 + 3] = 0;
-                  const cx = cur % w;
-                  const cy = (cur / w) | 0;
-                  const nb = [[cx - 1, cy], [cx + 1, cy], [cx, cy - 1], [cx, cy + 1]];
-                  for (const [nx, ny] of nb) {
-                    if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
-                    const nIdx = ny * w + nx;
-                    if (visited[nIdx]) continue;
-                    const np = nIdx * 4;
-                    if (isChecker(data[np], data[np + 1], data[np + 2])) {
-                      visited[nIdx] = 1;
-                      queue[tail++] = nIdx;
-                    }
-                  }
-                }
-              }
-            }
-          }
-
-        } else if (type === 'black') {
-          // Buddha: Remove black background with smooth anti-aliased edge
-          const visited = new Uint8Array(n);
-          const queue = new Int32Array(n);
-          let head = 0, tail = 0;
-
-          for (let x = 0; x < w; x++) { seedB(x, 0); seedB(x, h - 1); }
-          for (let y = 0; y < h; y++) { seedB(0, y); seedB(w - 1, y); }
-
-          function seedB(x, y) {
-            const idx = y * w + x;
-            if (visited[idx]) return;
-            const p = idx * 4;
-            if (data[p] <= 45 && data[p + 1] <= 45 && data[p + 2] <= 45) {
-              visited[idx] = 1;
-              queue[tail++] = idx;
-            }
-          }
-
-          while (head < tail) {
-            const idx = queue[head++];
-            data[idx * 4 + 3] = 0;
-            const x = idx % w;
-            const y = (idx / w) | 0;
-
-            const neighbors = [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]];
-            for (const [nx, ny] of neighbors) {
-              if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
-              const nIdx = ny * w + nx;
-              if (visited[nIdx]) continue;
-              const np = nIdx * 4;
-              const r = data[np], g = data[np + 1], b = data[np + 2];
-              if (r <= 48 && g <= 48 && b <= 48) {
-                visited[nIdx] = 1;
-                queue[tail++] = nIdx;
-              } else if (r <= 78 && g <= 78 && b <= 78) {
-                visited[nIdx] = 1;
-                const avg = (r + g + b) / 3;
-                data[np + 3] = Math.max(0, Math.min(255, Math.round((avg - 48) * 8.5)));
-              }
-            }
-          }
-
-        } else if (type === 'white') {
-          // Shepherd: Remove white background with smooth edge feathering
-          const visited = new Uint8Array(n);
-          const queue = new Int32Array(n);
-          let head = 0, tail = 0;
-
-          function isWhite(r, g, b) {
-            const diff = Math.max(Math.abs(r - g), Math.max(Math.abs(r - b), Math.abs(g - b)));
-            return r >= 220 && g >= 220 && b >= 220 && diff <= 25;
-          }
-
-          for (let x = 0; x < w; x++) { seedW(x, 0); seedW(x, h - 1); }
-          for (let y = 0; y < h; y++) { seedW(0, y); seedW(w - 1, y); }
-
-          function seedW(x, y) {
-            const idx = y * w + x;
-            if (visited[idx]) return;
-            const p = idx * 4;
-            if (isWhite(data[p], data[p + 1], data[p + 2])) {
-              visited[idx] = 1;
-              queue[tail++] = idx;
-            }
-          }
-
-          while (head < tail) {
-            const idx = queue[head++];
-            data[idx * 4 + 3] = 0;
-            const x = idx % w;
-            const y = (idx / w) | 0;
-
-            const neighbors = [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]];
-            for (const [nx, ny] of neighbors) {
-              if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
-              const nIdx = ny * w + nx;
-              if (visited[nIdx]) continue;
-              const np = nIdx * 4;
-              const r = data[np], g = data[np + 1], b = data[np + 2];
-              if (isWhite(r, g, b)) {
-                visited[nIdx] = 1;
-                queue[tail++] = nIdx;
-              } else {
-                const diff = Math.max(Math.abs(r - g), Math.max(Math.abs(r - b), Math.abs(g - b)));
-                if (r >= 200 && g >= 200 && b >= 200 && diff <= 16) {
-                  visited[nIdx] = 1;
-                  const avg = (r + g + b) / 3;
-                  data[np + 3] = Math.max(0, Math.min(255, Math.round((255 - avg) * 7.5)));
-                }
-              }
-            }
-          }
-        }
-
-        oCtx.putImageData(imgData, 0, 0);
-        return off;
-      } catch (e) {
-        console.warn('Canvas transparency exception:', e);
-        return sourceImg;
-      }
-    }
-
-    const processedAvatars = {};
-
-    function loadAvatar(key, targetImg, paths, type) {
-      let idx = 0;
-      function tryNext() {
-        if (idx >= paths.length) return;
-        targetImg.src = paths[idx++];
-      }
-      targetImg.onload = () => {
-        processedAvatars[key] = makeTransparentCanvas(targetImg, type);
-        render9x10_9Poster();
-      };
-      targetImg.onerror = tryNext;
-      tryNext();
-    }
-
-    loadAvatar('buddha', avatarBuddhaImg, [
-      'assets/avatar-buddha.png',
-      'assets/avatar-buddha-raw.jpg',
-      '/assets/avatar-buddha.png',
-      '/assets/avatar-buddha-raw.jpg',
-      'docs/assets/avatar-buddha.png',
-      '../public/assets/avatar-buddha.png'
-    ], 'black');
-
-    loadAvatar('vishnu', avatarVishnuImg, [
-      'assets/avatar-vishnu.png',
-      'assets/avatar-vishnu-raw.jpg',
-      '/assets/avatar-vishnu.png',
-      '/assets/avatar-vishnu-raw.jpg',
-      'docs/assets/avatar-vishnu.png',
-      '../public/assets/avatar-vishnu.png'
-    ], 'checkerboard');
-
-    loadAvatar('shepherd', avatarShepherdImg, [
-      'assets/avatar-shepherd.png',
-      'assets/avatar-shepherd-raw.png',
-      '/assets/avatar-shepherd.png',
-      '/assets/avatar-shepherd-raw.png',
-      'docs/assets/avatar-shepherd.png',
-      '../public/assets/avatar-shepherd.png'
-    ], 'white');
-
-    function toggleAvatar(name, val) {
-      if (name === 'buddha') showBuddhaAvatar = val;
-      if (name === 'vishnu') showVishnuAvatar = val;
-      if (name === 'shepherd') showShepherdAvatar = val;
-      render9x10_9Poster();
-    }
-
-    function updateAvatarScale(val) {
-      avatarScale = val / 100;
-      document.getElementById('avatarScaleVal').textContent = Math.round(val) + '%';
-      render9x10_9Poster();
-    }
-
-    // Cache pre-rendered QR canvases so re-rendering is instantaneous
-    const qrCanvasCache = {};
-
-    const shaawCandidates = [
-      'assets/shaaw-center.jpg',
-      '/assets/shaaw-center.jpg',
-      '../public/assets/shaaw-center.jpg'
+    // Calibrated coordinates and default transforms for all 7 polaroid frames
+    const FRAME_CONFIGS = [
+      { id: 0, title: "🌟 Center Main Polaroid (Shaaaw)", cxPct: 0.490, cyPct: 0.368, wPct: 0.258, hPct: 0.252, rotDeg: -2.0, panX: 0.00, panY: 0.18, zoom: 1.05, scale: 1.00, isMain: true, label: "Shaaaw 💖" },
+      { id: 1, title: "🖼️ Top-Left Polaroid (Frame 1)",   cxPct: 0.245, cyPct: 0.250, wPct: 0.170, hPct: 0.145, rotDeg: 5.5,  panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "01. Memory 💗" },
+      { id: 2, title: "🦋 Mid-Left Polaroid (Frame 2)",    cxPct: 0.230, cyPct: 0.500, wPct: 0.175, hPct: 0.150, rotDeg: -5.8, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "02. Smiles ✨" },
+      { id: 3, title: "🎀 Bottom-Left Polaroid (Frame 3)", cxPct: 0.370, cyPct: 0.650, wPct: 0.175, hPct: 0.150, rotDeg: -3.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "03. Melody 🎵" },
+      { id: 4, title: "🎀 Bottom-Right Polaroid (Frame 4)",cxPct: 0.625, cyPct: 0.650, wPct: 0.175, hPct: 0.150, rotDeg: 3.2,  panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "04. Moments 🧇" },
+      { id: 5, title: "🏰 Top-Right Polaroid (Frame 5)",  cxPct: 0.725, cyPct: 0.258, wPct: 0.170, hPct: 0.145, rotDeg: -5.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "05. Fairytale 🏰" },
+      { id: 6, title: "✨ Mid-Right Polaroid (Frame 6)",   cxPct: 0.755, cyPct: 0.502, wPct: 0.175, hPct: 0.150, rotDeg: 5.5,  panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "06. Forever 🌸" }
     ];
-    let shaawIdx = 0;
-    function tryLoadNextShaaw() {
-      if (shaawIdx >= shaawCandidates.length) return;
-      shaawImage.src = shaawCandidates[shaawIdx++];
-    }
-    shaawImage.onload = () => {
-      render9x10_9Poster();
-    };
-    shaawImage.onerror = tryLoadNextShaaw;
-    tryLoadNextShaaw();
 
-    function setPolaroidMode(mode) {
-      polaroidMode = mode;
-      document.getElementById('btnModeSeamless').classList.toggle('active', mode === 'seamless');
-      document.getElementById('btnModeStudio').classList.toggle('active', mode === 'studio-card');
-      render9x10_9Poster();
-    }
+    // Current working transform values (can be nudged via sliders)
+    const frameStates = JSON.parse(JSON.stringify(FRAME_CONFIGS));
+    const frameImages = {};
+    let activeFrameId = 0;
 
-    function setQrStyleMode(mode) {
-      qrStyleMode = mode;
-      document.getElementById('btnQrFlush').classList.toggle('active', mode === 'flush');
-      document.getElementById('btnQrBadge').classList.toggle('active', mode === 'badge');
-      render9x10_9Poster();
-    }
+    // Cache drawn poster coordinates for mouse clicks & hit detection
+    let currentDrawMetrics = { drawX: 0, drawY: 0, drawW: 2700, drawH: 3270 };
 
-    function updateShaawPanY(val) {
-      shaawPanY = val / 100;
-      document.getElementById('panVal').textContent = Math.round(val) + '%';
-      render9x10_9Poster();
-    }
-
-    function updateShaawPanX(val) {
-      shaawPanX = val / 100;
-      document.getElementById('panXVal').textContent = (val > 0 ? '+' : '') + Math.round(val) + '%';
-      render9x10_9Poster();
-    }
-
-    function updateShaawZoom(val) {
-      shaawZoom = val / 100;
-      document.getElementById('zoomVal').textContent = (val / 100).toFixed(2) + 'x';
-      render9x10_9Poster();
-    }
-
-    function updateShaawTilt(val) {
-      polaroidTilt = val / 10;
-      document.getElementById('tiltVal').textContent = (val / 10).toFixed(1) + '°';
-      render9x10_9Poster();
-    }
-
-    function updateWidthScale(val) {
-      centerWidthScale = val / 100;
-      document.getElementById('widthScaleVal').textContent = Math.round(val) + '%';
-      render9x10_9Poster();
-    }
-
-    function updateHeightScale(val) {
-      centerHeightScale = val / 100;
-      document.getElementById('heightScaleVal').textContent = Math.round(val) + '%';
-      render9x10_9Poster();
-    }
-
-    function updateQrScale(val) {
-      qrScaleMultiplier = val / 100;
-      document.getElementById('qrScaleVal').textContent = Math.round(val) + '%';
-      render9x10_9Poster();
-    }
-
-    function toggleAlignmentGuides(val) {
-      showAlignmentOutlines = val;
-      render9x10_9Poster();
-    }
-
-    function resetCalibratedDefaults() {
-      shaawPanY = 0.18;
-      shaawPanX = 0.00;
-      shaawZoom = 1.05;
-      polaroidTilt = -2.00;
-      centerWidthScale = 1.00;
-      centerHeightScale = 1.00;
-      qrScaleMultiplier = 1.00;
-      showBuddhaAvatar = true;
-      showVishnuAvatar = true;
-      showShepherdAvatar = true;
-      avatarScale = 1.00;
-
-      document.getElementById('sliderPanY').value = 18;
-      document.getElementById('panVal').textContent = '18% (Face Focus)';
-      document.getElementById('sliderPanX').value = 0;
-      document.getElementById('panXVal').textContent = '0% (Centered)';
-      document.getElementById('sliderZoom').value = 105;
-      document.getElementById('zoomVal').textContent = '1.05x';
-      document.getElementById('sliderTilt').value = -20;
-      document.getElementById('tiltVal').textContent = '-2.0° (Poster Aligned)';
-      document.getElementById('sliderWidthScale').value = 100;
-      document.getElementById('widthScaleVal').textContent = '100%';
-      document.getElementById('sliderHeightScale').value = 100;
-      document.getElementById('heightScaleVal').textContent = '100%';
-      document.getElementById('sliderQrScale').value = 100;
-      document.getElementById('qrScaleVal').textContent = '100%';
-      if (document.getElementById('toggleBuddha')) document.getElementById('toggleBuddha').checked = true;
-      if (document.getElementById('toggleVishnu')) document.getElementById('toggleVishnu').checked = true;
-      if (document.getElementById('toggleShepherd')) document.getElementById('toggleShepherd').checked = true;
-      if (document.getElementById('sliderAvatarScale')) document.getElementById('sliderAvatarScale').value = 100;
-      if (document.getElementById('avatarScaleVal')) document.getElementById('avatarScaleVal').textContent = '100%';
-
-      setPolaroidMode('studio-card');
-      setQrStyleMode('badge');
-    }
-
-    function uploadMainPhoto(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        shaawImage.onload = () => render9x10_9Poster();
-        shaawImage.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function uploadExtraPhoto(frameId, event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const img = new Image();
-        img.onload = function () {
-          extraPhotos[frameId] = img;
-          render9x10_9Poster();
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
+    // 1. Poster Loading Candidates (Top Priority: User's composite poster)
     const posterCandidates = [
+      'C:/Users/Nandheesaprasad/.gemini/antigravity-ide/brain/6ea84756-37a6-43a8-8392-c3735cd7d754/.user_uploaded/media_1789417290826.jpg',
+      'file:///C:/Users/Nandheesaprasad/.gemini/antigravity-ide/brain/6ea84756-37a6-43a8-8392-c3735cd7d754/.user_uploaded/media_1789417290826.jpg',
       'assets/original-poster.jpg',
+      'assets/clean-poster-bg.jpg',
       '/assets/original-poster.jpg',
+      '/assets/clean-poster-bg.jpg',
       '../public/assets/original-poster.jpg',
-      '../assets/original-poster.jpg',
-      '../public/assets/poster-with-qrs.png'
+      '../public/assets/clean-poster-bg.jpg'
     ];
 
-    let candidateIdx = 0;
+    let posterIdx = 0;
     function tryLoadNextPoster() {
-      if (candidateIdx >= posterCandidates.length) {
-        return;
+      if (posterIdx < posterCandidates.length) {
+        sourceImage.src = posterCandidates[posterIdx++];
       }
-      sourceImage.src = posterCandidates[candidateIdx++];
     }
-
     sourceImage.onload = () => {
       render9x10_9Poster();
     };
     sourceImage.onerror = tryLoadNextPoster;
     tryLoadNextPoster();
 
-    function setFramingStyle(style) {
-      currentStyle = style;
-      document.querySelectorAll('.style-btn-group .style-option-btn').forEach(btn => btn.classList.remove('active'));
-      if (style === 'mat') document.getElementById('btnStyleMat').classList.add('active');
-      if (style === 'seamless') document.getElementById('btnStyleSeamless').classList.add('active');
-      if (style === 'white-border') document.getElementById('btnStyleBorder').classList.add('active');
-      render9x10_9Poster();
-    }
-
-    function toggleGuidelines(show) {
-      const overlay = document.getElementById('guideOverlay');
-      if (show) {
-        overlay.classList.add('active');
-      } else {
-        overlay.classList.remove('active');
+    // 2. Load Shaaaw Center Photo default into Frame 0
+    const shaawDefaultImg = new Image();
+    const shaawCandidates = [
+      'assets/shaaw-center.jpg',
+      '/assets/shaaw-center.jpg',
+      '../public/assets/shaaw-center.jpg',
+      'C:/Users/Nandheesaprasad/.gemini/antigravity-ide/brain/4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5/.user_uploaded/media_1789381931433.jpg'
+    ];
+    let shaawIdx = 0;
+    function tryLoadNextShaaw() {
+      if (shaawIdx < shaawCandidates.length) {
+        shaawDefaultImg.src = shaawCandidates[shaawIdx++];
       }
     }
+    shaawDefaultImg.onload = () => {
+      if (!frameImages[0]) {
+        frameImages[0] = shaawDefaultImg;
+        updateUIBadges();
+        render9x10_9Poster();
+      }
+    };
+    shaawDefaultImg.onerror = tryLoadNextShaaw;
+    tryLoadNextShaaw();
 
-    // Helper for rounded rectangle with safety clamping
+    // Helper: Rounded Rectangle
     function drawRoundedRect(c, x, y, width, height, radius) {
       const maxR = Math.min(Math.abs(width) / 2, Math.abs(height) / 2);
       const r = Math.max(0, Math.min(radius || 0, maxR));
@@ -1296,107 +837,31 @@
       c.closePath();
     }
 
-    // Helper to draw cute washi tape strip
-    function drawWashiTape(c, x, y, w, h, angleDeg, colorPattern = 'gingham') {
-      c.save();
-      c.translate(x, y);
-      c.rotate(angleDeg * Math.PI / 180);
-      c.fillStyle = 'rgba(244, 180, 196, 0.85)';
-      c.fillRect(-w/2, -h/2, w, h);
-      // Gingham or tape texture
-      c.strokeStyle = 'rgba(255, 255, 255, 0.55)';
-      c.lineWidth = 1.5;
-      for (let i = -w/2; i < w/2; i += 6) {
-        c.beginPath();
-        c.moveTo(i, -h/2);
-        c.lineTo(i, h/2);
-        c.stroke();
-      }
-      // Torn fibrous edges
-      c.fillStyle = 'rgba(40, 20, 30, 0.08)';
-      c.fillRect(-w/2, -h/2, 2, h);
-      c.fillRect(w/2 - 2, -h/2, 2, h);
-      c.restore();
-    }
+    // Helper: Cropped photo inside an aperture with Pan X, Pan Y and Zoom
+    function drawCroppedPhoto(photoImg, destX, destY, destW, destH, panX, panY, zoom) {
+      if (!photoImg || !photoImg.complete || !photoImg.naturalWidth) return;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
 
-    // Pre-generate QR canvases for crisp rendering with warm note paper tone
-    function getQRCodeCanvas(targetUrl, size) {
-      const key = targetUrl + '_' + size;
-      if (qrCanvasCache[key]) {
-        return qrCanvasCache[key];
-      }
-      const offCanvas = document.createElement('canvas');
-      offCanvas.width = size;
-      offCanvas.height = size;
-      const oCtx = offCanvas.getContext('2d');
+      const destAspect = destW / destH;
+      const imgW = photoImg.naturalWidth;
+      const imgH = photoImg.naturalHeight;
+      const baseCropW = imgW;
+      const baseCropH = imgW / destAspect;
+      
+      const cropW = baseCropW / zoom;
+      const cropH = baseCropH / zoom;
+      
+      const maxPanX = Math.max(0, imgW - cropW);
+      const maxPanY = Math.max(0, imgH - cropH);
+      const cropX = Math.max(0, Math.min(maxPanX, maxPanX / 2 + panX * maxPanX));
+      const cropY = Math.max(0, Math.min(maxPanY, maxPanY * panY));
 
-      if (window.QRCode && typeof QRCode.toCanvas === 'function') {
-        QRCode.toCanvas(offCanvas, targetUrl, {
-          errorCorrectionLevel: 'H',
-          margin: 1,
-          width: size,
-          color: { 
-            dark: '#1a1215', // Rich deep espresso ink
-            light: '#faf7f0' // Warm vintage note paper background (seamlessly embedded)
-          }
-        }, function (err) {
-          if (!err) {
-            qrCanvasCache[key] = offCanvas;
-            render9x10_9Poster();
-          }
-        });
-      } else {
-        const qrImg = new Image();
-        qrImg.crossOrigin = 'anonymous';
-        qrImg.onload = () => {
-          oCtx.drawImage(qrImg, 0, 0, size, size);
-          qrCanvasCache[key] = offCanvas;
-          render9x10_9Poster();
-        };
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&ecc=H&margin=1&color=1a1215&bgcolor=faf7f0&data=${encodeURIComponent(targetUrl)}`;
-      }
-      qrCanvasCache[key] = offCanvas;
-      return offCanvas;
-    }
-
-    // Helper to draw cropped photo with pan & zoom (defaults to Shaaaw photo if frame unassigned)
-    function drawCroppedPhoto(photoImg, destX, destY, destW, destH, panX, panY, zoom, labelText, scaleW) {
-      const actualImg = (photoImg && photoImg.complete && photoImg.naturalWidth)
-        ? photoImg
-        : (shaawImage.complete && shaawImage.naturalWidth ? shaawImage : null);
-
-      if (actualImg) {
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
-
-        const destAspect = destW / destH;
-        const imgW = actualImg.naturalWidth;
-        const imgH = actualImg.naturalHeight;
-        const baseCropW = imgW;
-        const baseCropH = imgW / destAspect;
-        
-        const cropW = baseCropW / zoom;
-        const cropH = baseCropH / zoom;
-        
-        const maxPanX = (imgW - cropW);
-        const maxPanY = (imgH - cropH);
-        const cropX = Math.max(0, Math.min(maxPanX, maxPanX / 2 + panX * maxPanX));
-        const cropY = Math.max(0, Math.min(maxPanY, maxPanY * panY));
-
-        ctx.drawImage(actualImg, cropX, cropY, cropW, cropH, destX, destY, destW, destH);
-      } else {
-        ctx.fillStyle = '#faf7f2';
-        ctx.fillRect(destX, destY, destW, destH);
-        ctx.fillStyle = '#db2777';
-        ctx.font = 'bold ' + Math.round(scaleW * 0.16) + 'px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('♡', destX + destW / 2, destY + destH / 2);
-      }
+      ctx.drawImage(photoImg, cropX, cropY, cropW, cropH, destX, destY, destW, destH);
     }
 
     // ========================================================================
-    // MASTER 9x10.9 KODAK RENDER ENGINE
+    // MASTER 9x10.9 KODAK RENDER ENGINE (PHOTO PLACEMENTS ONLY)
     // ========================================================================
     function render9x10_9Poster() {
       const targetW = 2700;
@@ -1412,7 +877,6 @@
 
       const origW = sourceImage.naturalWidth;
       const origH = sourceImage.naturalHeight;
-
       let drawX, drawY, drawW, drawH;
 
       if (currentStyle === 'mat') {
@@ -1426,7 +890,7 @@
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, targetW, targetH);
 
-        // Archival rose-gold & blush double pinstripe
+        // Rose-gold archival pinstripe
         ctx.strokeStyle = '#da8ca0';
         ctx.lineWidth = 5;
         ctx.strokeRect(55, 55, targetW - 110, targetH - 110);
@@ -1443,7 +907,6 @@
         drawX = Math.round((targetW - drawW) / 2);
         drawY = safeMarginY;
 
-        // Subtle shadow behind the scrapbook collage
         ctx.shadowColor = 'rgba(40, 15, 25, 0.25)';
         ctx.shadowBlur = 40;
         ctx.shadowOffsetX = 0;
@@ -1454,7 +917,6 @@
         ctx.shadowColor = 'transparent';
         ctx.shadowBlur = 0;
         ctx.shadowOffsetY = 0;
-
         ctx.drawImage(sourceImage, drawX, drawY, drawW, drawH);
 
         ctx.strokeStyle = '#f5e8ea';
@@ -1500,422 +962,332 @@
         ctx.drawImage(sourceImage, drawX, drawY, drawW, drawH);
       }
 
-      // ====================================================================
-      // 🌟 REDESIGNED POLAROID FRAMES (PRECISION FIT - ALL 7 FRAMES)
-      // ====================================================================
+      currentDrawMetrics = { drawX, drawY, drawW, drawH };
 
-      function renderPolaroidSlot(config) {
-        const {
-          cx, cy,
-          apertureW, apertureH,
-          cardW, cardH,
-          rotDeg,
-          photoImg,
-          panX = 0,
-          panY = 0.18,
-          zoom = 1.05,
-          isMain = false,
-          labelText = ''
-        } = config;
+      // ====================================================================
+      // 🌟 DRAW SHAAAW'S PHOTOS INTO THE 7 POLAROID FRAME APERTURES
+      // ====================================================================
+      frameStates.forEach(cfg => {
+        const cx = drawX + Math.round(drawW * cfg.cxPct);
+        const cy = drawY + Math.round(drawH * cfg.cyPct);
+        const aw = Math.round(drawW * cfg.wPct * (cfg.scale || 1.0));
+        const ah = Math.round(drawW * cfg.hPct * (cfg.scale || 1.0));
+        const rot = cfg.rotDeg || 0;
+        const photo = frameImages[cfg.id];
 
         ctx.save();
         ctx.translate(cx, cy);
-        ctx.rotate(rotDeg * Math.PI / 180);
+        ctx.rotate(rot * Math.PI / 180);
 
-        if (polaroidMode === 'studio-card') {
-          // MODE B: REDESIGNED CRISP ARCHIVAL POLAROID CARD OVERLAY
-          ctx.shadowColor = 'rgba(30, 10, 20, 0.28)';
-          ctx.shadowBlur = isMain ? 32 : 18;
-          ctx.shadowOffsetX = 0;
-          ctx.shadowOffsetY = isMain ? 10 : 6;
-
-          // Archival Silk Warm Ivory Polaroid Paper
-          const cardGrad = ctx.createLinearGradient(-cardW / 2, -cardH / 2, cardW / 2, cardH / 2);
-          cardGrad.addColorStop(0, '#ffffff');
-          cardGrad.addColorStop(0.38, '#faf8f4');
-          cardGrad.addColorStop(0.78, '#f5eee2');
-          cardGrad.addColorStop(1, '#ebe2d1');
-          ctx.fillStyle = cardGrad;
-          drawRoundedRect(ctx, -cardW / 2, -cardH / 2, cardW, cardH, 4);
-          ctx.fill();
-
-          ctx.shadowColor = 'transparent';
-          ctx.strokeStyle = 'rgba(160, 130, 110, 0.25)';
-          ctx.lineWidth = 1.5;
-          drawRoundedRect(ctx, -cardW / 2, -cardH / 2, cardW, cardH, 4);
-          ctx.stroke();
-
-          // Polaroid aperture: equal top, left, right border
-          const sideMargin = Math.round((cardW - apertureW) / 2);
-          const photoTop = -cardH / 2 + sideMargin;
-
+        if (photo && photo.complete && photo.naturalWidth) {
           ctx.save();
           ctx.beginPath();
-          drawRoundedRect(ctx, -apertureW / 2, photoTop, apertureW, apertureH, 3);
+          drawRoundedRect(ctx, -aw / 2, -ah / 2, aw, ah, 4);
           ctx.clip();
 
-          drawCroppedPhoto(photoImg, -apertureW / 2, photoTop, apertureW, apertureH, panX, panY, zoom, labelText, apertureW);
-          
-          // Inner photo bevel depth
-          ctx.strokeStyle = 'rgba(50, 25, 35, 0.22)';
-          ctx.lineWidth = 2;
-          drawRoundedRect(ctx, -apertureW / 2, photoTop, apertureW, apertureH, 3);
-          ctx.stroke();
-          ctx.restore();
+          drawCroppedPhoto(photo, -aw / 2, -ah / 2, aw, ah, cfg.panX, cfg.panY, cfg.zoom);
 
-          // Bottom chin handwritten calligraphy
-          const chinY = photoTop + apertureH + (cardH / 2 - (photoTop + apertureH)) / 2;
-          if (isMain) {
-            ctx.fillStyle = '#3a272e';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.font = 'italic 700 ' + Math.round(cardW * 0.062) + 'px "Caveat", "Brush Script MT", cursive, sans-serif';
-            ctx.fillText('Our Prettiest Girl ♡ Shaaaw', 0, chinY);
-
-            ctx.font = 'bold ' + Math.round(cardW * 0.065) + 'px Arial, sans-serif';
-            ctx.fillStyle = 'rgba(236, 72, 153, 0.85)';
-            ctx.fillText('💖', cardW / 2 - 24, chinY);
-            ctx.fillText('♡', -cardW / 2 + 24, chinY);
-
-            // Pink washi tape strip on top
-            drawWashiTape(ctx, 0, -cardH / 2 + 2, Math.round(cardW * 0.32), 22, -1.5, 'gingham');
-          } else {
-            ctx.fillStyle = '#5a3d46';
-            ctx.font = 'italic 700 ' + Math.round(cardW * 0.062) + 'px "Caveat", "Brush Script MT", cursive, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(labelText || 'Memory ♡', 0, chinY);
-
-            ctx.font = 'bold ' + Math.round(cardW * 0.060) + 'px sans-serif';
-            ctx.fillStyle = 'rgba(236, 72, 153, 0.85)';
-            ctx.fillText('♡', cardW / 2 - 18, chinY);
-            ctx.fillText('♡', -cardW / 2 + 18, chinY);
-
-            // Gingham washi tape on top of frame
-            drawWashiTape(ctx, 0, -cardH / 2 + 2, Math.round(cardW * 0.30), 16, (rotDeg > 0 ? -2.5 : 2.5), 'gingham');
-          }
-
-          // Alignment Outlines (if inspector toggled)
-          if (showAlignmentOutlines) {
-            ctx.strokeStyle = '#06b6d4';
-            ctx.lineWidth = 3;
-            ctx.strokeRect(-cardW / 2, -cardH / 2, cardW, cardH);
-            ctx.strokeStyle = '#f43f5e';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(-apertureW / 2, photoTop, apertureW, apertureH);
-          }
-
-        } else {
-          // MODE A: SEAMLESS IN-FRAME APERTURE FIT (RECOMMENDED)
-          ctx.save();
-          ctx.beginPath();
-          drawRoundedRect(ctx, -apertureW / 2, -apertureH / 2, apertureW, apertureH, 3);
-          ctx.clip();
-
-          drawCroppedPhoto(photoImg, -apertureW / 2, -apertureH / 2, apertureW, apertureH, panX, panY, zoom, labelText, apertureW);
-
-          // Delicate inner photo shadow to blend naturally into poster frame opening
-          ctx.strokeStyle = 'rgba(40, 20, 30, 0.28)';
+          // Subtle inner shading to blend seamlessly into poster's frame aperture
+          ctx.strokeStyle = 'rgba(40, 20, 30, 0.25)';
           ctx.lineWidth = 2.5;
-          drawRoundedRect(ctx, -apertureW / 2, -apertureH / 2, apertureW, apertureH, 3);
+          drawRoundedRect(ctx, -aw / 2, -ah / 2, aw, ah, 4);
           ctx.stroke();
 
           ctx.restore();
-
-          // Alignment Outlines (if inspector toggled)
-          if (showAlignmentOutlines) {
-            ctx.strokeStyle = '#06b6d4';
-            ctx.lineWidth = 3;
-            ctx.strokeRect(-apertureW / 2, -apertureH / 2, apertureW, apertureH);
-            ctx.fillStyle = '#06b6d4';
-            ctx.font = 'bold 16px sans-serif';
-            ctx.fillText(labelText || (isMain ? 'Main Photo' : 'Frame'), -apertureW / 2 + 6, -apertureH / 2 + 20);
-          }
         }
 
-        ctx.restore();
-      }
-
-      // --- FRAME 0: CENTER MAIN POLAROID (SHAAAW) ---
-      const centerPhotoW = Math.round(drawW * 0.320 * centerWidthScale);
-      const centerPhotoH = Math.round(drawW * 0.322 * centerHeightScale);
-      const centerCardW = Math.round(drawW * 0.370 * centerWidthScale);
-      const centerCardH = Math.round(centerCardW * 1.16 * centerHeightScale);
-
-      renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.504),
-        cy: drawY + Math.round(drawH * 0.338),
-        apertureW: centerPhotoW,
-        apertureH: centerPhotoH,
-        cardW: centerCardW,
-        cardH: centerCardH,
-        rotDeg: polaroidTilt,
-        photoImg: shaawImage,
-        panX: shaawPanX,
-        panY: shaawPanY,
-        zoom: shaawZoom,
-        isMain: true,
-        labelText: 'Shaaaw 💖'
-      });
-
-      // --- FRAME 1: TOP-LEFT POLAROID (01. Memory) ---
-      const f1W = Math.round(drawW * 0.180);
-      renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.180),
-        cy: drawY + Math.round(drawH * 0.218),
-        apertureW: f1W,
-        apertureH: f1W,
-        cardW: Math.round(drawW * 0.200),
-        cardH: Math.round(drawW * 0.200 * 1.18),
-        rotDeg: 4.5,
-        photoImg: extraPhotos[1],
-        labelText: '01. Memory 💗'
-      });
-
-      // --- FRAME 2: MID-LEFT POLAROID ---
-      const f2W = Math.round(drawW * 0.195);
-      renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.165),
-        cy: drawY + Math.round(drawH * 0.430),
-        apertureW: f2W,
-        apertureH: f2W,
-        cardW: Math.round(drawW * 0.220),
-        cardH: Math.round(drawW * 0.220 * 1.18),
-        rotDeg: -6.8,
-        photoImg: extraPhotos[2],
-        labelText: '02. Smiles ✨'
-      });
-
-      // --- FRAME 3: BOTTOM-LEFT POLAROID ---
-      const f3W = Math.round(drawW * 0.190);
-      renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.355),
-        cy: drawY + Math.round(drawH * 0.630),
-        apertureW: f3W,
-        apertureH: f3W,
-        cardW: Math.round(drawW * 0.215),
-        cardH: Math.round(drawW * 0.215 * 1.18),
-        rotDeg: -3.2,
-        photoImg: extraPhotos[3],
-        labelText: '03. Melody 🎵'
-      });
-
-      // --- FRAME 4: BOTTOM-RIGHT POLAROID ---
-      const f4W = Math.round(drawW * 0.190);
-      renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.645),
-        cy: drawY + Math.round(drawH * 0.622),
-        apertureW: f4W,
-        apertureH: f4W,
-        cardW: Math.round(drawW * 0.215),
-        cardH: Math.round(drawW * 0.215 * 1.18),
-        rotDeg: 3.2,
-        photoImg: extraPhotos[4],
-        labelText: '04. Moments 🧇'
-      });
-
-      // --- FRAME 5: TOP-RIGHT POLAROID ---
-      const f5W = Math.round(drawW * 0.185);
-      renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.785),
-        cy: drawY + Math.round(drawH * 0.208),
-        apertureW: f5W,
-        apertureH: f5W,
-        cardW: Math.round(drawW * 0.210),
-        cardH: Math.round(drawW * 0.210 * 1.18),
-        rotDeg: -6.2,
-        photoImg: extraPhotos[5],
-        labelText: '05. Fairytale 🏰'
-      });
-
-      // --- FRAME 6: MID-RIGHT POLAROID ---
-      const f6W = Math.round(drawW * 0.195);
-      renderPolaroidSlot({
-        cx: drawX + Math.round(drawW * 0.840),
-        cy: drawY + Math.round(drawH * 0.468),
-        apertureW: f6W,
-        apertureH: f6W,
-        cardW: Math.round(drawW * 0.220),
-        cardH: Math.round(drawW * 0.220 * 1.18),
-        rotDeg: 6.5,
-        photoImg: extraPhotos[6],
-        labelText: '06. Forever 🌸'
-      });
-
-      // ====================================================================
-      // 🌟 REDESIGNED QR CODES (CALIBRATED DUMMY REPLACEMENT - ALL 8 QRs)
-      // ====================================================================
-      const QR_PLACEMENTS = [
-        // Left column (3 QRs) - QR 1 tucked into top corner away from Happy Birthday title
-        { id: 1, label: "Tape 01 💗", cxPct: 0.078, cyPct: 0.068, sizePct: 0.088, rotDeg: 0.0 },
-        { id: 2, label: "Tape 02 ✨", cxPct: 0.092, cyPct: 0.324, sizePct: 0.096, rotDeg: -1.5 },
-        { id: 3, label: "Tape 03 🎵", cxPct: 0.088, cyPct: 0.612, sizePct: 0.096, rotDeg: 0.0 },
-        // Right column (5 QRs)
-        { id: 4, label: "Tape 04 💌", cxPct: 0.925, cyPct: 0.120, sizePct: 0.096, rotDeg: 0.0 },
-        { id: 5, label: "Tape 05 🌸", cxPct: 0.925, cyPct: 0.322, sizePct: 0.096, rotDeg: -1.0 },
-        { id: 6, label: "Tape 06 🎶", cxPct: 0.915, cyPct: 0.608, sizePct: 0.096, rotDeg: 1.0 },
-        { id: 7, label: "Tape 07 🎸", cxPct: 0.908, cyPct: 0.738, sizePct: 0.096, rotDeg: -0.8 },
-        { id: 8, label: "Tape 08 💫", cxPct: 0.890, cyPct: 0.885, sizePct: 0.096, rotDeg: 0.8 }
-      ];
-
-      QR_PLACEMENTS.forEach(p => {
-        const qx = drawX + Math.round(drawW * p.cxPct);
-        const qy = drawY + Math.round(drawH * p.cyPct);
-        const qs = Math.round(drawW * p.sizePct * qrScaleMultiplier);
-        const targetUrl = 'https://nandhish3004.github.io/birthday-qr-memory/m/' + p.id;
-
-        ctx.save();
-        ctx.translate(qx, qy);
-        ctx.rotate(p.rotDeg * Math.PI / 180);
-
-        if (qrStyleMode === 'flush') {
-          // FLUSH SCRAPBOOK FIT: Embedded directly on the paper note without fake white glue backing
-          ctx.fillStyle = '#faf7f0';
-          drawRoundedRect(ctx, -qs / 2, -qs / 2, qs, qs, 3);
-          ctx.fill();
-
-          const qrCanvas = getQRCodeCanvas(targetUrl, qs);
-          if (qrCanvas && qrCanvas.width > 0) {
-            ctx.drawImage(qrCanvas, -qs / 2, -qs / 2, qs, qs);
-          } else {
-            const qrImg = new Image();
-            qrImg.onload = () => {
-              ctx.save();
-              ctx.translate(qx, qy);
-              ctx.rotate(p.rotDeg * Math.PI / 180);
-              ctx.drawImage(qrImg, -qs / 2, -qs / 2, qs, qs);
-              ctx.restore();
-            };
-            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&margin=1&color=1a1215&bgcolor=faf7f0&data=${encodeURIComponent(targetUrl)}`;
-          }
-
-          // Delicate warm outline to blend with vintage scrap paper
-          ctx.strokeStyle = 'rgba(120, 85, 90, 0.14)';
-          ctx.lineWidth = 1.0;
-          drawRoundedRect(ctx, -qs / 2, -qs / 2, qs, qs, 3);
+        // Live Alignment Inspector Guides (if toggled)
+        if (showAlignmentOutlines || cfg.id === activeFrameId) {
+          ctx.strokeStyle = cfg.id === activeFrameId ? '#ec4899' : 'rgba(56, 189, 248, 0.6)';
+          ctx.lineWidth = cfg.id === activeFrameId ? 3.5 : 2.0;
+          if (cfg.id !== activeFrameId) ctx.setLineDash([8, 6]);
+          drawRoundedRect(ctx, -aw / 2, -ah / 2, aw, ah, 4);
           ctx.stroke();
+          ctx.setLineDash([]);
 
-        } else {
-          // KEEPSAKE TAG BADGES: Decorative tag with washi tape & title
-          const badgeW = Math.round(qs * 1.15);
-          const badgeH = Math.round(qs * 1.35);
-
-          ctx.shadowColor = 'rgba(35, 15, 25, 0.22)';
-          ctx.shadowBlur = 14;
-          ctx.shadowOffsetX = 0;
-          ctx.shadowOffsetY = 6;
-
-          ctx.fillStyle = '#fdfbf7';
-          drawRoundedRect(ctx, -badgeW / 2, -badgeH / 2, badgeW, badgeH, 4);
-          ctx.fill();
-
-          ctx.shadowColor = 'transparent';
-          ctx.strokeStyle = 'rgba(70, 45, 40, 0.15)';
-          ctx.lineWidth = 1.2;
-          drawRoundedRect(ctx, -badgeW / 2, -badgeH / 2, badgeW, badgeH, 4);
-          ctx.stroke();
-
-          // Washi tape header
-          drawWashiTape(ctx, 0, -badgeH / 2 + 2, Math.round(badgeW * 0.7), 12, 0, 'pink');
-
-          // Scannable QR code
-          const qrY = -badgeH / 2 + 15 + qs / 2;
-          const qrCanvas = getQRCodeCanvas(targetUrl, qs);
-          if (qrCanvas && qrCanvas.width > 0) {
-            ctx.drawImage(qrCanvas, -qs / 2, qrY - qs / 2, qs, qs);
-          } else {
-            const qrImg = new Image();
-            qrImg.onload = () => render9x10_9Poster();
-            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&margin=1&color=1a1215&bgcolor=faf7f0&data=${encodeURIComponent(targetUrl)}`;
-          }
-
-          // Track label
-          ctx.fillStyle = '#4a2835';
-          ctx.font = '700 ' + Math.round(badgeW * 0.10) + 'px sans-serif';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(p.label, 0, badgeH / 2 - 8);
-        }
-
-        // Inspector Outline (if toggled)
-        if (showAlignmentOutlines) {
-          ctx.strokeStyle = '#f59e0b';
-          ctx.lineWidth = 2.5;
-          ctx.strokeRect(-qs / 2, -qs / 2, qs, qs);
-          ctx.fillStyle = '#f59e0b';
-          ctx.font = 'bold 14px sans-serif';
-          ctx.fillText(`QR #${p.id}`, -qs / 2 + 4, -qs / 2 + 16);
+          // Frame badge label
+          ctx.fillStyle = cfg.id === activeFrameId ? '#ec4899' : '#38bdf8';
+          ctx.font = 'bold 15px sans-serif';
+          ctx.fillText(`Frame ${cfg.id}: ${cfg.label || ''}`, -aw / 2 + 6, -ah / 2 + 20);
         }
 
         ctx.restore();
       });
+    }
 
-      // ====================================================================
-      // 🌟 MEANINGFUL STORYTELLING AVATAR FIGURES (INTEGRATED SCRAPBOOK ROLES)
-      // ====================================================================
+    // ========================================================================
+    // UI CONTROLS & FRAME SELECTION
+    // ========================================================================
+    function selectActiveFrame(id) {
+      activeFrameId = id;
+      const cfg = frameStates[id];
 
-      function drawAvatarSticker(avatarAsset, cx, cy, width, rotDeg = 0, role = 'default') {
-        const item = avatarAsset;
-        if (!item || !item.width || !item.height) return;
-        const aspect = (item.naturalHeight || item.height) / (item.naturalWidth || item.width);
-        const height = Math.round(width * aspect);
+      // Update tab styling
+      for (let i = 0; i <= 6; i++) {
+        const tab = document.getElementById(`tabFrame${i}`);
+        if (tab) tab.classList.toggle('active', i === id);
+      }
 
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(rotDeg * Math.PI / 180);
+      // Update title
+      document.getElementById('activeFrameTitle').textContent = cfg.title;
 
-        if (role === 'celestial') {
-          // Lord Vishnu: Sacred golden aura guarding Queen Shaaaw's central memory
-          ctx.shadowColor = 'rgba(251, 191, 36, 0.45)';
-          ctx.shadowBlur = 22;
-          ctx.shadowOffsetX = 0;
-          ctx.shadowOffsetY = 4;
-        } else if (role === 'music') {
-          // Buddha: Warm melody reflection on the retro vinyl grooves
-          ctx.shadowColor = 'rgba(244, 114, 182, 0.35)';
-          ctx.shadowBlur = 18;
-          ctx.shadowOffsetX = 0;
-          ctx.shadowOffsetY = 6;
-        } else {
-          // Shepherd: Warm celebratory die-cut drop shadow
-          ctx.shadowColor = 'rgba(30, 15, 25, 0.28)';
-          ctx.shadowBlur = 14;
-          ctx.shadowOffsetX = 0;
-          ctx.shadowOffsetY = 6;
+      // Update slider positions
+      document.getElementById('sliderPanY').value = Math.round(cfg.panY * 100);
+      document.getElementById('panVal').textContent = `${Math.round(cfg.panY * 100)}%`;
+
+      document.getElementById('sliderPanX').value = Math.round(cfg.panX * 100);
+      document.getElementById('panXVal').textContent = `${cfg.panX > 0 ? '+' : ''}${Math.round(cfg.panX * 100)}%`;
+
+      document.getElementById('sliderZoom').value = Math.round(cfg.zoom * 100);
+      document.getElementById('zoomVal').textContent = `${cfg.zoom.toFixed(2)}x`;
+
+      document.getElementById('sliderTilt').value = Math.round(cfg.rotDeg * 10);
+      document.getElementById('tiltVal').textContent = `${cfg.rotDeg.toFixed(1)}°`;
+
+      document.getElementById('sliderScale').value = Math.round((cfg.scale || 1.0) * 100);
+      document.getElementById('scaleVal').textContent = `${Math.round((cfg.scale || 1.0) * 100)}%`;
+
+      // Show/hide clear photo button
+      const hasPhoto = Boolean(frameImages[id]);
+      const btnRemove = document.getElementById('btnRemoveActivePhoto');
+      if (btnRemove) {
+        btnRemove.style.display = hasPhoto ? 'inline-flex' : 'none';
+      }
+
+      render9x10_9Poster();
+    }
+
+    function updateActivePanY(val) {
+      frameStates[activeFrameId].panY = val / 100;
+      document.getElementById('panVal').textContent = `${Math.round(val)}%`;
+      render9x10_9Poster();
+    }
+
+    function updateActivePanX(val) {
+      frameStates[activeFrameId].panX = val / 100;
+      document.getElementById('panXVal').textContent = `${val > 0 ? '+' : ''}${Math.round(val)}%`;
+      render9x10_9Poster();
+    }
+
+    function updateActiveZoom(val) {
+      frameStates[activeFrameId].zoom = val / 100;
+      document.getElementById('zoomVal').textContent = `${(val / 100).toFixed(2)}x`;
+      render9x10_9Poster();
+    }
+
+    function updateActiveTilt(val) {
+      frameStates[activeFrameId].rotDeg = val / 10;
+      document.getElementById('tiltVal').textContent = `${(val / 10).toFixed(1)}°`;
+      render9x10_9Poster();
+    }
+
+    function updateActiveScale(val) {
+      frameStates[activeFrameId].scale = val / 100;
+      document.getElementById('scaleVal').textContent = `${Math.round(val)}%`;
+      render9x10_9Poster();
+    }
+
+    function handleActiveFrameUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          frameImages[activeFrameId] = img;
+          updateUIBadges();
+          selectActiveFrame(activeFrameId);
+          render9x10_9Poster();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function uploadDirectFrame(id, event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          frameImages[id] = img;
+          updateUIBadges();
+          selectActiveFrame(id);
+          render9x10_9Poster();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeActiveFramePhoto() {
+      delete frameImages[activeFrameId];
+      updateUIBadges();
+      selectActiveFrame(activeFrameId);
+      render9x10_9Poster();
+    }
+
+    function resetAllFrameDefaults() {
+      for (let i = 0; i <= 6; i++) {
+        frameStates[i].panX = FRAME_CONFIGS[i].panX;
+        frameStates[i].panY = FRAME_CONFIGS[i].panY;
+        frameStates[i].zoom = FRAME_CONFIGS[i].zoom;
+        frameStates[i].rotDeg = FRAME_CONFIGS[i].rotDeg;
+        frameStates[i].scale = FRAME_CONFIGS[i].scale;
+      }
+      selectActiveFrame(activeFrameId);
+      render9x10_9Poster();
+    }
+
+    function updateUIBadges() {
+      for (let i = 0; i <= 6; i++) {
+        const badge = document.getElementById(`badgeFrame${i}`);
+        const hasImg = Boolean(frameImages[i]);
+        if (badge) {
+          if (hasImg) {
+            badge.textContent = '✓ Photo Set';
+            badge.style.color = '#10b981';
+          } else {
+            badge.textContent = i === 0 ? 'Default' : 'Empty';
+            badge.style.color = '#94a3b8';
+          }
         }
-
-        ctx.drawImage(item, -width / 2, -height / 2, width, height);
-
-        ctx.restore();
-      }
-
-      // 1. BUDDHA NANDHISH: Meditating on the Retro Vinyl Record (Soulful Music & Inner Peace)
-      if (showBuddhaAvatar) {
-        const vinylCenterX = drawX + Math.round(drawW * 0.170);
-        const vinylCenterY = drawY + Math.round(drawH * 0.805);
-        const bWidth = Math.round(drawW * 0.175 * avatarScale);
-        const buddhaAsset = processedAvatars['buddha'] || avatarBuddhaImg;
-        drawAvatarSticker(buddhaAsset, vinylCenterX, vinylCenterY, bWidth, -2, 'music');
-      }
-
-      // 2. LORD VISHNU NANDHISH: Celestial Guardian beside Queen Shaaaw's central memory polaroid
-      if (showVishnuAvatar) {
-        const vishnuX = drawX + Math.round(drawW * 0.730);
-        const vishnuY = drawY + Math.round(drawH * 0.368);
-        const vWidth = Math.round(drawW * 0.160 * avatarScale);
-        const vishnuAsset = processedAvatars['vishnu'] || avatarVishnuImg;
-        drawAvatarSticker(vishnuAsset, vishnuX, vishnuY, vWidth, 1.5, 'celestial');
-      }
-
-      // 3. WELCOMING SHEPHERD NANDHISH: Celebrating Queen Shaaaw at bottom greeting note
-      if (showShepherdAvatar) {
-        const shepherdX = drawX + Math.round(drawW * 0.485);
-        const shepherdY = drawY + Math.round(drawH * 0.830);
-        const sWidth = Math.round(drawW * 0.160 * avatarScale);
-        const shepherdAsset = processedAvatars['shepherd'] || avatarShepherdImg;
-        drawAvatarSticker(shepherdAsset, shepherdX, shepherdY, sWidth, 0, 'celebration');
+        const btnLbl = document.getElementById(`btnLbl${i}`);
+        if (btnLbl) {
+          btnLbl.textContent = hasImg ? `✓ Frame ${i} Loaded` : `🖼️ Upload Frame ${i}`;
+        }
       }
     }
+
+    function uploadCustomPoster(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        sourceImage.onload = () => render9x10_9Poster();
+        sourceImage.src = e.target.result;
+        const tag = document.getElementById('posterStatusTag');
+        if (tag) tag.textContent = '✨ Custom Poster Active (Uploaded)';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function setFramingStyle(style) {
+      currentStyle = style;
+      document.querySelectorAll('.style-btn-group .style-option-btn').forEach(btn => btn.classList.remove('active'));
+      if (style === 'mat') document.getElementById('btnStyleMat').classList.add('active');
+      if (style === 'seamless') document.getElementById('btnStyleSeamless').classList.add('active');
+      if (style === 'white-border') document.getElementById('btnStyleBorder').classList.add('active');
+      render9x10_9Poster();
+    }
+
+    function toggleGuidelines(show) {
+      const overlay = document.getElementById('guideOverlay');
+      if (show) {
+        overlay.classList.add('active');
+      } else {
+        overlay.classList.remove('active');
+      }
+    }
+
+    function toggleAlignmentGuides(val) {
+      showAlignmentOutlines = val;
+      render9x10_9Poster();
+    }
+
+    // ========================================================================
+    // INTERACTIVE CANVAS: CLICK DIRECTLY ON ANY POLAROID TO UPLOAD PHOTO
+    // ========================================================================
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const clickX = (e.clientX - rect.left) * scaleX;
+      const clickY = (e.clientY - rect.top) * scaleY;
+
+      const { drawX, drawY, drawW, drawH } = currentDrawMetrics;
+
+      // Check click against each frame's rotated bounding box
+      for (let i = 0; i <= 6; i++) {
+        const cfg = frameStates[i];
+        const cx = drawX + Math.round(drawW * cfg.cxPct);
+        const cy = drawY + Math.round(drawH * cfg.cyPct);
+        const aw = Math.round(drawW * cfg.wPct * (cfg.scale || 1.0));
+        const ah = Math.round(drawW * cfg.hPct * (cfg.scale || 1.0));
+        const rad = -cfg.rotDeg * Math.PI / 180;
+
+        // Un-rotate click point around frame center
+        const dx = clickX - cx;
+        const dy = clickY - cy;
+        const localX = dx * Math.cos(rad) - dy * Math.sin(rad);
+        const localY = dx * Math.sin(rad) + dy * Math.cos(rad);
+
+        if (Math.abs(localX) <= aw / 2 && Math.abs(localY) <= ah / 2) {
+          selectActiveFrame(i);
+          document.getElementById('activeFrameFileInput').click();
+          return;
+        }
+      }
+    });
+
+    // Drag and drop photo onto any frame on canvas
+    canvas.addEventListener('dragover', (e) => e.preventDefault());
+    canvas.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const files = e.dataTransfer.files;
+      if (!files || !files.length) return;
+      const file = files[0];
+      if (!file.type.startsWith('image/')) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const dropX = (e.clientX - rect.left) * scaleX;
+      const dropY = (e.clientY - rect.top) * scaleY;
+
+      const { drawX, drawY, drawW, drawH } = currentDrawMetrics;
+      let targetFrame = -1;
+
+      for (let i = 0; i <= 6; i++) {
+        const cfg = frameStates[i];
+        const cx = drawX + Math.round(drawW * cfg.cxPct);
+        const cy = drawY + Math.round(drawH * cfg.cyPct);
+        const aw = Math.round(drawW * cfg.wPct * (cfg.scale || 1.0));
+        const ah = Math.round(drawW * cfg.hPct * (cfg.scale || 1.0));
+        const rad = -cfg.rotDeg * Math.PI / 180;
+
+        const dx = dropX - cx;
+        const dy = dropY - cy;
+        const localX = dx * Math.cos(rad) - dy * Math.sin(rad);
+        const localY = dx * Math.sin(rad) + dy * Math.cos(rad);
+
+        if (Math.abs(localX) <= aw / 2 && Math.abs(localY) <= ah / 2) {
+          targetFrame = i;
+          break;
+        }
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const img = new Image();
+        img.onload = function() {
+          if (targetFrame >= 0) {
+            frameImages[targetFrame] = img;
+            updateUIBadges();
+            selectActiveFrame(targetFrame);
+            render9x10_9Poster();
+          } else {
+            sourceImage.onload = () => render9x10_9Poster();
+            sourceImage.src = ev.target.result;
+            const tag = document.getElementById('posterStatusTag');
+            if (tag) tag.textContent = '✨ Custom Poster Active (Drop)';
+          }
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
 
     // ========================================================================
     // 4K & KODAK PRINT EXPORT ENGINE
@@ -1923,7 +1295,6 @@
     function downloadMasterImage(format = 'jpeg', is4K = false) {
       let exportCanvas = canvas;
       if (is4K) {
-        // High-definition 4K Ultra-HD Master (3840 x 4650 px @ 426 DPI)
         exportCanvas = document.createElement('canvas');
         exportCanvas.width = 3840;
         exportCanvas.height = 4650;
@@ -1949,7 +1320,8 @@
     }
 
     window.addEventListener('load', () => {
-      setTimeout(render9x10_9Poster, 250);
+      selectActiveFrame(0);
+      setTimeout(render9x10_9Poster, 200);
     });
   </script>
 </body>

@@ -7,8 +7,7 @@ const ASSETS_DIR = path.join(ROOT_DIR, 'public', 'assets');
 const DOCS_ASSETS_DIR = path.join(ROOT_DIR, 'docs', 'assets');
 
 const USER_UPLOAD = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded";
-const USER_LORD = path.join(USER_UPLOAD, "media_1789372775279.jpg");
-const USER_POSTER = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\clean_scrapbook_bg_1789392487236.jpg";
+const USER_POSTER = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\6ea84756-37a6-43a8-8392-c3735cd7d754\\.user_uploaded\\media_1789417290826.jpg";
 const USER_SHAAW_CENTER = path.join(USER_UPLOAD, "media_1789381931433.jpg");
 
 const AVATAR_SHEPHERD = path.join(USER_UPLOAD, "media_1789393837249.png");
