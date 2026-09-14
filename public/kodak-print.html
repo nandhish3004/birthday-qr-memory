@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kodak 9×10.9 Photo Print Studio 📸 Shaaaw's Birthday Scrapbook</title>
-  <link rel="stylesheet" href="/css/global.css">
-  <link rel="stylesheet" href="/css/lord-nandhish.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>">
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <style>
@@ -30,7 +28,6 @@
       padding: 24px 16px 60px;
     }
 
-    /* Top Nav */
     .studio-nav {
       display: flex;
       align-items: center;
@@ -71,7 +68,6 @@
       box-shadow: 0 0 20px rgba(255, 184, 0, 0.35);
     }
 
-    /* Header */
     .studio-header {
       text-align: center;
       margin-bottom: 32px;
@@ -94,7 +90,6 @@
       line-height: 1.5;
     }
 
-    /* Layout Grid */
     .studio-grid {
       display: grid;
       grid-template-columns: 1fr 380px;
@@ -108,7 +103,6 @@
       }
     }
 
-    /* Preview Canvas Stage */
     .preview-stage-wrap {
       background: rgba(18, 11, 28, 0.7);
       border: 1px solid rgba(244, 114, 182, 0.2);
@@ -154,7 +148,6 @@
       aspect-ratio: 9 / 10.9;
     }
 
-    /* Overlay guidelines */
     .guide-overlay {
       position: absolute;
       top: 0;
@@ -169,7 +162,6 @@
       display: block;
     }
 
-    /* 1/8" trim blade cut line (approx 3.2% from edge) */
     .guide-bleed-line {
       position: absolute;
       top: 3.2%;
@@ -193,7 +185,6 @@
       border-radius: 4px;
     }
 
-    /* 1/4" frame lip line (approx 6.3% from edge) */
     .guide-frame-line {
       position: absolute;
       top: 6.3%;
@@ -217,7 +208,6 @@
       border-radius: 4px;
     }
 
-    /* Control Panel */
     .control-panel {
       display: flex;
       flex-direction: column;
@@ -242,7 +232,6 @@
       gap: 8px;
     }
 
-    /* Style selector buttons */
     .style-btn-group {
       display: flex;
       flex-direction: column;
@@ -286,7 +275,6 @@
       color: #94a3b8;
     }
 
-    /* Guidelines toggle */
     .toggle-row {
       display: flex;
       align-items: center;
@@ -342,7 +330,6 @@
       transform: translateX(20px);
     }
 
-    /* Print verification checklist */
     .checklist-list {
       list-style: none;
       padding: 0;
@@ -366,7 +353,6 @@
       font-size: 1.1rem;
     }
 
-    /* Action Buttons */
     .actions-card {
       display: flex;
       flex-direction: column;
@@ -418,7 +404,6 @@
       color: #fff;
     }
 
-    /* Instructions Box */
     .kodak-tip-box {
       background: rgba(255, 184, 0, 0.08);
       border: 1px solid rgba(255, 184, 0, 0.25);
@@ -430,10 +415,9 @@
     }
 
     .kodak-tip-box strong {
-      color: #ffb800;
+      color: #ffb800;    /* Dedicated Print Stylesheet */
     }
 
-    /* Dedicated Print Stylesheet */
     @media print {
       @page {
         size: 9in 10.9in;
@@ -479,17 +463,18 @@
 <body>
 
   <div class="studio-container">
-    <!-- Top Navigation -->
     <nav class="studio-nav">
-      <a href="/" class="studio-back-link">
-        <span>← Back to Vault</span>
+      <a href="./" class="studio-back-link">
+        <span>← Back to Vault Hub</span>
+      </a>
+      <a href="new-poster.html" class="studio-back-link" style="background: linear-gradient(135deg, rgba(244,63,94,0.35), rgba(219,39,119,0.35)); border-color: #f43f5e; color: #fff; font-weight: 700;">
+        <span>💖 Switch to New 9×10.9 Scrapbook Studio (7 Polaroids & 8 QRs) →</span>
       </a>
       <div class="kodak-badge">
         📸 Kodak 9×10.9 Master Studio (300 DPI)
       </div>
     </nav>
 
-    <!-- Header -->
     <header class="studio-header">
       <h1 class="studio-title">Shaaaw's 9×10.9 Kodak Photo Paper Studio</h1>
       <p class="studio-sub">
@@ -498,10 +483,7 @@
       </p>
     </header>
 
-    <!-- Main Studio Grid -->
     <div class="studio-grid">
-      
-      <!-- Left: Interactive Canvas Preview Stage -->
       <div class="preview-stage-wrap">
         <div class="preview-header-bar">
           <span>Target: <span class="paper-spec-tag">9.0 × 10.9 Inches (Kodak Paper)</span></span>
@@ -511,8 +493,6 @@
         <div class="canvas-viewport" id="canvasViewport">
           <!-- 300 DPI Master 9x10.9 Canvas -->
           <canvas id="kodakCanvas" width="2700" height="3270"></canvas>
-
-          <!-- Safe Zone & Cut Lines Overlay -->
           <div class="guide-overlay" id="guideOverlay">
             <div class="guide-bleed-line">
               <span class="guide-bleed-label">✂️ 1/8" Lab Cut Trim Line</span>
@@ -528,10 +508,7 @@
         </div>
       </div>
 
-      <!-- Right: Controls & One-Click Export -->
       <div class="control-panel">
-        
-        <!-- Style Selector -->
         <div class="panel-card">
           <h3 class="panel-title">🎨 Matting & Border Style</h3>
           
@@ -567,7 +544,6 @@
           </div>
         </div>
 
-        <!-- Verification Checklist -->
         <div class="panel-card">
           <h3 class="panel-title">🛡️ Kodak Print Safety Check</h3>
           <ul class="checklist-list">
@@ -583,6 +559,7 @@
               <span class="check-icon">✓</span>
               <span><strong>8 QR Codes Protected:</strong> All 8 codes are inside the 1/4" safe zone</span>
             </li>
+            <li class="checklist-item">
           </ul>
         </div>
 
@@ -597,16 +574,16 @@
 
           <!-- Framing Integration Mode -->
           <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-            <button class="style-option-btn active" id="btnModeSeamless" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setPolaroidMode('seamless')">
+            <button class="style-option-btn" id="btnModeSeamless" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setPolaroidMode('seamless')">
               <div>
-                <span class="style-btn-title" style="font-size: 0.82rem;">✨ Seamless Aperture (Zero Overlay)</span>
-                <span class="style-btn-desc" style="font-size: 0.72rem;">Clips photos directly inside real poster frames. No double-card overlays or ghost borders!</span>
+                <span class="style-btn-title" style="font-size: 0.82rem;">✨ Seamless Aperture</span>
+                <span class="style-btn-desc" style="font-size: 0.72rem;">Clips photos directly inside background openings.</span>
               </div>
             </button>
-            <button class="style-option-btn" id="btnModeStudio" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setPolaroidMode('studio-card')">
+            <button class="style-option-btn active" id="btnModeStudio" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setPolaroidMode('studio-card')">
               <div>
-                <span class="style-btn-title" style="font-size: 0.82rem;">🖼️ Calibrated Studio Card</span>
-                <span class="style-btn-desc" style="font-size: 0.72rem;">Precision-aligned 4K archival Polaroid cardstock overlay.</span>
+                <span class="style-btn-title" style="font-size: 0.82rem;">🖼️ Calibrated Studio Card (Recommended)</span>
+                <span class="style-btn-desc" style="font-size: 0.72rem;">Full white polaroid frames, chins, doodles & washi tape!</span>
               </div>
             </button>
           </div>
@@ -716,20 +693,20 @@
         <div class="panel-card">
           <h3 class="panel-title">🏷️ Redesigned QR Code Fit (All 8 QRs)</h3>
           <p style="font-size: 0.82rem; color: #94a3b8; margin-top: -6px; margin-bottom: 12px;">
-            Redesigned to fit flush on scrapbook scraps without blocking surrounding paperclips or doodle hearts:
+            Choose how QR codes are encased on the scrapbook poster:
           </p>
 
           <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-            <button class="style-option-btn active" id="btnQrFlush" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setQrStyleMode('flush')">
+            <button class="style-option-btn active" id="btnQrBadge" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setQrStyleMode('badge')">
               <div>
-                <span class="style-btn-title" style="font-size: 0.82rem;">🎯 Flush Fit (Clean)</span>
-                <span class="style-btn-desc" style="font-size: 0.72rem;">Replaces dummy QR squares exactly. Preserves paper edges & hearts!</span>
+                <span class="style-btn-title" style="font-size: 0.82rem;">🏷️ Keepsake Mini Cards (Recommended)</span>
+                <span class="style-btn-desc" style="font-size: 0.72rem;">Encased inside cute polaroid cards with washi tape &amp; track labels!</span>
               </div>
             </button>
-            <button class="style-option-btn" id="btnQrBadge" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setQrStyleMode('badge')">
+            <button class="style-option-btn" id="btnQrFlush" style="flex: 1; padding: 8px 10px; font-size: 0.78rem;" onclick="setQrStyleMode('flush')">
               <div>
-                <span class="style-btn-title" style="font-size: 0.82rem;">🏷️ Keepsake Tags</span>
-                <span class="style-btn-desc" style="font-size: 0.72rem;">Adds washi tape header and track label title.</span>
+                <span class="style-btn-title" style="font-size: 0.82rem;">🎯 Flush Fit (Bare)</span>
+                <span class="style-btn-desc" style="font-size: 0.72rem;">Flush borderless QR code square.</span>
               </div>
             </button>
           </div>
@@ -738,7 +715,7 @@
             <div>
               <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
                 <span>QR Code Scale / Size:</span>
-                <span id="qrScaleVal" style="color: #fbbf24; font-weight: 700;">100% (Exact Dummy Replacement)</span>
+                <span id="qrScaleVal" style="color: #fbbf24; font-weight: 700;">100%</span>
               </div>
               <input type="range" id="sliderQrScale" min="80" max="115" value="100" style="width: 100%; accent-color: #fbbf24;" oninput="updateQrScale(this.value)">
             </div>
@@ -759,7 +736,50 @@
           </div>
         </div>
 
-        <!-- Export Buttons -->
+        <!-- Cute Funny Avatar Easter Eggs Panel -->
+        <div class="panel-card" style="border-color: #a855f7; background: rgba(28, 16, 44, 0.85);">
+          <h3 class="panel-title" style="color: #e9d5ff;">
+            <span>🎭 Funny Nandhish Avatars (Cute Easter Eggs)</span>
+          </h3>
+          <p style="font-size: 0.82rem; color: #cbd5e1; margin-top: -6px; margin-bottom: 12px;">
+            Transparent funny caricature stickers positioned meaningfully on the poster:
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="toggle-row">
+              <span style="font-size: 0.84rem;">🧘‍♂️ DJ Zen Buddha (Sitting on Retro Vinyl)</span>
+              <label class="switch">
+                <input type="checkbox" id="toggleBuddha" checked onchange="toggleAvatar('buddha', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="toggle-row">
+              <span style="font-size: 0.84rem;">☸️ Cosmic Vishnu (Guarding Shaaaw's Memory)</span>
+              <label class="switch">
+                <input type="checkbox" id="toggleVishnu" checked onchange="toggleAvatar('vishnu', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="toggle-row">
+              <span style="font-size: 0.84rem;">🕊️ Welcoming Shepherd (Celebrating Shaaaw)</span>
+              <label class="switch">
+                <input type="checkbox" id="toggleShepherd" checked onchange="toggleAvatar('shepherd', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div style="margin-top: 6px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
+                <span>Avatar Sticker Scale:</span>
+                <span id="avatarScaleVal" style="color: #c084fc; font-weight: 700;">100%</span>
+              </div>
+              <input type="range" id="sliderAvatarScale" min="60" max="140" value="100" style="width: 100%; accent-color: #a855f7;" oninput="updateAvatarScale(this.value)">
+            </div>
+          </div>
+        </div>
+
         <div class="panel-card actions-card">
           <button class="btn-download-hero" onclick="downloadMasterImage('jpeg', true)" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">
             <span>💎 Download 4K Ultra-HD Master (3840×4650)</span>
@@ -778,16 +798,13 @@
           </button>
         </div>
 
-        <!-- Printing Tips Box -->
         <div class="kodak-tip-box">
           <strong>💡 Printing at Kodak Kiosk, Walmart, CVS, or Photo Lab:</strong><br>
           1. Download the <strong>JPEG (300 DPI)</strong> file onto a USB thumb drive or phone.<br>
           2. At the kiosk or website, select <strong>9" × 10.9" (or Custom Size)</strong>.<br>
           3. Choose <strong>"Kodak Glossy"</strong> or <strong>"Kodak Lustre/Matte"</strong> finish for richest color pop!
         </div>
-
       </div>
-
     </div>
   </div>
 
@@ -802,8 +819,8 @@
     const extraPhotos = {};
 
     // Precision Framing & QR Alignment State
-    let polaroidMode = 'seamless'; // 'seamless' (in-frame aperture fit) or 'studio-card' (crisp card overlay)
-    let qrStyleMode = 'flush';     // 'flush' (seamless dummy replacement) or 'badge' (keepsake tag badge)
+    let polaroidMode = 'studio-card'; // 'studio-card' (full cardstock, chin, doodles & tape) or 'seamless'
+    let qrStyleMode = 'badge';        // 'badge' (encased mini polaroid card tags) or 'flush'
     
     let shaawPanY = 0.18;
     let shaawPanX = 0.00;
@@ -814,12 +831,132 @@
     let qrScaleMultiplier = 1.00;
     let showAlignmentOutlines = false;
 
+    // Funny Avatar Figures State & Loaders
+    let showBuddhaAvatar = true;
+    let showVishnuAvatar = true;
+    let showShepherdAvatar = true;
+    let avatarScale = 1.00;
+
+    const avatarBuddhaImg = new Image();
+    const avatarVishnuImg = new Image();
+    const avatarShepherdImg = new Image();
+
+    // Client-side automatic background transparency filter
+    function makeTransparentCanvas(sourceImg, type) {
+      const off = document.createElement('canvas');
+      off.width = sourceImg.naturalWidth || sourceImg.width;
+      off.height = sourceImg.naturalHeight || sourceImg.height;
+      const oCtx = off.getContext('2d');
+      oCtx.drawImage(sourceImg, 0, 0);
+
+      try {
+        const imgData = oCtx.getImageData(0, 0, off.width, off.height);
+        const data = imgData.data;
+        const len = data.length;
+
+        if (type === 'white') {
+          // Shepherd: White background
+          for (let i = 0; i < len; i += 4) {
+            const r = data[i], g = data[i+1], b = data[i+2];
+            const diff = Math.max(Math.abs(r-g), Math.abs(r-b), Math.abs(g-b));
+            if (r > 220 && g > 220 && b > 220 && diff < 20) {
+              data[i+3] = 0;
+            }
+          }
+        } else if (type === 'black') {
+          // Buddha: Black background
+          for (let i = 0; i < len; i += 4) {
+            const r = data[i], g = data[i+1], b = data[i+2];
+            if (r < 38 && g < 38 && b < 38) {
+              data[i+3] = 0;
+            }
+          }
+        } else if (type === 'checkerboard') {
+          // Vishnu: Checkerboard background
+          for (let i = 0; i < len; i += 4) {
+            const r = data[i], g = data[i+1], b = data[i+2];
+            const diff = Math.max(Math.abs(r-g), Math.abs(r-b), Math.abs(g-b));
+            const isGrey = (r >= 170 && r <= 225 && diff <= 12);
+            const isWhite = (r >= 235 && g >= 235 && b >= 235 && diff <= 8);
+            if (isGrey || isWhite) {
+              data[i+3] = 0;
+            }
+          }
+        }
+        oCtx.putImageData(imgData, 0, 0);
+        return off;
+      } catch (e) {
+        return sourceImg;
+      }
+    }
+
+    const processedAvatars = {};
+
+    function loadAvatar(key, targetImg, paths, type) {
+      let idx = 0;
+      function tryNext() {
+        if (idx >= paths.length) return;
+        targetImg.src = paths[idx++];
+      }
+      targetImg.onload = () => {
+        // If image has extension -raw or is jpeg, automatically create transparent version
+        if (targetImg.src.includes('-raw') || targetImg.src.endsWith('.jpg') || targetImg.src.endsWith('.jpeg')) {
+          processedAvatars[key] = makeTransparentCanvas(targetImg, type);
+        } else {
+          processedAvatars[key] = targetImg;
+        }
+        render9x10_9Poster();
+      };
+      targetImg.onerror = tryNext;
+      tryNext();
+    }
+
+    loadAvatar('buddha', avatarBuddhaImg, [
+      'assets/avatar-buddha.png',
+      'assets/avatar-buddha-raw.jpg',
+      '/assets/avatar-buddha.png',
+      '/assets/avatar-buddha-raw.jpg',
+      'docs/assets/avatar-buddha.png',
+      '../public/assets/avatar-buddha.png'
+    ], 'black');
+
+    loadAvatar('vishnu', avatarVishnuImg, [
+      'assets/avatar-vishnu.png',
+      'assets/avatar-vishnu-raw.jpg',
+      '/assets/avatar-vishnu.png',
+      '/assets/avatar-vishnu-raw.jpg',
+      'docs/assets/avatar-vishnu.png',
+      '../public/assets/avatar-vishnu.png'
+    ], 'checkerboard');
+
+    loadAvatar('shepherd', avatarShepherdImg, [
+      'assets/avatar-shepherd.png',
+      'assets/avatar-shepherd-raw.png',
+      '/assets/avatar-shepherd.png',
+      '/assets/avatar-shepherd-raw.png',
+      'docs/assets/avatar-shepherd.png',
+      '../public/assets/avatar-shepherd.png'
+    ], 'white');
+
+    function toggleAvatar(name, val) {
+      if (name === 'buddha') showBuddhaAvatar = val;
+      if (name === 'vishnu') showVishnuAvatar = val;
+      if (name === 'shepherd') showShepherdAvatar = val;
+      render9x10_9Poster();
+    }
+
+    function updateAvatarScale(val) {
+      avatarScale = val / 100;
+      document.getElementById('avatarScaleVal').textContent = Math.round(val) + '%';
+      render9x10_9Poster();
+    }
+
     // Cache pre-rendered QR canvases so re-rendering is instantaneous
     const qrCanvasCache = {};
 
     const shaawCandidates = [
-      '/assets/shaaw-center.jpg',
       'assets/shaaw-center.jpg',
+      '/assets/shaaw-center.jpg',
       '../public/assets/shaaw-center.jpg'
     ];
     let shaawIdx = 0;
@@ -902,6 +1039,10 @@
       centerWidthScale = 1.00;
       centerHeightScale = 1.00;
       qrScaleMultiplier = 1.00;
+      showBuddhaAvatar = true;
+      showVishnuAvatar = true;
+      showShepherdAvatar = true;
+      avatarScale = 1.00;
 
       document.getElementById('sliderPanY').value = 18;
       document.getElementById('panVal').textContent = '18% (Face Focus)';
@@ -916,10 +1057,15 @@
       document.getElementById('sliderHeightScale').value = 100;
       document.getElementById('heightScaleVal').textContent = '100%';
       document.getElementById('sliderQrScale').value = 100;
-      document.getElementById('qrScaleVal').textContent = '100% (Exact Dummy Replacement)';
+      document.getElementById('qrScaleVal').textContent = '100%';
+      if (document.getElementById('toggleBuddha')) document.getElementById('toggleBuddha').checked = true;
+      if (document.getElementById('toggleVishnu')) document.getElementById('toggleVishnu').checked = true;
+      if (document.getElementById('toggleShepherd')) document.getElementById('toggleShepherd').checked = true;
+      if (document.getElementById('sliderAvatarScale')) document.getElementById('sliderAvatarScale').value = 100;
+      if (document.getElementById('avatarScaleVal')) document.getElementById('avatarScaleVal').textContent = '100%';
 
-      setPolaroidMode('seamless');
-      setQrStyleMode('flush');
+      setPolaroidMode('studio-card');
+      setQrStyleMode('badge');
     }
 
     function uploadMainPhoto(event) {
@@ -948,12 +1094,12 @@
       reader.readAsDataURL(file);
     }
 
-    // Try loaded local poster or fallback paths
     const posterCandidates = [
-      '/assets/original-poster.jpg',
       'assets/original-poster.jpg',
+      '/assets/original-poster.jpg',
+      '../public/assets/original-poster.jpg',
       '../assets/original-poster.jpg',
-      '/assets/poster-with-qrs.png'
+      '../public/assets/poster-with-qrs.png'
     ];
 
     let candidateIdx = 0;
@@ -1039,7 +1185,7 @@
           margin: 1,
           width: size,
           color: { 
-            dark: '#1a1416', // Warm deep espresso ink instead of harsh #000000
+            dark: '#1a1416', // Warm deep espresso ink
             light: '#ffffff' 
           }
         }, function (err) {
@@ -1075,31 +1221,29 @@
 
         ctx.drawImage(photoImg, cropX, cropY, cropW, cropH, destX, destY, destW, destH);
       } else {
-        // Romantic placeholder art when no custom photo uploaded yet (only in Studio Card overlay mode)
-        if (polaroidMode === 'studio-card') {
-          ctx.fillStyle = '#f8f1e9';
-          ctx.fillRect(destX, destY, destW, destH);
-          
-          // Diagonal hatching
-          ctx.strokeStyle = 'rgba(235, 190, 200, 0.45)';
-          ctx.lineWidth = 1.5;
-          for (let i = destX - destH; i < destX + destW + destH; i += 22) {
-            ctx.beginPath();
-            ctx.moveTo(i, destY);
-            ctx.lineTo(i + destH, destY + destH);
-            ctx.stroke();
-          }
-
-          ctx.fillStyle = '#db2777';
-          ctx.font = 'bold ' + Math.round(scaleW * 0.16) + 'px sans-serif';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText('♡', destX + destW / 2, destY + destH / 2 - 8);
-
-          ctx.fillStyle = '#831843';
-          ctx.font = '600 ' + Math.round(scaleW * 0.08) + 'px sans-serif';
-          ctx.fillText(labelText || 'Add Photo', destX + destW / 2, destY + destH / 2 + 18);
+        // Romantic archival placeholder art when no custom photo uploaded yet
+        ctx.fillStyle = '#fbf7f2';
+        ctx.fillRect(destX, destY, destW, destH);
+        
+        // Diagonal blush hatching
+        ctx.strokeStyle = 'rgba(235, 190, 200, 0.40)';
+        ctx.lineWidth = 1.5;
+        for (let i = destX - destH; i < destX + destW + destH; i += 22) {
+          ctx.beginPath();
+          ctx.moveTo(i, destY);
+          ctx.lineTo(i + destH, destY + destH);
+          ctx.stroke();
         }
+
+        ctx.fillStyle = '#db2777';
+        ctx.font = 'bold ' + Math.round(scaleW * 0.16) + 'px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('♡', destX + destW / 2, destY + destH / 2 - 8);
+
+        ctx.fillStyle = '#831843';
+        ctx.font = '600 ' + Math.round(scaleW * 0.08) + 'px sans-serif';
+        ctx.fillText(labelText || 'Add Photo', destX + destW / 2, destY + destH / 2 + 18);
       }
     }
 
@@ -1289,10 +1433,18 @@
             drawWashiTape(ctx, 0, -cardH / 2 + 2, Math.round(cardW * 0.32), 22, -1.5, 'gingham');
           } else {
             ctx.fillStyle = '#5a3d46';
-            ctx.font = '700 ' + Math.round(cardW * 0.060) + 'px sans-serif';
+            ctx.font = 'italic 700 ' + Math.round(cardW * 0.062) + 'px "Caveat", "Brush Script MT", cursive, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('♡', cardW / 2 - 20, chinY);
+            ctx.fillText(labelText || 'Memory ♡', 0, chinY);
+
+            ctx.font = 'bold ' + Math.round(cardW * 0.060) + 'px sans-serif';
+            ctx.fillStyle = 'rgba(236, 72, 153, 0.85)';
+            ctx.fillText('♡', cardW / 2 - 18, chinY);
+            ctx.fillText('♡', -cardW / 2 + 18, chinY);
+
+            // Gingham washi tape on top of frame
+            drawWashiTape(ctx, 0, -cardH / 2 + 2, Math.round(cardW * 0.30), 16, (rotDeg > 0 ? -2.5 : 2.5), 'gingham');
           }
 
           // Alignment Outlines (if inspector toggled)
@@ -1307,8 +1459,6 @@
 
         } else {
           // MODE A: SEAMLESS IN-FRAME APERTURE FIT (RECOMMENDED)
-          // Photo clips cleanly inside the original poster Polaroid opening.
-          // Preserves 100% of the poster's original white card, washi tape, and doodle hearts!
           ctx.save();
           ctx.beginPath();
           drawRoundedRect(ctx, -apertureW / 2, -apertureH / 2, apertureW, apertureH, 3);
@@ -1361,7 +1511,6 @@
       });
 
       // --- FRAME 1: TOP-LEFT POLAROID (01. Memory) ---
-      // Shifted down & left to guarantee 100% unobstructed visibility of 'Happy Birthday Shaaaw!!!'
       const f1W = Math.round(drawW * 0.180);
       renderPolaroidSlot({
         cx: drawX + Math.round(drawW * 0.180),
@@ -1473,7 +1622,6 @@
 
         if (qrStyleMode === 'flush') {
           // FLUSH SCRAPBOOK FIT: Replaces only the dummy QR square!
-          // Preserves all surrounding torn paper edges, paperclips, and doodle hearts.
           ctx.fillStyle = '#ffffff';
           drawRoundedRect(ctx, -qs / 2, -qs / 2, qs, qs, 3);
           ctx.fill();
@@ -1527,6 +1675,10 @@
           const qrCanvas = getQRCodeCanvas(targetUrl, qs);
           if (qrCanvas && qrCanvas.width > 0) {
             ctx.drawImage(qrCanvas, -qs / 2, qrY - qs / 2, qs, qs);
+          } else {
+            const qrImg = new Image();
+            qrImg.onload = () => render9x10_9Poster();
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&margin=1&data=${encodeURIComponent(targetUrl)}`;
           }
 
           // Track label
@@ -1549,6 +1701,89 @@
 
         ctx.restore();
       });
+
+      // ====================================================================
+      // 🌟 HILARIOUS & CUTE AVATAR FIGURES (MEANINGFUL SCRAPBOOK POSITIONS)
+      // ====================================================================
+
+      function drawAvatarSticker(avatarAsset, cx, cy, width, rotDeg = 0, caption = '') {
+        const item = avatarAsset;
+        if (!item) return;
+        const aspect = (item.naturalHeight || item.height) / (item.naturalWidth || item.width);
+        const height = Math.round(width * aspect);
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(rotDeg * Math.PI / 180);
+
+        // Warm scrapbook sticker drop shadow
+        ctx.shadowColor = 'rgba(25, 10, 20, 0.40)';
+        ctx.shadowBlur = 24;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 10;
+
+        ctx.drawImage(item, -width / 2, -height / 2, width, height);
+
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+
+        // Cute scrapbook caption tag
+        if (caption) {
+          const fontSize = Math.max(14, Math.round(width * 0.080));
+          ctx.font = 'bold ' + fontSize + 'px "Plus Jakarta Sans", sans-serif';
+          const textMetrics = ctx.measureText(caption);
+          const pillW = textMetrics.width + 24;
+          const pillH = Math.round(fontSize * 1.8);
+          const pillY = Math.round(height / 2 + 6);
+
+          ctx.fillStyle = '#ffffff';
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
+          ctx.shadowBlur = 10;
+          ctx.shadowOffsetY = 3;
+          drawRoundedRect(ctx, -pillW / 2, pillY, pillW, pillH, 999);
+          ctx.fill();
+
+          ctx.shadowColor = 'transparent';
+          ctx.strokeStyle = '#f472b6';
+          ctx.lineWidth = 1.8;
+          drawRoundedRect(ctx, -pillW / 2, pillY, pillW, pillH, 999);
+          ctx.stroke();
+
+          ctx.fillStyle = '#831843';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(caption, 0, pillY + pillH / 2);
+        }
+
+        ctx.restore();
+      }
+
+      // 1. BUDDHA NANDHISH: Meditating DJ sitting on top of the Retro Vinyl Record!
+      if (showBuddhaAvatar) {
+        const vinylCenterX = drawX + Math.round(drawW * 0.170);
+        const vinylCenterY = drawY + Math.round(drawH * 0.805);
+        const bWidth = Math.round(drawW * 0.180 * avatarScale);
+        const buddhaAsset = processedAvatars['buddha'] || avatarBuddhaImg;
+        drawAvatarSticker(buddhaAsset, vinylCenterX, vinylCenterY, bWidth, -2, 'DJ Zen Beats 🧘‍♂️💿');
+      }
+
+      // 2. COSMIC VISHNU NANDHISH: Celestial Preserver guarding Shaaaw's central memory!
+      if (showVishnuAvatar) {
+        const vishnuX = drawX + Math.round(drawW * 0.725);
+        const vishnuY = drawY + Math.round(drawH * 0.375);
+        const vWidth = Math.round(drawW * 0.165 * avatarScale);
+        const vishnuAsset = processedAvatars['vishnu'] || avatarVishnuImg;
+        drawAvatarSticker(vishnuAsset, vishnuX, vishnuY, vWidth, 2, 'Supreme Preserver ☸️✨');
+      }
+
+      // 3. WELCOMING SHEPHERD NANDHISH: Open-arms celebrating Queen Shaaaw at bottom
+      if (showShepherdAvatar) {
+        const shepherdX = drawX + Math.round(drawW * 0.490);
+        const shepherdY = drawY + Math.round(drawH * 0.835);
+        const sWidth = Math.round(drawW * 0.165 * avatarScale);
+        const shepherdAsset = processedAvatars['shepherd'] || avatarShepherdImg;
+        drawAvatarSticker(shepherdAsset, shepherdX, shepherdY, sWidth, 0, 'Welcome to Shaaaw Day! 🕊️💖');
+      }
     }
 
     // ========================================================================
@@ -1586,8 +1821,5 @@
       setTimeout(render9x10_9Poster, 250);
     });
   </script>
-
-  <!-- Lord Nandhish Integration -->
-  <script src="/js/lord-nandhish.js"></script>
 </body>
 </html>

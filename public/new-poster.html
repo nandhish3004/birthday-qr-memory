@@ -559,6 +559,61 @@
     #qr8 { top: 885px; right: 20px; transform: rotate(1deg); }
 
     /* ========================================================
+       FUNNY NANDHISH AVATAR STICKERS (EASTER EGGS)
+       ======================================================== */
+    .avatar-sticker {
+      position: absolute;
+      z-index: 26;
+      cursor: pointer;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .avatar-sticker:hover {
+      transform: scale(1.15) translateY(-6px) !important;
+      z-index: 50 !important;
+      filter: drop-shadow(0 20px 40px rgba(225, 29, 72, 0.6));
+    }
+    .avatar-sticker img {
+      width: 100%;
+      height: auto;
+      display: block;
+      pointer-events: none;
+    }
+    .avatar-badge {
+      background: #ffffff;
+      color: #831843;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-top: 4px;
+      border: 1.5px solid #f472b6;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      white-space: nowrap;
+    }
+    .avatar-buddha {
+      bottom: 80px;
+      left: 48px;
+      width: 165px;
+      transform: rotate(-2deg);
+    }
+    .avatar-vishnu {
+      top: 360px;
+      right: 175px;
+      width: 145px;
+      transform: rotate(3deg);
+    }
+    .avatar-shepherd {
+      bottom: 40px;
+      left: 365px;
+      width: 145px;
+      transform: rotate(0deg);
+    }
+
+    /* ========================================================
        SCRAPBOOK KEEPSAKES & DETAILS AT BOTTOM
        ======================================================== */
     /* Retro Vinyl Record */
@@ -1103,6 +1158,27 @@
         <div class="qr-scrap-card" id="qr8" title="Tape 08 - Click to Test" onclick="openMemory(8)">
           <canvas class="qr-canvas" id="qrCanvas8"></canvas>
           <div class="qr-tag-label">Tape 08</div>
+        </div>
+
+        <!-- ==============================================
+             3 FUNNY NANDHISH AVATAR STICKERS (EASTER EGGS)
+             ============================================== -->
+        <!-- 1. DJ Zen Buddha Nandhish (Sitting atop Retro Vinyl) -->
+        <div class="avatar-sticker avatar-buddha" title="DJ Zen Nandhish 🧘‍♂️💿">
+          <img id="avatarBuddhaImg" src="assets/avatar-buddha.png" alt="DJ Zen Buddha Nandhish" onerror="this.src='../public/assets/avatar-buddha.png'">
+          <div class="avatar-badge">DJ Zen Beats 🧘‍♂️</div>
+        </div>
+
+        <!-- 2. Cosmic Vishnu Nandhish (Guarding Shaaaw's Memory) -->
+        <div class="avatar-sticker avatar-vishnu" title="Supreme Memory Preserver ☸️✨">
+          <img id="avatarVishnuImg" src="assets/avatar-vishnu.png" alt="Cosmic Vishnu Nandhish" onerror="this.src='../public/assets/avatar-vishnu.png'">
+          <div class="avatar-badge">Memory Preserver ☸️</div>
+        </div>
+
+        <!-- 3. Welcoming Shepherd Nandhish (Celebrating Shaaaw) -->
+        <div class="avatar-sticker avatar-shepherd" title="Welcome to Shaaaw Day! 🕊️💖">
+          <img id="avatarShepherdImg" src="assets/avatar-shepherd.png" alt="Welcoming Shepherd Nandhish" onerror="this.src='../public/assets/avatar-shepherd.png'">
+          <div class="avatar-badge">Welcome Queen Shaaaw! 🕊️</div>
         </div>
 
         <!-- ==============================================
@@ -1692,9 +1768,77 @@
       }
     }
 
+    function makeElementTransparent(imgEl, type) {
+      if (!imgEl) return;
+      const process = () => {
+        try {
+          const off = document.createElement('canvas');
+          off.width = imgEl.naturalWidth || imgEl.width;
+          off.height = imgEl.naturalHeight || imgEl.height;
+          if (!off.width || !off.height) return;
+          const oCtx = off.getContext('2d');
+          oCtx.drawImage(imgEl, 0, 0);
+          const imgData = oCtx.getImageData(0, 0, off.width, off.height);
+          const data = imgData.data;
+          const len = data.length;
+
+          if (type === 'black') {
+            for (let i = 0; i < len; i += 4) {
+              const r = data[i], g = data[i+1], b = data[i+2];
+              if (r <= 42 && g <= 42 && b <= 42) {
+                data[i+3] = 0;
+              } else if (r <= 70 && g <= 70 && b <= 70) {
+                const avg = (r + g + b) / 3;
+                data[i+3] = Math.max(0, Math.min(255, Math.round((avg - 42) * 9)));
+              }
+            }
+          } else if (type === 'white') {
+            for (let i = 0; i < len; i += 4) {
+              const r = data[i], g = data[i+1], b = data[i+2];
+              const diff = Math.max(Math.abs(r-g), Math.max(Math.abs(r-b), Math.abs(g-b)));
+              if (r >= 225 && g >= 225 && b >= 225 && diff <= 25) {
+                data[i+3] = 0;
+              } else if (r >= 210 && g >= 210 && b >= 210 && diff <= 15) {
+                const avg = (r + g + b) / 3;
+                data[i+3] = Math.max(0, Math.min(255, Math.round((255 - avg) * 8)));
+              }
+            }
+          } else if (type === 'checkerboard') {
+            for (let i = 0; i < len; i += 4) {
+              const r = data[i], g = data[i+1], b = data[i+2];
+              const diff = Math.max(Math.abs(r-g), Math.max(Math.abs(r-b), Math.abs(g-b)));
+              const isGrey = (r >= 165 && r <= 228 && diff <= 14);
+              const isWhite = (r >= 235 && g >= 235 && b >= 235 && diff <= 8);
+              if (isGrey || isWhite) {
+                data[i+3] = 0;
+              }
+            }
+          }
+          oCtx.putImageData(imgData, 0, 0);
+          imgEl.src = off.toDataURL('image/png');
+        } catch (e) {
+          if (type === 'black') imgEl.style.mixBlendMode = 'screen';
+          else if (type === 'white') imgEl.style.mixBlendMode = 'multiply';
+        }
+      };
+
+      if (imgEl.complete && imgEl.naturalWidth > 0) {
+        process();
+      } else {
+        imgEl.addEventListener('load', process, { once: true });
+      }
+    }
+
+    function initAvatars() {
+      makeElementTransparent(document.getElementById('avatarBuddhaImg'), 'black');
+      makeElementTransparent(document.getElementById('avatarVishnuImg'), 'checkerboard');
+      makeElementTransparent(document.getElementById('avatarShepherdImg'), 'white');
+    }
+
     // Initialize on Load
     window.addEventListener('DOMContentLoaded', () => {
       initQRCodes();
+      initAvatars();
     });
   </script>
 </body>

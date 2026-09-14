@@ -841,35 +841,102 @@
     const avatarVishnuImg = new Image();
     const avatarShepherdImg = new Image();
 
-    function loadAvatar(img, paths) {
+    // Client-side automatic background transparency filter
+    function makeTransparentCanvas(sourceImg, type) {
+      const off = document.createElement('canvas');
+      off.width = sourceImg.naturalWidth || sourceImg.width;
+      off.height = sourceImg.naturalHeight || sourceImg.height;
+      const oCtx = off.getContext('2d');
+      oCtx.drawImage(sourceImg, 0, 0);
+
+      try {
+        const imgData = oCtx.getImageData(0, 0, off.width, off.height);
+        const data = imgData.data;
+        const len = data.length;
+
+        if (type === 'white') {
+          // Shepherd: White background
+          for (let i = 0; i < len; i += 4) {
+            const r = data[i], g = data[i+1], b = data[i+2];
+            const diff = Math.max(Math.abs(r-g), Math.abs(r-b), Math.abs(g-b));
+            if (r > 220 && g > 220 && b > 220 && diff < 20) {
+              data[i+3] = 0;
+            }
+          }
+        } else if (type === 'black') {
+          // Buddha: Black background
+          for (let i = 0; i < len; i += 4) {
+            const r = data[i], g = data[i+1], b = data[i+2];
+            if (r < 38 && g < 38 && b < 38) {
+              data[i+3] = 0;
+            }
+          }
+        } else if (type === 'checkerboard') {
+          // Vishnu: Checkerboard background
+          for (let i = 0; i < len; i += 4) {
+            const r = data[i], g = data[i+1], b = data[i+2];
+            const diff = Math.max(Math.abs(r-g), Math.abs(r-b), Math.abs(g-b));
+            const isGrey = (r >= 170 && r <= 225 && diff <= 12);
+            const isWhite = (r >= 235 && g >= 235 && b >= 235 && diff <= 8);
+            if (isGrey || isWhite) {
+              data[i+3] = 0;
+            }
+          }
+        }
+        oCtx.putImageData(imgData, 0, 0);
+        return off;
+      } catch (e) {
+        return sourceImg;
+      }
+    }
+
+    const processedAvatars = {};
+
+    function loadAvatar(key, targetImg, paths, type) {
       let idx = 0;
       function tryNext() {
         if (idx >= paths.length) return;
-        img.src = paths[idx++];
+        targetImg.src = paths[idx++];
       }
-      img.onload = () => render9x10_9Poster();
-      img.onerror = tryNext;
+      targetImg.onload = () => {
+        // If image has extension -raw or is jpeg, automatically create transparent version
+        if (targetImg.src.includes('-raw') || targetImg.src.endsWith('.jpg') || targetImg.src.endsWith('.jpeg')) {
+          processedAvatars[key] = makeTransparentCanvas(targetImg, type);
+        } else {
+          processedAvatars[key] = targetImg;
+        }
+        render9x10_9Poster();
+      };
+      targetImg.onerror = tryNext;
       tryNext();
     }
 
-    loadAvatar(avatarBuddhaImg, [
+    loadAvatar('buddha', avatarBuddhaImg, [
       'assets/avatar-buddha.png',
-      '../public/assets/avatar-buddha.png',
+      'assets/avatar-buddha-raw.jpg',
+      '/assets/avatar-buddha.png',
+      '/assets/avatar-buddha-raw.jpg',
       'docs/assets/avatar-buddha.png',
-      '/assets/avatar-buddha.png'
-    ]);
-    loadAvatar(avatarVishnuImg, [
+      '../public/assets/avatar-buddha.png'
+    ], 'black');
+
+    loadAvatar('vishnu', avatarVishnuImg, [
       'assets/avatar-vishnu.png',
-      '../public/assets/avatar-vishnu.png',
+      'assets/avatar-vishnu-raw.jpg',
+      '/assets/avatar-vishnu.png',
+      '/assets/avatar-vishnu-raw.jpg',
       'docs/assets/avatar-vishnu.png',
-      '/assets/avatar-vishnu.png'
-    ]);
-    loadAvatar(avatarShepherdImg, [
+      '../public/assets/avatar-vishnu.png'
+    ], 'checkerboard');
+
+    loadAvatar('shepherd', avatarShepherdImg, [
       'assets/avatar-shepherd.png',
-      '../public/assets/avatar-shepherd.png',
+      'assets/avatar-shepherd-raw.png',
+      '/assets/avatar-shepherd.png',
+      '/assets/avatar-shepherd-raw.png',
       'docs/assets/avatar-shepherd.png',
-      '/assets/avatar-shepherd.png'
-    ]);
+      '../public/assets/avatar-shepherd.png'
+    ], 'white');
 
     function toggleAvatar(name, val) {
       if (name === 'buddha') showBuddhaAvatar = val;
@@ -889,8 +956,8 @@
 
     const shaawCandidates = [
       'assets/shaaw-center.jpg',
-      '../public/assets/shaaw-center.jpg',
-      '/assets/shaaw-center.jpg'
+      '/assets/shaaw-center.jpg',
+      '../public/assets/shaaw-center.jpg'
     ];
     let shaawIdx = 0;
     function tryLoadNextShaaw() {
@@ -1029,10 +1096,10 @@
 
     const posterCandidates = [
       'assets/original-poster.jpg',
+      '/assets/original-poster.jpg',
       '../public/assets/original-poster.jpg',
       '../assets/original-poster.jpg',
-      '../public/assets/poster-with-qrs.png',
-      '/assets/original-poster.jpg'
+      '../public/assets/poster-with-qrs.png'
     ];
 
     let candidateIdx = 0;
@@ -1392,8 +1459,6 @@
 
         } else {
           // MODE A: SEAMLESS IN-FRAME APERTURE FIT (RECOMMENDED)
-          // Photo clips cleanly inside the original poster Polaroid opening.
-          // Preserves 100% of the poster's original white card, washi tape, and doodle hearts!
           ctx.save();
           ctx.beginPath();
           drawRoundedRect(ctx, -apertureW / 2, -apertureH / 2, apertureW, apertureH, 3);
@@ -1446,7 +1511,6 @@
       });
 
       // --- FRAME 1: TOP-LEFT POLAROID (01. Memory) ---
-      // Shifted down & left to guarantee 100% unobstructed visibility of 'Happy Birthday Shaaaw!!!'
       const f1W = Math.round(drawW * 0.180);
       renderPolaroidSlot({
         cx: drawX + Math.round(drawW * 0.180),
@@ -1558,7 +1622,6 @@
 
         if (qrStyleMode === 'flush') {
           // FLUSH SCRAPBOOK FIT: Replaces only the dummy QR square!
-          // Preserves all surrounding torn paper edges, paperclips, and doodle hearts.
           ctx.fillStyle = '#ffffff';
           drawRoundedRect(ctx, -qs / 2, -qs / 2, qs, qs, 3);
           ctx.fill();
@@ -1643,9 +1706,10 @@
       // 🌟 HILARIOUS & CUTE AVATAR FIGURES (MEANINGFUL SCRAPBOOK POSITIONS)
       // ====================================================================
 
-      function drawAvatarSticker(img, cx, cy, width, rotDeg = 0, caption = '') {
-        if (!img || !img.complete || !img.naturalWidth) return;
-        const aspect = img.naturalHeight / img.naturalWidth;
+      function drawAvatarSticker(avatarAsset, cx, cy, width, rotDeg = 0, caption = '') {
+        const item = avatarAsset;
+        if (!item) return;
+        const aspect = (item.naturalHeight || item.height) / (item.naturalWidth || item.width);
         const height = Math.round(width * aspect);
 
         ctx.save();
@@ -1658,7 +1722,7 @@
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 10;
 
-        ctx.drawImage(img, -width / 2, -height / 2, width, height);
+        ctx.drawImage(item, -width / 2, -height / 2, width, height);
 
         ctx.shadowColor = 'transparent';
         ctx.shadowBlur = 0;
@@ -1699,7 +1763,8 @@
         const vinylCenterX = drawX + Math.round(drawW * 0.170);
         const vinylCenterY = drawY + Math.round(drawH * 0.805);
         const bWidth = Math.round(drawW * 0.180 * avatarScale);
-        drawAvatarSticker(avatarBuddhaImg, vinylCenterX, vinylCenterY, bWidth, -2, 'DJ Zen Beats 🧘‍♂️💿');
+        const buddhaAsset = processedAvatars['buddha'] || avatarBuddhaImg;
+        drawAvatarSticker(buddhaAsset, vinylCenterX, vinylCenterY, bWidth, -2, 'DJ Zen Beats 🧘‍♂️💿');
       }
 
       // 2. COSMIC VISHNU NANDHISH: Celestial Preserver guarding Shaaaw's central memory!
@@ -1707,7 +1772,8 @@
         const vishnuX = drawX + Math.round(drawW * 0.725);
         const vishnuY = drawY + Math.round(drawH * 0.375);
         const vWidth = Math.round(drawW * 0.165 * avatarScale);
-        drawAvatarSticker(avatarVishnuImg, vishnuX, vishnuY, vWidth, 2, 'Supreme Preserver ☸️✨');
+        const vishnuAsset = processedAvatars['vishnu'] || avatarVishnuImg;
+        drawAvatarSticker(vishnuAsset, vishnuX, vishnuY, vWidth, 2, 'Supreme Preserver ☸️✨');
       }
 
       // 3. WELCOMING SHEPHERD NANDHISH: Open-arms celebrating Queen Shaaaw at bottom
@@ -1715,7 +1781,8 @@
         const shepherdX = drawX + Math.round(drawW * 0.490);
         const shepherdY = drawY + Math.round(drawH * 0.835);
         const sWidth = Math.round(drawW * 0.165 * avatarScale);
-        drawAvatarSticker(avatarShepherdImg, shepherdX, shepherdY, sWidth, 0, 'Welcome to Shaaaw Day! 🕊️💖');
+        const shepherdAsset = processedAvatars['shepherd'] || avatarShepherdImg;
+        drawAvatarSticker(shepherdAsset, shepherdX, shepherdY, sWidth, 0, 'Welcome to Shaaaw Day! 🕊️💖');
       }
     }
 
@@ -1756,4 +1823,3 @@
   </script>
 </body>
 </html>
-
