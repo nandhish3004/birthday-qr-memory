@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shaaaw's 9×10.9 Birthday Scrapbook Studio 📸 (4K & 300 DPI)</title>
+  <title>Shaaaw's 9×10.9 Birthday Scrapbook Studio 📸 (100% Authentic 4K & 300 DPI)</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,10 +15,7 @@
       --primary-pink: #f472b6;
       --deep-pink: #db2777;
       --soft-rose: #fdf2f8;
-      --paper-cream: #faf5ee;
-      --paper-shadow: rgba(0, 0, 0, 0.18);
-      --aspect-w: 9;
-      --aspect-h: 10.9;
+      --kodak-gold: #ffb800;
     }
 
     * {
@@ -28,27 +25,27 @@
     }
 
     body {
-      background: radial-gradient(circle at 50% 15%, #23122e 0%, #0d0614 100%);
+      background: radial-gradient(circle at 50% 15%, #23122e 0%, #0c0714 100%);
       color: #f8fafc;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 16px 8px 60px;
+      padding: 16px 12px 60px;
     }
 
     /* Top Navigation & Action Bar */
     .top-bar {
       width: 100%;
-      max-width: 1400px;
+      max-width: 1480px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 12px 20px;
       background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 16px;
       margin-bottom: 20px;
       flex-wrap: wrap;
@@ -70,7 +67,7 @@
     }
 
     .paper-badge {
-      background: #ffb800;
+      background: var(--kodak-gold);
       color: #1a0f00;
       font-size: 0.75rem;
       font-weight: 800;
@@ -144,7 +141,7 @@
       align-items: flex-start;
     }
 
-    @media (max-width: 1200px) {
+    @media (max-width: 1240px) {
       .studio-layout {
         flex-direction: column;
         align-items: center;
@@ -167,663 +164,283 @@
       width: 100%;
       max-width: 900px;
       aspect-ratio: 9 / 10.9;
-      background: #ebd8c8 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.12'/%3E%3C/svg%3E");
+      background: #fbf6ee;
       border-radius: 4px;
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.15);
       overflow: hidden;
       user-select: none;
     }
 
-    /* Background Collage Texture Layers */
-    .poster-bg-texture {
+    /* Master Photographic Collage Base */
+    #posterBaseImage {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      pointer-events: none;
-      background: 
-        radial-gradient(circle at 50% 35%, rgba(255, 245, 240, 0.7) 0%, rgba(235, 205, 195, 0.5) 50%, rgba(185, 145, 135, 0.65) 100%),
-        repeating-linear-gradient(45deg, rgba(210, 160, 175, 0.08) 0, rgba(210, 160, 175, 0.08) 15px, transparent 15px, transparent 30px);
-      z-index: 1;
-    }
-
-    .poster-vintage-wash {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      box-shadow: inset 0 0 100px rgba(100, 60, 40, 0.35), inset 0 0 30px rgba(80, 40, 30, 0.4);
-      z-index: 2;
-    }
-
-    /* Paper Scraps and Collage Overlays */
-    .scrap-layer {
-      position: absolute;
-      pointer-events: none;
-      z-index: 3;
-    }
-
-    /* Top Banner: Happy Birthday Shaaaw!!! */
-    .top-banner-scrap {
-      position: absolute;
-      top: 3.2%;
-      left: 50%;
-      transform: translateX(-50%) rotate(-1.5deg);
-      width: 68%;
-      background: linear-gradient(135deg, #fbcfe8, #f472b6);
-      padding: 18px 24px 22px;
-      box-shadow: 0 12px 28px rgba(180, 50, 100, 0.3), 0 2px 6px rgba(0,0,0,0.15);
-      clip-path: polygon(1% 4%, 8% 1%, 17% 5%, 26% 2%, 35% 6%, 45% 1%, 55% 5%, 65% 2%, 75% 6%, 86% 2%, 94% 6%, 99% 3%, 98% 92%, 92% 98%, 82% 94%, 73% 99%, 62% 95%, 52% 99%, 41% 94%, 32% 98%, 21% 94%, 11% 98%, 2% 93%);
-      text-align: center;
-      z-index: 15;
-    }
-
-    .top-banner-scrap::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(0deg, rgba(255,255,255,0.12) 0, rgba(255,255,255,0.12) 2px, transparent 2px, transparent 6px);
-      pointer-events: none;
-    }
-
-    .banner-text-wrap {
-      position: relative;
-    }
-
-    .banner-crown {
-      font-size: 1.6rem;
-      display: inline-block;
-      transform: rotate(-12deg) translateY(-2px);
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-    }
-
-    .banner-title {
-      font-family: 'Patrick Hand', 'Caveat', cursive;
-      font-size: 3.2rem;
-      font-weight: 700;
-      color: #3b0724;
-      line-height: 1.05;
-      text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.7), 4px 4px 10px rgba(219, 39, 119, 0.3);
-      letter-spacing: 0.5px;
-    }
-
-    .banner-title span.name {
+      object-fit: cover;
       display: block;
-      font-size: 3.6rem;
-      color: #831843;
-      margin-top: -4px;
-      text-shadow: 3px 3px 0px #fdf2f8, 5px 5px 12px rgba(190, 24, 93, 0.4);
-    }
-
-    /* Angel / Stitch Peeking Mascot */
-    .angel-mascot {
-      position: absolute;
-      top: -24px;
-      right: -26px;
-      width: 110px;
-      height: 110px;
-      z-index: 25;
-      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
-      transform: rotate(10deg);
-      pointer-events: none;
-    }
-
-    /* Ribbon Bow */
-    .satin-bow {
-      position: absolute;
-      top: -14px;
-      left: -18px;
-      width: 60px;
-      height: 60px;
-      z-index: 25;
-      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
-      transform: rotate(-15deg);
+      z-index: 1;
       pointer-events: none;
     }
 
     /* ========================================================
-       POLAROID PHOTO FRAMES (CENTER + 6 SURROUNDING = 7 TOTAL)
+       7 POLAROID PHOTO APERTURES (CLIPPED PRECISELY TO FRAMES)
        ======================================================== */
-    .polaroid-frame {
+    .polaroid-aperture {
       position: absolute;
-      background: #fdfaf6;
-      padding: 10px 10px 38px 10px;
-      border-radius: 3px;
-      box-shadow: 0 14px 32px rgba(40, 20, 25, 0.28), 0 2px 6px rgba(0,0,0,0.12);
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+      transform-origin: center center;
+      overflow: hidden;
+      border-radius: 2px;
+      background: #c8c8c8;
       cursor: pointer;
       z-index: 10;
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.25);
+      transition: box-shadow 0.2s ease;
     }
 
-    .polaroid-frame:hover {
-      transform: scale(1.03) !important;
-      box-shadow: 0 20px 45px rgba(225, 29, 72, 0.35);
-      z-index: 30 !important;
+    .polaroid-aperture:hover {
+      box-shadow: inset 0 0 0 2px #f472b6, 0 0 15px rgba(244, 114, 182, 0.6);
+      z-index: 25;
     }
 
-    .polaroid-frame::after {
-      content: '';
+    .polaroid-aperture.outline-debug {
+      outline: 2px dashed #e11d48 !important;
+    }
+
+    .aperture-img {
       position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 60%, rgba(0,0,0,0.03) 100%);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
       pointer-events: none;
+      transform-origin: center center;
     }
 
-    .photo-window {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      background: #e2d9d0;
-      overflow: hidden;
-      border: 1px solid rgba(0, 0, 0, 0.08);
-      border-radius: 2px;
+    /* Exact Aperture Placements Over Master Reference */
+    /* 1. Center Hero Frame (Shaaaw) */
+    #apertureCenter {
+      top: 23.3%;
+      left: 33.8%;
+      width: 33.4%;
+      height: 20.2%;
+      transform: rotate(-2.6deg);
+      border: 1px solid rgba(0, 0, 0, 0.15);
+    }
+
+    /* 2. Top-Left Frame */
+    #aperture1 {
+      top: 12.3%;
+      left: 8.8%;
+      width: 21.0%;
+      height: 12.6%;
+      transform: rotate(4.6deg);
+    }
+
+    /* 3. Top-Right Frame */
+    #aperture2 {
+      top: 15.2%;
+      left: 69.4%;
+      width: 20.8%;
+      height: 12.4%;
+      transform: rotate(-6.2deg);
+    }
+
+    /* 4. Mid-Left Frame */
+    #aperture3 {
+      top: 36.6%;
+      left: 5.6%;
+      width: 23.4%;
+      height: 13.9%;
+      transform: rotate(-2.2deg);
+    }
+
+    /* 5. Mid-Right Frame */
+    #aperture4 {
+      top: 42.1%;
+      left: 73.2%;
+      width: 21.8%;
+      height: 13.0%;
+      transform: rotate(2.5deg);
+    }
+
+    /* 6. Bottom-Left Frame */
+    #aperture5 {
+      top: 56.6%;
+      left: 25.4%;
+      width: 21.4%;
+      height: 12.8%;
+      transform: rotate(-4.0deg);
+    }
+
+    /* 7. Bottom-Right Frame */
+    #aperture6 {
+      top: 56.6%;
+      left: 54.0%;
+      width: 21.5%;
+      height: 12.8%;
+      transform: rotate(6.2deg);
+    }
+
+    /* ========================================================
+       8 SCANNABLE QR CODE SLOTS (FLUSH COMPOSITED)
+       ======================================================== */
+    .qr-slot-wrap {
+      position: absolute;
+      transform-origin: center center;
+      background: #ffffff;
+      padding: 3px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22), 0 1px 3px rgba(0, 0, 0, 0.12);
+      border-radius: 3px;
+      z-index: 15;
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .photo-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.1s ease;
-    }
-
-    .polaroid-caption {
-      position: absolute;
-      bottom: 7px;
-      left: 10px;
-      right: 28px;
-      font-family: 'Homemade Apple', 'Caveat', cursive;
-      font-size: 0.95rem;
-      color: #3f2a33;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      outline: none;
-    }
-
-    .polaroid-doodle-heart {
-      position: absolute;
-      bottom: 9px;
-      right: 10px;
-      font-size: 1.1rem;
-      color: #be185d;
-      opacity: 0.85;
-      pointer-events: none;
-    }
-
-    /* Washi Tapes */
-    .washi-tape {
-      position: absolute;
-      height: 18px;
-      background: rgba(255, 220, 230, 0.75);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.12);
-      z-index: 12;
-      pointer-events: none;
-    }
-
-    .washi-pink-check {
-      background-color: #fbcfe8;
-      background-image: repeating-linear-gradient(45deg, #f472b6 0, #f472b6 4px, transparent 4px, transparent 8px);
-      opacity: 0.88;
-    }
-
-    .washi-translucent {
-      background: rgba(255, 255, 255, 0.65);
-      border-left: 2px dashed rgba(0,0,0,0.15);
-      border-right: 2px dashed rgba(0,0,0,0.15);
-    }
-
-    /* Specific Polaroid Geometry */
-    /* 1. Center Hero Frame (Shaaaw) */
-    #frameCenter {
-      top: 25.5%;
-      left: 31%;
-      width: 38%;
-      padding-bottom: 46px;
-      transform: rotate(-1.8deg);
-      z-index: 20;
-      border: 1px solid rgba(244, 114, 182, 0.3);
-      box-shadow: 0 20px 50px rgba(60, 20, 35, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.6);
-    }
-    #frameCenter .polaroid-caption {
-      font-size: 1.25rem;
-      color: #831843;
-      font-weight: 700;
-      bottom: 11px;
-    }
-    #frameCenter .washi-tape {
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%) rotate(1deg);
-      width: 70px;
-      height: 22px;
-    }
-
-    /* 2. Top-Left Frame */
-    #frame1 {
-      top: 10.5%;
-      left: 6.5%;
-      width: 25%;
-      transform: rotate(-5.5deg);
-    }
-    #frame1 .washi-tape {
-      top: -8px;
-      left: 20%;
-      transform: rotate(-8deg);
-      width: 50px;
-    }
-
-    /* 3. Top-Right Frame */
-    #frame2 {
-      top: 13.5%;
-      right: 6.5%;
-      width: 25%;
-      transform: rotate(4.2deg);
-    }
-    #frame2 .washi-tape {
-      top: -8px;
-      right: 20%;
-      transform: rotate(6deg);
-      width: 50px;
-    }
-
-    /* 4. Mid-Left Frame */
-    #frame3 {
-      top: 34.5%;
-      left: 3.5%;
-      width: 26.5%;
-      transform: rotate(3deg);
-    }
-    #frame3 .washi-tape {
-      top: -8px;
-      right: 15%;
-      transform: rotate(4deg);
-      width: 52px;
-    }
-
-    /* 5. Mid-Right Frame */
-    #frame4 {
-      top: 39.5%;
-      right: 4%;
-      width: 26%;
-      transform: rotate(-4.2deg);
-    }
-    #frame4 .washi-tape {
-      top: -8px;
-      left: 25%;
-      transform: rotate(-5deg);
-      width: 50px;
-    }
-
-    /* 6. Lower-Left Frame */
-    #frame5 {
-      top: 54.5%;
-      left: 22.5%;
-      width: 26%;
-      transform: rotate(-3deg);
-    }
-    #frame5 .washi-tape {
-      top: -9px;
-      left: 50%;
-      transform: translateX(-50%) rotate(-1deg);
-      width: 60px;
-    }
-
-    /* 7. Lower-Right Frame */
-    #frame6 {
-      top: 54.5%;
-      right: 22.5%;
-      width: 26%;
-      transform: rotate(3.2deg);
-    }
-    #frame6 .washi-tape {
-      top: -9px;
-      left: 50%;
-      transform: translateX(-50%) rotate(2deg);
-      width: 60px;
-    }
-
-    /* ========================================================
-       8 SCANNABLE QR CODE SLOTS (3 ON LEFT + 5 ON RIGHT)
-       ======================================================== */
-    .qr-stamp {
-      position: absolute;
-      background: #fff;
-      padding: 6px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22), 0 2px 4px rgba(0, 0, 0, 0.1);
-      border-radius: 4px;
-      z-index: 18;
-      cursor: pointer;
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .qr-stamp:hover {
-      transform: scale(1.15) !important;
-      z-index: 40 !important;
-      box-shadow: 0 12px 30px rgba(225, 29, 72, 0.4);
+    .qr-slot-wrap:hover {
+      transform: scale(1.18) !important;
+      z-index: 35;
+      box-shadow: 0 10px 25px rgba(225, 29, 72, 0.45);
     }
 
     .qr-canvas {
       display: block;
       width: 100%;
       height: 100%;
+      border-radius: 2px;
     }
 
-    .qr-tag {
-      position: absolute;
-      bottom: -14px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #fdf2f8;
-      color: #9d174d;
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 1px 6px;
-      border-radius: 999px;
-      white-space: nowrap;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      border: 1px solid #fbcfe8;
-    }
-
-    /* Exact placements of the 8 QRs */
-    /* QR 1: Top-Left flank */
+    /* Exact Coordinates of 8 QRs */
+    /* Left Flank (3 QRs) */
     #qrSlot1 {
-      top: 4.2%;
-      left: 4.2%;
-      width: 11.5%;
-      transform: rotate(-3deg);
+      top: 4.4%;
+      left: 4.5%;
+      width: 10.6%;
+      aspect-ratio: 1 / 1;
+      transform: rotate(0deg);
     }
 
-    /* QR 2: Mid-Left flank */
     #qrSlot2 {
-      top: 28.5%;
-      left: 4.8%;
-      width: 11.8%;
-      transform: rotate(2.5deg);
-    }
-
-    /* QR 3: Lower-Left flank (above cassette) */
-    #qrSlot3 {
-      top: 56.5%;
-      left: 4.2%;
-      width: 11.8%;
-      transform: rotate(-2deg);
-    }
-
-    /* QR 4: Top-Right flank */
-    #qrSlot4 {
-      top: 9.2%;
-      right: 3.5%;
-      width: 11.5%;
-      transform: rotate(2deg);
-    }
-
-    /* QR 5: Upper-Mid-Right flank */
-    #qrSlot5 {
-      top: 29.5%;
-      right: 3.2%;
-      width: 11.5%;
+      top: 29.3%;
+      left: 4.0%;
+      width: 10.4%;
+      aspect-ratio: 1 / 1;
       transform: rotate(-1.5deg);
     }
 
-    /* QR 6: Mid-Right flank (below mid-right polaroid) */
+    #qrSlot3 {
+      top: 58.1%;
+      left: 3.6%;
+      width: 10.4%;
+      aspect-ratio: 1 / 1;
+      transform: rotate(0deg);
+    }
+
+    /* Right Flank (5 QRs) */
+    #qrSlot4 {
+      top: 9.3%;
+      left: 88.5%;
+      width: 9.8%;
+      aspect-ratio: 1 / 1;
+      transform: rotate(0deg);
+    }
+
+    #qrSlot5 {
+      top: 29.5%;
+      left: 88.5%;
+      width: 9.8%;
+      aspect-ratio: 1 / 1;
+      transform: rotate(-1.0deg);
+    }
+
     #qrSlot6 {
-      top: 57.5%;
-      right: 4.2%;
-      width: 11.8%;
-      transform: rotate(3deg);
+      top: 58.2%;
+      left: 86.8%;
+      width: 9.8%;
+      aspect-ratio: 1 / 1;
+      transform: rotate(1.0deg);
     }
 
-    /* QR 7: Lower-Right flank */
     #qrSlot7 {
-      top: 70.8%;
-      right: 3.8%;
-      width: 11.8%;
-      transform: rotate(-2.5deg);
+      top: 71.3%;
+      left: 85.9%;
+      width: 9.8%;
+      aspect-ratio: 1 / 1;
+      transform: rotate(-0.8deg);
     }
 
-    /* QR 8: Bottom-Right corner */
     #qrSlot8 {
-      bottom: 4.2%;
-      right: 4.5%;
-      width: 11.8%;
-      transform: rotate(2deg);
+      top: 85.9%;
+      left: 84.4%;
+      width: 9.8%;
+      aspect-ratio: 1 / 1;
+      transform: rotate(0.8deg);
     }
 
     /* ========================================================
-       SCRAPBOOK KEEPSAKES & DETAILS
+       LIVE-EDITABLE TEXTBOXES OVER NOTEPAD & PINK CARD
        ======================================================== */
-    /* Vinyl Record */
-    .vinyl-record {
+    /* Lined Yellow Notepad Paper */
+    .notepad-text-overlay {
       position: absolute;
-      bottom: 3.5%;
-      left: 3%;
-      width: 25%;
-      aspect-ratio: 1 / 1;
-      border-radius: 50%;
-      background: radial-gradient(circle, #2d2a2e 0%, #151416 55%, #050406 100%);
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.08);
-      z-index: 14;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .vinyl-grooves {
-      position: absolute;
-      inset: 6%;
-      border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      box-shadow: 
-        inset 0 0 0 8px rgba(255, 255, 255, 0.03),
-        inset 0 0 0 18px rgba(255, 255, 255, 0.04),
-        inset 0 0 0 28px rgba(255, 255, 255, 0.03),
-        inset 0 0 0 38px rgba(255, 255, 255, 0.03);
-      pointer-events: none;
-    }
-
-    .vinyl-label {
-      width: 44%;
-      aspect-ratio: 1 / 1;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #fbcfe8, #f472b6);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-    }
-
-    .vinyl-spindle {
-      width: 14px;
-      height: 14px;
-      background: #000;
-      border-radius: 50%;
-      border: 2px solid #fff;
-    }
-
-    .vinyl-title {
-      font-family: 'Caveat', cursive;
-      font-size: 0.8rem;
-      color: #4a0429;
-      font-weight: 700;
-      margin-top: 4px;
-    }
-
-    /* Vintage Audio Cassette Tape */
-    .cassette-tape {
-      position: absolute;
-      bottom: 23.5%;
-      left: 3%;
-      width: 22%;
-      aspect-ratio: 1.58 / 1;
-      background: #334155;
-      border-radius: 6px;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
-      border: 2px solid #475569;
-      z-index: 12;
-      transform: rotate(3.5deg);
-      padding: 6px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .cassette-label {
-      background: #fdf4ff;
-      border-radius: 3px;
-      padding: 4px 8px;
-      text-align: center;
-      border: 1px solid #e9d5ff;
-    }
-
-    .cassette-text {
-      font-family: 'Patrick Hand', cursive;
-      font-size: 0.78rem;
-      color: #701a75;
-      font-weight: 700;
-    }
-
-    .cassette-window {
-      background: #1e293b;
-      height: 24px;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      padding: 0 10px;
-    }
-
-    .cassette-reel {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #fff;
-      border: 2px dashed #0f172a;
-    }
-
-    /* Editable Lined Yellow Notepad Paper */
-    .notepad-scrap {
-      position: absolute;
-      bottom: 12%;
-      left: 32%;
-      width: 32%;
-      background: #fffbeb;
-      padding: 16px 14px 18px 24px;
-      box-shadow: 0 12px 28px rgba(60, 40, 20, 0.25);
-      border-radius: 2px;
-      transform: rotate(1.2deg);
-      z-index: 15;
-      background-image: 
-        linear-gradient(90deg, transparent 20px, #fca5a5 20px, #fca5a5 22px, transparent 22px),
-        repeating-linear-gradient(0deg, transparent 0, transparent 18px, #bfdbfe 18px, #bfdbfe 19px);
-      background-size: 100% 100%, 100% 19px;
-      border: 1px solid #fef3c7;
-    }
-
-    .notepad-holes {
-      position: absolute;
-      left: 8px;
-      top: 12px;
-      bottom: 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      pointer-events: none;
-    }
-
-    .notepad-hole {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #5b4231;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
-    }
-
-    .notepad-text {
+      bottom: 12.2%;
+      left: 34.5%;
+      width: 25.5%;
+      height: 12.5%;
       font-family: 'Caveat', cursive;
       font-size: 1.15rem;
-      line-height: 19px;
+      line-height: 1.32;
       color: #1e1b4b;
-      min-height: 95px;
+      font-weight: 600;
       outline: none;
-      word-break: break-word;
+      overflow: hidden;
+      transform: rotate(1.2deg);
+      z-index: 18;
+      cursor: text;
+      padding: 4px;
+      border-radius: 4px;
+      transition: background 0.2s ease;
     }
 
-    /* Editable Pink Torn Card Note */
-    .pink-card-scrap {
+    .notepad-text-overlay:hover, .notepad-text-overlay:focus {
+      background: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 0 1px rgba(225, 29, 72, 0.3);
+    }
+
+    /* Pink Deckled Card Note */
+    .pink-card-text-overlay {
       position: absolute;
-      bottom: 16%;
-      right: 17%;
-      width: 25%;
-      background: #fbcfe8;
-      padding: 14px;
-      box-shadow: 0 12px 28px rgba(180, 50, 100, 0.22);
-      transform: rotate(-3.5deg);
-      z-index: 15;
-      clip-path: polygon(1% 2%, 12% 0, 25% 3%, 38% 0, 52% 2%, 67% 0, 80% 3%, 92% 1%, 99% 3%, 98% 97%, 88% 99%, 74% 96%, 60% 99%, 45% 96%, 32% 99%, 18% 96%, 5% 99%, 0% 96%);
-    }
-
-    .pink-card-text {
+      bottom: 16.5%;
+      left: 62.0%;
+      width: 21.0%;
+      height: 9.5%;
       font-family: 'Caveat', cursive;
-      font-size: 1.1rem;
-      line-height: 1.35;
+      font-size: 1.12rem;
+      line-height: 1.3;
       color: #831843;
-      min-height: 70px;
+      font-weight: 700;
       outline: none;
+      overflow: hidden;
+      transform: rotate(-3.5deg);
+      z-index: 18;
+      cursor: text;
+      padding: 4px;
+      border-radius: 4px;
+      transition: background 0.2s ease;
     }
 
-    /* Decorative Film Strips & Flowers */
-    .film-strip {
-      position: absolute;
-      bottom: 3.5%;
-      left: 45%;
-      width: 26%;
-      height: 38px;
-      background: #18181b;
-      border-radius: 2px;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      padding: 0 6px;
-      transform: rotate(-1.5deg);
-      box-shadow: 0 8px 18px rgba(0,0,0,0.35);
-      z-index: 11;
-    }
-
-    .film-frame {
-      width: 24%;
-      height: 24px;
-      background: #3f3f46;
-      border-radius: 1px;
-    }
-
-    .butterfly-sticker {
-      position: absolute;
-      font-size: 2.2rem;
-      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.25));
-      pointer-events: none;
-      z-index: 22;
-    }
-
-    .flower-sprig {
-      position: absolute;
-      pointer-events: none;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-      z-index: 9;
+    .pink-card-text-overlay:hover, .pink-card-text-overlay:focus {
+      background: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 0 1px rgba(225, 29, 72, 0.3);
     }
 
     /* Right Control Sidebar */
     .studio-sidebar {
-      width: 380px;
+      width: 390px;
       background: rgba(18, 11, 28, 0.85);
       backdrop-filter: blur(16px);
       border: 1px solid rgba(244, 114, 182, 0.2);
@@ -852,63 +469,70 @@
       margin-bottom: 12px;
     }
 
-    .photo-slots-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-height: 380px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-
     .photo-slot-row {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
       background: rgba(255, 255, 255, 0.05);
-      padding: 8px 12px;
+      padding: 10px 12px;
       border-radius: 10px;
       font-size: 0.84rem;
       gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .slot-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .slot-label {
-      font-weight: 600;
+      font-weight: 700;
       color: #e2e8f0;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .slot-actions {
+    .slider-row {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      font-size: 0.76rem;
+      color: #94a3b8;
+    }
+
+    .slider-row input[type=range] {
+      flex: 1;
+      accent-color: #f472b6;
+      cursor: pointer;
     }
 
     .mini-upload-btn {
       background: rgba(244, 114, 182, 0.2);
       color: #fbcfe8;
-      border: 1px solid rgba(244, 114, 182, 0.3);
+      border: 1px solid rgba(244, 114, 182, 0.35);
       padding: 4px 10px;
       border-radius: 6px;
       font-size: 0.78rem;
       cursor: pointer;
+      font-weight: 600;
     }
     .mini-upload-btn:hover {
       background: rgba(244, 114, 182, 0.4);
+      color: #fff;
     }
 
     .export-card {
-      background: linear-gradient(135deg, rgba(225, 29, 72, 0.15), rgba(251, 191, 36, 0.15));
-      border: 1px solid rgba(244, 114, 182, 0.3);
+      background: linear-gradient(135deg, rgba(225, 29, 72, 0.18), rgba(251, 191, 36, 0.15));
+      border: 1px solid rgba(244, 114, 182, 0.35);
       border-radius: 14px;
       padding: 18px;
       text-align: center;
     }
 
     .export-card h3 {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: #fff;
       margin-bottom: 6px;
@@ -927,7 +551,7 @@
         background: #fff !important;
         padding: 0 !important;
       }
-      .top-bar, .studio-sidebar, .hidden-print {
+      .top-bar, .studio-sidebar {
         display: none !important;
       }
       .studio-layout {
@@ -941,7 +565,7 @@
         box-shadow: none !important;
         border: none !important;
         width: 100vw !important;
-        height: 121.1vw !important; /* 10.9 / 9 */
+        height: 121.1vw !important;
       }
       @page {
         size: 9in 10.9in;
@@ -957,268 +581,136 @@
     <div class="brand">
       <span style="font-size: 1.5rem;">📸</span>
       <div>
-        <div class="brand-title">Shaaaw's 9×10.9 Scrapbook Studio</div>
-        <div style="font-size: 0.78rem; color: #94a3b8;">High-Resolution Kodak Print & Scrapbook Engine</div>
+        <div class="brand-title">Shaaaw's 9×10.9 Birthday Scrapbook Studio</div>
+        <div style="font-size: 0.78rem; color: #94a3b8;">100% Authentic Photographic Collage & Ultra-HD Canvas Compositor</div>
       </div>
-      <span class="paper-badge">9" × 10.9" Photo Paper</span>
+      <span class="paper-badge">9" × 10.9" Kodak Paper</span>
     </div>
 
     <div class="top-actions">
       <a href="index.html" class="btn btn-secondary">🏠 Hub</a>
-      <a href="kodak-print.html" class="btn btn-secondary">🖨️ Classic Print Tool</a>
-      <button class="btn btn-primary" onclick="exportPoster(1)">
-        <span>💾 Download 300 DPI (2700×3270)</span>
+      <button class="btn btn-secondary" onclick="toggleApertureOutlines()">
+        <span id="outlineToggleText">🔲 Toggle Frame Outlines</span>
       </button>
-      <button class="btn btn-gold" onclick="exportPoster(1.422)">
+      <button class="btn btn-primary" onclick="exportMasterPoster(1)">
+        <span>📥 Download 300 DPI (2700×3270)</span>
+      </button>
+      <button class="btn btn-gold" onclick="exportMasterPoster(1.422)">
         <span>✨ Download 4K Ultra-HD (3840×4650)</span>
       </button>
     </div>
   </div>
 
-  <!-- Studio Layout -->
+  <!-- Main Workspace Layout -->
   <div class="studio-layout">
-    
+
     <!-- Poster Viewport -->
     <div class="poster-viewport">
       <div id="masterPoster">
 
-        <!-- Background Textures -->
-        <div class="poster-bg-texture"></div>
-        <div class="poster-vintage-wash"></div>
-
-        <!-- Top Banner: Happy Birthday Shaaaw!!! -->
-        <div class="top-banner-scrap">
-          <div class="banner-text-wrap">
-            <span class="banner-crown">👑</span>
-            <div class="banner-title" contenteditable="true" id="bannerTitle">
-              Happy Birthday
-              <span class="name">Shaaaw!!!</span>
-            </div>
-          </div>
-          <!-- Satin Ribbon Bow -->
-          <svg class="satin-bow" viewBox="0 0 100 100">
-            <path d="M50 45 C30 20, 10 35, 30 55 C40 65, 48 52, 50 50 C52 52, 60 65, 70 55 C90 35, 70 20, 50 45 Z" fill="#f43f5e" />
-            <path d="M48 50 C38 65, 25 80, 20 95 C30 92, 42 75, 48 55 Z" fill="#e11d48" />
-            <path d="M52 50 C62 65, 75 80, 80 95 C70 92, 58 75, 52 55 Z" fill="#e11d48" />
-            <circle cx="50" cy="50" r="7" fill="#be123c" />
-          </svg>
-          <!-- Pink Angel Mascot -->
-          <svg class="angel-mascot" viewBox="0 0 120 120">
-            <!-- Ears -->
-            <ellipse cx="25" cy="40" rx="14" ry="32" fill="#f472b6" transform="rotate(-30 25 40)"/>
-            <ellipse cx="25" cy="40" rx="9" ry="24" fill="#fb7185" transform="rotate(-30 25 40)"/>
-            <ellipse cx="95" cy="40" rx="14" ry="32" fill="#f472b6" transform="rotate(30 95 40)"/>
-            <ellipse cx="95" cy="40" rx="9" ry="24" fill="#fb7185" transform="rotate(30 95 40)"/>
-            <!-- Antennae -->
-            <path d="M48 30 Q38 10 32 15" stroke="#db2777" stroke-width="4" fill="none" stroke-linecap="round"/>
-            <path d="M72 30 Q82 10 88 15" stroke="#db2777" stroke-width="4" fill="none" stroke-linecap="round"/>
-            <!-- Head -->
-            <circle cx="60" cy="65" r="32" fill="#f472b6"/>
-            <!-- Eyes -->
-            <ellipse cx="48" cy="62" rx="7" ry="10" fill="#4338ca"/>
-            <circle cx="46" cy="59" r="3" fill="#fff"/>
-            <ellipse cx="72" cy="62" rx="7" ry="10" fill="#4338ca"/>
-            <circle cx="70" cy="59" r="3" fill="#fff"/>
-            <!-- Nose & Smile -->
-            <ellipse cx="60" cy="70" rx="4" ry="3" fill="#9d174d"/>
-            <path d="M54 75 Q60 80 66 75" stroke="#9d174d" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            <!-- Cute Blush -->
-            <ellipse cx="42" cy="72" rx="5" ry="3" fill="#f43f5e" opacity="0.6"/>
-            <ellipse cx="78" cy="72" rx="5" ry="3" fill="#f43f5e" opacity="0.6"/>
-          </svg>
-        </div>
+        <!-- Master Photographic Collage Background (The Exact Reference Artwork!) -->
+        <img id="posterBaseImage" src="assets/original-poster.jpg" alt="Shaaaw Scrapbook Poster" onerror="this.src='../public/assets/original-poster.jpg'">
 
         <!-- ==============================================
-             7 POLAROID PHOTO FRAMES
+             7 POLAROID PHOTO APERTURES (CLIPPED PRECISELY)
              ============================================== -->
-        
+
         <!-- 1. Center Hero Frame: Shaaaw -->
-        <div class="polaroid-frame" id="frameCenter" onclick="triggerUpload('inputCenter')">
-          <div class="washi-tape washi-pink-check"></div>
-          <div class="photo-window">
-            <img class="photo-img" id="imgCenter" src="assets/shaaw-center.jpg" alt="Shaaaw Center Photo" onerror="this.src='../public/assets/shaaw-center.jpg'">
-          </div>
-          <div class="polaroid-caption" contenteditable="true" onclick="event.stopPropagation()">Our Prettiest Girl ♡ Shaaaw</div>
-          <div class="polaroid-doodle-heart">💖</div>
+        <div class="polaroid-aperture" id="apertureCenter" onclick="triggerUpload('inputCenter')" title="Center Photo: Shaaaw (Click to Change)">
+          <img class="aperture-img" id="imgCenter" src="assets/shaaw-center.jpg" alt="Shaaaw Center Photo" onerror="this.src='../public/assets/shaaw-center.jpg'">
         </div>
 
         <!-- 2. Top-Left Frame -->
-        <div class="polaroid-frame" id="frame1" onclick="triggerUpload('input1')">
-          <div class="washi-tape washi-translucent"></div>
-          <div class="photo-window">
-            <img class="photo-img" id="img1" src="assets/shaaw-center.jpg" alt="Photo 1" style="filter: hue-rotate(15deg) contrast(1.05);">
-          </div>
-          <div class="polaroid-caption" contenteditable="true" onclick="event.stopPropagation()">Sweet Smiles ✨</div>
-          <div class="polaroid-doodle-heart">♡</div>
+        <div class="polaroid-aperture" id="aperture1" onclick="triggerUpload('input1')" title="Polaroid 1 (Top-Left) - Click to Upload">
+          <img class="aperture-img" id="img1" src="assets/shaaw-center.jpg" alt="Photo 1" style="filter: hue-rotate(20deg) contrast(1.05);">
         </div>
 
         <!-- 3. Top-Right Frame -->
-        <div class="polaroid-frame" id="frame2" onclick="triggerUpload('input2')">
-          <div class="washi-tape washi-translucent"></div>
-          <div class="photo-window">
-            <img class="photo-img" id="img2" src="assets/shaaw-center.jpg" alt="Photo 2" style="filter: hue-rotate(-15deg) saturate(1.1);">
-          </div>
-          <div class="polaroid-caption" contenteditable="true" onclick="event.stopPropagation()">Forever Besties ♡</div>
-          <div class="polaroid-doodle-heart">♡</div>
+        <div class="polaroid-aperture" id="aperture2" onclick="triggerUpload('input2')" title="Polaroid 2 (Top-Right) - Click to Upload">
+          <img class="aperture-img" id="img2" src="assets/shaaw-center.jpg" alt="Photo 2" style="filter: hue-rotate(-20deg) saturate(1.1);">
         </div>
 
         <!-- 4. Mid-Left Frame -->
-        <div class="polaroid-frame" id="frame3" onclick="triggerUpload('input3')">
-          <div class="washi-tape washi-translucent"></div>
-          <div class="photo-window">
-            <img class="photo-img" id="img3" src="assets/shaaw-center.jpg" alt="Photo 3" style="filter: sepia(0.15) brightness(1.05);">
-          </div>
-          <div class="polaroid-caption" contenteditable="true" onclick="event.stopPropagation()">Cutie Pie 🌸</div>
-          <div class="polaroid-doodle-heart">♡</div>
-          <!-- Butterfly sticker -->
-          <div class="butterfly-sticker" style="bottom: -15px; left: -15px;">🦋</div>
+        <div class="polaroid-aperture" id="aperture3" onclick="triggerUpload('input3')" title="Polaroid 3 (Mid-Left) - Click to Upload">
+          <img class="aperture-img" id="img3" src="assets/shaaw-center.jpg" alt="Photo 3" style="filter: sepia(0.18) brightness(1.05);">
         </div>
 
         <!-- 5. Mid-Right Frame -->
-        <div class="polaroid-frame" id="frame4" onclick="triggerUpload('input4')">
-          <div class="washi-tape washi-translucent"></div>
-          <div class="photo-window">
-            <img class="photo-img" id="img4" src="assets/shaaw-center.jpg" alt="Photo 4" style="filter: contrast(1.1) brightness(0.98);">
-          </div>
-          <div class="polaroid-caption" contenteditable="true" onclick="event.stopPropagation()">Pure Joy 💖</div>
-          <div class="polaroid-doodle-heart">♡</div>
+        <div class="polaroid-aperture" id="aperture4" onclick="triggerUpload('input4')" title="Polaroid 4 (Mid-Right) - Click to Upload">
+          <img class="aperture-img" id="img4" src="assets/shaaw-center.jpg" alt="Photo 4" style="filter: contrast(1.1) brightness(0.98);">
         </div>
 
         <!-- 6. Bottom-Left Frame -->
-        <div class="polaroid-frame" id="frame5" onclick="triggerUpload('input5')">
-          <div class="washi-tape washi-pink-check"></div>
-          <div class="photo-window">
-            <img class="photo-img" id="img5" src="assets/shaaw-center.jpg" alt="Photo 5" style="filter: saturate(1.15);">
-          </div>
-          <div class="polaroid-caption" contenteditable="true" onclick="event.stopPropagation()">Golden Memories 🌷</div>
-          <div class="polaroid-doodle-heart">♡</div>
+        <div class="polaroid-aperture" id="aperture5" onclick="triggerUpload('input5')" title="Polaroid 5 (Bottom-Left) - Click to Upload">
+          <img class="aperture-img" id="img5" src="assets/shaaw-center.jpg" alt="Photo 5" style="filter: saturate(1.2);">
         </div>
 
         <!-- 7. Bottom-Right Frame -->
-        <div class="polaroid-frame" id="frame6" onclick="triggerUpload('input6')">
-          <div class="washi-tape washi-pink-check"></div>
-          <div class="photo-window">
-            <img class="photo-img" id="img6" src="assets/shaaw-center.jpg" alt="Photo 6" style="filter: brightness(1.03) contrast(1.02);">
-          </div>
-          <div class="polaroid-caption" contenteditable="true" onclick="event.stopPropagation()">Endless Love ✨</div>
-          <div class="polaroid-doodle-heart">♡</div>
+        <div class="polaroid-aperture" id="aperture6" onclick="triggerUpload('input6')" title="Polaroid 6 (Bottom-Right) - Click to Upload">
+          <img class="aperture-img" id="img6" src="assets/shaaw-center.jpg" alt="Photo 6" style="filter: brightness(1.03) contrast(1.02);">
         </div>
 
         <!-- ==============================================
-             8 SCANNABLE QR CODE SLOTS (PERMANENT ROUTES)
+             8 SCANNABLE QR CODE SLOTS (FLUSH COMPOSITED)
              ============================================== -->
-        <div class="qr-stamp" id="qrSlot1" title="Memory Tape 01 - Click to Test" onclick="openMemory(1)">
+        <div class="qr-slot-wrap" id="qrSlot1" title="Tape 01 - Click to Test" onclick="openMemory(1)">
           <canvas class="qr-canvas" id="qrCanvas1"></canvas>
-          <div class="qr-tag">Tape 01</div>
         </div>
 
-        <div class="qr-stamp" id="qrSlot2" title="Memory Tape 02 - Click to Test" onclick="openMemory(2)">
+        <div class="qr-slot-wrap" id="qrSlot2" title="Tape 02 - Click to Test" onclick="openMemory(2)">
           <canvas class="qr-canvas" id="qrCanvas2"></canvas>
-          <div class="qr-tag">Tape 02</div>
         </div>
 
-        <div class="qr-stamp" id="qrSlot3" title="Memory Tape 03 - Click to Test" onclick="openMemory(3)">
+        <div class="qr-slot-wrap" id="qrSlot3" title="Tape 03 - Click to Test" onclick="openMemory(3)">
           <canvas class="qr-canvas" id="qrCanvas3"></canvas>
-          <div class="qr-tag">Tape 03</div>
         </div>
 
-        <div class="qr-stamp" id="qrSlot4" title="Memory Tape 04 - Click to Test" onclick="openMemory(4)">
+        <div class="qr-slot-wrap" id="qrSlot4" title="Tape 04 - Click to Test" onclick="openMemory(4)">
           <canvas class="qr-canvas" id="qrCanvas4"></canvas>
-          <div class="qr-tag">Tape 04</div>
         </div>
 
-        <div class="qr-stamp" id="qrSlot5" title="Memory Tape 05 - Click to Test" onclick="openMemory(5)">
+        <div class="qr-slot-wrap" id="qrSlot5" title="Tape 05 - Click to Test" onclick="openMemory(5)">
           <canvas class="qr-canvas" id="qrCanvas5"></canvas>
-          <div class="qr-tag">Tape 05</div>
         </div>
 
-        <div class="qr-stamp" id="qrSlot6" title="Memory Tape 06 - Click to Test" onclick="openMemory(6)">
+        <div class="qr-slot-wrap" id="qrSlot6" title="Tape 06 - Click to Test" onclick="openMemory(6)">
           <canvas class="qr-canvas" id="qrCanvas6"></canvas>
-          <div class="qr-tag">Tape 06</div>
         </div>
 
-        <div class="qr-stamp" id="qrSlot7" title="Memory Tape 07 - Click to Test" onclick="openMemory(7)">
+        <div class="qr-slot-wrap" id="qrSlot7" title="Tape 07 - Click to Test" onclick="openMemory(7)">
           <canvas class="qr-canvas" id="qrCanvas7"></canvas>
-          <div class="qr-tag">Tape 07</div>
         </div>
 
-        <div class="qr-stamp" id="qrSlot8" title="Memory Tape 08 - Click to Test" onclick="openMemory(8)">
+        <div class="qr-slot-wrap" id="qrSlot8" title="Tape 08 - Click to Test" onclick="openMemory(8)">
           <canvas class="qr-canvas" id="qrCanvas8"></canvas>
-          <div class="qr-tag">Tape 08</div>
         </div>
 
         <!-- ==============================================
-             SCRAPBOOK KEEPSAKES & DETAILS
+             LIVE-EDITABLE TEXTBOXES
              ============================================== -->
-        
-        <!-- Vinyl Record -->
-        <div class="vinyl-record">
-          <div class="vinyl-grooves"></div>
-          <div class="vinyl-label">
-            <div class="vinyl-spindle"></div>
-            <div class="vinyl-title">Our Soundtrack ♡</div>
-          </div>
+        <div class="notepad-text-overlay" contenteditable="true" id="notepadMessage" title="Click to edit your handwritten note on the legal pad">
+          Happy Birthday to our favorite person! You bring sunshine, laughter, and pure happiness wherever you go. May all your dreams come true! ♡
         </div>
 
-        <!-- Vintage Cassette Tape -->
-        <div class="cassette-tape">
-          <div class="cassette-label">
-            <div class="cassette-text">Shaaaw's Tape 📼 Vol. 2024</div>
-          </div>
-          <div class="cassette-window">
-            <div class="cassette-reel"></div>
-            <div style="width: 25px; height: 6px; background: #64748b; border-radius: 2px;"></div>
-            <div class="cassette-reel"></div>
-          </div>
+        <div class="pink-card-text-overlay" contenteditable="true" id="pinkCardMessage" title="Click to edit message on the pink card">
+          Forever grateful for your gorgeous smile! Keep shining bright ✨
         </div>
-
-        <!-- Lined Notepad Paper (Live-Editable!) -->
-        <div class="notepad-scrap">
-          <div class="notepad-holes">
-            <div class="notepad-hole"></div>
-            <div class="notepad-hole"></div>
-            <div class="notepad-hole"></div>
-            <div class="notepad-hole"></div>
-          </div>
-          <div class="notepad-text" contenteditable="true" id="notepadMessage">
-            Happy Birthday to our favorite person! You bring so much sunshine and joy everywhere you go. May this year be filled with unforgettable memories and pure magic! ♡
-          </div>
-        </div>
-
-        <!-- Pink Deckled Card Note (Live-Editable!) -->
-        <div class="pink-card-scrap">
-          <div class="pink-card-text" contenteditable="true" id="pinkCardMessage">
-            Forever grateful for your gorgeous smile and all the happy moments! Keep shining bright ✨
-          </div>
-        </div>
-
-        <!-- Film Strip -->
-        <div class="film-strip">
-          <div class="film-frame"></div>
-          <div class="film-frame"></div>
-          <div class="film-frame"></div>
-        </div>
-
-        <!-- Decorative Floral Sprigs -->
-        <div class="flower-sprig" style="top: 22%; left: 24%; font-size: 1.8rem;">💐</div>
-        <div class="flower-sprig" style="top: 48%; right: 28%; font-size: 1.8rem;">🌸</div>
-        <div class="flower-sprig" style="bottom: 8%; right: 30%; font-size: 2.2rem;">🌺</div>
 
       </div>
     </div>
 
     <!-- Right Control Sidebar -->
     <div class="studio-sidebar">
-      
+
       <!-- Export Card -->
       <div class="export-card">
-        <h3>🖨️ Ready to Print & Frame</h3>
-        <p>Direct export calibrated for Kodak 9" × 10.9" photo paper at crisp 300 DPI or 4K Ultra-HD.</p>
+        <h3>🖨️ Master Print Exporter</h3>
+        <p>Direct export for Kodak 9" × 10.9" Photo Paper (300 DPI) or 4K Ultra-HD with zero quality loss.</p>
         <div style="display: flex; flex-direction: column; gap: 8px;">
-          <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="exportPoster(1)">
+          <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="exportMasterPoster(1)">
             📥 Download 300 DPI Print (2700×3270)
           </button>
-          <button class="btn btn-gold" style="width: 100%; justify-content: center;" onclick="exportPoster(1.422)">
+          <button class="btn btn-gold" style="width: 100%; justify-content: center;" onclick="exportMasterPoster(1.422)">
             ✨ Download 4K Ultra-HD (3840×4650)
           </button>
           <button class="btn btn-secondary" style="width: 100%; justify-content: center;" onclick="window.print()">
@@ -1227,65 +719,78 @@
         </div>
       </div>
 
-      <!-- Photo Manager -->
+      <!-- Center Photo Tuning -->
+      <div class="sidebar-section" style="background: rgba(244, 114, 182, 0.12); border: 1px solid rgba(244, 114, 182, 0.3);">
+        <div class="sidebar-title" style="color: #f472b6;">
+          <span>⭐</span> Center Polaroid (Shaaaw)
+        </div>
+        <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+          <button class="mini-upload-btn" style="flex: 1; padding: 6px;" onclick="triggerUpload('inputCenter')">📁 Replace Shaaaw Photo</button>
+        </div>
+        <div class="slider-row">
+          <span>Zoom:</span>
+          <input type="range" id="zoomCenter" min="1" max="2.5" step="0.05" value="1.05" oninput="updateTransform('imgCenter', 'zoomCenter', 'panXCenter', 'panYCenter')">
+        </div>
+        <div class="slider-row" style="margin-top: 6px;">
+          <span>Pan Y:</span>
+          <input type="range" id="panYCenter" min="-40" max="40" step="1" value="0" oninput="updateTransform('imgCenter', 'zoomCenter', 'panXCenter', 'panYCenter')">
+        </div>
+        <div class="slider-row" style="margin-top: 6px;">
+          <span>Pan X:</span>
+          <input type="range" id="panXCenter" min="-40" max="40" step="1" value="0" oninput="updateTransform('imgCenter', 'zoomCenter', 'panXCenter', 'panYCenter')">
+        </div>
+      </div>
+
+      <!-- 6 Surrounding Photos -->
       <div class="sidebar-section">
         <div class="sidebar-title">
-          <span>🖼️</span> Polaroid Photos (7 Frames)
+          <span>🖼️</span> Surrounding Frames (1 to 6)
         </div>
-        <div class="photo-slots-list">
-          <div class="photo-slot-row" style="background: rgba(244, 114, 182, 0.15); border: 1px solid rgba(244, 114, 182, 0.3);">
-            <div class="slot-label">⭐ Center: Shaaaw</div>
-            <div class="slot-actions">
-              <button class="mini-upload-btn" onclick="triggerUpload('inputCenter')">Change Photo</button>
-            </div>
-          </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; padding-right: 4px;">
           <div class="photo-slot-row">
-            <div class="slot-label">Frame 1 (Top-Left)</div>
-            <div class="slot-actions">
+            <div class="slot-header">
+              <span class="slot-label">Frame 1 (Top-Left)</span>
               <button class="mini-upload-btn" onclick="triggerUpload('input1')">Upload</button>
             </div>
           </div>
           <div class="photo-slot-row">
-            <div class="slot-label">Frame 2 (Top-Right)</div>
-            <div class="slot-actions">
+            <div class="slot-header">
+              <span class="slot-label">Frame 2 (Top-Right)</span>
               <button class="mini-upload-btn" onclick="triggerUpload('input2')">Upload</button>
             </div>
           </div>
           <div class="photo-slot-row">
-            <div class="slot-label">Frame 3 (Mid-Left)</div>
-            <div class="slot-actions">
+            <div class="slot-header">
+              <span class="slot-label">Frame 3 (Mid-Left)</span>
               <button class="mini-upload-btn" onclick="triggerUpload('input3')">Upload</button>
             </div>
           </div>
           <div class="photo-slot-row">
-            <div class="slot-label">Frame 4 (Mid-Right)</div>
-            <div class="slot-actions">
+            <div class="slot-header">
+              <span class="slot-label">Frame 4 (Mid-Right)</span>
               <button class="mini-upload-btn" onclick="triggerUpload('input4')">Upload</button>
             </div>
           </div>
           <div class="photo-slot-row">
-            <div class="slot-label">Frame 5 (Lower-Left)</div>
-            <div class="slot-actions">
+            <div class="slot-header">
+              <span class="slot-label">Frame 5 (Bottom-Left)</span>
               <button class="mini-upload-btn" onclick="triggerUpload('input5')">Upload</button>
             </div>
           </div>
           <div class="photo-slot-row">
-            <div class="slot-label">Frame 6 (Lower-Right)</div>
-            <div class="slot-actions">
+            <div class="slot-header">
+              <span class="slot-label">Frame 6 (Bottom-Right)</span>
               <button class="mini-upload-btn" onclick="triggerUpload('input6')">Upload</button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Scannable QRs Info -->
+      <!-- 8 QRs Status -->
       <div class="sidebar-section">
         <div class="sidebar-title">
           <span>📱</span> 8 Scannable Audio/Video QRs
         </div>
-        <p style="font-size: 0.8rem; color: #cbd5e1; line-height: 1.4; margin-bottom: 10px;">
-          All 8 QRs link permanently to your GitHub Pages routes (<code>/m/1</code> to <code>/m/8</code>).
-        </p>
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
           <button class="btn btn-secondary" style="padding: 4px; font-size: 0.72rem; justify-content: center;" onclick="openMemory(1)">Tape 01</button>
           <button class="btn btn-secondary" style="padding: 4px; font-size: 0.72rem; justify-content: center;" onclick="openMemory(2)">Tape 02</button>
@@ -1296,14 +801,6 @@
           <button class="btn btn-secondary" style="padding: 4px; font-size: 0.72rem; justify-content: center;" onclick="openMemory(7)">Tape 07</button>
           <button class="btn btn-secondary" style="padding: 4px; font-size: 0.72rem; justify-content: center;" onclick="openMemory(8)">Tape 08</button>
         </div>
-      </div>
-
-      <!-- Quick Tips -->
-      <div class="sidebar-section" style="font-size: 0.8rem; color: #94a3b8; line-height: 1.5;">
-        <strong style="color: #fbcfe8;">💡 Studio Pro Tips:</strong><br>
-        • Click directly on any polaroid to replace its photo.<br>
-        • Click any text (banner, polaroid captions, yellow notepad, pink card) to type your custom birthday message!<br>
-        • Photos never spill outside the frame—they are auto-cropped to fit the polaroid aperture.
       </div>
 
     </div>
@@ -1332,7 +829,7 @@
           width: 256,
           margin: 1,
           color: {
-            dark: '#1e1022',
+            dark: '#180c1e',
             light: '#ffffff'
           },
           errorCorrectionLevel: 'H'
@@ -1362,8 +859,29 @@
       reader.readAsDataURL(file);
     }
 
-    // 4. Ultra-HD Master Canvas Exporter (2700 x 3270 @ 300 DPI or 3840 x 4650 @ 4K)
-    async function exportPoster(scaleFactor = 1) {
+    // 4. Transform / Zoom / Pan Updates
+    function updateTransform(imgId, zoomId, panXId, panYId) {
+      const img = document.getElementById(imgId);
+      const zoom = document.getElementById(zoomId).value;
+      const panX = document.getElementById(panXId).value;
+      const panY = document.getElementById(panYId).value;
+      img.style.transform = `scale(${zoom}) translate(${panX}px, ${panY}px)`;
+    }
+
+    // 5. Toggle Aperture Outlines for alignment inspection
+    let outlinesVisible = false;
+    function toggleApertureOutlines() {
+      outlinesVisible = !outlinesVisible;
+      const apertures = document.querySelectorAll('.polaroid-aperture');
+      apertures.forEach(ap => {
+        if (outlinesVisible) ap.classList.add('outline-debug');
+        else ap.classList.remove('outline-debug');
+      });
+      document.getElementById('outlineToggleText').innerText = outlinesVisible ? '✅ Outlines Visible' : '🔲 Toggle Frame Outlines';
+    }
+
+    // 6. Master Ultra-HD Canvas Compositor (2700 x 3270 @ 300 DPI or 3840 x 4650 @ 4K)
+    async function exportMasterPoster(scaleFactor = 1) {
       const baseW = 2700;
       const baseH = 3270;
       const targetW = Math.round(baseW * scaleFactor);
@@ -1371,7 +889,7 @@
 
       const statusBtn = event.currentTarget;
       const origText = statusBtn.innerHTML;
-      statusBtn.innerHTML = '⏳ Rendering Ultra-HD...';
+      statusBtn.innerHTML = '⏳ Rendering 300 DPI...';
       statusBtn.disabled = true;
 
       try {
@@ -1379,209 +897,117 @@
         offscreenCanvas.width = targetW;
         offscreenCanvas.height = targetH;
         const ctx = offscreenCanvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
 
-        // Draw Background Texture
-        ctx.fillStyle = '#ebd8c8';
+        // 1. Draw Base Kodak Ivory Mat
+        ctx.fillStyle = '#fbf6ee';
         ctx.fillRect(0, 0, targetW, targetH);
 
-        // Gradient Wash
-        const radialGrad = ctx.createRadialGradient(targetW * 0.5, targetH * 0.35, 50, targetW * 0.5, targetH * 0.35, targetW * 0.7);
-        radialGrad.addColorStop(0, 'rgba(255, 245, 240, 0.75)');
-        radialGrad.addColorStop(0.5, 'rgba(235, 205, 195, 0.5)');
-        radialGrad.addColorStop(1, 'rgba(185, 145, 135, 0.7)');
-        ctx.fillStyle = radialGrad;
-        ctx.fillRect(0, 0, targetW, targetH);
+        // 2. Draw Master Poster Artwork
+        const baseImg = document.getElementById('posterBaseImage');
+        if (baseImg && baseImg.complete && baseImg.naturalWidth > 0) {
+          ctx.drawImage(baseImg, 0, 0, targetW, targetH);
+        }
 
-        // Helper to load image as HTMLImageElement
-        const loadImage = (src) => new Promise((resolve) => {
-          const img = new Image();
-          img.crossOrigin = 'anonymous';
-          img.onload = () => resolve(img);
-          img.onerror = () => resolve(null);
-          img.src = src;
-        });
+        // Helper to draw clipped photo inside transformed aperture
+        const drawClippedPhoto = (imgEl, xPct, yPct, wPct, hPct, angleDeg, zoom = 1.05, panXPx = 0, panYPx = 0) => {
+          if (!imgEl || !imgEl.complete || imgEl.naturalWidth <= 0) return;
 
-        // Function to render a polaroid on canvas
-        const renderPolaroid = async (imgEl, x, y, width, height, angleDeg, captionText, washiColor = '#fbcfe8') => {
+          const cx = targetW * (xPct + wPct / 2);
+          const cy = targetH * (yPct + hPct / 2);
+          const w = targetW * wPct;
+          const h = targetH * hPct;
+
           ctx.save();
-          ctx.translate(x + width / 2, y + height / 2);
+          ctx.translate(cx, cy);
           ctx.rotate((angleDeg * Math.PI) / 180);
 
-          const halfW = width / 2;
-          const halfH = height / 2;
-
-          // Shadow
-          ctx.shadowColor = 'rgba(40, 20, 25, 0.28)';
-          ctx.shadowBlur = 40 * scaleFactor;
-          ctx.shadowOffsetY = 15 * scaleFactor;
-
-          // White Polaroid Card
-          ctx.fillStyle = '#fdfaf6';
+          // Clip to aperture rectangle
           ctx.beginPath();
-          ctx.roundRect(-halfW, -halfH, width, height, 8 * scaleFactor);
-          ctx.fill();
+          ctx.rect(-w / 2, -h / 2, w, h);
+          ctx.clip();
 
-          // Reset Shadow for photo
-          ctx.shadowColor = 'transparent';
-
-          // Photo Aperture (Square)
-          const margin = 14 * scaleFactor;
-          const bottomPad = 50 * scaleFactor;
-          const photoW = width - (margin * 2);
-          const photoH = photoW; // Square aperture
-
-          ctx.fillStyle = '#e2d9d0';
-          ctx.fillRect(-halfW + margin, -halfH + margin, photoW, photoH);
-
-          // Draw Photo
-          if (imgEl && imgEl.complete && imgEl.naturalWidth > 0) {
-            ctx.save();
-            ctx.beginPath();
-            ctx.rect(-halfW + margin, -halfH + margin, photoW, photoH);
-            ctx.clip();
-
-            // Cover math
-            const imgAspect = imgEl.naturalWidth / imgEl.naturalHeight;
-            let drawW, drawH, drawX, drawY;
-            if (imgAspect > 1) {
-              drawH = photoH;
-              drawW = photoH * imgAspect;
-              drawX = -halfW + margin - (drawW - photoW) / 2;
-              drawY = -halfH + margin;
-            } else {
-              drawW = photoW;
-              drawH = photoW / imgAspect;
-              drawX = -halfW + margin;
-              drawY = -halfH + margin - (drawH - photoH) / 2;
-            }
-            ctx.drawImage(imgEl, drawX, drawY, drawW, drawH);
-            ctx.restore();
+          // Calculate aspect cover
+          const imgAspect = imgEl.naturalWidth / imgEl.naturalHeight;
+          const boxAspect = w / h;
+          let drawW, drawH;
+          if (imgAspect > boxAspect) {
+            drawH = h * zoom;
+            drawW = drawH * imgAspect;
+          } else {
+            drawW = w * zoom;
+            drawH = drawW / imgAspect;
           }
 
-          // Caption Text
-          ctx.fillStyle = '#3f2a33';
-          ctx.font = `bold ${Math.round(28 * scaleFactor)}px "Homemade Apple", "Caveat", cursive`;
-          ctx.textAlign = 'left';
-          ctx.fillText(captionText, -halfW + margin, halfH - (18 * scaleFactor));
+          const drawX = -drawW / 2 + (panXPx * scaleFactor);
+          const drawY = -drawH / 2 + (panYPx * scaleFactor);
 
-          // Doodle Heart
-          ctx.fillStyle = '#be185d';
-          ctx.font = `${Math.round(26 * scaleFactor)}px sans-serif`;
-          ctx.fillText('♡', halfW - margin - (25 * scaleFactor), halfH - (18 * scaleFactor));
+          ctx.drawImage(imgEl, drawX, drawY, drawW, drawH);
 
-          // Washi Tape on Top
-          ctx.fillStyle = washiColor;
-          ctx.fillRect(-40 * scaleFactor, -halfH - (12 * scaleFactor), 80 * scaleFactor, 24 * scaleFactor);
+          // Subtle inner shadow along photo edges
+          ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+          ctx.lineWidth = 2 * scaleFactor;
+          ctx.strokeRect(-w / 2, -h / 2, w, h);
 
           ctx.restore();
         };
 
-        // Function to render QR on canvas
-        const renderQR = (qrCanvas, x, y, size, angleDeg, labelText) => {
+        // Helper to draw clean QR flush over scrap
+        const drawFlushQR = (qrCanvas, xPct, yPct, sizePct, angleDeg) => {
           if (!qrCanvas) return;
+          const s = targetW * sizePct;
+          const cx = targetW * xPct + s / 2;
+          const cy = targetH * yPct + s / 2;
+
           ctx.save();
-          ctx.translate(x + size / 2, y + size / 2);
+          ctx.translate(cx, cy);
           ctx.rotate((angleDeg * Math.PI) / 180);
 
-          const half = size / 2;
-          ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
-          ctx.shadowBlur = 20 * scaleFactor;
-          ctx.shadowOffsetY = 8 * scaleFactor;
-
+          // White flush backing
           ctx.fillStyle = '#ffffff';
-          ctx.beginPath();
-          ctx.roundRect(-half, -half, size, size, 6 * scaleFactor);
-          ctx.fill();
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+          ctx.shadowBlur = 10 * scaleFactor;
+          ctx.shadowOffsetY = 3 * scaleFactor;
+          ctx.fillRect(-s / 2, -s / 2, s, s);
 
           ctx.shadowColor = 'transparent';
-          ctx.drawImage(qrCanvas, -half + (8 * scaleFactor), -half + (8 * scaleFactor), size - (16 * scaleFactor), size - (16 * scaleFactor));
-
-          // Label
-          ctx.fillStyle = '#9d174d';
-          ctx.font = `800 ${Math.round(18 * scaleFactor)}px "Plus Jakarta Sans", sans-serif`;
-          ctx.textAlign = 'center';
-          ctx.fillText(labelText, 0, half + (22 * scaleFactor));
+          ctx.drawImage(qrCanvas, -s / 2, -s / 2, s, s);
 
           ctx.restore();
         };
 
-        // Render Center Hero Photo Frame
-        await renderPolaroid(
-          document.getElementById('imgCenter'),
-          targetW * 0.31,
-          targetH * 0.25,
-          targetW * 0.38,
-          targetW * 0.44,
-          -1.8,
-          document.querySelector('#frameCenter .polaroid-caption').innerText
-        );
+        // Draw 7 Polaroid Photos
+        const centerZoom = parseFloat(document.getElementById('zoomCenter').value) || 1.05;
+        const centerPanX = parseFloat(document.getElementById('panXCenter').value) || 0;
+        const centerPanY = parseFloat(document.getElementById('panYCenter').value) || 0;
 
-        // Render Surrounding Polaroids
-        await renderPolaroid(document.getElementById('img1'), targetW * 0.065, targetH * 0.105, targetW * 0.25, targetW * 0.30, -5.5, document.querySelector('#frame1 .polaroid-caption').innerText);
-        await renderPolaroid(document.getElementById('img2'), targetW * 0.685, targetH * 0.135, targetW * 0.25, targetW * 0.30, 4.2, document.querySelector('#frame2 .polaroid-caption').innerText);
-        await renderPolaroid(document.getElementById('img3'), targetW * 0.035, targetH * 0.345, targetW * 0.265, targetW * 0.315, 3.0, document.querySelector('#frame3 .polaroid-caption').innerText);
-        await renderPolaroid(document.getElementById('img4'), targetW * 0.70, targetH * 0.395, targetW * 0.26, targetW * 0.31, -4.2, document.querySelector('#frame4 .polaroid-caption').innerText);
-        await renderPolaroid(document.getElementById('img5'), targetW * 0.225, targetH * 0.545, targetW * 0.26, targetW * 0.31, -3.0, document.querySelector('#frame5 .polaroid-caption').innerText);
-        await renderPolaroid(document.getElementById('img6'), targetW * 0.515, targetH * 0.545, targetW * 0.26, targetW * 0.31, 3.2, document.querySelector('#frame6 .polaroid-caption').innerText);
+        // Center Hero Shaaaw Photo
+        drawClippedPhoto(document.getElementById('imgCenter'), 0.338, 0.233, 0.334, 0.202, -2.6, centerZoom, centerPanX, centerPanY);
 
-        // Render All 8 QR Codes
-        const qrSize = targetW * 0.115;
-        renderQR(document.getElementById('qrCanvas1'), targetW * 0.042, targetH * 0.042, qrSize, -3, 'Tape 01');
-        renderQR(document.getElementById('qrCanvas2'), targetW * 0.048, targetH * 0.285, qrSize, 2.5, 'Tape 02');
-        renderQR(document.getElementById('qrCanvas3'), targetW * 0.042, targetH * 0.565, qrSize, -2, 'Tape 03');
-        renderQR(document.getElementById('qrCanvas4'), targetW * 0.85, targetH * 0.092, qrSize, 2, 'Tape 04');
-        renderQR(document.getElementById('qrCanvas5'), targetW * 0.85, targetH * 0.295, qrSize, -1.5, 'Tape 05');
-        renderQR(document.getElementById('qrCanvas6'), targetW * 0.84, targetH * 0.575, qrSize, 3, 'Tape 06');
-        renderQR(document.getElementById('qrCanvas7'), targetW * 0.84, targetH * 0.708, qrSize, -2.5, 'Tape 07');
-        renderQR(document.getElementById('qrCanvas8'), targetW * 0.835, targetH * 0.84, qrSize, 2, 'Tape 08');
+        // Surrounding 6 Photos
+        drawClippedPhoto(document.getElementById('img1'), 0.088, 0.123, 0.210, 0.126, 4.6);
+        drawClippedPhoto(document.getElementById('img2'), 0.694, 0.152, 0.208, 0.124, -6.2);
+        drawClippedPhoto(document.getElementById('img3'), 0.056, 0.366, 0.234, 0.139, -2.2);
+        drawClippedPhoto(document.getElementById('img4'), 0.732, 0.421, 0.218, 0.130, 2.5);
+        drawClippedPhoto(document.getElementById('img5'), 0.254, 0.566, 0.214, 0.128, -4.0);
+        drawClippedPhoto(document.getElementById('img6'), 0.540, 0.566, 0.215, 0.128, 6.2);
 
-        // Render Top Torn Banner Text
-        ctx.save();
-        ctx.translate(targetW * 0.5, targetH * 0.075);
-        ctx.rotate((-1.5 * Math.PI) / 180);
-        ctx.fillStyle = '#db2777';
-        ctx.font = `bold ${Math.round(72 * scaleFactor)}px "Patrick Hand", cursive`;
-        ctx.textAlign = 'center';
-        ctx.shadowColor = 'rgba(0,0,0,0.2)';
-        ctx.shadowBlur = 15 * scaleFactor;
-        ctx.fillText('Happy Birthday Shaaaw!!! 💖', 0, 0);
-        ctx.restore();
-
-        // Render Lined Notepad Message
-        ctx.save();
-        ctx.translate(targetW * 0.32, targetH * 0.75);
-        ctx.rotate((1.2 * Math.PI) / 180);
-        ctx.fillStyle = '#fffbeb';
-        ctx.shadowColor = 'rgba(60, 40, 20, 0.25)';
-        ctx.shadowBlur = 25 * scaleFactor;
-        ctx.fillRect(0, 0, targetW * 0.34, targetH * 0.16);
-        ctx.shadowColor = 'transparent';
-        ctx.fillStyle = '#1e1b4b';
-        ctx.font = `${Math.round(26 * scaleFactor)}px "Caveat", cursive`;
-        const noteMsg = document.getElementById('notepadMessage').innerText;
-        wrapText(ctx, noteMsg, 30 * scaleFactor, 45 * scaleFactor, targetW * 0.30, 32 * scaleFactor);
-        ctx.restore();
-
-        // Render Pink Card Note
-        ctx.save();
-        ctx.translate(targetW * 0.58, targetH * 0.80);
-        ctx.rotate((-3.5 * Math.PI) / 180);
-        ctx.fillStyle = '#fbcfe8';
-        ctx.shadowColor = 'rgba(180, 50, 100, 0.25)';
-        ctx.shadowBlur = 25 * scaleFactor;
-        ctx.fillRect(0, 0, targetW * 0.23, targetH * 0.12);
-        ctx.shadowColor = 'transparent';
-        ctx.fillStyle = '#831843';
-        ctx.font = `${Math.round(24 * scaleFactor)}px "Caveat", cursive`;
-        const pinkMsg = document.getElementById('pinkCardMessage').innerText;
-        wrapText(ctx, pinkMsg, 20 * scaleFactor, 38 * scaleFactor, targetW * 0.20, 30 * scaleFactor);
-        ctx.restore();
+        // Draw 8 Scannable QRs
+        drawFlushQR(document.getElementById('qrCanvas1'), 0.045, 0.044, 0.106, 0.0);
+        drawFlushQR(document.getElementById('qrCanvas2'), 0.040, 0.293, 0.104, -1.5);
+        drawFlushQR(document.getElementById('qrCanvas3'), 0.036, 0.581, 0.104, 0.0);
+        drawFlushQR(document.getElementById('qrCanvas4'), 0.885, 0.093, 0.098, 0.0);
+        drawFlushQR(document.getElementById('qrCanvas5'), 0.885, 0.295, 0.098, -1.0);
+        drawFlushQR(document.getElementById('qrCanvas6'), 0.868, 0.582, 0.098, 1.0);
+        drawFlushQR(document.getElementById('qrCanvas7'), 0.859, 0.713, 0.098, -0.8);
+        drawFlushQR(document.getElementById('qrCanvas8'), 0.844, 0.859, 0.098, 0.8);
 
         // Trigger Download
         offscreenCanvas.toBlob(function(blob) {
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
-          a.download = `shaaaw-birthday-poster-${scaleFactor > 1 ? '4k' : '300dpi-kodak'}.png`;
+          a.download = `shaaaw-scrapbook-${scaleFactor > 1 ? '4k' : '300dpi-kodak'}.png`;
           a.href = url;
           a.click();
           URL.revokeObjectURL(url);
@@ -1591,29 +1017,10 @@
 
       } catch (err) {
         console.error('Export error:', err);
-        alert('Export failed. Please check browser console.');
+        alert('Export error. Please check browser console.');
         statusBtn.innerHTML = origText;
         statusBtn.disabled = false;
       }
-    }
-
-    // Canvas Text Wrapping Helper
-    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-      const words = text.split(/\s+/);
-      let line = '';
-      for (let n = 0; n < words.length; n++) {
-        const testLine = line + words[n] + ' ';
-        const metrics = ctx.measureText(testLine);
-        const testWidth = metrics.width;
-        if (testWidth > maxWidth && n > 0) {
-          ctx.fillText(line, x, y);
-          line = words[n] + ' ';
-          y += lineHeight;
-        } else {
-          line = testLine;
-        }
-      }
-      ctx.fillText(line, x, y);
     }
 
     // Initialize on Load
