@@ -48,14 +48,22 @@ app.get('/assets/caricature.png', (req, res) => {
 });
 
 // Lord Nandhish (The Supreme Cosmic Preserver) asset handler
-const USER_UPLOADED_LORD = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789364766184.jpg";
+const LORD_CANDIDATES = [
+  "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789372775279.jpg",
+  "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789364766184.jpg"
+];
+const USER_UPLOADED_LORD = LORD_CANDIDATES.find(p => fs.existsSync(p)) || LORD_CANDIDATES[0];
 const LORD_PNG = path.join(__dirname, '..', 'public', 'assets', 'lord-nandhish.png');
 const LORD_RAW = path.join(__dirname, '..', 'public', 'assets', 'lord-nandhish-raw.jpg');
 
 async function ensureLordNandhishAsset() {
   try {
-    if (!fs.existsSync(LORD_RAW) && fs.existsSync(USER_UPLOADED_LORD)) {
-      fs.copyFileSync(USER_UPLOADED_LORD, LORD_RAW);
+    const srcFound = LORD_CANDIDATES.find(p => fs.existsSync(p));
+    if (srcFound && (!fs.existsSync(LORD_RAW) || fs.statSync(srcFound).size !== (fs.existsSync(LORD_RAW) ? fs.statSync(LORD_RAW).size : 0))) {
+      fs.copyFileSync(srcFound, LORD_RAW);
+      if (!fs.existsSync(LORD_PNG)) {
+        fs.copyFileSync(srcFound, LORD_PNG);
+      }
     }
     if (!fs.existsSync(LORD_PNG)) {
       const { processLordNandhish } = require('../scripts/process-lord-nandhish');

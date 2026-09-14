@@ -2,7 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const Jimp = require('jimp');
 
-const INPUT_PATH = "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789364766184.jpg";
+const CANDIDATES = [
+  "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789372775279.jpg",
+  "C:\\Users\\Nandheesaprasad\\.gemini\\antigravity-ide\\brain\\4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5\\.user_uploaded\\media_1789364766184.jpg"
+];
+const INPUT_PATH = CANDIDATES.find(p => fs.existsSync(p)) || CANDIDATES[0];
 const OUTPUT_DIR = path.join(__dirname, '..', 'public', 'assets');
 const OUTPUT_PATH = path.join(OUTPUT_DIR, 'lord-nandhish.png');
 
