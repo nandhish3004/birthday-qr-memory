@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kodak 9×10.9 Photo Print Studio 📸 Shaaaw's Birthday Scrapbook</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --kodak-yellow: #ffb800;
@@ -866,7 +869,35 @@
           </div>
         </div>
 
-        <!-- 2. Matting & Border Style -->
+        <!-- 2. New 4K Studio Polaroid Frames -->
+        <div class="panel-card">
+          <h3 class="panel-title">📸 New 4K Studio Polaroid Frames</h3>
+          <p style="font-size: 0.82rem; color: #94a3b8; margin: 0 0 12px; line-height: 1.4;">
+            Replaces old blurry collage frames with fresh, ultra-sharp 4K Polaroid cardstock, pink washi tape, and cute stickers!
+          </p>
+
+          <div style="margin-bottom: 12px;">
+            <label style="display: block; font-size: 0.80rem; font-weight: 700; color: #fbcfe8; margin-bottom: 6px;">
+              ✍️ Center Polaroid Caption:
+            </label>
+            <input type="text" id="inputCenterCaption" value="You Make Everything More Fun ♡"
+              oninput="render9x10_9Poster()"
+              style="width: 100%; background: #160f22; border: 1px solid #a855f7; border-radius: 8px; color: #fdf4ff; padding: 8px 12px; font-family: 'Caveat', cursive, sans-serif; font-size: 1.18rem; outline: none;">
+          </div>
+
+          <div class="toggle-row" style="border-top: none; padding-top: 0;">
+            <div>
+              <span style="font-weight: 600; color: #fbcfe8;">✨ Washi Tape & Heart Stickers</span>
+              <div style="font-size: 0.74rem; color: #94a3b8;">Render authentic pink gingham washi tape & hand-drawn hearts</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggleEmbellishments" checked onchange="render9x10_9Poster()">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 3. Matting & Border Style -->
         <div class="panel-card">
           <h3 class="panel-title">🎨 Matting & Framing Style</h3>
           
@@ -993,7 +1024,7 @@
     let currentDrawMetrics = { drawX: 0, drawY: 0, drawW: 2700, drawH: 3270 };
 
     // ========================================================================
-    // 1. POSTER ARTWORK & POLAROID FRAME OVERLAY COMPOSITING ENGINE
+    // 1. POSTER ARTWORK & NEW 4K POLAROID FRAMES ENGINE
     // ========================================================================
     const posterCandidates = [
       'assets/original-poster.jpg',
@@ -1016,62 +1047,6 @@
     };
     sourceImage.onerror = tryLoadNextPoster;
     tryLoadNextPoster();
-
-    /**
-     * Dynamically builds the Polaroid Frame Overlay using Canvas 2D destination-out.
-     * This creates a transparent cutout window inside each Polaroid photo aperture
-     * while keeping the white borders, pink tape, "You Make Everything More Fun ♡" text,
-     * hearts, and all 8 QR codes 100% intact ON TOP of Shaaaw's photo!
-     * Immune to CORS / tainted canvas restrictions.
-     */
-    function buildFrameOverlay() {
-      if (!sourceImage.complete || !sourceImage.naturalWidth) return null;
-
-      const w = sourceImage.naturalWidth;
-      const h = sourceImage.naturalHeight;
-
-      if (!overlayCanvas) {
-        overlayCanvas = document.createElement('canvas');
-      }
-      if (overlayCanvas.width !== w || overlayCanvas.height !== h) {
-        overlayCanvas.width = w;
-        overlayCanvas.height = h;
-      }
-
-      const oCtx = overlayCanvas.getContext('2d');
-      oCtx.clearRect(0, 0, w, h);
-
-      // 1. Draw original poster (all frames, tape, stickers, QR codes)
-      oCtx.drawImage(sourceImage, 0, 0, w, h);
-
-      // 2. Punch transparent cutout holes in apertures where photos have been uploaded
-      oCtx.save();
-      oCtx.globalCompositeOperation = 'destination-out';
-      oCtx.fillStyle = '#000000';
-
-      FRAME_CONFIGS.forEach(cfg => {
-        // Only punch hole if a photo has been uploaded for this frame
-        // (if empty, original grey placeholder remains cleanly visible)
-        if (frameImages[cfg.id]) {
-          const state = frameStates[cfg.id];
-          const cx = Math.round(w * cfg.cxPct);
-          const cy = Math.round(h * cfg.cyPct);
-          const aw = Math.round(w * cfg.wPct * (state.scale || 1.0));
-          const ah = Math.round(w * cfg.hPct * (state.scale || 1.0));
-          const rot = state.rotDeg || 0;
-
-          oCtx.save();
-          oCtx.translate(cx, cy);
-          oCtx.rotate(rot * Math.PI / 180);
-          drawRoundedRect(oCtx, -aw / 2, -ah / 2, aw, ah, 5);
-          oCtx.fill();
-          oCtx.restore();
-        }
-      });
-
-      oCtx.restore();
-      return overlayCanvas;
-    }
 
     // Default center photo
     const shaawDefaultImg = new Image();
@@ -1098,8 +1073,12 @@
     shaawDefaultImg.onerror = tryLoadNextShaaw;
     tryLoadNextShaaw();
 
+    if (document.fonts) {
+      document.fonts.ready.then(() => render9x10_9Poster());
+    }
+
     // ========================================================================
-    // 2. HELPER FUNCTIONS
+    // 2. POLAROID FRAME EMBELLISHMENTS & CRAFTSMANSHIP HELPERS
     // ========================================================================
     function drawRoundedRect(c, x, y, width, height, radius) {
       const maxR = Math.min(Math.abs(width) / 2, Math.abs(height) / 2);
@@ -1144,6 +1123,385 @@
       const cropY = Math.max(0, Math.min(maxPanY, maxPanY * (panY !== undefined ? panY : 0.5)));
 
       targetCtx.drawImage(photoImg, cropX, cropY, cropW, cropH, destX, destY, destW, destH);
+    }
+
+    // Cached Pink Gingham Pattern for Washi Tape
+    let ginghamPatternCache = null;
+    function getGinghamPattern(targetCtx) {
+      if (ginghamPatternCache) return ginghamPatternCache;
+      try {
+        const pCanvas = document.createElement('canvas');
+        pCanvas.width = 32;
+        pCanvas.height = 32;
+        const pCtx = pCanvas.getContext('2d');
+
+        pCtx.fillStyle = '#fce7f3';
+        pCtx.fillRect(0, 0, 32, 32);
+
+        pCtx.fillStyle = '#f472b6';
+        pCtx.fillRect(0, 0, 16, 32);
+        pCtx.fillRect(0, 0, 32, 16);
+
+        pCtx.fillStyle = '#db2777';
+        pCtx.fillRect(0, 0, 16, 16);
+
+        pCtx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+        pCtx.lineWidth = 1;
+        pCtx.strokeRect(0.5, 0.5, 15, 15);
+        pCtx.strokeRect(16.5, 16.5, 15, 15);
+
+        ginghamPatternCache = targetCtx.createPattern(pCanvas, 'repeat');
+      } catch (e) {
+        return null;
+      }
+      return ginghamPatternCache;
+    }
+
+    function drawTornTapeRect(c, x, y, w, h) {
+      const serrations = 6;
+      const step = h / serrations;
+      c.beginPath();
+      c.moveTo(x, y);
+      c.lineTo(x + w, y);
+      // Right torn edge
+      for (let i = 0; i < serrations; i++) {
+        const toothX = (i % 2 === 0) ? x + w - 4 : x + w;
+        c.lineTo(toothX, y + (i + 0.5) * step);
+        c.lineTo(x + w, y + (i + 1) * step);
+      }
+      c.lineTo(x + w, y + h);
+      c.lineTo(x, y + h);
+      // Left torn edge
+      for (let i = serrations; i > 0; i--) {
+        const toothX = (i % 2 === 0) ? x + 4 : x;
+        c.lineTo(toothX, y + (i - 0.5) * step);
+        c.lineTo(x, y + (i - 1) * step);
+      }
+      c.closePath();
+    }
+
+    function drawGinghamTape(targetCtx, x, y, width, height) {
+      targetCtx.save();
+      targetCtx.translate(x, y);
+
+      const w = width;
+      const h = height;
+
+      // Soft tape shadow
+      targetCtx.save();
+      targetCtx.shadowColor = 'rgba(30, 10, 20, 0.24)';
+      targetCtx.shadowBlur = 12;
+      targetCtx.shadowOffsetY = 4;
+      targetCtx.fillStyle = '#fce7f3';
+      drawTornTapeRect(targetCtx, -w / 2, -h / 2, w, h);
+      targetCtx.fill();
+      targetCtx.restore();
+
+      // Washi tape body with gingham pattern
+      const pat = getGinghamPattern(targetCtx);
+      targetCtx.save();
+      targetCtx.globalAlpha = 0.94;
+      targetCtx.fillStyle = pat || '#f472b6';
+      drawTornTapeRect(targetCtx, -w / 2, -h / 2, w, h);
+      targetCtx.fill();
+
+      // Translucent glossy highlights
+      const grad = targetCtx.createLinearGradient(0, -h / 2, 0, h / 2);
+      grad.addColorStop(0, 'rgba(255, 255, 255, 0.35)');
+      grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.0)');
+      grad.addColorStop(1, 'rgba(0, 0, 0, 0.08)');
+      targetCtx.fillStyle = grad;
+      drawTornTapeRect(targetCtx, -w / 2, -h / 2, w, h);
+      targetCtx.fill();
+      targetCtx.restore();
+
+      targetCtx.restore();
+    }
+
+    function drawCornerTape(targetCtx, x, y, width, height, color) {
+      targetCtx.save();
+      targetCtx.translate(x, y);
+
+      const w = width;
+      const h = height;
+
+      targetCtx.save();
+      targetCtx.shadowColor = 'rgba(25, 10, 20, 0.2)';
+      targetCtx.shadowBlur = 8;
+      targetCtx.shadowOffsetY = 3;
+      targetCtx.fillStyle = color;
+      drawTornTapeRect(targetCtx, -w / 2, -h / 2, w, h);
+      targetCtx.fill();
+      targetCtx.restore();
+
+      targetCtx.save();
+      targetCtx.globalAlpha = 0.88;
+      targetCtx.fillStyle = color;
+      drawTornTapeRect(targetCtx, -w / 2, -h / 2, w, h);
+      targetCtx.fill();
+
+      targetCtx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      targetCtx.lineWidth = 1;
+      drawTornTapeRect(targetCtx, -w / 2, -h / 2, w, h);
+      targetCtx.stroke();
+      targetCtx.restore();
+
+      targetCtx.restore();
+    }
+
+    function drawCuteHeartSticker(targetCtx, x, y, size, angle) {
+      targetCtx.save();
+      targetCtx.translate(x, y);
+      targetCtx.rotate(angle || 0);
+
+      const s = size;
+
+      // Sticker shadow
+      targetCtx.save();
+      targetCtx.shadowColor = 'rgba(40, 15, 25, 0.28)';
+      targetCtx.shadowBlur = Math.round(s * 0.4);
+      targetCtx.shadowOffsetY = Math.round(s * 0.2);
+
+      // White paper die-cut border
+      targetCtx.fillStyle = '#ffffff';
+      drawHeartPath(targetCtx, 0, 0, s * 1.18);
+      targetCtx.fill();
+      targetCtx.restore();
+
+      // Pink heart gradient fill
+      const heartGrad = targetCtx.createLinearGradient(0, -s / 2, 0, s / 2);
+      heartGrad.addColorStop(0, '#f472b6');
+      heartGrad.addColorStop(1, '#ec4899');
+      targetCtx.fillStyle = heartGrad;
+      drawHeartPath(targetCtx, 0, 0, s);
+      targetCtx.fill();
+
+      // Dark playful marker outline
+      targetCtx.strokeStyle = '#261a22';
+      targetCtx.lineWidth = Math.max(1.5, Math.round(s * 0.08));
+      targetCtx.lineCap = 'round';
+      targetCtx.lineJoin = 'round';
+      drawHeartPath(targetCtx, 0, 0, s);
+      targetCtx.stroke();
+
+      // Glossy reflection streak
+      targetCtx.save();
+      targetCtx.strokeStyle = 'rgba(255, 255, 255, 0.65)';
+      targetCtx.lineWidth = Math.max(1, Math.round(s * 0.06));
+      targetCtx.beginPath();
+      targetCtx.arc(-s * 0.25, -s * 0.25, s * 0.18, 1.2 * Math.PI, 1.8 * Math.PI);
+      targetCtx.stroke();
+      targetCtx.restore();
+
+      targetCtx.restore();
+    }
+
+    function drawHeartPath(c, cx, cy, size) {
+      const d = size;
+      c.beginPath();
+      c.moveTo(cx, cy + d * 0.35);
+      c.bezierCurveTo(cx - d * 0.6, cy - d * 0.1, cx - d * 0.5, cy - d * 0.6, cx, cy - d * 0.25);
+      c.bezierCurveTo(cx + d * 0.5, cy - d * 0.6, cx + d * 0.6, cy - d * 0.1, cx, cy + d * 0.35);
+      c.closePath();
+    }
+
+    function drawHandDrawnSmiley(targetCtx, x, y, radius) {
+      targetCtx.save();
+      targetCtx.translate(x, y);
+
+      const r = radius;
+      targetCtx.fillStyle = '#261a22';
+      targetCtx.strokeStyle = '#261a22';
+      targetCtx.lineWidth = Math.max(1.8, Math.round(r * 0.16));
+      targetCtx.lineCap = 'round';
+
+      // Left eye
+      targetCtx.beginPath();
+      targetCtx.ellipse(-r * 0.35, -r * 0.25, r * 0.12, r * 0.18, -0.1, 0, Math.PI * 2);
+      targetCtx.fill();
+
+      // Right eye
+      targetCtx.beginPath();
+      targetCtx.ellipse(r * 0.35, -r * 0.25, r * 0.12, r * 0.18, 0.1, 0, Math.PI * 2);
+      targetCtx.fill();
+
+      // Playful smile arc
+      targetCtx.beginPath();
+      targetCtx.arc(0, -r * 0.05, r * 0.65, 0.22 * Math.PI, 0.78 * Math.PI);
+      targetCtx.stroke();
+
+      targetCtx.restore();
+    }
+
+    /**
+     * Renders a brand-new, ultra-sharp 4K Polaroid Frame over the old frame location.
+     * Guaranteed to perfectly fit the photo into the aperture, with paper borders,
+     * washi tape, and cute handwritten caption sitting ON TOP of the photo!
+     */
+    function drawNewPolaroidFrame(targetCtx, cfg, photo, drawW, drawH, drawX, drawY) {
+      const isMain = cfg.id === 0;
+      const state = frameStates[cfg.id];
+      const scale = state.scale || 1.0;
+      const rot = state.rotDeg || 0;
+
+      const cx = drawX + Math.round(drawW * cfg.cxPct);
+      const cy = drawY + Math.round(drawH * cfg.cyPct);
+
+      // Polaroid Card Outer Dimensions (sized to 100% cover the old frame underneath)
+      const cardW = Math.round(drawW * (isMain ? 0.3220 : 0.2080) * scale);
+      const cardH = Math.round(drawW * (isMain ? 0.3840 : 0.2540) * scale);
+      const cornerR = Math.round(drawW * (isMain ? 0.007 : 0.005));
+
+      // Inner Photo Aperture Dimensions
+      const photoW = Math.round(drawW * (isMain ? 0.2740 : 0.1760) * scale);
+      const photoH = Math.round(drawW * (isMain ? 0.2300 : 0.1500) * scale);
+      const topMargin = Math.round(drawW * (isMain ? 0.0240 : 0.0160) * scale);
+      const photoY = -cardH / 2 + topMargin + photoH / 2;
+
+      targetCtx.save();
+      targetCtx.translate(cx, cy);
+      targetCtx.rotate(rot * Math.PI / 180);
+
+      // -------------------------------------------------------------
+      // STEP 1: REALISTIC POLAROID CARD DROP SHADOW & PAPER BASE
+      // (Completely covers old polaroid frame from the background image)
+      // -------------------------------------------------------------
+      targetCtx.save();
+      targetCtx.shadowColor = 'rgba(25, 12, 18, 0.35)';
+      targetCtx.shadowBlur = Math.round(drawW * (isMain ? 0.016 : 0.012));
+      targetCtx.shadowOffsetX = Math.round(drawW * (rot > 0 ? 0.003 : -0.003));
+      targetCtx.shadowOffsetY = Math.round(drawW * 0.007);
+
+      const cardGrad = targetCtx.createLinearGradient(0, -cardH / 2, 0, cardH / 2);
+      cardGrad.addColorStop(0, '#fefdfa');
+      cardGrad.addColorStop(0.7, '#fdfbf7');
+      cardGrad.addColorStop(1, '#f6f1e7');
+      targetCtx.fillStyle = cardGrad;
+
+      drawRoundedRect(targetCtx, -cardW / 2, -cardH / 2, cardW, cardH, cornerR);
+      targetCtx.fill();
+      targetCtx.restore();
+
+      // Subtle paper edge border
+      targetCtx.strokeStyle = 'rgba(220, 210, 195, 0.7)';
+      targetCtx.lineWidth = Math.max(1, Math.round(drawW * 0.0008));
+      drawRoundedRect(targetCtx, -cardW / 2, -cardH / 2, cardW, cardH, cornerR);
+      targetCtx.stroke();
+
+      // -------------------------------------------------------------
+      // STEP 2: INNER PHOTO CAVITY / SHAAAW'S PHOTO
+      // -------------------------------------------------------------
+      const photoX = -photoW / 2;
+      const photoTop = photoY - photoH / 2;
+      const photoR = Math.round(drawW * 0.002);
+
+      targetCtx.save();
+      drawRoundedRect(targetCtx, photoX, photoTop, photoW, photoH, photoR);
+      targetCtx.clip();
+
+      if (photo && photo.complete && photo.naturalWidth) {
+        // Draw Shaaaw's photo with zoom and pan
+        drawCroppedPhoto(targetCtx, photo, photoX, photoTop, photoW, photoH, state.panX, state.panY, state.zoom);
+
+        // Subtle paper recess shadow along top and left edges
+        const innerShadow = targetCtx.createLinearGradient(0, photoTop, 0, photoTop + Math.round(photoH * 0.09));
+        innerShadow.addColorStop(0, 'rgba(35, 18, 24, 0.28)');
+        innerShadow.addColorStop(1, 'rgba(35, 18, 24, 0.0)');
+        targetCtx.fillStyle = innerShadow;
+        targetCtx.fillRect(photoX, photoTop, photoW, Math.round(photoH * 0.09));
+      } else {
+        // Empty frame placeholder: elegant vintage paper placeholder
+        targetCtx.fillStyle = '#eae3d8';
+        targetCtx.fillRect(photoX, photoTop, photoW, photoH);
+
+        targetCtx.strokeStyle = 'rgba(200, 190, 180, 0.35)';
+        targetCtx.lineWidth = 2;
+        for (let x = -photoW; x < photoW * 2; x += 24) {
+          targetCtx.beginPath();
+          targetCtx.moveTo(photoX + x, photoTop);
+          targetCtx.lineTo(photoX + x + photoH, photoTop + photoH);
+          targetCtx.stroke();
+        }
+
+        targetCtx.fillStyle = '#8c7d75';
+        targetCtx.font = `bold ${Math.round(drawW * (isMain ? 0.014 : 0.010))}px sans-serif`;
+        targetCtx.textAlign = 'center';
+        targetCtx.textBaseline = 'middle';
+        targetCtx.fillText(isMain ? "📷 Click to Insert Shaaaw's Photo" : `📷 ${cfg.label}`, 0, photoY);
+      }
+      targetCtx.restore();
+
+      // Subtle photo paper bevel border (recess edge)
+      targetCtx.strokeStyle = 'rgba(50, 30, 35, 0.20)';
+      targetCtx.lineWidth = Math.max(1, Math.round(drawW * 0.0009));
+      drawRoundedRect(targetCtx, photoX, photoTop, photoW, photoH, photoR);
+      targetCtx.stroke();
+
+      // -------------------------------------------------------------
+      // STEP 3: POLAROID EMBELLISHMENTS ON TOP OF PHOTO
+      // -------------------------------------------------------------
+      const showEmbellishments = !document.getElementById('toggleEmbellishments') || document.getElementById('toggleEmbellishments').checked;
+
+      if (showEmbellishments) {
+        if (isMain) {
+          // A. Top Pink Gingham Washi Tape
+          drawGinghamTape(targetCtx, 0, -cardH / 2, Math.round(cardW * 0.62), Math.round(drawW * 0.040));
+
+          // B. Bottom Chin Handwritten Text: "You Make Everything More Fun ♡"
+          const chinCenterY = photoTop + photoH + (cardH / 2 - (photoTop + photoH)) / 2;
+
+          // Smiley face on left
+          const smileX = -cardW * 0.35;
+          drawHandDrawnSmiley(targetCtx, smileX, chinCenterY, Math.round(drawW * 0.013));
+
+          // Caption text in handwritten font
+          const captionInput = document.getElementById('inputCenterCaption');
+          const captionText = (captionInput && captionInput.value.trim()) ? captionInput.value.trim() : "You Make Everything More Fun ♡";
+
+          targetCtx.save();
+          targetCtx.fillStyle = '#261a22';
+          targetCtx.font = `700 ${Math.round(drawW * 0.0165)}px 'Caveat', 'Patrick Hand', cursive, sans-serif`;
+          targetCtx.textAlign = 'center';
+          targetCtx.textBaseline = 'middle';
+          targetCtx.translate(Math.round(cardW * 0.02), chinCenterY - Math.round(drawW * 0.002));
+          targetCtx.rotate(-0.015);
+          targetCtx.fillText(captionText, 0, 0);
+          targetCtx.restore();
+
+          // C. Cute Layered Pink Heart Stickers on right
+          const heartX = cardW * 0.36;
+          drawCuteHeartSticker(targetCtx, heartX, chinCenterY + Math.round(drawW * 0.004), Math.round(drawW * 0.022), -0.18);
+          drawCuteHeartSticker(targetCtx, heartX - Math.round(drawW * 0.022), chinCenterY - Math.round(drawW * 0.006), Math.round(drawW * 0.013), 0.22);
+        } else {
+          // Companion Polaroids: Washi tape at top
+          const tapeColors = ['', '#d8b4e2', '#f472b6', '#fed7aa', '#fbcfe8', '#a7f3d0', '#fef08a'];
+          drawCornerTape(targetCtx, 0, -cardH / 2, Math.round(cardW * 0.46), Math.round(drawW * 0.028), tapeColors[cfg.id] || '#f472b6');
+
+          // Bottom label
+          const chinCenterY = photoTop + photoH + (cardH / 2 - (photoTop + photoH)) / 2;
+          targetCtx.fillStyle = '#4a3843';
+          targetCtx.font = `600 ${Math.round(drawW * 0.010)}px 'Caveat', 'Patrick Hand', cursive, sans-serif`;
+          targetCtx.textAlign = 'center';
+          targetCtx.textBaseline = 'middle';
+          targetCtx.fillText(`✨ ${cfg.label} ♡`, 0, chinCenterY);
+        }
+      }
+
+      // Live Inspector Guides (if enabled)
+      if (showAlignmentOutlines) {
+        targetCtx.strokeStyle = cfg.id === activeFrameId ? '#ec4899' : 'rgba(56, 189, 248, 0.7)';
+        targetCtx.lineWidth = cfg.id === activeFrameId ? 3.0 : 1.5;
+        if (cfg.id !== activeFrameId) targetCtx.setLineDash([6, 4]);
+        drawRoundedRect(targetCtx, -cardW / 2, -cardH / 2, cardW, cardH, cornerR);
+        targetCtx.stroke();
+        targetCtx.setLineDash([]);
+
+        targetCtx.fillStyle = cfg.id === activeFrameId ? '#ec4899' : '#38bdf8';
+        targetCtx.font = 'bold 14px sans-serif';
+        targetCtx.fillText(`Frame ${cfg.id}: ${cfg.label || ''} (${cfg.rotDeg > 0 ? '+' : ''}${cfg.rotDeg.toFixed(1)}°)`, -cardW / 2 + 6, -cardH / 2 + 18);
+      }
+
+      targetCtx.restore();
     }
 
     function showToast(msg) {
@@ -1260,79 +1618,13 @@
       currentDrawMetrics = { drawX, drawY, drawW, drawH };
 
       // ====================================================================
-      // LAYER A: DRAW SHAAAW'S PHOTOS (UNDERNEATH THE POLAROID FRAME)
+      // 🌟 RENDER THE 7 NEW POLAROID FRAMES (PERFECT FIT & COVERS OLD FRAMES)
       // ====================================================================
+      // Note: All 8 QR codes on sourceImage are preserved 100% untouched.
       frameStates.forEach(cfg => {
         const photo = frameImages[cfg.id];
-        if (photo && photo.complete && photo.naturalWidth) {
-          const cx = drawX + Math.round(drawW * cfg.cxPct);
-          const cy = drawY + Math.round(drawH * cfg.cyPct);
-          const aw = Math.round(drawW * cfg.wPct * (cfg.scale || 1.0));
-          const ah = Math.round(drawW * cfg.hPct * (cfg.scale || 1.0));
-          const rot = cfg.rotDeg || 0;
-
-          // Draw photo with 8% bleed so it tucks right under the white polaroid border
-          const bleedW = Math.round(aw * 1.08);
-          const bleedH = Math.round(ah * 1.08);
-
-          ctx.save();
-          ctx.translate(cx, cy);
-          ctx.rotate(rot * Math.PI / 180);
-
-          // Clip to bleed rectangle to keep clean separation
-          drawRoundedRect(ctx, -bleedW / 2, -bleedH / 2, bleedW, bleedH, 4);
-          ctx.clip();
-
-          drawCroppedPhoto(ctx, photo, -bleedW / 2, -bleedH / 2, bleedW, bleedH, cfg.panX, cfg.panY, cfg.zoom);
-
-          // Subtle inner cavity shadow for authentic photo depth under paper
-          const shadowGrad = ctx.createLinearGradient(0, -bleedH / 2, 0, -bleedH / 2 + 20);
-          shadowGrad.addColorStop(0, 'rgba(40, 20, 25, 0.25)');
-          shadowGrad.addColorStop(1, 'rgba(40, 20, 25, 0.0)');
-          ctx.fillStyle = shadowGrad;
-          ctx.fillRect(-bleedW / 2, -bleedH / 2, bleedW, 20);
-
-          ctx.restore();
-        }
+        drawNewPolaroidFrame(ctx, cfg, photo, drawW, drawH, drawX, drawY);
       });
-
-      // ====================================================================
-      // LAYER B: DRAW THE POLAROID FRAME OVERLAY ON TOP OF SHAAAW'S PHOTOS!
-      // ====================================================================
-      // The Polaroid frame (white paper borders, pink tape, "You Make Everything More Fun",
-      // Stitch, butterfly, hearts, and all 8 QR codes) sits PHYSICALLY ON TOP of the photos!
-      const frameOverlay = buildFrameOverlay();
-      if (frameOverlay) {
-        ctx.drawImage(frameOverlay, drawX, drawY, drawW, drawH);
-      }
-
-      // Live Alignment Inspector Guides (only when user checks "Show Guides")
-      if (showAlignmentOutlines) {
-        frameStates.forEach(cfg => {
-          const cx = drawX + Math.round(drawW * cfg.cxPct);
-          const cy = drawY + Math.round(drawH * cfg.cyPct);
-          const aw = Math.round(drawW * cfg.wPct * (cfg.scale || 1.0));
-          const ah = Math.round(drawW * cfg.hPct * (cfg.scale || 1.0));
-          const rot = cfg.rotDeg || 0;
-
-          ctx.save();
-          ctx.translate(cx, cy);
-          ctx.rotate(rot * Math.PI / 180);
-
-          ctx.strokeStyle = cfg.id === activeFrameId ? '#ec4899' : 'rgba(56, 189, 248, 0.7)';
-          ctx.lineWidth = cfg.id === activeFrameId ? 3.0 : 1.5;
-          if (cfg.id !== activeFrameId) ctx.setLineDash([6, 4]);
-          drawRoundedRect(ctx, -aw / 2, -ah / 2, aw, ah, 5);
-          ctx.stroke();
-          ctx.setLineDash([]);
-
-          ctx.fillStyle = cfg.id === activeFrameId ? '#ec4899' : '#38bdf8';
-          ctx.font = 'bold 14px sans-serif';
-          ctx.fillText(`Frame ${cfg.id}: ${cfg.label || ''} (${cfg.rotDeg > 0 ? '+' : ''}${cfg.rotDeg.toFixed(1)}°)`, -aw / 2 + 6, -ah / 2 + 18);
-
-          ctx.restore();
-        });
-      }
     }
 
     // ========================================================================
@@ -1559,10 +1851,11 @@
 
       for (let i = 0; i <= 6; i++) {
         const cfg = frameStates[i];
+        const isMain = cfg.id === 0;
         const cx = drawX + Math.round(drawW * cfg.cxPct);
         const cy = drawY + Math.round(drawH * cfg.cyPct);
-        const aw = Math.round(drawW * cfg.wPct * (cfg.scale || 1.0));
-        const ah = Math.round(drawW * cfg.hPct * (cfg.scale || 1.0));
+        const cardW = Math.round(drawW * (isMain ? 0.3220 : 0.2080) * (cfg.scale || 1.0));
+        const cardH = Math.round(drawW * (isMain ? 0.3840 : 0.2540) * (cfg.scale || 1.0));
         const rad = -cfg.rotDeg * Math.PI / 180;
 
         const dx = clickX - cx;
@@ -1570,7 +1863,7 @@
         const localX = dx * Math.cos(rad) - dy * Math.sin(rad);
         const localY = dx * Math.sin(rad) + dy * Math.cos(rad);
 
-        if (Math.abs(localX) <= aw / 2 && Math.abs(localY) <= ah / 2) {
+        if (Math.abs(localX) <= cardW / 2 && Math.abs(localY) <= cardH / 2) {
           selectActiveFrame(i);
           document.getElementById('activeFrameFileInput').click();
           return;
@@ -1614,10 +1907,11 @@
 
         for (let i = 0; i <= 6; i++) {
           const cfg = frameStates[i];
+          const isMain = cfg.id === 0;
           const cx = drawX + Math.round(drawW * cfg.cxPct);
           const cy = drawY + Math.round(drawH * cfg.cyPct);
-          const aw = Math.round(drawW * cfg.wPct * (cfg.scale || 1.0));
-          const ah = Math.round(drawW * cfg.hPct * (cfg.scale || 1.0));
+          const cardW = Math.round(drawW * (isMain ? 0.3220 : 0.2080) * (cfg.scale || 1.0));
+          const cardH = Math.round(drawW * (isMain ? 0.3840 : 0.2540) * (cfg.scale || 1.0));
           const rad = -cfg.rotDeg * Math.PI / 180;
 
           const dx = dropX - cx;
@@ -1625,7 +1919,7 @@
           const localX = dx * Math.cos(rad) - dy * Math.sin(rad);
           const localY = dx * Math.sin(rad) + dy * Math.cos(rad);
 
-          if (Math.abs(localX) <= aw / 2 && Math.abs(localY) <= ah / 2) {
+          if (Math.abs(localX) <= cardW / 2 && Math.abs(localY) <= cardH / 2) {
             targetFrame = i;
             break;
           }
