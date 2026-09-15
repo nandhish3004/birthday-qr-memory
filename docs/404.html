@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shaaaw's Birthday Memories &bull; Permanent Resolver Hub</title>
+  <title>Shaaaw's Birthday Memories • Permanent Resolver Hub</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎁</text></svg>">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Playfair+Display:ital,wght@1,600;1,700&display=swap');
@@ -101,23 +101,23 @@
 </head>
 <body>
   <div class="hub-container">
-    <span class="badge">🔒 PERMANENT RESOLVER VAULT &bull; ACTIVE</span>
+    <span class="badge">🔒 PERMANENT RESOLVER VAULT • ACTIVE</span>
     <h1>Shaaaw's Birthday Archive</h1>
     <p>Lifetime Resolver Hub hosted on GitHub Pages. Every scanned physical QR code resolves through this hub directly to Shaaaw's memory playback.</p>
 
     <div class="tape-grid">
-      <a href="m/1.html" class="tape-btn"><span>📼</span> Tape 01</a>
-      <a href="m/2.html" class="tape-btn"><span>📼</span> Tape 02</a>
-      <a href="m/3.html" class="tape-btn"><span>📼</span> Tape 03</a>
-      <a href="m/4.html" class="tape-btn"><span>📼</span> Tape 04</a>
-      <a href="m/5.html" class="tape-btn"><span>📼</span> Tape 05</a>
-      <a href="m/6.html" class="tape-btn"><span>📼</span> Tape 06</a>
-      <a href="m/7.html" class="tape-btn"><span>📼</span> Tape 07</a>
-      <a href="m/8.html" class="tape-btn"><span>📼</span> Tape 08</a>
+      <a href="/birthday-qr-memory/m/1.html" class="tape-btn"><span>📼</span> Tape 01</a>
+      <a href="/birthday-qr-memory/m/2.html" class="tape-btn"><span>📼</span> Tape 02</a>
+      <a href="/birthday-qr-memory/m/3.html" class="tape-btn"><span>📼</span> Tape 03</a>
+      <a href="/birthday-qr-memory/m/4.html" class="tape-btn"><span>📼</span> Tape 04</a>
+      <a href="/birthday-qr-memory/m/5.html" class="tape-btn"><span>📼</span> Tape 05</a>
+      <a href="/birthday-qr-memory/m/6.html" class="tape-btn"><span>📼</span> Tape 06</a>
+      <a href="/birthday-qr-memory/m/7.html" class="tape-btn"><span>📼</span> Tape 07</a>
+      <a href="/birthday-qr-memory/m/8.html" class="tape-btn"><span>📼</span> Tape 08</a>
     </div>
 
-    <a href="https://birthday-qr-memory-system.onrender.com" class="live-app-btn" id="liveAppBtn">
-      ✨ Enter Full Birthday Experience
+    <a href="/birthday-qr-memory/kodak-print.html" class="live-app-btn">
+      💖 View 4K Poster & Studio
     </a>
 
     <p class="footer-note">
@@ -126,32 +126,18 @@
   </div>
 
   <script>
-    // Route /m/1 or /memory/1 if hit via 404
-    (async function checkRoute() {
+    // Route any /m/1 or /memory/1 route immediately to standalone player
+    (function checkRoute() {
       const path = window.location.pathname;
-      const match = path.match(/(?:\/m\/|\/memory\/)(\d+)/);
+      const match = path.match(/(?:m|memory)\/(\d+)/i);
       if (match) {
         const id = match[1];
-        let target = 'https://birthday-qr-memory-system.onrender.com/memory/' + id;
-        try {
-          const res = await fetch('/birthday-qr-memory/config.json?t=' + Date.now());
-          if (res.ok) {
-            const cfg = await res.json();
-            if (cfg.targetBaseUrl) target = cfg.targetBaseUrl.replace(/\/+$/, '') + '/memory/' + id;
-          }
-        } catch(e) {}
-        window.location.replace(target);
-        return;
-      }
-      try {
-        const res = await fetch('config.json?t=' + Date.now());
-        if (res.ok) {
-          const cfg = await res.json();
-          if (cfg && cfg.targetBaseUrl) {
-            document.getElementById('liveAppBtn').href = cfg.targetBaseUrl;
-          }
+        if (id >= 1 && id <= 8) {
+          const root = path.includes('/birthday-qr-memory') ? '/birthday-qr-memory' : '';
+          window.location.replace(`${root}/m/${id}.html`);
+          return;
         }
-      } catch (e) {}
+      }
     })();
   </script>
 </body>

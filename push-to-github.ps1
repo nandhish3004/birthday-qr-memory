@@ -25,11 +25,11 @@ Write-Host "3. Synchronizing HTML Studios between docs/ and public/..." -Foregro
 Copy-Item -Path "docs\kodak-print.html" -Destination "public\kodak-print.html" -Force
 Copy-Item -Path "docs\new-poster.html" -Destination "public\new-poster.html" -Force
 
-Write-Host "3. Staging modified files..." -ForegroundColor Green
+Write-Host "3. Staging modified files (standalone memory players, studios, assets)..." -ForegroundColor Green
 git add -A
 
 Write-Host "4. Committing changes..." -ForegroundColor Green
-git commit -m "fix: Completely erase old baked-in Polaroid frames and render fresh 4K Polaroids with pink washi tape and cursive caption"
+git commit -m "fix: Standalone mobile memory players for all 8 tapes - zero tape not found errors on QR scan"
 
 Write-Host "5. Setting main branch & pushing to GitHub..." -ForegroundColor Green
 git branch -M main

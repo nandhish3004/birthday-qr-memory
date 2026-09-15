@@ -30,11 +30,11 @@ copy /Y "docs\kodak-print.html" "public\kodak-print.html" >nul
 copy /Y "docs\new-poster.html" "public\new-poster.html" >nul
 echo    - kodak-print.html and new-poster.html synced!
 
-echo 3. Staging modified files...
+echo 3. Staging modified files (standalone memory players, studios, assets)...
 git add -A
 
 echo 4. Committing changes...
-git commit -m "fix: Completely erase old baked-in Polaroid frames and render pristine 4K Polaroid cardstock with pink washi tape & cursive caption"
+git commit -m "fix: Standalone mobile memory players for all 8 tapes - zero tape not found errors on QR scan"
 
 echo 5. Pushing to GitHub...
 git branch -M main
@@ -43,6 +43,7 @@ git push -u origin main
 echo.
 echo ======================================================
 echo  Done! Authentic Scrapbook & Memories Pushed to GitHub!
+echo  Mobile QR Resolution: Zero dependency on Render!
 echo  Visit: https://nandhish3004.github.io/birthday-qr-memory/kodak-print.html
 echo ======================================================
 echo.
