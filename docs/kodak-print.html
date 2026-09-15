@@ -429,6 +429,35 @@
       padding-bottom: 8px;
     }
 
+    .nudge-btn-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .btn-nudge {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 6px 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-nudge:hover {
+      background: rgba(236, 72, 153, 0.25);
+      border-color: #ec4899;
+      color: #fff;
+    }
+
     .slider-row {
       display: flex;
       flex-direction: column;
@@ -696,7 +725,7 @@
     <header class="studio-header">
       <h1 class="studio-title">Shaaaw's 9×10.9 Kodak Photo Paper Studio</h1>
       <p class="studio-sub">
-        Upload Shaaaw's pictures — photos <span class="highlight-text">automatically auto-align and tilt</span> to fit each Polaroid frame seamlessly.
+        Upload Shaaaw's pictures — photos <span class="highlight-text">automatically auto-align, tilt and crop</span> to fit each Polaroid frame perfectly.
         Export a high-definition <span class="highlight-text">4K Ultra-HD enhanced poster</span> ready to print on <strong>9" × 10.9" Kodak photo paper</strong>.
       </p>
     </header>
@@ -747,7 +776,7 @@
             <span>🌸 Upload Shaaaw's Photos</span>
           </h3>
           <p style="font-size: 0.84rem; color: #cbd5e1; margin: 0 0 12px; line-height: 1.45;">
-            Select 1 to 7 photos of Shaaaw. They will <strong>automatically rotate to each Polaroid's exact tilt angle</strong>, auto-center, and clip into each frame!
+            Select 1 to 7 photos of Shaaaw. They will <strong>automatically crop to fit each Polaroid aperture with exact tilt alignment</strong>!
           </p>
 
           <label class="btn-hero-upload">
@@ -776,10 +805,22 @@
                   <span>Choose</span>
                   <input type="file" id="activeFrameFileInput" accept="image/*" style="display: none;" onchange="handleActiveFrameUpload(event)">
                 </label>
-                <button class="btn-download-sub" style="padding: 3px 8px; font-size: 0.74rem; width: auto;" onclick="resetActiveFrameDefaults()" title="Reset to default auto-tilt and alignment">
-                  <span>🔄 Auto</span>
+                <button class="btn-download-sub" style="padding: 3px 8px; font-size: 0.74rem; width: auto;" onclick="resetActiveFrameDefaults()" title="Reset to calibrated auto-tilt and aperture fit">
+                  <span>🎯 Auto-Snap</span>
                 </button>
               </div>
+            </div>
+
+            <!-- Quick Precision Nudge Buttons -->
+            <div class="nudge-btn-grid">
+              <button class="btn-nudge" onclick="nudgeActiveFrame('x', -0.003)" title="Move Left">⬅️ Left</button>
+              <button class="btn-nudge" onclick="nudgeActiveFrame('x', 0.003)" title="Move Right">➡️ Right</button>
+              <button class="btn-nudge" onclick="nudgeActiveFrame('y', -0.003)" title="Move Up">⬆️ Up</button>
+              <button class="btn-nudge" onclick="nudgeActiveFrame('y', 0.003)" title="Move Down">⬇️ Down</button>
+              <button class="btn-nudge" onclick="nudgeActiveFrame('scale', 0.02)" title="Expand Size">➕ Size +2%</button>
+              <button class="btn-nudge" onclick="nudgeActiveFrame('scale', -0.02)" title="Shrink Size">➖ Size -2%</button>
+              <button class="btn-nudge" onclick="nudgeActiveFrame('tilt', -0.5)" title="Tilt Left">📐 Tilt -0.5°</button>
+              <button class="btn-nudge" onclick="nudgeActiveFrame('tilt', 0.5)" title="Tilt Right">📐 Tilt +0.5°</button>
             </div>
 
             <div class="slider-row">
@@ -810,16 +851,16 @@
               <div class="slider-row">
                 <div class="slider-row-header">
                   <span>Auto-Tilt:</span>
-                  <span id="tiltVal">-2.0°</span>
+                  <span id="tiltVal">-2.6°</span>
                 </div>
-                <input type="range" id="sliderTilt" min="-120" max="120" value="-20" oninput="updateActiveTilt(this.value)">
+                <input type="range" id="sliderTilt" min="-120" max="120" value="-26" oninput="updateActiveTilt(this.value)">
               </div>
               <div class="slider-row">
                 <div class="slider-row-header">
-                  <span>Slot Scale:</span>
+                  <span>Frame Scale:</span>
                   <span id="scaleVal">100%</span>
                 </div>
-                <input type="range" id="sliderScale" min="85" max="115" value="100" oninput="updateActiveScale(this.value)">
+                <input type="range" id="sliderScale" min="80" max="130" value="100" oninput="updateActiveScale(this.value)">
               </div>
             </div>
           </div>
@@ -930,17 +971,18 @@
     let showAlignmentOutlines = false;
 
     // ========================================================================
-    // CALIBRATED POLAROID GEOMETRIES & EXACT AUTO-TILT ANGLES
+    // CALIBRATED POLAROID APERTURES: EXACT SIZES & AUTO-TILT ANGLES
     // ========================================================================
-    // Note: All 8 QR codes are part of sourceImage and are NEVER touched.
+    // NOTE: All dimensions are mathematically calibrated to completely fill
+    // the inner grey apertures of the polaroid frames without touching the QR codes.
     const FRAME_CONFIGS = [
-      { id: 0, title: "🌟 Center Main Polaroid (Shaaaw)", cxPct: 0.490, cyPct: 0.368, wPct: 0.258, hPct: 0.252, rotDeg: -2.0, panX: 0.00, panY: 0.18, zoom: 1.05, scale: 1.00, isMain: true,  label: "Shaaaw 💖", icon: "🌟" },
-      { id: 1, title: "🖼️ Top-Left Polaroid (Frame 1)",   cxPct: 0.245, cyPct: 0.250, wPct: 0.170, hPct: 0.145, rotDeg:  5.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Left",   icon: "🖼️" },
-      { id: 2, title: "🦋 Mid-Left Polaroid (Frame 2)",    cxPct: 0.230, cyPct: 0.500, wPct: 0.175, hPct: 0.150, rotDeg: -5.8, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Left",   icon: "🦋" },
-      { id: 3, title: "🎀 Bottom-Left Polaroid (Frame 3)", cxPct: 0.370, cyPct: 0.650, wPct: 0.175, hPct: 0.150, rotDeg: -3.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Left",   icon: "🎀" },
-      { id: 4, title: "🎀 Bottom-Right Polaroid (Frame 4)",cxPct: 0.625, cyPct: 0.650, wPct: 0.175, hPct: 0.150, rotDeg:  3.2, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Right",  icon: "🎀" },
-      { id: 5, title: "🏰 Top-Right Polaroid (Frame 5)",  cxPct: 0.725, cyPct: 0.258, wPct: 0.170, hPct: 0.145, rotDeg: -5.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Right",  icon: "🏰" },
-      { id: 6, title: "✨ Mid-Right Polaroid (Frame 6)",   cxPct: 0.755, cyPct: 0.502, wPct: 0.175, hPct: 0.150, rotDeg:  5.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Right",  icon: "✨" }
+      { id: 0, title: "🌟 Center Main Polaroid (Shaaaw)", cxPct: 0.5055, cyPct: 0.3555, wPct: 0.3220, hPct: 0.3280, rotDeg: -2.6, panX: 0.00, panY: 0.18, zoom: 1.05, scale: 1.00, isMain: true,  label: "Shaaaw 💖", icon: "🌟" },
+      { id: 1, title: "🖼️ Top-Left Polaroid (Frame 1)",   cxPct: 0.2450, cyPct: 0.2520, wPct: 0.2180, hPct: 0.1880, rotDeg:  5.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Left",   icon: "🖼️" },
+      { id: 2, title: "🦋 Mid-Left Polaroid (Frame 2)",    cxPct: 0.2280, cyPct: 0.5020, wPct: 0.2200, hPct: 0.1900, rotDeg: -6.0, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Left",   icon: "🦋" },
+      { id: 3, title: "🎀 Bottom-Left Polaroid (Frame 3)", cxPct: 0.3720, cyPct: 0.6520, wPct: 0.2200, hPct: 0.1900, rotDeg: -3.6, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Left",   icon: "🎀" },
+      { id: 4, title: "🎀 Bottom-Right Polaroid (Frame 4)",cxPct: 0.6260, cyPct: 0.6520, wPct: 0.2200, hPct: 0.1900, rotDeg:  3.4, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Right",  icon: "🎀" },
+      { id: 5, title: "🏰 Top-Right Polaroid (Frame 5)",  cxPct: 0.7280, cyPct: 0.2600, wPct: 0.2180, hPct: 0.1880, rotDeg: -5.6, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Right",  icon: "🏰" },
+      { id: 6, title: "✨ Mid-Right Polaroid (Frame 6)",   cxPct: 0.7560, cyPct: 0.5040, wPct: 0.2200, hPct: 0.1900, rotDeg:  5.8, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Right",  icon: "✨" }
     ];
 
     const frameStates = JSON.parse(JSON.stringify(FRAME_CONFIGS));
@@ -949,7 +991,7 @@
     let currentDrawMetrics = { drawX: 0, drawY: 0, drawW: 2700, drawH: 3270 };
 
     // ========================================================================
-    // 1. POSTER ARTWORK LOADING (Relative paths first for maximum compatibility)
+    // 1. POSTER ARTWORK LOADING
     // ========================================================================
     const posterCandidates = [
       'assets/original-poster.jpg',
@@ -972,7 +1014,7 @@
     sourceImage.onerror = tryLoadNextPoster;
     tryLoadNextPoster();
 
-    // Load Shaaaw Center Photo default if available
+    // Default center photo
     const shaawDefaultImg = new Image();
     const shaawCandidates = [
       'assets/shaaw-center.jpg',
@@ -1022,6 +1064,7 @@
       targetCtx.imageSmoothingEnabled = true;
       targetCtx.imageSmoothingQuality = 'high';
 
+      const z = Math.max(1.0, zoom || 1.0);
       const destAspect = destW / destH;
       const imgW = photoImg.naturalWidth;
       const imgH = photoImg.naturalHeight;
@@ -1029,16 +1072,16 @@
 
       let cropW, cropH;
       if (imgAspect > destAspect) {
-        cropH = imgH / (zoom || 1.0);
-        cropW = (cropH * destAspect);
+        cropH = imgH / z;
+        cropW = cropH * destAspect;
       } else {
-        cropW = imgW / (zoom || 1.0);
-        cropH = (cropW / destAspect);
+        cropW = imgW / z;
+        cropH = cropW / destAspect;
       }
 
       const maxPanX = Math.max(0, imgW - cropW);
       const maxPanY = Math.max(0, imgH - cropH);
-      const cropX = Math.max(0, Math.min(maxPanX, (imgW - cropW) / 2 + (panX || 0) * maxPanX));
+      const cropX = Math.max(0, Math.min(maxPanX, (maxPanX / 2) + (panX || 0) * maxPanX));
       const cropY = Math.max(0, Math.min(maxPanY, maxPanY * (panY !== undefined ? panY : 0.5)));
 
       targetCtx.drawImage(photoImg, cropX, cropY, cropW, cropH, destX, destY, destW, destH);
@@ -1158,9 +1201,9 @@
       currentDrawMetrics = { drawX, drawY, drawW, drawH };
 
       // ====================================================================
-      // 🌸 DRAW SHAAAW'S PHOTOS INTO POLAROID FRAMES (AUTO-TILTED & ALIGNED)
+      // 🌸 DRAW SHAAAW'S PHOTOS: EXACT APERTURE FIT & AUTO-TILT
       // ====================================================================
-      // NOTE: The 8 QR codes on the poster are strictly left untouched!
+      // Note: QR codes are untouched and preserved from sourceImage.
       frameStates.forEach(cfg => {
         const cx = drawX + Math.round(drawW * cfg.cxPct);
         const cy = drawY + Math.round(drawH * cfg.cyPct);
@@ -1175,6 +1218,7 @@
 
         if (photo && photo.complete && photo.naturalWidth) {
           ctx.save();
+          // Precise rounded rect clipping matching polaroid inner cavity
           drawRoundedRect(ctx, -aw / 2, -ah / 2, aw, ah, 5);
           ctx.clip();
 
@@ -1241,7 +1285,7 @@
               renderThumbnailsGrid();
               selectActiveFrame(targetFrameId);
               render9x10_9Poster();
-              showToast(`🎉 ${loadedCount} Photo${loadedCount > 1 ? 's' : ''} Auto-Aligned & Tilted!`);
+              showToast(`🎉 ${loadedCount} Photo${loadedCount > 1 ? 's' : ''} Auto-Cropped & Tilted!`);
             }
           };
           img.src = e.target.result;
@@ -1266,7 +1310,7 @@
           renderThumbnailsGrid();
           selectActiveFrame(activeFrameId);
           render9x10_9Poster();
-          showToast(`✨ Frame ${activeFrameId} Auto-Aligned & Tilted!`);
+          showToast(`✨ Frame ${activeFrameId} Auto-Cropped & Tilted!`);
         };
         img.src = e.target.result;
       };
@@ -1285,6 +1329,10 @@
     }
 
     function resetFrameToDefault(id) {
+      frameStates[id].cxPct = FRAME_CONFIGS[id].cxPct;
+      frameStates[id].cyPct = FRAME_CONFIGS[id].cyPct;
+      frameStates[id].wPct = FRAME_CONFIGS[id].wPct;
+      frameStates[id].hPct = FRAME_CONFIGS[id].hPct;
       frameStates[id].panX = FRAME_CONFIGS[id].panX;
       frameStates[id].panY = FRAME_CONFIGS[id].panY;
       frameStates[id].zoom = FRAME_CONFIGS[id].zoom;
@@ -1296,7 +1344,24 @@
       resetFrameToDefault(activeFrameId);
       selectActiveFrame(activeFrameId);
       render9x10_9Poster();
-      showToast(`🔄 Frame ${activeFrameId} reset to calibrated auto-tilt`);
+      showToast(`🎯 Frame ${activeFrameId} locked to Polaroid frame!`);
+    }
+
+    function nudgeActiveFrame(type, delta) {
+      const s = frameStates[activeFrameId];
+      if (type === 'x') s.cxPct += delta;
+      if (type === 'y') s.cyPct += delta;
+      if (type === 'scale') {
+        s.scale = Math.max(0.7, Math.min(1.5, (s.scale || 1.0) + delta));
+        document.getElementById('sliderScale').value = Math.round(s.scale * 100);
+        document.getElementById('scaleVal').textContent = `${Math.round(s.scale * 100)}%`;
+      }
+      if (type === 'tilt') {
+        s.rotDeg = Math.round((s.rotDeg + delta) * 10) / 10;
+        document.getElementById('sliderTilt').value = Math.round(s.rotDeg * 10);
+        document.getElementById('tiltVal').textContent = `${s.rotDeg > 0 ? '+' : ''}${s.rotDeg.toFixed(1)}°`;
+      }
+      render9x10_9Poster();
     }
 
     function updatePhotoCountStatus() {
@@ -1500,7 +1565,7 @@
             renderThumbnailsGrid();
             selectActiveFrame(targetFrame);
             render9x10_9Poster();
-            showToast(`✨ Frame ${targetFrame} Auto-Aligned & Tilted!`);
+            showToast(`✨ Frame ${targetFrame} Auto-Cropped & Tilted!`);
           };
           img.src = ev.target.result;
         };
