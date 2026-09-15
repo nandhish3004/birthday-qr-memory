@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kodak 9×10.9 Photo Print Studio 📸 Shaaaw's Birthday Scrapbook</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -716,7 +717,7 @@
       </a>
       <div style="display: flex; align-items: center; gap: 10px;">
         <span class="paper-spec-tag" id="posterStatusTag" style="background: rgba(236,72,153,0.2); color: #fbcfe8; border-color: rgba(236,72,153,0.4);">
-          ✨ Embedded QR Codes Untouched & Preserved
+          ✨ Polaroid Frame Layered On Top of Photos
         </span>
         <div class="kodak-badge">
           📸 Kodak 9×10.9 Master Studio (300 DPI / 4K)
@@ -727,7 +728,7 @@
     <header class="studio-header">
       <h1 class="studio-title">Shaaaw's 9×10.9 Kodak Photo Paper Studio</h1>
       <p class="studio-sub">
-        Upload Shaaaw's pictures — photos <span class="highlight-text">automatically auto-align, tilt and crop</span> to fit each Polaroid frame perfectly.
+        Upload Shaaaw's pictures — the <span class="highlight-text">Polaroid frame sits on top of each image</span>, tucking photos seamlessly inside the paper aperture.
         Export a high-definition <span class="highlight-text">4K Ultra-HD enhanced poster</span> ready to print on <strong>9" × 10.9" Kodak photo paper</strong>.
       </p>
     </header>
@@ -749,7 +750,7 @@
           <canvas id="kodakCanvas" width="2700" height="3270" title="Click directly on any Polaroid frame to upload or change photo!"></canvas>
 
           <div class="canvas-toast" id="canvasToast">
-            <span>✨ Photos Auto-Aligned & Tilted!</span>
+            <span>✨ Photos Inserted Under Polaroid Frames!</span>
           </div>
 
           <div class="guide-overlay" id="guideOverlay">
@@ -764,7 +765,7 @@
 
         <div style="margin-top: 14px; font-size: 0.86rem; color: #cbd5e1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
           <span>💡 <strong>Interactive:</strong> Click any polaroid frame on the poster to replace its photo directly.</span>
-          <span style="color: #f472b6; font-weight: 700;">🎯 7 Polaroid Frames Calibrated</span>
+          <span style="color: #f472b6; font-weight: 700;">🎯 Polaroid Frames Layered on Top</span>
         </div>
       </div>
 
@@ -773,16 +774,16 @@
 
         <!-- 1. Hero Auto-Upload Box -->
         <div class="panel-card hero-upload-card">
-          <div class="hero-badge">✨ Smart Auto-Placement & Tilt</div>
+          <div class="hero-badge">✨ Frame Sits on Top of Photos</div>
           <h3 class="panel-title" style="margin-bottom: 6px; font-size: 1.15rem; color: #fff;">
             <span>🌸 Upload Shaaaw's Photos</span>
           </h3>
           <p style="font-size: 0.84rem; color: #cbd5e1; margin: 0 0 12px; line-height: 1.45;">
-            Select 1 to 7 photos of Shaaaw. They will <strong>automatically crop to fit each Polaroid aperture with exact tilt alignment</strong>!
+            Select 1 to 7 photos of Shaaaw. Each photo is <strong>inserted UNDER the Polaroid frame</strong> so the white border, pink tape, and text sit on top!
           </p>
 
           <label class="btn-hero-upload">
-            <span>📂 Upload Photos (Auto-Fit All 7 Frames)</span>
+            <span>📂 Upload Photos (Auto-Insert Into All Frames)</span>
             <input type="file" id="batchPhotoInput" multiple accept="image/*" style="display: none;" onchange="handleBatchPhotoUpload(event)">
           </label>
 
@@ -807,7 +808,7 @@
                   <span>Choose</span>
                   <input type="file" id="activeFrameFileInput" accept="image/*" style="display: none;" onchange="handleActiveFrameUpload(event)">
                 </label>
-                <button class="btn-download-sub" style="padding: 3px 8px; font-size: 0.74rem; width: auto;" onclick="resetActiveFrameDefaults()" title="Reset to calibrated auto-tilt and aperture fit">
+                <button class="btn-download-sub" style="padding: 3px 8px; font-size: 0.74rem; width: auto;" onclick="resetActiveFrameDefaults()" title="Reset photo inside Polaroid frame">
                   <span>🎯 Auto-Snap</span>
                 </button>
               </div>
@@ -859,7 +860,7 @@
               </div>
               <div class="slider-row">
                 <div class="slider-row-header">
-                  <span>Frame Scale:</span>
+                  <span>Photo Scale:</span>
                   <span id="scaleVal">100%</span>
                 </div>
                 <input type="range" id="sliderScale" min="80" max="130" value="100" oninput="updateActiveScale(this.value)">
@@ -1174,7 +1175,7 @@
       for (let i = serrations; i > 0; i--) {
         const toothX = (i % 2 === 0) ? x + 4 : x;
         c.lineTo(toothX, y + (i - 0.5) * step);
-        c.lineTo(x + y, y + (i - 1) * step);
+        c.lineTo(x, y + (i - 1) * step);
       }
       c.closePath();
     }
@@ -1729,7 +1730,7 @@
               renderThumbnailsGrid();
               selectActiveFrame(targetFrameId);
               render9x10_9Poster();
-              showToast(`🎉 ${loadedCount} Photo${loadedCount > 1 ? 's' : ''} Auto-Cropped & Tilted!`);
+              showToast(`🎉 ${loadedCount} Photo${loadedCount > 1 ? 's' : ''} Inserted Under Frames!`);
             }
           };
           img.src = e.target.result;
@@ -1754,7 +1755,7 @@
           renderThumbnailsGrid();
           selectActiveFrame(activeFrameId);
           render9x10_9Poster();
-          showToast(`✨ Frame ${activeFrameId} Auto-Cropped & Tilted!`);
+          showToast(`✨ Frame ${activeFrameId} Inserted Under Frame!`);
         };
         img.src = e.target.result;
       };
@@ -1788,7 +1789,7 @@
       resetFrameToDefault(activeFrameId);
       selectActiveFrame(activeFrameId);
       render9x10_9Poster();
-      showToast(`🎯 Frame ${activeFrameId} locked to Polaroid frame!`);
+      showToast(`🎯 Frame ${activeFrameId} locked under Polaroid frame!`);
     }
 
     function nudgeActiveFrame(type, delta) {
@@ -2011,7 +2012,7 @@
             renderThumbnailsGrid();
             selectActiveFrame(targetFrame);
             render9x10_9Poster();
-            showToast(`✨ Frame ${targetFrame} Auto-Cropped & Tilted!`);
+            showToast(`✨ Frame ${targetFrame} Inserted Under Frame!`);
           };
           img.src = ev.target.result;
         };
@@ -2025,7 +2026,9 @@
       if (!file) return;
       const reader = new FileReader();
       reader.onload = function(e) {
-        sourceImage.onload = () => render9x10_9Poster();
+        sourceImage.onload = () => {
+          render9x10_9Poster();
+        };
         sourceImage.src = e.target.result;
         const tag = document.getElementById('posterStatusTag');
         if (tag) tag.textContent = '✨ Custom Poster Active (Uploaded)';
