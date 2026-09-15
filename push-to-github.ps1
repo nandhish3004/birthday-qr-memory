@@ -31,12 +31,9 @@ git add -A
 Write-Host "4. Committing changes..." -ForegroundColor Green
 git commit -m "fix: Standalone mobile memory players for all 8 tapes - zero tape not found errors on QR scan"
 
-Write-Host "5. Syncing with remote repository..." -ForegroundColor Green
-git pull origin main --no-rebase -m "Merge remote changes"
-
-Write-Host "6. Setting main branch & pushing to GitHub..." -ForegroundColor Green
+Write-Host "5. Setting main branch & pushing to GitHub (Force update)..." -ForegroundColor Green
 git branch -M main
-git push -u origin main
+git push -u origin main --force
 
 Write-Host "`n======================================================" -ForegroundColor Cyan
 Write-Host " Done! Authentic Scrapbook & Memories pushed to GitHub!" -ForegroundColor Yellow

@@ -36,12 +36,9 @@ git add -A
 echo 4. Committing changes...
 git commit -m "fix: Standalone mobile memory players for all 8 tapes - zero tape not found errors on QR scan"
 
-echo 5. Syncing with remote repository...
-git pull origin main --no-rebase -m "Merge remote changes"
-
-echo 6. Pushing to GitHub...
+echo 5. Pushing to GitHub (Force update with complete standalone player suite)...
 git branch -M main
-git push -u origin main
+git push -u origin main --force
 
 echo.
 echo ======================================================
