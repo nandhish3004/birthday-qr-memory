@@ -1,724 +1,245 @@
+﻿#!/usr/bin/env node
+/**
+ * build-github-pages.js — REBUILT FROM SCRATCH
+ * ---------------------------------------------------------------------------
+ * The 8 QR stickers scan to GitHub Pages /m/N. The old build generated
+ * "standalone players" with a BUILT-IN synthesized melody, so a scan never
+ * reached your live app — and the audio you upload in the Admin Panel never
+ * played.
+ *
+ * The new build is deliberately simple with zero moving parts:
+ *   every /m/N page is a small on-theme "Opening your tape..." card that
+ *   redirects straight to the LIVE app, where the uploaded audio lives:
+ *       https://birthday-qr-memory.onrender.com/memory/N
+ *   (JS jump after 1.5 s + 3 s meta-refresh fallback + visible button)
+ *
+ * It also:
+ *   - rebuilds docs/index.html (hub) and docs/404.html
+ *   - points docs/config.json / data/config.json at the live domain
+ *     (away from the dead free-plan URL)
+ *   - swaps the mislabeled public/assets/qr/1.png <-> 2.png
+ *     (1.png encoded /memory/2 and vice versa) — guarded by a marker file
+ *   - fixes doc references to the dead free-plan URL
+ *
+ * Usage:  node scripts/build-github-pages.js     (idempotent, safe to re-run)
+ * Then:   git add -A
+ *         git commit -m "rebuild: QR tape pages now open the live app"
+ *         git push origin main
+ * ---------------------------------------------------------------------------
+ */
+'use strict';
 const fs = require('fs');
 const path = require('path');
 
-const DOCS_DIR = path.join(__dirname, '..', 'docs');
-const M_DIR = path.join(DOCS_DIR, 'm');
-const MEMORY_DIR = path.join(DOCS_DIR, 'memory');
-const PUBLIC_M_DIR = path.join(__dirname, '..', 'public', 'm');
+const ROOT = path.join(__dirname, '..');
+const LIVE = 'https://birthday-qr-memory.onrender.com';
+const DEAD = 'https://birthday-qr-memory-system.onrender.com';
 
-const TAPES_DATA = [
-  {
-    id: 1,
-    title: "Divine Chaos Since Day 1 ♡",
-    sub: "TAPE 01 • THE GENESIS MEMORY",
-    emoji: "💖",
-    noteHeading: "💌 A Moment Locked in Time Forever",
-    noteBody: "Here's to the divine chaos, the uncontrollable laughter, and all the spontaneous adventures that started from day 1! May this birthday bring a thousand more unforgettable chapters and beautiful nonsense. Happy Birthday Shaaaw! 💖"
-  },
-  {
-    id: 2,
-    title: "Same Madness, More Birthdays ♡",
-    sub: "TAPE 02 • THE UNBREAKABLE BOND",
-    emoji: "🥂",
-    noteHeading: "💌 Growing Older, Staying Wild",
-    noteBody: "Another year of questionable life choices, endless inside jokes, and laughing until our stomachs hurt. You never change, and honestly, don't you dare start now. Here is to celebrating you today, tomorrow, and forever! 🥂✨"
-  },
-  {
-    id: 3,
-    title: "Chai & Late Night Talks ♡",
-    sub: "TAPE 03 • COZY MEMORIES & CONFESSIONS",
-    emoji: "☕",
-    noteHeading: "💌 The Best Therapy in the World",
-    noteBody: "From 2 AM deep talks over warm chai to the silliness that keeps us going through everything. You are one of the rarest humans, someone who listens with full heart and turns any ordinary evening into gold. Happy Birthday Shaaaw! ☕💫"
-  },
-  {
-    id: 4,
-    title: "Louder Laughs, Brighter Days ♡",
-    sub: "TAPE 04 • PURE JOY & SUNSHINE",
-    emoji: "🌟",
-    noteHeading: "💌 Unstoppable Smiles & Energy",
-    noteBody: "Life is simply 100x louder, brighter, and better with you in the room. Thank you for radiating so much warmth, turning rainy days into celebrations, and keeping everyone smiling. Keep shining this year! 🌟💛"
-  },
-  {
-    id: 5,
-    title: "Collecting Moments, Not Things ♡",
-    sub: "TAPE 05 • ADVENTURE & WANDERLUST",
-    emoji: "✈️",
-    noteHeading: "💌 Snapshots That Never Fade",
-    noteBody: "Every trip, every photo, every crazy detour with you has been a treasure worth keeping forever. May this next spin around the sun take you to new horizons, breathtaking views, and magic at every turn. 🗺️✈️"
-  },
-  {
-    id: 6,
-    title: "Different Chapters, Same You ♡",
-    sub: "TAPE 06 • GROWTH & RESILIENCE",
-    emoji: "🚀",
-    noteHeading: "💌 Proud of Everything You Are",
-    noteBody: "Through every storm, every milestone, and every new chapter, you've stood resilient, kind-hearted, and wonderfully genuine. Seeing you grow and succeed is an honor. Keep reaching for the stars! 🚀🌸"
-  },
-  {
-    id: 7,
-    title: "Good Music, Better Company ♡",
-    sub: "TAPE 07 • SOUNDTRACK OF OUR LIVES",
-    emoji: "🎸",
-    noteHeading: "💌 Bass, Beats & Shared Melodies",
-    noteBody: "Here's to blasting playlists on full volume, singing at the top of our lungs off-key, and dancing like nobody is watching. Some souls are just wired on the same frequency, and you are definitely one of them. 🎶🎸"
-  },
-  {
-    id: 8,
-    title: "Same Weirdo Forever ♡",
-    sub: "TAPE 08 • FOREVER & ALWAYS",
-    emoji: "🎂",
-    noteHeading: "💌 The Grand Finale Tape",
-    noteBody: "Whatever happens, whoever we become, this tape is the proof of an eternal pact: we will remain the same beautiful weirdos forever and ever. Happy Birthday, Shaaaw! Make this the best year yet! 🎂👑🎈"
-  }
+const TAPES = [
+  { id: 1, title: 'THE GENESIS MEMORY' },
+  { id: 2, title: 'THE UNBREAKABLE BOND' },
+  { id: 3, title: 'COZY MEMORIES & CONFESSIONS' },
+  { id: 4, title: 'PURE JOY & SUNSHINE' },
+  { id: 5, title: 'ADVENTURE & WANDERLUST' },
+  { id: 6, title: 'GROWTH & RESILIENCE' },
+  { id: 7, title: 'SOUNDTRACK OF OUR LIVES' },
+  { id: 8, title: 'FOREVER & ALWAYS' },
 ];
 
-function generateStandalonePlayerHtml(tape) {
-  const pills = TAPES_DATA.map(t => {
-    const isActive = t.id === tape.id;
-    return `          <a href="#" onclick="goToTape(${t.id}); return false;" class="tape-pill ${isActive ? 'active' : ''}">Tape 0${t.id}</a>`;
-  }).join('\n');
+const written = [];
+function write(rel, text) {
+  const p = path.join(ROOT, rel);
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  fs.writeFileSync(p, text);
+  written.push(rel);
+}
 
+/* ----------------------------- tape page ------------------------------ */
+function tapePage(t) {
+  const url = LIVE + '/memory/' + t.id;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Tape 0${tape.id} • ${tape.title} | For Shaaaw</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📼</text></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <style>
-    :root {
-      --primary: #e11d48;
-      --primary-gradient: linear-gradient(135deg, #e11d48, #f43f5e);
-      --bg-gradient: radial-gradient(circle at 50% 10%, #2e1222 0%, #150918 60%, #0c040f 100%);
-      --card-bg: rgba(30, 18, 28, 0.78);
-      --card-border: rgba(244, 114, 182, 0.28);
-      --text-main: #fdf2f8;
-      --text-muted: #cbd5e1;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      min-height: 100vh;
-      background: var(--bg-gradient);
-      color: var(--text-main);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px 16px 80px;
-      overflow-x: hidden;
-      position: relative;
-    }
-    .particles {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 1;
-    }
-    .spore {
-      position: absolute;
-      animation: floatUp linear infinite;
-      opacity: 0.6;
-    }
-    @keyframes floatUp {
-      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-      15% { opacity: 0.8; }
-      85% { opacity: 0.8; }
-      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-    }
-    .container {
-      max-width: 480px;
-      width: 100%;
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .brand-header {
-      text-align: center;
-      margin-top: 8px;
-    }
-    .brand-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(244, 63, 94, 0.2);
-      border: 1px solid rgba(244, 114, 182, 0.4);
-      color: #fbcfe8;
-      font-size: 0.76rem;
-      font-weight: 800;
-      letter-spacing: 1.2px;
-      padding: 5px 16px;
-      border-radius: 999px;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-    }
-    .brand-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.85rem;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: 0.5px;
-      text-shadow: 0 4px 20px rgba(225, 29, 72, 0.5);
-    }
-    .brand-sub {
-      color: #94a3b8;
-      font-size: 0.85rem;
-      margin-top: 4px;
-    }
-    .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--card-border);
-      border-radius: 28px;
-      padding: 24px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65), 0 0 35px rgba(244, 63, 94, 0.15);
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .tape-tag {
-      background: linear-gradient(135deg, #f43f5e, #e11d48);
-      color: #fff;
-      font-size: 0.82rem;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      padding: 4px 14px;
-      border-radius: 999px;
-      box-shadow: 0 4px 12px rgba(244, 63, 94, 0.35);
-    }
-    .status-tag {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #a7f3d0;
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 4px 10px;
-      border-radius: 999px;
-    }
-    /* Vinyl Stage */
-    .vinyl-stage {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 10px 0;
-      position: relative;
-    }
-    .disc-wrap {
-      width: 190px;
-      height: 190px;
-      position: relative;
-      cursor: pointer;
-    }
-    .disc {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: radial-gradient(circle, #2a2a2a 24%, #121212 25%, #181818 42%, #0e0e0e 43%, #161616 68%, #080808 69%, #050505 100%);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      animation: spinDisc 8s linear infinite;
-      animation-play-state: paused;
-      border: 2px solid rgba(255, 255, 255, 0.08);
-      transition: transform 0.2s;
-    }
-    .disc.spinning {
-      animation-play-state: running;
-    }
-    @keyframes spinDisc {
-      100% { transform: rotate(360deg); }
-    }
-    .disc-grooves {
-      position: absolute;
-      width: 82%;
-      height: 82%;
-      border-radius: 50%;
-      border: 1px dashed rgba(255, 255, 255, 0.12);
-    }
-    .disc-grooves::after {
-      content: '';
-      position: absolute;
-      top: 15%; left: 15%; width: 70%; height: 70%;
-      border-radius: 50%;
-      border: 1px dashed rgba(255, 255, 255, 0.08);
-    }
-    .disc-label {
-      width: 68px;
-      height: 68px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #f43f5e, #fb7185);
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 0.72rem;
-      font-weight: 800;
-      border: 3px solid #111;
-      z-index: 2;
-    }
-    .disc-label span { font-size: 1.1rem; }
-    .disc-label-center {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #0f172a;
-      margin-top: 2px;
-    }
-    /* Controls */
-    .track-info {
-      text-align: center;
-      margin-top: 14px;
-    }
-    .track-title {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: #fff;
-      font-family: 'Playfair Display', serif;
-    }
-    .track-sub {
-      font-size: 0.8rem;
-      color: #f472b6;
-      font-weight: 600;
-      margin-top: 2px;
-    }
-    .waveform {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      height: 32px;
-      margin-top: 12px;
-    }
-    .wave-bar {
-      width: 4px;
-      height: 8px;
-      background: #f472b6;
-      border-radius: 2px;
-      transition: height 0.15s ease;
-    }
-    .waveform.active .wave-bar {
-      animation: waveDance 0.8s ease-in-out infinite alternate;
-    }
-    .waveform .wave-bar:nth-child(2) { animation-delay: 0.1s; }
-    .waveform .wave-bar:nth-child(3) { animation-delay: 0.25s; }
-    .waveform .wave-bar:nth-child(4) { animation-delay: 0.4s; }
-    .waveform .wave-bar:nth-child(5) { animation-delay: 0.15s; }
-    .waveform .wave-bar:nth-child(6) { animation-delay: 0.35s; }
-    .waveform .wave-bar:nth-child(7) { animation-delay: 0.2s; }
-    .waveform .wave-bar:nth-child(8) { animation-delay: 0.45s; }
-    @keyframes waveDance {
-      0% { height: 6px; }
-      100% { height: 28px; background: #fb7185; }
-    }
-    .play-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      margin-top: 12px;
-    }
-    .btn-play {
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      background: var(--primary-gradient);
-      color: #fff;
-      border: none;
-      font-size: 1.4rem;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(225, 29, 72, 0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .btn-play:hover {
-      transform: scale(1.08);
-      box-shadow: 0 10px 30px rgba(225, 29, 72, 0.6);
-    }
-    /* Note Box */
-    .note-box {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 18px;
-      padding: 16px 18px;
-      position: relative;
-    }
-    .note-heading {
-      font-family: 'Caveat', cursive;
-      font-size: 1.35rem;
-      color: #fbcfe8;
-      font-weight: 700;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .note-body {
-      font-size: 0.92rem;
-      line-height: 1.6;
-      color: #e2e8f0;
-    }
-    /* Surprise Orb */
-    .surprise-box {
-      background: linear-gradient(135deg, rgba(225, 29, 72, 0.15), rgba(168, 85, 247, 0.15));
-      border: 1px dashed rgba(244, 114, 182, 0.4);
-      border-radius: 18px;
-      padding: 16px;
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.2s, background 0.2s;
-    }
-    .surprise-box:hover {
-      transform: translateY(-2px);
-      background: linear-gradient(135deg, rgba(225, 29, 72, 0.25), rgba(168, 85, 247, 0.25));
-    }
-    .gift-icon {
-      font-size: 2.2rem;
-      display: inline-block;
-      animation: bounceGift 2s infinite ease-in-out;
-    }
-    @keyframes bounceGift {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px) rotate(4deg); }
-    }
-    .surprise-text {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: #fda4af;
-      margin-top: 6px;
-    }
-    /* Navigation pills */
-    .nav-section {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .nav-label {
-      font-size: 0.78rem;
-      font-weight: 800;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-    }
-    .pills-scroll {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 6px;
-      scrollbar-width: none;
-    }
-    .pills-scroll::-webkit-scrollbar { display: none; }
-    .tape-pill {
-      flex-shrink: 0;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #e2e8f0;
-      text-decoration: none;
-      font-size: 0.82rem;
-      font-weight: 700;
-      padding: 8px 14px;
-      border-radius: 999px;
-      transition: all 0.2s;
-      cursor: pointer;
-    }
-    .tape-pill.active {
-      background: var(--primary-gradient);
-      color: #fff;
-      border-color: transparent;
-      box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4);
-    }
-    .actions-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 6px;
-    }
-    .btn-action {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      color: #fff;
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 700;
-      padding: 12px;
-      border-radius: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-action:hover {
-      background: rgba(255, 255, 255, 0.16);
-      transform: translateY(-2px);
-    }
-    .btn-celebrate {
-      background: var(--primary-gradient);
-      border: none;
-      box-shadow: 0 6px 20px rgba(225, 29, 72, 0.4);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tape 0${t.id} • For Shaaaw</title>
+<meta http-equiv="refresh" content="3;url=${url}">
+<style>
+  html, body { margin:0; height:100%; display:flex; align-items:center; justify-content:center;
+    background: radial-gradient(1200px 600px at 50% 18%, #2a1230, #120818 60%, #0a0510);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color:#fff; }
+  .card { text-align:center; padding:2rem; }
+  .tape { font-size:3.2rem; display:inline-block; animation: spin 2.5s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  h1 { font-size:1.35rem; letter-spacing:.12em; margin:.9rem 0 .3rem; color:#ffd7ec; }
+  .sub { font-size:.95rem; opacity:.75; margin-bottom:1.4rem; }
+  .dots::after { content:'…'; animation: dots 1.2s steps(4) infinite; }
+  @keyframes dots { 0% { content:''; } 25% { content:'.'; } 50% { content:'..'; } 75% { content:'...'; } }
+  a.btn { display:inline-block; margin-top:.4rem; color:#ff8fd0; text-decoration:none;
+      border:1px solid #ff8fd0; padding:.6rem 1.4rem; border-radius:999px; font-size:.9rem; }
+  a.btn:hover { background:rgba(255,143,208,.13); }
+</style>
 </head>
 <body>
-  <div class="particles" id="particles"></div>
-
-  <div class="container">
-    <header class="brand-header">
-      <span class="brand-pill">✨ FOR SHAAAW • SPECIAL EDITION ✨</span>
-      <h1 class="brand-title">THE HAWKINS ARCHIVE</h1>
-      <p class="brand-sub">Scrapbook Memory Vault • Chapter by Chapter</p>
-    </header>
-
-    <main class="card">
-      <div class="card-header">
-        <span class="tape-tag">📼 TAPE 0${tape.id}</span>
-        <span class="status-tag">✨ Lifetime Scannable</span>
-      </div>
-
-      <div class="vinyl-stage">
-        <div class="disc-wrap" onclick="toggleAudio()">
-          <div class="disc" id="vinylDisc">
-            <div class="disc-grooves"></div>
-            <div class="disc-label">
-              <span>${tape.emoji}</span>
-              <div>SHAAAW</div>
-              <div class="disc-label-center"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="track-info">
-          <h2 class="track-title">${tape.title}</h2>
-          <div class="track-sub">${tape.sub}</div>
-        </div>
-
-        <div class="waveform" id="waveform">
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-        </div>
-
-        <div class="play-row">
-          <button class="btn-play" id="playBtn" onclick="toggleAudio()" title="Play Birthday Memory Track">▶</button>
-        </div>
-      </div>
-
-      <div class="note-box">
-        <div class="note-heading">${tape.noteHeading}</div>
-        <p class="note-body">
-          ${tape.noteBody}
-        </p>
-      </div>
-
-      <div class="surprise-box" onclick="burstConfetti()">
-        <span class="gift-icon">🎁</span>
-        <div class="surprise-text">Tap to unlock celebratory confetti & love! 💗</div>
-      </div>
-
-      <nav class="nav-section">
-        <span class="nav-label">Browse All 8 Tapes:</span>
-        <div class="pills-scroll">
-${pills}
-        </div>
-      </nav>
-
-      <div class="actions-grid">
-        <button class="btn-action btn-celebrate" onclick="burstConfetti()">
-          <span>🎉 Celebrate</span>
-        </button>
-        <a href="#" onclick="goToPoster(); return false;" class="btn-action">
-          <span>📸 View Poster</span>
-        </a>
-      </div>
-    </main>
+  <div class="card">
+    <span class="tape">📼</span>
+    <h1>TAPE 0${t.id} • ${t.title}</h1>
+    <div class="sub">Opening your memory<span class="dots"></span></div>
+    <a class="btn" href="${url}">Open your tape now</a>
   </div>
-
   <script>
-    function goToTape(num) {
-      const p = window.location.pathname;
-      if (p.includes('/birthday-qr-memory')) {
-        window.location.href = '/birthday-qr-memory/m/' + num + '.html';
-      } else {
-        const inSub = p.includes('/m/') || p.includes('/memory/');
-        window.location.href = (inSub ? '../m/' : 'm/') + num + '.html';
-      }
-    }
-
-    function goToPoster() {
-      const p = window.location.pathname;
-      if (p.includes('/birthday-qr-memory')) {
-        window.location.href = '/birthday-qr-memory/kodak-print.html';
-      } else {
-        const inSub = p.includes('/m/') || p.includes('/memory/');
-        window.location.href = (inSub ? '../' : '') + 'kodak-print.html';
-      }
-    }
-
-    // Particle Spores
-    const pContainer = document.getElementById('particles');
-    const emojis = ['✨', '⭐', '🌸', '💖', '💫'];
-    for (let i = 0; i < 24; i++) {
-      const sp = document.createElement('div');
-      sp.className = 'spore';
-      sp.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      sp.style.left = Math.random() * 95 + 'vw';
-      sp.style.fontSize = (0.7 + Math.random() * 0.9) + 'rem';
-      sp.style.animationDuration = (8 + Math.random() * 9) + 's';
-      sp.style.animationDelay = (Math.random() * 8) + 's';
-      pContainer.appendChild(sp);
-    }
-
-    // Confetti
-    function burstConfetti() {
-      if (typeof confetti === 'function') {
-        confetti({
-          particleCount: 90,
-          spread: 80,
-          origin: { y: 0.6 },
-          colors: ['#e11d48', '#f43f5e', '#fb7185', '#fbbf24', '#c084fc', '#38bdf8']
-        });
-      }
-    }
-    window.addEventListener('load', () => setTimeout(burstConfetti, 400));
-
-    // Synthesized Acoustic Birthday Melody via Web Audio API
-    let audioCtx = null;
-    let isPlaying = false;
-    let melodyTimer = null;
-
-    const notes = [
-      261.63, 261.63, 293.66, 261.63, 349.23, 329.63,
-      261.63, 261.63, 293.66, 261.63, 392.00, 349.23,
-      261.63, 261.63, 523.25, 440.00, 349.23, 329.63, 293.66,
-      466.16, 466.16, 440.00, 349.23, 392.00, 349.23
-    ];
-    const durations = [
-      0.35, 0.35, 0.7, 0.7, 0.7, 1.2,
-      0.35, 0.35, 0.7, 0.7, 0.7, 1.2,
-      0.35, 0.35, 0.7, 0.7, 0.7, 0.7, 1.2,
-      0.35, 0.35, 0.7, 0.7, 0.7, 1.4
-    ];
-
-    function playTone(freq, duration, time) {
-      if (!audioCtx) return;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, time);
-
-      gain.gain.setValueAtTime(0, time);
-      gain.gain.linearRampToValueAtTime(0.22, time + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.001, time + duration - 0.04);
-
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start(time);
-      osc.stop(time + duration);
-    }
-
-    function startMelodyLoop() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-
-      let currTime = audioCtx.currentTime + 0.1;
-      let totalDuration = 0;
-
-      for (let i = 0; i < notes.length; i++) {
-        playTone(notes[i], durations[i], currTime);
-        currTime += durations[i] * 0.95;
-        totalDuration += durations[i] * 0.95;
-      }
-
-      melodyTimer = setTimeout(() => {
-        if (isPlaying) startMelodyLoop();
-      }, totalDuration * 1000);
-    }
-
-    function toggleAudio() {
-      const disc = document.getElementById('vinylDisc');
-      const wave = document.getElementById('waveform');
-      const btn = document.getElementById('playBtn');
-
-      if (!isPlaying) {
-        isPlaying = true;
-        disc.classList.add('spinning');
-        wave.classList.add('active');
-        btn.textContent = '⏸';
-        startMelodyLoop();
-        burstConfetti();
-      } else {
-        isPlaying = false;
-        disc.classList.remove('spinning');
-        wave.classList.remove('active');
-        btn.textContent = '▶';
-        if (melodyTimer) clearTimeout(melodyTimer);
-      }
-    }
+    // Your uploaded audio lives in the live app — jump there.
+    setTimeout(function () { window.location.replace(${JSON.stringify(url)}); }, 1500);
   </script>
 </body>
-</html>`;
+</html>
+`;
 }
 
+/* ------------------------------- hub ---------------------------------- */
+function hubPage() {
+  const tiles = TAPES
+    .map(t => `    <a class="tile" href="${LIVE}/memory/${t.id}"><span class="n">TAPE 0${t.id}</span>${t.title}</a>`)
+    .join('\n');
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Shaaaw 💖 — Birthday QR Memory</title>
+<style>
+  html, body { margin:0; min-height:100%; background: radial-gradient(1200px 600px at 50% 10%, #2a1230, #120818 60%, #0a0510);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color:#fff; }
+  .wrap { max-width:760px; margin:0 auto; padding:3.5rem 1.25rem 3rem; text-align:center; }
+  .cake { font-size:3rem; }
+  h1 { font-size:2rem; margin:.5rem 0 .25rem; letter-spacing:.06em; }
+  .tag { opacity:.75; margin-bottom:2rem; }
+  a.big { display:inline-block; background:#ff5fa2; color:#fff; text-decoration:none; font-weight:600;
+    padding:.85rem 2rem; border-radius:999px; font-size:1.05rem; box-shadow:0 8px 30px rgba(255,95,162,.35); }
+  a.big:hover { background:#ff79b0; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:.75rem; margin:2.25rem 0 1.5rem; text-align:left; }
+  .tile { display:block; text-decoration:none; color:#fff; background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:.8rem 1rem; }
+  .tile:hover { background:rgba(255,143,208,.12); border-color:#ff8fd0; }
+  .tile .n { display:block; font-size:.7rem; letter-spacing:.18em; color:#ff8fd0; margin-bottom:.3rem; }
+  .foot { display:flex; gap:1.5rem; justify-content:center; opacity:.7; font-size:.85rem; }
+  .foot a { color:#ff9fd6; text-decoration:none; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="cake">🎂</div>
+    <h1>For Shaaaw 💖</h1>
+    <div class="tag">Divine Chaos Since Day 1 ♡ — 8 lifetimes of memories, locked in QR</div>
+    <a class="big" href="${LIVE}">Open the Live Experience</a>
+    <div class="grid">
+${tiles}
+    </div>
+    <div class="foot">
+      <a href="${LIVE}/kodak-print.html">📸 View the Poster</a>
+      <a href="${LIVE}/admin.html">🔐 Admin</a>
+    </div>
+  </div>
+</body>
+</html>
+`;
+}
+
+/* ------------------------------- 404 ---------------------------------- */
+function notFoundPage() {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lost Tape</title>
+<meta http-equiv="refresh" content="3;url=${LIVE}">
+<style>
+  html, body { margin:0; height:100%; display:flex; align-items:center; justify-content:center;
+    background:#120818; font-family:'Segoe UI', system-ui, sans-serif; color:#fff; text-align:center; }
+  a { color:#ff8fd0; }
+</style>
+</head>
+<body>
+  <div>
+    <div style="font-size:3rem">📼</div>
+    <h1>Lost tape</h1>
+    <p>Opening the memory hub<span style="animation:none">…</span></p>
+    <p><a href="${LIVE}">Take me there now</a></p>
+  </div>
+</body>
+</html>
+`;
+}
+
+/* ---------------------------- side fixes ------------------------------ */
+function patchJson(rel, key) {
+  const p = path.join(ROOT, rel);
+  if (!fs.existsSync(p)) return;
+  try {
+    const cfg = JSON.parse(fs.readFileSync(p, 'utf8'));
+    if (cfg[key] === DEAD) {
+      cfg[key] = LIVE;
+      fs.writeFileSync(p, JSON.stringify(cfg, null, 2) + '\n');
+      written.push(rel);
+    }
+  } catch (e) {
+    console.warn('  ! skipped', rel, '-', e.message);
+  }
+}
+
+function patchText(rel) {
+  const p = path.join(ROOT, rel);
+  if (!fs.existsSync(p)) return;
+  const t = fs.readFileSync(p, 'utf8');
+  if (t.includes(DEAD)) {
+    fs.writeFileSync(p, t.split(DEAD).join(LIVE));
+    written.push(rel);
+  }
+}
+
+function swapQr() {
+  const qrDir = path.join(ROOT, 'public', 'assets', 'qr');
+  const f1 = path.join(qrDir, '1.png');
+  const f2 = path.join(qrDir, '2.png');
+  const marker = path.join(qrDir, '.qr12-swapped');
+  if (!fs.existsSync(f1) || !fs.existsSync(f2) || fs.existsSync(marker)) return;
+  const tmp = path.join(qrDir, '.1.tmp.png');
+  fs.copyFileSync(f1, tmp);
+  fs.copyFileSync(f2, f1);
+  fs.copyFileSync(tmp, f2);
+  fs.unlinkSync(tmp);
+  fs.writeFileSync(marker, '1.png and 2.png were swapped so each encodes its own memory\n');
+  written.push('public/assets/qr/1.png + 2.png (swapped)');
+}
+
+/* ------------------------------- main --------------------------------- */
 function buildGitHubPages() {
-  console.log('Building GitHub Pages Standalone Memory Players...');
+  // 1. The 8 tape pages, at every path that can serve them
+  for (const t of TAPES) {
+    const html = tapePage(t);
+    write(`docs/m/${t.id}.html`, html);
+    write(`docs/m/${t.id}/index.html`, html);
+    write(`docs/memory/${t.id}/index.html`, html);
+    write(`public/m/${t.id}.html`, html);
+    write(`public/m/${t.id}/index.html`, html);
+  }
+  // 2. Hub + 404
+  write('docs/index.html', hubPage());
+  write('docs/404.html', notFoundPage());
+  // 3. Configs + docs pointing at the dead free-plan URL
+  patchJson('docs/config.json', 'targetBaseUrl');
+  patchJson('data/config.json', 'targetServerUrl');
+  for (const rel of ['scripts/generate-qrs.js', 'README.md', 'DEPLOYMENT.md']) patchText(rel);
+  // 4. Swapped QR PNGs
+  swapQr();
 
-  [DOCS_DIR, M_DIR, MEMORY_DIR, PUBLIC_M_DIR].forEach(dir => {
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  });
-
-  TAPES_DATA.forEach(tape => {
-    const html = generateStandalonePlayerHtml(tape);
-
-    // 1. docs/m/X.html
-    fs.writeFileSync(path.join(M_DIR, `${tape.id}.html`), html);
-
-    // 2. docs/m/X/index.html (for extensionless /m/1)
-    const tapeDir = path.join(M_DIR, `${tape.id}`);
-    if (!fs.existsSync(tapeDir)) fs.mkdirSync(tapeDir, { recursive: true });
-    fs.writeFileSync(path.join(tapeDir, 'index.html'), html);
-
-    // 3. docs/memory/X/index.html (for /memory/1)
-    const memDir = path.join(MEMORY_DIR, `${tape.id}`);
-    if (!fs.existsSync(memDir)) fs.mkdirSync(memDir, { recursive: true });
-    fs.writeFileSync(path.join(memDir, 'index.html'), html);
-
-    // 4. public/m/X.html and public/m/X/index.html
-    fs.writeFileSync(path.join(PUBLIC_M_DIR, `${tape.id}.html`), html);
-    const pubTapeDir = path.join(PUBLIC_M_DIR, `${tape.id}`);
-    if (!fs.existsSync(pubTapeDir)) fs.mkdirSync(pubTapeDir, { recursive: true });
-    fs.writeFileSync(path.join(pubTapeDir, 'index.html'), html);
-  });
-
-  console.log('✅ All 8 Standalone Memory Players successfully built across docs/ and public/!');
+  console.log(`✅ Rebuilt ${written.length} files for the live-redirect memory site.`);
+  console.log('   Every /m/N tape page now opens ' + LIVE + '/memory/N');
+  console.log('\nNow commit & push:');
+  console.log('   git add -A');
+  console.log('   git commit -m "rebuild: QR tape pages now open the live app"');
+  console.log('   git push origin main');
 }
 
-if (require.main === module) {
-  buildGitHubPages();
-}
-
-module.exports = { buildGitHubPages, DOCS_DIR, TAPES_DATA };
+buildGitHubPages();
