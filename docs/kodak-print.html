@@ -714,7 +714,7 @@
       </a>
       <div style="display: flex; align-items: center; gap: 10px;">
         <span class="paper-spec-tag" id="posterStatusTag" style="background: rgba(236,72,153,0.2); color: #fbcfe8; border-color: rgba(236,72,153,0.4);">
-          ✨ Embedded QR Codes Untouched & Preserved
+          ✨ Polaroid Frame Layered On Top of Photos
         </span>
         <div class="kodak-badge">
           📸 Kodak 9×10.9 Master Studio (300 DPI / 4K)
@@ -725,7 +725,7 @@
     <header class="studio-header">
       <h1 class="studio-title">Shaaaw's 9×10.9 Kodak Photo Paper Studio</h1>
       <p class="studio-sub">
-        Upload Shaaaw's pictures — photos <span class="highlight-text">automatically auto-align, tilt and crop</span> to fit each Polaroid frame perfectly.
+        Upload Shaaaw's pictures — the <span class="highlight-text">Polaroid frame sits on top of each image</span>, tucking photos seamlessly inside the paper aperture.
         Export a high-definition <span class="highlight-text">4K Ultra-HD enhanced poster</span> ready to print on <strong>9" × 10.9" Kodak photo paper</strong>.
       </p>
     </header>
@@ -747,7 +747,7 @@
           <canvas id="kodakCanvas" width="2700" height="3270" title="Click directly on any Polaroid frame to upload or change photo!"></canvas>
 
           <div class="canvas-toast" id="canvasToast">
-            <span>✨ Photos Auto-Aligned & Tilted!</span>
+            <span>✨ Photos Inserted Under Polaroid Frames!</span>
           </div>
 
           <div class="guide-overlay" id="guideOverlay">
@@ -762,7 +762,7 @@
 
         <div style="margin-top: 14px; font-size: 0.86rem; color: #cbd5e1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
           <span>💡 <strong>Interactive:</strong> Click any polaroid frame on the poster to replace its photo directly.</span>
-          <span style="color: #f472b6; font-weight: 700;">🎯 7 Polaroid Frames Calibrated</span>
+          <span style="color: #f472b6; font-weight: 700;">🎯 Polaroid Frames Layered on Top</span>
         </div>
       </div>
 
@@ -771,16 +771,16 @@
 
         <!-- 1. Hero Auto-Upload Box -->
         <div class="panel-card hero-upload-card">
-          <div class="hero-badge">✨ Smart Auto-Placement & Tilt</div>
+          <div class="hero-badge">✨ Frame Sits on Top of Photos</div>
           <h3 class="panel-title" style="margin-bottom: 6px; font-size: 1.15rem; color: #fff;">
             <span>🌸 Upload Shaaaw's Photos</span>
           </h3>
           <p style="font-size: 0.84rem; color: #cbd5e1; margin: 0 0 12px; line-height: 1.45;">
-            Select 1 to 7 photos of Shaaaw. They will <strong>automatically crop to fit each Polaroid aperture with exact tilt alignment</strong>!
+            Select 1 to 7 photos of Shaaaw. Each photo is <strong>inserted UNDER the Polaroid frame</strong> so the white border, pink tape, and text sit on top!
           </p>
 
           <label class="btn-hero-upload">
-            <span>📂 Upload Photos (Auto-Fit All 7 Frames)</span>
+            <span>📂 Upload Photos (Auto-Insert Into All Frames)</span>
             <input type="file" id="batchPhotoInput" multiple accept="image/*" style="display: none;" onchange="handleBatchPhotoUpload(event)">
           </label>
 
@@ -805,7 +805,7 @@
                   <span>Choose</span>
                   <input type="file" id="activeFrameFileInput" accept="image/*" style="display: none;" onchange="handleActiveFrameUpload(event)">
                 </label>
-                <button class="btn-download-sub" style="padding: 3px 8px; font-size: 0.74rem; width: auto;" onclick="resetActiveFrameDefaults()" title="Reset to calibrated auto-tilt and aperture fit">
+                <button class="btn-download-sub" style="padding: 3px 8px; font-size: 0.74rem; width: auto;" onclick="resetActiveFrameDefaults()" title="Reset photo inside Polaroid frame">
                   <span>🎯 Auto-Snap</span>
                 </button>
               </div>
@@ -857,7 +857,7 @@
               </div>
               <div class="slider-row">
                 <div class="slider-row-header">
-                  <span>Frame Scale:</span>
+                  <span>Photo Scale:</span>
                   <span id="scaleVal">100%</span>
                 </div>
                 <input type="range" id="sliderScale" min="80" max="130" value="100" oninput="updateActiveScale(this.value)">
@@ -969,20 +969,22 @@
     let currentStyle = 'mat';
     const sourceImage = new Image();
     let showAlignmentOutlines = false;
+    let overlayCanvas = null;
 
     // ========================================================================
-    // CALIBRATED POLAROID APERTURES: EXACT SIZES & AUTO-TILT ANGLES
+    // CALIBRATED POLAROID APERTURES (EXACT INNER PHOTO CAVITY DIMENSIONS)
     // ========================================================================
-    // NOTE: All dimensions are mathematically calibrated to completely fill
-    // the inner grey apertures of the polaroid frames without touching the QR codes.
+    // The Polaroid frame (white paper borders, pink washi tape, "You Make Everything
+    // More Fun ♡" text, stickers, and QR codes) is rendered ON TOP of the photos.
+    // Photos sit UNDER the frame, bleeding slightly behind the white borders.
     const FRAME_CONFIGS = [
-      { id: 0, title: "🌟 Center Main Polaroid (Shaaaw)", cxPct: 0.5055, cyPct: 0.3555, wPct: 0.3220, hPct: 0.3280, rotDeg: -2.6, panX: 0.00, panY: 0.18, zoom: 1.05, scale: 1.00, isMain: true,  label: "Shaaaw 💖", icon: "🌟" },
-      { id: 1, title: "🖼️ Top-Left Polaroid (Frame 1)",   cxPct: 0.2450, cyPct: 0.2520, wPct: 0.2180, hPct: 0.1880, rotDeg:  5.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Left",   icon: "🖼️" },
-      { id: 2, title: "🦋 Mid-Left Polaroid (Frame 2)",    cxPct: 0.2280, cyPct: 0.5020, wPct: 0.2200, hPct: 0.1900, rotDeg: -6.0, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Left",   icon: "🦋" },
-      { id: 3, title: "🎀 Bottom-Left Polaroid (Frame 3)", cxPct: 0.3720, cyPct: 0.6520, wPct: 0.2200, hPct: 0.1900, rotDeg: -3.6, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Left",   icon: "🎀" },
-      { id: 4, title: "🎀 Bottom-Right Polaroid (Frame 4)",cxPct: 0.6260, cyPct: 0.6520, wPct: 0.2200, hPct: 0.1900, rotDeg:  3.4, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Right",  icon: "🎀" },
-      { id: 5, title: "🏰 Top-Right Polaroid (Frame 5)",  cxPct: 0.7280, cyPct: 0.2600, wPct: 0.2180, hPct: 0.1880, rotDeg: -5.6, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Right",  icon: "🏰" },
-      { id: 6, title: "✨ Mid-Right Polaroid (Frame 6)",   cxPct: 0.7560, cyPct: 0.5040, wPct: 0.2200, hPct: 0.1900, rotDeg:  5.8, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Right",  icon: "✨" }
+      { id: 0, title: "🌟 Center Main Polaroid (Shaaaw)", cxPct: 0.5050, cyPct: 0.3400, wPct: 0.2680, hPct: 0.2220, rotDeg: -2.6, panX: 0.00, panY: 0.18, zoom: 1.05, scale: 1.00, isMain: true,  label: "Shaaaw 💖", icon: "🌟" },
+      { id: 1, title: "🖼️ Top-Left Polaroid (Frame 1)",   cxPct: 0.2450, cyPct: 0.2450, wPct: 0.1740, hPct: 0.1460, rotDeg:  5.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Left",   icon: "🖼️" },
+      { id: 2, title: "🦋 Mid-Left Polaroid (Frame 2)",    cxPct: 0.2280, cyPct: 0.4950, wPct: 0.1740, hPct: 0.1460, rotDeg: -6.0, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Left",   icon: "🦋" },
+      { id: 3, title: "🎀 Bottom-Left Polaroid (Frame 3)", cxPct: 0.3720, cyPct: 0.6420, wPct: 0.1740, hPct: 0.1460, rotDeg: -3.6, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Left",   icon: "🎀" },
+      { id: 4, title: "🎀 Bottom-Right Polaroid (Frame 4)",cxPct: 0.6260, cyPct: 0.6420, wPct: 0.1740, hPct: 0.1460, rotDeg:  3.4, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Right",  icon: "🎀" },
+      { id: 5, title: "🏰 Top-Right Polaroid (Frame 5)",  cxPct: 0.7280, cyPct: 0.2520, wPct: 0.1740, hPct: 0.1460, rotDeg: -5.6, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Right",  icon: "🏰" },
+      { id: 6, title: "✨ Mid-Right Polaroid (Frame 6)",   cxPct: 0.7560, cyPct: 0.4960, wPct: 0.1740, hPct: 0.1460, rotDeg:  5.8, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Right",  icon: "✨" }
     ];
 
     const frameStates = JSON.parse(JSON.stringify(FRAME_CONFIGS));
@@ -991,7 +993,7 @@
     let currentDrawMetrics = { drawX: 0, drawY: 0, drawW: 2700, drawH: 3270 };
 
     // ========================================================================
-    // 1. POSTER ARTWORK LOADING
+    // 1. POSTER ARTWORK & POLAROID FRAME OVERLAY COMPOSITING ENGINE
     // ========================================================================
     const posterCandidates = [
       'assets/original-poster.jpg',
@@ -1008,11 +1010,68 @@
         sourceImage.src = posterCandidates[posterIdx++];
       }
     }
+
     sourceImage.onload = () => {
       render9x10_9Poster();
     };
     sourceImage.onerror = tryLoadNextPoster;
     tryLoadNextPoster();
+
+    /**
+     * Dynamically builds the Polaroid Frame Overlay using Canvas 2D destination-out.
+     * This creates a transparent cutout window inside each Polaroid photo aperture
+     * while keeping the white borders, pink tape, "You Make Everything More Fun ♡" text,
+     * hearts, and all 8 QR codes 100% intact ON TOP of Shaaaw's photo!
+     * Immune to CORS / tainted canvas restrictions.
+     */
+    function buildFrameOverlay() {
+      if (!sourceImage.complete || !sourceImage.naturalWidth) return null;
+
+      const w = sourceImage.naturalWidth;
+      const h = sourceImage.naturalHeight;
+
+      if (!overlayCanvas) {
+        overlayCanvas = document.createElement('canvas');
+      }
+      if (overlayCanvas.width !== w || overlayCanvas.height !== h) {
+        overlayCanvas.width = w;
+        overlayCanvas.height = h;
+      }
+
+      const oCtx = overlayCanvas.getContext('2d');
+      oCtx.clearRect(0, 0, w, h);
+
+      // 1. Draw original poster (all frames, tape, stickers, QR codes)
+      oCtx.drawImage(sourceImage, 0, 0, w, h);
+
+      // 2. Punch transparent cutout holes in apertures where photos have been uploaded
+      oCtx.save();
+      oCtx.globalCompositeOperation = 'destination-out';
+      oCtx.fillStyle = '#000000';
+
+      FRAME_CONFIGS.forEach(cfg => {
+        // Only punch hole if a photo has been uploaded for this frame
+        // (if empty, original grey placeholder remains cleanly visible)
+        if (frameImages[cfg.id]) {
+          const state = frameStates[cfg.id];
+          const cx = Math.round(w * cfg.cxPct);
+          const cy = Math.round(h * cfg.cyPct);
+          const aw = Math.round(w * cfg.wPct * (state.scale || 1.0));
+          const ah = Math.round(w * cfg.hPct * (state.scale || 1.0));
+          const rot = state.rotDeg || 0;
+
+          oCtx.save();
+          oCtx.translate(cx, cy);
+          oCtx.rotate(rot * Math.PI / 180);
+          drawRoundedRect(oCtx, -aw / 2, -ah / 2, aw, ah, 5);
+          oCtx.fill();
+          oCtx.restore();
+        }
+      });
+
+      oCtx.restore();
+      return overlayCanvas;
+    }
 
     // Default center photo
     const shaawDefaultImg = new Image();
@@ -1201,62 +1260,79 @@
       currentDrawMetrics = { drawX, drawY, drawW, drawH };
 
       // ====================================================================
-      // 🌸 DRAW SHAAAW'S PHOTOS: EXACT APERTURE FIT & AUTO-TILT
+      // LAYER A: DRAW SHAAAW'S PHOTOS (UNDERNEATH THE POLAROID FRAME)
       // ====================================================================
-      // Note: QR codes are untouched and preserved from sourceImage.
       frameStates.forEach(cfg => {
-        const cx = drawX + Math.round(drawW * cfg.cxPct);
-        const cy = drawY + Math.round(drawH * cfg.cyPct);
-        const aw = Math.round(drawW * cfg.wPct * (cfg.scale || 1.0));
-        const ah = Math.round(drawW * cfg.hPct * (cfg.scale || 1.0));
-        const rot = cfg.rotDeg || 0;
         const photo = frameImages[cfg.id];
-
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(rot * Math.PI / 180);
-
         if (photo && photo.complete && photo.naturalWidth) {
+          const cx = drawX + Math.round(drawW * cfg.cxPct);
+          const cy = drawY + Math.round(drawH * cfg.cyPct);
+          const aw = Math.round(drawW * cfg.wPct * (cfg.scale || 1.0));
+          const ah = Math.round(drawW * cfg.hPct * (cfg.scale || 1.0));
+          const rot = cfg.rotDeg || 0;
+
+          // Draw photo with 8% bleed so it tucks right under the white polaroid border
+          const bleedW = Math.round(aw * 1.08);
+          const bleedH = Math.round(ah * 1.08);
+
           ctx.save();
-          // Precise rounded rect clipping matching polaroid inner cavity
-          drawRoundedRect(ctx, -aw / 2, -ah / 2, aw, ah, 5);
+          ctx.translate(cx, cy);
+          ctx.rotate(rot * Math.PI / 180);
+
+          // Clip to bleed rectangle to keep clean separation
+          drawRoundedRect(ctx, -bleedW / 2, -bleedH / 2, bleedW, bleedH, 4);
           ctx.clip();
 
-          drawCroppedPhoto(ctx, photo, -aw / 2, -ah / 2, aw, ah, cfg.panX, cfg.panY, cfg.zoom);
+          drawCroppedPhoto(ctx, photo, -bleedW / 2, -bleedH / 2, bleedW, bleedH, cfg.panX, cfg.panY, cfg.zoom);
 
-          // Subtle authentic inner vignette/shadow for authentic paper depth
-          const shadowGrad = ctx.createLinearGradient(0, -ah/2, 0, -ah/2 + 20);
-          shadowGrad.addColorStop(0, 'rgba(40, 20, 25, 0.22)');
+          // Subtle inner cavity shadow for authentic photo depth under paper
+          const shadowGrad = ctx.createLinearGradient(0, -bleedH / 2, 0, -bleedH / 2 + 20);
+          shadowGrad.addColorStop(0, 'rgba(40, 20, 25, 0.25)');
           shadowGrad.addColorStop(1, 'rgba(40, 20, 25, 0.0)');
           ctx.fillStyle = shadowGrad;
-          ctx.fillRect(-aw/2, -ah/2, aw, 20);
-
-          // Authentic Polaroid paper bevel border
-          ctx.strokeStyle = 'rgba(50, 30, 40, 0.25)';
-          ctx.lineWidth = 2.5;
-          drawRoundedRect(ctx, -aw / 2, -ah / 2, aw, ah, 5);
-          ctx.stroke();
+          ctx.fillRect(-bleedW / 2, -bleedH / 2, bleedW, 20);
 
           ctx.restore();
         }
+      });
 
-        // Live Alignment Inspector Guides (if enabled)
-        if (showAlignmentOutlines || cfg.id === activeFrameId) {
-          ctx.strokeStyle = cfg.id === activeFrameId ? '#ec4899' : 'rgba(56, 189, 248, 0.6)';
-          ctx.lineWidth = cfg.id === activeFrameId ? 3.5 : 2.0;
-          if (cfg.id !== activeFrameId) ctx.setLineDash([8, 6]);
+      // ====================================================================
+      // LAYER B: DRAW THE POLAROID FRAME OVERLAY ON TOP OF SHAAAW'S PHOTOS!
+      // ====================================================================
+      // The Polaroid frame (white paper borders, pink tape, "You Make Everything More Fun",
+      // Stitch, butterfly, hearts, and all 8 QR codes) sits PHYSICALLY ON TOP of the photos!
+      const frameOverlay = buildFrameOverlay();
+      if (frameOverlay) {
+        ctx.drawImage(frameOverlay, drawX, drawY, drawW, drawH);
+      }
+
+      // Live Alignment Inspector Guides (only when user checks "Show Guides")
+      if (showAlignmentOutlines) {
+        frameStates.forEach(cfg => {
+          const cx = drawX + Math.round(drawW * cfg.cxPct);
+          const cy = drawY + Math.round(drawH * cfg.cyPct);
+          const aw = Math.round(drawW * cfg.wPct * (cfg.scale || 1.0));
+          const ah = Math.round(drawW * cfg.hPct * (cfg.scale || 1.0));
+          const rot = cfg.rotDeg || 0;
+
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(rot * Math.PI / 180);
+
+          ctx.strokeStyle = cfg.id === activeFrameId ? '#ec4899' : 'rgba(56, 189, 248, 0.7)';
+          ctx.lineWidth = cfg.id === activeFrameId ? 3.0 : 1.5;
+          if (cfg.id !== activeFrameId) ctx.setLineDash([6, 4]);
           drawRoundedRect(ctx, -aw / 2, -ah / 2, aw, ah, 5);
           ctx.stroke();
           ctx.setLineDash([]);
 
-          // Frame badge label
           ctx.fillStyle = cfg.id === activeFrameId ? '#ec4899' : '#38bdf8';
-          ctx.font = 'bold 15px sans-serif';
-          ctx.fillText(`Frame ${cfg.id}: ${cfg.label || ''} (${cfg.rotDeg > 0 ? '+' : ''}${cfg.rotDeg.toFixed(1)}°)`, -aw / 2 + 6, -ah / 2 + 20);
-        }
+          ctx.font = 'bold 14px sans-serif';
+          ctx.fillText(`Frame ${cfg.id}: ${cfg.label || ''} (${cfg.rotDeg > 0 ? '+' : ''}${cfg.rotDeg.toFixed(1)}°)`, -aw / 2 + 6, -ah / 2 + 18);
 
-        ctx.restore();
-      });
+          ctx.restore();
+        });
+      }
     }
 
     // ========================================================================
@@ -1285,7 +1361,7 @@
               renderThumbnailsGrid();
               selectActiveFrame(targetFrameId);
               render9x10_9Poster();
-              showToast(`🎉 ${loadedCount} Photo${loadedCount > 1 ? 's' : ''} Auto-Cropped & Tilted!`);
+              showToast(`🎉 ${loadedCount} Photo${loadedCount > 1 ? 's' : ''} Inserted Under Frames!`);
             }
           };
           img.src = e.target.result;
@@ -1310,7 +1386,7 @@
           renderThumbnailsGrid();
           selectActiveFrame(activeFrameId);
           render9x10_9Poster();
-          showToast(`✨ Frame ${activeFrameId} Auto-Cropped & Tilted!`);
+          showToast(`✨ Frame ${activeFrameId} Inserted Under Frame!`);
         };
         img.src = e.target.result;
       };
@@ -1344,7 +1420,7 @@
       resetFrameToDefault(activeFrameId);
       selectActiveFrame(activeFrameId);
       render9x10_9Poster();
-      showToast(`🎯 Frame ${activeFrameId} locked to Polaroid frame!`);
+      showToast(`🎯 Frame ${activeFrameId} locked under Polaroid frame!`);
     }
 
     function nudgeActiveFrame(type, delta) {
@@ -1525,7 +1601,7 @@
           };
           reader.readAsDataURL(file);
         });
-        showToast(`🎉 ${Math.min(files.length, 7)} Photos Dropped & Auto-Aligned!`);
+        showToast(`🎉 ${Math.min(files.length, 7)} Photos Inserted Under Frames!`);
       } else {
         const rect = canvas.getBoundingClientRect();
         const scaleX = canvas.width / rect.width;
@@ -1565,7 +1641,7 @@
             renderThumbnailsGrid();
             selectActiveFrame(targetFrame);
             render9x10_9Poster();
-            showToast(`✨ Frame ${targetFrame} Auto-Cropped & Tilted!`);
+            showToast(`✨ Frame ${targetFrame} Inserted Under Frame!`);
           };
           img.src = ev.target.result;
         };
@@ -1579,7 +1655,9 @@
       if (!file) return;
       const reader = new FileReader();
       reader.onload = function(e) {
-        sourceImage.onload = () => render9x10_9Poster();
+        sourceImage.onload = () => {
+          render9x10_9Poster();
+        };
         sourceImage.src = e.target.result;
         const tag = document.getElementById('posterStatusTag');
         if (tag) tag.textContent = '✨ Custom Poster Active (Uploaded)';
