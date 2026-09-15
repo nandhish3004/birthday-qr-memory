@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Shaaaw Birthday • 10-Frame Floral Poster v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@500;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdf6f0;
+    --ink:#2d2a26;
+    --accent:#e11d48;
+    --purple:#c4b5fd;
+    --cream:#fef3c7;
+    --paper:#fffaf0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background: radial-gradient(1200px 600px at 20% -10%, #ffe4e6 0%, transparent 60%),
+                radial-gradient(900px 500px at 90% 10%, #e0e7ff 0%, transparent 60%),
+                radial-gradient(800px 600px at 50% 120%, #fef3c7 0%, transparent 70%),
+                var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  .toolbar{
+    position:sticky;top:0;z-index:100;
+    backdrop-filter:blur(16px);
+    background:rgba(255,255,255,0.92);
+    border-bottom:1px solid rgba(0,0,0,0.06);
+    padding:10px 14px;
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;
+  }
+  .toolbar-left{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .brand{
+    font-weight:800;font-size:14px;letter-spacing:-0.02em;
+    display:flex;align-items:center;gap:8px;
+    background:#fff;border:1px solid #ffe4e6;border-radius:999px;padding:6px 12px;
+    box-shadow:0 2px 10px rgba(225,29,72,0.08);
+  }
+  .brand .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,0.2)}
+  .btn{
+    appearance:none;border:1px solid rgba(0,0,0,0.08);background:#fff;
+    border-radius:999px;padding:8px 14px;font-weight:700;font-size:13px;
+    cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:all .15s;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,0.10)}
+  .btn-primary{background:linear-gradient(135deg,#e11d48,#f43f5e);color:#fff;border-color:transparent}
+  .btn-ghost{background:rgba(255,255,255,0.7)}
+  .status{font-size:12px;color:#6b7280;display:flex;align-items:center;gap:6px}
+  .status .pulse{width:6px;height:6px;border-radius:50%;background:#10b981;animation:pulse 1.8s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,0.5)}70%{box-shadow:0 0 0 6px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+
+  .stage{
+    max-width:1100px;margin:18px auto;padding:0 14px 40px;
+    display:grid;grid-template-columns:1fr 320px;gap:18px;
+  }
+  @media(max-width:980px){.stage{grid-template-columns:1fr}}
+  .poster-wrap{
+    display:flex;justify-content:center;align-items:flex-start;
+  }
+  .poster{
+    position:relative;
+    width:min(100%, 540px);
+    aspect-ratio:675/1200;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,0.18), 0 2px 10px rgba(0,0,0,0.08);
+    isolation:isolate;
+    touch-action:none;
+  }
+  .poster .bg-img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;
+    user-select:none;pointer-events:none;
+  }
+  .poster .bg-fallback{
+    position:absolute;inset:0;z-index:0;
+    background:
+      radial-gradient(600px 400px at 20% 10%, #fbcfe8 0%, transparent 60%),
+      radial-gradient(500px 400px at 80% 20%, #bfdbfe 0%, transparent 60%),
+      radial-gradient(700px 500px at 50% 90%, #fde68a 0%, transparent 70%),
+      linear-gradient(180deg,#fff7ed,#fdf2f8);
+    display:none;
+  }
+  /* Photo slots — positioned over the black boxes in template.jpg */
+  .photo-slot{
+    position:absolute;z-index:2;
+    background:#0a0a0a;
+    border-radius:6px;
+    overflow:hidden;
+    cursor:pointer;
+    box-shadow:0 4px 18px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(255,255,255,0.15);
+    transition:box-shadow .15s, transform .15s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .photo-slot:hover{box-shadow:0 8px 26px rgba(0,0,0,0.28);transform:translateZ(0) scale(1.01)}
+  .photo-slot.dragging{opacity:0.92;z-index:50!important;box-shadow:0 16px 40px rgba(0,0,0,0.35);cursor:grabbing}
+  .photo-slot img.filled{
+    width:100%;height:100%;object-fit:cover;display:block;
+    transform-origin:center;
+  }
+  .photo-slot .ph{
+    color:#fff;font-family:'Caveat',cursive;font-size:18px;letter-spacing:0.02em;
+    text-align:center;padding:6px;user-select:none;pointer-events:none;opacity:0.9;
+    line-height:1;
+  }
+  .photo-slot .del{
+    position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;
+    background:rgba(0,0,0,0.6);color:#fff;border:1px solid rgba(255,255,255,0.3);
+    display:none;align-items:center;justify-content:center;font-size:12px;cursor:pointer;z-index:3;
+  }
+  .photo-slot.has-photo .del{display:flex}
+  .photo-slot input{display:none}
+
+  /* Name strip — lavender bar under TO */
+  .name-strip{
+    position:absolute;z-index:4;
+    background:linear-gradient(135deg,#ddd6fe,#c4b5fd);
+    border-radius:999px;
+    padding:6px 18px;
+    min-width:120px;min-height:28px;
+    font-weight:800;font-size:15px;letter-spacing:-0.01em;
+    color:#4c1d95;
+    box-shadow:0 3px 12px rgba(124,58,237,0.22), inset 0 1px 0 rgba(255,255,255,0.6);
+    border:1.5px solid rgba(124,58,237,0.15);
+    cursor:text;
+    outline:none;
+    white-space:nowrap;
+    overflow:hidden;
+  }
+  .name-strip:empty:before{content:attr(data-placeholder);color:rgba(76,29,149,0.5);font-weight:700}
+  .name-strip:focus{box-shadow:0 0 0 3px rgba(124,58,237,0.25), 0 3px 12px rgba(124,58,237,0.22)}
+
+  /* Cream message card — bottom */
+  .message-card{
+    position:absolute;z-index:4;
+    background:linear-gradient(180deg,#fefce8,#fef3c7 60%,#fde68a);
+    border-radius:10px;
+    padding:14px 16px;
+    min-width:160px;min-height:90px;
+    font-family:'Caveat',cursive;
+    font-size:19px;line-height:1.25;color:#422006;
+    box-shadow:0 6px 20px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.7);
+    border:1px solid rgba(180,83,9,0.18);
+    transform:rotate(-1.2deg);
+    cursor:text;
+    outline:none;
+    overflow:auto;
+  }
+  .message-card:empty:before{content:attr(data-placeholder);color:rgba(66,32,6,0.45)}
+  .message-card:focus{box-shadow:0 0 0 3px rgba(251,191,36,0.35), 0 6px 20px rgba(0,0,0,0.14)}
+
+  /* Editable notes — 10 small stickies */
+  .note{
+    position:absolute;z-index:3;
+    background:var(--note-bg,#fff1f2);
+    border-radius:8px;
+    padding:8px 10px;
+    min-width:70px;max-width:150px;
+    min-height:28px;
+    font-family:'Caveat',cursive;
+    font-size:16px;line-height:1.2;color:#3f3f46;
+    box-shadow:0 3px 12px rgba(0,0,0,0.12);
+    border:1px solid rgba(0,0,0,0.06);
+    cursor:grab;
+    outline:none;
+    word-break:break-word;
+  }
+  .note:active{cursor:grabbing}
+  .note.dragging{opacity:0.9;z-index:50!important;transform:rotate(0deg) scale(1.05)!important;box-shadow:0 12px 28px rgba(0,0,0,0.22)}
+  .note:empty:before{content:attr(data-placeholder);color:rgba(0,0,0,0.35)}
+  .note:focus{box-shadow:0 0 0 2px var(--accent-alpha, rgba(225,29,72,0.25)), 0 3px 12px rgba(0,0,0,0.12)}
+
+  /* QR easter eggs — tiny scannable */
+  .qr-egg{
+    position:absolute;z-index:5;
+    width:34px;height:34px;
+    background:#fff;
+    border-radius:7px;
+    padding:3px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06);
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .15s, box-shadow .15s;
+  }
+  .qr-egg:hover{transform:scale(1.18) rotate(3deg);box-shadow:0 8px 20px rgba(0,0,0,0.24);z-index:20}
+  .qr-egg.dragging{opacity:0.9;z-index:60!important;transform:scale(1.2)}
+  .qr-egg img{width:100%;height:100%;object-fit:contain;border-radius:4px;display:block}
+  .qr-egg .lbl{
+    position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
+    font-size:9px;font-weight:800;background:#111;color:#fff;border-radius:999px;
+    padding:1px 5px;letter-spacing:0.02em;white-space:nowrap;opacity:0;transition:opacity .15s;pointer-events:none;
+  }
+  .qr-egg:hover .lbl{opacity:1}
+
+  /* Avatar easter eggs */
+  .avatar-egg{
+    position:absolute;z-index:5;
+    width:38px;height:38px;
+    border-radius:50%;
+    background:#fff;
+    padding:2px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.18), 0 0 0 2px rgba(255,255,255,0.9);
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .15s;
+    overflow:hidden;
+  }
+  .avatar-egg:hover{transform:scale(1.22) rotate(-4deg);z-index:20}
+  .avatar-egg.dragging{opacity:0.9;z-index:60!important;transform:scale(1.25)}
+  .avatar-egg img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+  .avatar-egg .lbl{
+    position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
+    font-size:9px;font-weight:800;background:#111;color:#fff;border-radius:999px;
+    padding:1px 5px;white-space:nowrap;opacity:0;transition:opacity .15s;pointer-events:none;
+  }
+  .avatar-egg:hover .lbl{opacity:1}
+
+  /* Side panel */
+  .panel{
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(14px);
+    border:1px solid rgba(0,0,0,0.06);
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.06);
+    overflow:hidden;
+    height:fit-content;
+    position:sticky;top:70px;
+  }
+  .panel h3{font-size:13px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;color:#6b7280;padding:14px 16px 8px;border-bottom:1px solid rgba(0,0,0,0.06)}
+  .panel-section{padding:12px 14px;border-bottom:1px solid rgba(0,0,0,0.05)}
+  .panel-section:last-child{border-bottom:none}
+  .hint{font-size:12.5px;line-height:1.5;color:#4b5563}
+  .hint b{color:#111827}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .mini{
+    border-radius:10px;border:1px dashed rgba(0,0,0,0.12);background:#fff;
+    padding:8px;display:flex;gap:8px;align-items:center;cursor:pointer;
+    transition:all .15s;
+  }
+  .mini:hover{border-color:#e11d48;background:#fff1f2}
+  .mini img{width:32px;height:32px;border-radius:6px;object-fit:cover;background:#f3f4f6}
+  .mini .t{font-size:11px;font-weight:700;line-height:1.2}
+  .mini .s{font-size:10px;color:#6b7280}
+  .kvs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .kv{font-size:10px;font-weight:700;background:#f3f4f6;border:1px solid rgba(0,0,0,0.06);border-radius:999px;padding:3px 8px}
+
+  /* Print */
+  @media print{
+    body{background:#fff}
+    .toolbar,.panel{display:none!important}
+    .stage{display:block;margin:0;padding:0}
+    .poster-wrap{padding:0}
+    .poster{width:100%;max-width:none;box-shadow:none;border-radius:0;aspect-ratio:auto;height:100vh}
+    .photo-slot .del,.qr-egg .lbl,.avatar-egg .lbl{display:none!important}
+  }
+
+  /* Drag handle hint */
+  .drag-hint{
+    position:absolute;inset:0;border:2px dashed transparent;border-radius:inherit;
+    pointer-events:none;transition:border-color .15s;
+  }
+  .draggable:hover .drag-hint{border-color:rgba(225,29,72,0.25)}
+  .draggable.dragging .drag-hint{border-color:rgba(225,29,72,0.6)}
+
+  /* Loader */
+  .loader{
+    position:fixed;inset:0;background:rgba(255,255,255,0.8);backdrop-filter:blur(8px);
+    z-index:200;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;
+    transition:opacity .3s;
+  }
+  .loader.hidden{opacity:0;pointer-events:none}
+  .spinner{width:28px;height:28px;border:3px solid #ffe4e6;border-top-color:#e11d48;border-radius:50%;animation:spin 0.8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="loader" id="loader"><div class="spinner"></div><div style="font-weight:800;font-size:13px;color:#6b7280">Loading floral poster v3…</div></div>
+
+<div class="toolbar">
+  <div class="toolbar-left">
+    <div class="brand"><span class="dot"></span> poster-v3 • 10-frame floral • auto-save</div>
+    <div class="status" id="saveStatus"><span class="pulse"></span><span id="saveText">Saved locally</span></div>
+  </div>
+  <div class="toolbar-left">
+    <button class="btn btn-ghost" id="btnHow">💡 How to use</button>
+    <button class="btn btn-ghost" id="btnReset">↺ Reset positions</button>
+    <button class="btn btn-ghost" id="btnClear">🧹 Clear photos</button>
+    <button class="btn" id="btnPrint">🖨️ Print / PDF</button>
+    <button class="btn btn-primary" id="btnDownload">⬇️ Save PNG</button>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="poster-wrap">
+    <div class="poster" id="poster">
+      <div class="bg-fallback" id="bgFallback"></div>
+      <img class="bg-img" id="bgImg" alt="floral template" />
+      <!-- Photo slots, name, message, notes, QRs, avatars injected by JS -->
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>🎨 Your Poster Studio</h3>
+    <div class="panel-section">
+      <div class="hint">
+        <b>Tap any black box</b> to add your photo. <b>Drag</b> anything to reposition — it auto-saves. <b>Double-tap</b> a photo to remove. Editable texts save as you type. Print gives you a Kodak-ready PDF.
+      </div>
+      <div class="kvs">
+        <span class="kv">10 photo frames</span>
+        <span class="kv">name strip</span>
+        <span class="kv">cream card</span>
+        <span class="kv">10 notes</span>
+        <span class="kv">8 QR easter eggs</span>
+        <span class="kv">4 avatars</span>
+        <span class="kv">drag • auto-save</span>
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="hint" style="margin-bottom:8px"><b>Quick fill:</b> click a frame to upload. Or drag & drop images from your computer onto frames.</div>
+      <div class="grid2" id="quickFill"></div>
+    </div>
+    <div class="panel-section">
+      <div class="hint" style="margin-bottom:8px"><b>QR Easter Eggs</b> — hidden tiny QRs that link to your 8 memory tapes. Drag them to hide better! Tap to test.</div>
+      <div class="grid2" id="qrList"></div>
+    </div>
+    <div class="panel-section">
+      <div class="hint" style="margin-bottom:8px"><b>Avatar Easter Eggs</b> — Stitch, Buddha, Jesus, Krishna. Tiny storytelling guardians.</div>
+      <div class="grid2" id="avatarList"></div>
+    </div>
+    <div class="panel-section">
+      <div class="hint">
+        <b>Tip:</b> On mobile, long-press to drag. Your work is saved in this browser (<code>localStorage</code>). For final print, use <b>Print / PDF</b> → Save as PDF → Kodak 9×10.9 or 8×10.
+        <br><br>
+        Background auto-loads <code>public/assets/poster-v3/template.jpg</code> if present — you can replace it with your own floral design and keep same frame positions.
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="globalFile" accept="image/*" style="display:none">
+
+<script>
+/* ========== Config — calibrated to template.jpg 675×1200 ========== */
+const POSTER_W = 675, POSTER_H = 1200;
+const STORAGE_KEY = 'poster-v3-data-v2';
+
+const DEFAULTS = {
+  photos: {}, // id -> dataUrl
+  texts: {
+    name: 'Shaaaw ♡',
+    message: 'Happy Birthday to my sweetest person!\nYou make every day brighter. Here are 10 little memories that make us, us.\n— Love you always',
+    notes: {
+      1:'You + Me = ♡', 2:'Same madness, more birthdays!', 3:'My favorite hello',
+      4:'Adventure awaits', 5:'You are my sunshine', 6:'Forever & always',
+      7:'Cute chaos', 8:'Main character energy', 9:'Home is you', 10:'13 + lucky'
+    }
+  },
+  positions: {
+    // photo slots — x,y as % of poster, w,h as %, rot deg
+    'photo-1': {x:83.5,y:11.5,w:28,h:20.5,rot:8},
+    'photo-2': {x:17.5,y:28.5,w:31,h:22.5,rot:-4.5},
+    'photo-3': {x:48,y:26.2,w:24,h:19,rot:1.5},
+    'photo-4': {x:81.5,y:30.5,w:27.5,h:22,rot:9},
+    'photo-5': {x:18.5,y:50.5,w:25,h:20,rot:-6},
+    'photo-6': {x:51,y:44.5,w:31,h:24.5,rot:-7.5},
+    'photo-7': {x:80.5,y:50.5,w:26,h:21,rot:-4},
+    'photo-8': {x:18.5,y:71,w:28,h:23,rot:-6.5},
+    'photo-9': {x:48.5,y:65.5,w:25,h:20,rot:4.5},
+    'photo-10': {x:80,y:72.5,w:28,h:22.5,rot:5.5},
+    // name strip & message card
+    'name-strip': {x:39.5,y:16.2,w:30,h:4.2,rot:-3},
+    'message-card': {x:50,y:88,w:46,h:13.5,rot:-1.2},
+    // 10 notes — scattered, small
+    'note-1': {x:8,y:6,w:18,h:4,rot:-8},
+    'note-2': {x:52,y:6,w:18,h:4,rot:6},
+    'note-3': {x:10,y:41,w:16,h:4,rot:-5},
+    'note-4': {x:63,y:40,w:16,h:4,rot:7},
+    'note-5': {x:30,y:60,w:18,h:4,rot:-6},
+    'note-6': {x:70,y:62,w:18,h:4,rot:5},
+    'note-7': {x:12,y:84,w:18,h:4,rot:-4},
+    'note-8': {x:72,y:84,w:18,h:4,rot:6},
+    'note-9': {x:35,y:78,w:16,h:4,rot:3},
+    'note-10': {x:58,y:18,w:16,h:4,rot:-3},
+    // 8 QR easter eggs — tiny, hidden near decor
+    'qr-1': {x:6,y:13,w:5,h:5,rot:-8},
+    'qr-2': {x:32,y:40,w:5,h:5,rot:5},
+    'qr-3': {x:8,y:44,w:5,h:5,rot:-6},
+    'qr-4': {x:62,y:42,w:5,h:5,rot:8},
+    'qr-5': {x:30,y:60,w:5,h:5,rot:-5},
+    'qr-6': {x:88,y:86,w:5,h:5,rot:7},
+    'qr-7': {x:8,y:92,w:5,h:5,rot:-7},
+    'qr-8': {x:90,y:96,w:5,h:5,rot:6},
+    // 4 avatar easter eggs
+    'avatar-stitch': {x:12,y:18,w:6,h:6,rot:-10},
+    'avatar-buddha': {x:88,y:78,w:6,h:6,rot:8},
+    'avatar-jesus': {x:10,y:95,w:6,h:6,rot:-6},
+    'avatar-krishna': {x:85,y:35,w:6,h:6,rot:6},
+  }
+};
+
+const NOTE_COLORS = [
+  '#fff1f2','#fef3c7','#e0e7ff','#dcfce7','#f3e8ff',
+  '#ffedd5','#d1fae5','#ede9fe','#fce7f3','#e0f2fe'
+];
+
+const $poster = document.getElementById('poster');
+const $bgImg = document.getElementById('bgImg');
+const $bgFallback = document.getElementById('bgFallback');
+const $loader = document.getElementById('loader');
+const $saveText = document.getElementById('saveText');
+
+let state = loadState();
+let activeDrag = null;
+let dragStart = null;
+let currentPhotoTarget = null;
+
+/* ---------- Background auto-load ---------- */
+function loadBackground(){
+  const candidates = [
+    'assets/poster-v3/template.jpg',
+    './assets/poster-v3/template.jpg',
+    '/assets/poster-v3/template.jpg',
+    'public/assets/poster-v3/template.jpg'
+  ];
+  let idx=0;
+  function tryNext(){
+    if(idx>=candidates.length){
+      $bgImg.style.display='none';
+      $bgFallback.style.display='block';
+      hideLoader();
+      return;
+    }
+    const url = candidates[idx++] + '?v=' + Date.now();
+    const test = new Image();
+    test.onload = ()=>{ $bgImg.src = url.split('?')[0]; $bgImg.style.display='block'; $bgFallback.style.display='none'; hideLoader(); };
+    test.onerror = tryNext;
+    test.src = url;
+  }
+  tryNext();
+}
+function hideLoader(){ setTimeout(()=> $loader.classList.add('hidden'), 300); }
+
+/* ---------- Persistence ---------- */
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return structuredClone(DEFAULTS);
+    const parsed = JSON.parse(raw);
+    // merge with defaults for missing keys (forward compat)
+    return {
+      photos: {...DEFAULTS.photos, ...(parsed.photos||{})},
+      texts: {
+        name: parsed.texts?.name ?? DEFAULTS.texts.name,
+        message: parsed.texts?.message ?? DEFAULTS.texts.message,
+        notes: {...DEFAULTS.texts.notes, ...(parsed.texts?.notes||{})}
+      },
+      positions: {...DEFAULTS.positions, ...(parsed.positions||{})}
+    };
+  }catch{ return structuredClone(DEFAULTS); }
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  $saveText.textContent = 'Saved • ' + new Date().toLocaleTimeString();
+  setTimeout(()=> $saveText.textContent='Saved locally', 2000);
+}
+let saveDebounce=null;
+function saveDebounced(){
+  clearTimeout(saveDebounce);
+  saveDebounce=setTimeout(saveState, 250);
+}
+
+/* ---------- Build poster ---------- */
+function buildPoster(){
+  $poster.querySelectorAll('.photo-slot,.name-strip,.message-card,.note,.qr-egg,.avatar-egg').forEach(e=>e.remove());
+
+  // 10 photo slots
+  for(let i=1;i<=10;i++){
+    const id = `photo-${i}`;
+    const pos = state.positions[id] || DEFAULTS.positions[id];
+    const slot = document.createElement('div');
+    slot.className = 'photo-slot draggable';
+    slot.dataset.id = id;
+    slot.dataset.type = 'photo';
+    applyPos(slot,pos);
+    slot.innerHTML = `
+      <div class="drag-hint"></div>
+      <div class="ph">ur pic here</div>
+      <img class="filled" style="display:none" alt="photo ${i}">
+      <div class="del">✕</div>
+      <input type="file" accept="image/*">
+    `;
+    const img = slot.querySelector('img.filled');
+    const ph = slot.querySelector('.ph');
+    const input = slot.querySelector('input');
+    const del = slot.querySelector('.del');
+
+    const dataUrl = state.photos[i];
+    if(dataUrl){
+      img.src = dataUrl; img.style.display='block'; ph.style.display='none'; slot.classList.add('has-photo');
+    }
+
+    slot.addEventListener('click', (e)=>{
+      if(e.target===del) return;
+      if(activeDrag) return;
+      currentPhotoTarget = i;
+      input.click();
+    });
+    input.addEventListener('change', (e)=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ev=>{
+        state.photos[i]=ev.target.result;
+        img.src = ev.target.result; img.style.display='block'; ph.style.display='none';
+        slot.classList.add('has-photo');
+        saveState();
+      };
+      reader.readAsDataURL(file);
+      e.target.value='';
+    });
+    del.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      delete state.photos[i];
+      img.src=''; img.style.display='none'; ph.style.display='block';
+      slot.classList.remove('has-photo');
+      saveState();
+    });
+
+    // drag & drop image from OS onto slot
+    slot.addEventListener('dragover', e=>{ e.preventDefault(); slot.style.outline='2px dashed #e11d48'; });
+    slot.addEventListener('dragleave', e=>{ slot.style.outline=''; });
+    slot.addEventListener('drop', e=>{
+      e.preventDefault(); slot.style.outline='';
+      const file = e.dataTransfer.files[0];
+      if(!file || !file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = ev=>{
+        state.photos[i]=ev.target.result;
+        img.src=ev.target.result; img.style.display='block'; ph.style.display='none';
+        slot.classList.add('has-photo'); saveState();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    $poster.appendChild(slot);
+  }
+
+  // name strip
+  {
+    const id='name-strip';
+    const pos=state.positions[id];
+    const el=document.createElement('div');
+    el.className='name-strip draggable';
+    el.dataset.id=id;
+    el.dataset.type='text';
+    el.contentEditable=true;
+    el.setAttribute('data-placeholder','Enter name');
+    el.textContent=state.texts.name;
+    applyPos(el,pos);
+    el.innerHTML += `<div class="drag-hint"></div>`;
+    el.addEventListener('input',()=>{
+      state.texts.name = el.textContent;
+      saveDebounced();
+    });
+    el.addEventListener('focus',()=>{ el.style.zIndex=30; });
+    el.addEventListener('blur',()=>{ el.style.zIndex=''; saveState(); });
+    $poster.appendChild(el);
+  }
+
+  // message card
+  {
+    const id='message-card';
+    const pos=state.positions[id];
+    const el=document.createElement('div');
+    el.className='message-card draggable';
+    el.dataset.id=id;
+    el.dataset.type='text';
+    el.contentEditable=true;
+    el.setAttribute('data-placeholder','Write your birthday message here…');
+    el.textContent=state.texts.message;
+    applyPos(el,pos);
+    el.innerHTML += `<div class="drag-hint"></div>`;
+    el.addEventListener('input',()=>{
+      state.texts.message = el.textContent;
+      saveDebounced();
+    });
+    el.addEventListener('blur',saveState);
+    $poster.appendChild(el);
+  }
+
+  // 10 notes
+  for(let i=1;i<=10;i++){
+    const id=`note-${i}`;
+    const pos=state.positions[id];
+    const el=document.createElement('div');
+    el.className='note draggable';
+    el.dataset.id=id;
+    el.dataset.type='note';
+    el.contentEditable=true;
+    el.setAttribute('data-placeholder',`Note ${i}`);
+    el.textContent=state.texts.notes[i]||'';
+    el.style.setProperty('--note-bg', NOTE_COLORS[(i-1)%NOTE_COLORS.length]);
+    el.style.setProperty('--accent-alpha', `rgba(225,29,72,0.2)`);
+    applyPos(el,pos);
+    el.innerHTML += `<div class="drag-hint"></div>`;
+    el.addEventListener('input',()=>{
+      state.texts.notes[i]=el.textContent;
+      saveDebounced();
+    });
+    el.addEventListener('blur',saveState);
+    $poster.appendChild(el);
+  }
+
+  // 8 QR easter eggs
+  for(let i=1;i<=8;i++){
+    const id=`qr-${i}`;
+    const pos=state.positions[id];
+    const el=document.createElement('a');
+    el.className='qr-egg draggable';
+    el.dataset.id=id;
+    el.dataset.type='qr';
+    el.href=`/m/${i}`;
+    el.target='_blank';
+    el.title=`Memory ${i} — tap to test`;
+    applyPos(el,pos);
+    el.innerHTML=`
+      <div class="drag-hint"></div>
+      <img src="assets/poster-v3/qr/${i}.png" alt="QR ${i}" onerror="this.src='/assets/qr/${i}.png'; this.onerror=function(){this.src='assets/qr/${i}.png'}">
+      <span class="lbl">QR ${i}</span>
+    `;
+    el.addEventListener('click', (e)=>{
+      if(activeDrag && activeDrag.moved){ e.preventDefault(); }
+    });
+    $poster.appendChild(el);
+  }
+
+  // 4 avatar easter eggs
+  const avatars = [
+    {id:'avatar-stitch', file:'avatar_stitch.png', label:'Stitch'},
+    {id:'avatar-buddha', file:'avatar_buddha.png', label:'Buddha'},
+    {id:'avatar-jesus', file:'avatar_jesus.png', label:'Jesus'},
+    {id:'avatar-krishna', file:'avatar_krishna.png', label:'Krishna'},
+  ];
+  avatars.forEach(av=>{
+    const pos=state.positions[av.id];
+    const el=document.createElement('div');
+    el.className='avatar-egg draggable';
+    el.dataset.id=av.id;
+    el.dataset.type='avatar';
+    el.title=av.label;
+    applyPos(el,pos);
+    el.innerHTML=`
+      <div class="drag-hint"></div>
+      <img src="assets/poster-v3/${av.file}" alt="${av.label}" onerror="this.src='assets/${av.file.replace('_','-')}'; this.onerror=function(){this.src='assets/poster-v3/avatar_buddha.png'}">
+      <span class="lbl">${av.label}</span>
+    `;
+    $poster.appendChild(el);
+  });
+
+  // make all draggable
+  initDrag();
+
+  // quick fill panel
+  buildSidePanels();
+}
+
+function applyPos(el, pos){
+  if(!pos) return;
+  el.style.left = pos.x + '%';
+  el.style.top = pos.y + '%';
+  if(pos.w) el.style.width = pos.w + '%';
+  if(pos.h && el.classList.contains('photo-slot')) el.style.height = pos.h + '%';
+  if(pos.w && !el.classList.contains('photo-slot') && !el.classList.contains('qr-egg') && !el.classList.contains('avatar-egg')){
+    // for text blocks, w is % width
+    el.style.width = pos.w + '%';
+  }
+  if(pos.h && (el.classList.contains('message-card')||el.classList.contains('name-strip'))){
+    el.style.minHeight = pos.h + '%';
+  }
+  if(pos.rot!==undefined){
+    // keep existing transform for scale etc, just set rotate
+    const existing = el.dataset.baseRot ? '' : '';
+    el.style.transform = `translate(-50%,-50%) rotate(${pos.rot}deg)`;
+  } else {
+    el.style.transform = `translate(-50%,-50%)`;
+  }
+  // QR and avatar fixed size override
+  if(el.classList.contains('qr-egg')){
+    el.style.width = (pos.w||5) + '%';
+    el.style.aspectRatio='1';
+    el.style.height='auto';
+  }
+  if(el.classList.contains('avatar-egg')){
+    el.style.width = (pos.w||6) + '%';
+    el.style.aspectRatio='1';
+    el.style.height='auto';
+  }
+}
+
+/* ---------- Drag system (pointer events) ---------- */
+function initDrag(){
+  const draggables = $poster.querySelectorAll('.draggable');
+  draggables.forEach(el=>{
+    el.addEventListener('pointerdown', onPointerDown);
+  });
+  window.addEventListener('pointermove', onPointerMove);
+  window.addEventListener('pointerup', onPointerUp);
+  window.addEventListener('pointercancel', onPointerUp);
+}
+
+function onPointerDown(e){
+  // ignore if editing text and click inside contenteditable without modifier
+  const el = e.currentTarget;
+  const isEditable = el.isContentEditable && !e.altKey && !e.ctrlKey;
+  if(isEditable){
+    // allow text selection, but if they hold near border, still drag? We require Alt to drag editable
+    // For name/message/notes: drag only if altKey or if they drag the hint area? Simplify: drag handle is border
+    // We'll allow drag if pointer is near edge (within 10px) or alt pressed
+    const rect = el.getBoundingClientRect();
+    const nearEdge = e.clientX < rect.left+12 || e.clientX > rect.right-12 || e.clientY < rect.top+12 || e.clientY > rect.bottom-12;
+    if(!nearEdge && !e.altKey){
+      return; // let contenteditable handle
+    }
+  }
+  e.preventDefault();
+  el.setPointerCapture(e.pointerId);
+  const posterRect = $poster.getBoundingClientRect();
+  const elRect = el.getBoundingClientRect();
+  // position in % relative to poster center? We store center x,y %
+  activeDrag = {
+    el,
+    id: el.dataset.id,
+    startX: e.clientX,
+    startY: e.clientY,
+    origX: state.positions[el.dataset.id]?.x ?? 50,
+    origY: state.positions[el.dataset.id]?.y ?? 50,
+    posterRect,
+    moved:false
+  };
+  el.classList.add('dragging');
+  el.style.zIndex=100;
+}
+
+function onPointerMove(e){
+  if(!activeDrag) return;
+  const {el, startX, startY, origX, origY, posterRect} = activeDrag;
+  const dx = e.clientX - startX;
+  const dy = e.clientY - startY;
+  if(Math.abs(dx)>2 || Math.abs(dy)>2) activeDrag.moved=true;
+
+  // convert dx,dy to % of poster
+  const dxPct = (dx / posterRect.width)*100;
+  const dyPct = (dy / posterRect.height)*100;
+  let newX = origX + dxPct;
+  let newY = origY + dyPct;
+  // clamp 2..98
+  newX = Math.max(2, Math.min(98, newX));
+  newY = Math.max(2, Math.min(98, newY));
+
+  // update
+  if(!state.positions[activeDrag.id]) state.positions[activeDrag.id]={...DEFAULTS.positions[activeDrag.id]};
+  state.positions[activeDrag.id].x = newX;
+  state.positions[activeDrag.id].y = newY;
+  el.style.left = newX + '%';
+  el.style.top = newY + '%';
+}
+
+function onPointerUp(e){
+  if(!activeDrag) return;
+  const {el, id, moved} = activeDrag;
+  el.classList.remove('dragging');
+  el.style.zIndex='';
+  if(moved){
+    saveState();
+  }
+  activeDrag=null;
+}
+
+/* ---------- Side panels ---------- */
+function buildSidePanels(){
+  const $quick = document.getElementById('quickFill');
+  $quick.innerHTML='';
+  for(let i=1;i<=10;i++){
+    const d = document.createElement('div');
+    d.className='mini';
+    d.innerHTML=`<img src="${state.photos[i]||''}" style="${state.photos[i]?'':'background:#f3f4f6'}" alt=""><div><div class="t">Frame ${i}</div><div class="s">${state.photos[i]?'filled':'empty • tap poster'}</div></div>`;
+    d.addEventListener('click',()=>{
+      const slot = $poster.querySelector(`[data-id="photo-${i}"]`);
+      if(slot) slot.click();
+    });
+    $quick.appendChild(d);
+  }
+  const $qrList = document.getElementById('qrList');
+  $qrList.innerHTML='';
+  for(let i=1;i<=8;i++){
+    const d=document.createElement('a');
+    d.className='mini'; d.href=`/m/${i}`; d.target='_blank';
+    d.innerHTML=`<img src="assets/poster-v3/qr/${i}.png" onerror="this.src='/assets/qr/${i}.png'" alt="QR ${i}"><div><div class="t">QR ${i}</div><div class="s">/m/${i}</div></div>`;
+    $qrList.appendChild(d);
+  }
+  const $avList=document.getElementById('avatarList');
+  $avList.innerHTML='';
+  [
+    {f:'avatar_stitch.png',n:'Stitch'},
+    {f:'avatar_buddha.png',n:'Buddha'},
+    {f:'avatar_jesus.png',n:'Jesus'},
+    {f:'avatar_krishna.png',n:'Krishna'},
+  ].forEach(av=>{
+    const d=document.createElement('div');
+    d.className='mini';
+    d.innerHTML=`<img src="assets/poster-v3/${av.f}" style="border-radius:50%" onerror="this.src='assets/poster-v3/avatar_buddha.png'" alt="${av.n}"><div><div class="t">${av.n}</div><div class="s">easter egg</div></div>`;
+    $avList.appendChild(d);
+  });
+}
+
+/* ---------- Buttons ---------- */
+document.getElementById('btnPrint').addEventListener('click',()=> window.print());
+document.getElementById('btnReset').addEventListener('click',()=>{
+  if(!confirm('Reset all positions to default? Photos and texts stay.')) return;
+  state.positions = structuredClone(DEFAULTS.positions);
+  saveState();
+  buildPoster();
+});
+document.getElementById('btnClear').addEventListener('click',()=>{
+  if(!confirm('Clear all 10 photos? Texts stay.')) return;
+  state.photos={};
+  saveState();
+  buildPoster();
+});
+document.getElementById('btnDownload').addEventListener('click', async ()=>{
+  // simple: use canvas to rasterize? For now, trigger print and also try to use html2canvas if available, else just print
+  alert('Tip: For best Kodak print, use Print / PDF → Save as PDF → 300 DPI. A full PNG exporter can be added with html2canvas if needed. Your current poster is auto-saved and print-ready!');
+  window.print();
+});
+document.getElementById('btnHow').addEventListener('click',()=>{
+  alert(`How to use poster-v3:
+
+1. TAP any black “ur pic here” box → pick a photo from your phone/PC. It fills instantly and is saved in your browser.
+2. DRAG anything to reposition: photos, name strip (lavender), cream message card, 10 small notes, 8 tiny QR easter eggs, 4 avatar guardians.
+   • For text: hold Alt (or drag near border) to move, otherwise you can type.
+3. TYPE directly on name strip, cream card, and 10 notes — auto-saves.
+4. QR easter eggs are tiny scannable codes linking to /m/1…/m/8. Hide them in flowers, tickets, etc. Tap to test.
+5. Avatar easter eggs: Stitch, Buddha, Jesus, Krishna — storytelling guardians.
+6. Print / PDF: gives you a clean poster without UI. Save as PDF for Kodak 9×10.9 or 8×10 print.
+7. Everything auto-saves locally (localStorage). No server needed.
+
+Background: poster auto-loads public/assets/poster-v3/template.jpg if present. You can replace that JPG with your own design and keep positions.
+
+Made for Shaaaw ♡`);
+});
+
+/* ---------- Init ---------- */
+loadBackground();
+buildPoster();
+
+// update side panel when photos change (poll)
+setInterval(buildSidePanels, 2000);
+
+// handle global file drop on poster
+$poster.addEventListener('dragover', e=>{ e.preventDefault(); });
+$poster.addEventListener('drop', e=>{
+  // if dropped on poster but not on a slot, ignore
+});
+
+// service worker? not needed
+
+// Hide loader after build even if bg fails
+setTimeout(hideLoader, 1200);
+</script>
+</body>
+</html>
