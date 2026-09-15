@@ -1008,15 +1008,50 @@
     // The Polaroid frame (white paper borders, pink washi tape, "You Make Everything
     // More Fun ♡" text, stickers, and QR codes) is rendered ON TOP of the photos.
     // Photos sit UNDER the frame, bleeding slightly behind the white borders.
+    // Frame geometry: every frame has three calibrated polygons, measured pixel-exact
+    // against the 843×1024 source poster (public/assets/original-poster.jpg):
+    //   card  – the new Polaroid cardstock outline (concave notches cut around QR stickers
+    //           so the 8 QR codes stay 100% visible and scannable)
+    //   erase – the dark "erase old frame" fill (3px inside the card, always QR-safe)
+    //   ap    – the photo aperture (the grey cavity, inset 2px from any QR sticker)
+    // Polygon points are in the frame's ROTATED coordinate space: (u, v) in poster-image
+    // pixels relative to the cavity center, where u runs along the card and v runs down
+    // the card. They are scaled by (drawW / 843) * scale and rotated by rotDeg at render.
     const FRAME_CONFIGS = [
-      { id: 0, title: "🌟 Center Main Polaroid (Shaaaw)", cxPct: 0.5050, cyPct: 0.3950, wPct: 0.3480, hPct: 0.3040, rotDeg: -2.6, panX: 0.00, panY: 0.18, zoom: 1.05, scale: 1.00, isMain: true,  label: "Shaaaw 💖", icon: "🌟" },
-      { id: 1, title: "🖼️ Top-Left Polaroid (Frame 1)",   cxPct: 0.2450, cyPct: 0.2480, wPct: 0.2150, hPct: 0.1880, rotDeg: -6.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Left",   icon: "🖼️" },
-      { id: 2, title: "🦋 Mid-Left Polaroid (Frame 2)",    cxPct: 0.2280, cyPct: 0.4980, wPct: 0.2150, hPct: 0.1880, rotDeg:  6.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Left",   icon: "🦋" },
-      { id: 3, title: "🎀 Bottom-Left Polaroid (Frame 3)", cxPct: 0.3720, cyPct: 0.6420, wPct: 0.2150, hPct: 0.1880, rotDeg: -3.6, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Left",   icon: "🎀" },
-      { id: 4, title: "🎀 Bottom-Right Polaroid (Frame 4)",cxPct: 0.6260, cyPct: 0.6420, wPct: 0.2150, hPct: 0.1880, rotDeg:  3.4, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Right",  icon: "🎀" },
-      { id: 5, title: "🏰 Top-Right Polaroid (Frame 5)",  cxPct: 0.7280, cyPct: 0.2520, wPct: 0.2150, hPct: 0.1880, rotDeg:  6.2, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Right",  icon: "🏰" },
-      { id: 6, title: "✨ Mid-Right Polaroid (Frame 6)",   cxPct: 0.7560, cyPct: 0.4980, wPct: 0.2150, hPct: 0.1880, rotDeg: -6.2, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Right",  icon: "✨" }
+      { id: 0, title: "🌟 Center Main Polaroid (Shaaaw)", cxPct: 0.4881, cyPct: 0.3779, rotDeg: -2.6, panX: 0.00, panY: 0.18, zoom: 1.05, scale: 1.00, isMain: true,  label: "Shaaaw 💖", icon: "🌟",
+        card: [[-121.4,-135.1],[123.4,-135.1],[123.4,158.1],[-121.4,158.1]],
+        erase:[[-113.4,-127.1],[115.4,-127.1],[115.4,150.1],[-113.4,150.1]],
+        ap:   [[-99.4,-103.1],[99.4,-103.1],[99.4,103.1],[-99.4,103.1]] },
+      { id: 1, title: "🖼️ Top-Left Polaroid (Frame 1)",   cxPct: 0.2509, cyPct: 0.2593, rotDeg: -6.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Left",   icon: "🖼️",
+        card: [[-86.0,-50.6],[-58.5,-47.4],[-53.3,-93.0],[93.0,-93.0],[93.0,117.0],[-64.2,117.0],[-59.4,75.3],[-86.0,72.2]],
+        erase:[[-78.0,-49.6],[-58.5,-47.4],[-54.2,-85.0],[85.0,-85.0],[85.0,109.0],[-63.2,109.0],[-59.4,75.3],[-78.0,73.2]],
+        ap:   [[-66.0,-46.3],[-56.8,-45.2],[-54.4,-66.0],[66.0,-66.0],[66.0,66.0],[-66.0,66.0]] },
+      { id: 2, title: "🦋 Mid-Left Polaroid (Frame 2)",    cxPct: 0.2325, cyPct: 0.5049, rotDeg:  6.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Left",   icon: "🦋",
+        card: [[-89.7,-59.2],[-42.6,-64.6],[-44.0,-77.0],[94.7,-77.0],[94.7,99.0],[21.4,99.0],[19.1,79.3],[-89.7,91.7]],
+        erase:[[-81.7,-60.1],[-42.6,-64.6],[-43.1,-69.0],[86.7,-69.0],[86.7,91.0],[20.4,91.0],[19.1,79.3],[-81.7,90.8]],
+        ap:   [[-69.7,-59.5],[-40.4,-62.8],[-40.5,-64.0],[69.7,-64.0],[69.7,64.0],[-69.7,64.0]] },
+      { id: 3, title: "🎀 Bottom-Left Polaroid (Frame 3)", cxPct: 0.3725, cyPct: 0.6484, rotDeg: -3.6, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Left",   icon: "🎀",
+        card: [[-100.6,-95.9],[96.6,-95.9],[96.6,102.9],[-100.6,102.9]],
+        erase:[[-92.6,-87.9],[88.6,-87.9],[88.6,94.9],[-92.6,94.9]],
+        ap:   [[-75.6,-64.9],[75.6,-64.9],[75.6,64.9],[-75.6,64.9]] },
+      { id: 4, title: "🎀 Bottom-Right Polaroid (Frame 4)",cxPct: 0.6168, cyPct: 0.6514, rotDeg:  3.4, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Right",  icon: "🎀",
+        card: [[-94.9,-97.3],[93.9,-97.3],[93.9,54.5],[35.5,58.0],[37.4,89.3],[-94.9,89.3]],
+        erase:[[-86.9,-89.3],[85.9,-89.3],[85.9,55.0],[35.5,58.0],[36.9,81.3],[-86.9,81.3]],
+        ap:   [[-72.9,-62.3],[72.9,-62.3],[72.9,53.8],[33.4,56.1],[33.8,62.3],[-72.9,62.3]] },
+      { id: 5, title: "🏰 Top-Right Polaroid (Frame 5)",  cxPct: 0.7236, cyPct: 0.2642, rotDeg:  6.2, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Right",  icon: "🏰",
+        card: [[-98.8,-93.8],[97.4,-93.8],[101.7,-54.8],[101.8,55.8],[54.9,60.9],[59.0,98.8],[-98.8,98.8]],
+        erase:[[-90.8,-85.8],[93.8,-85.8],[93.8,56.7],[54.9,60.9],[58.1,90.8],[-90.8,90.8]],
+        ap:   [[-69.8,-65.8],[69.8,-65.8],[69.8,57.3],[52.7,59.1],[53.4,65.8],[-69.8,65.8]] },
+      { id: 6, title: "✨ Mid-Right Polaroid (Frame 6)",   cxPct: 0.7639, cyPct: 0.5039, rotDeg: -6.2, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Right",  icon: "✨",
+        card: [[-96.9,-79.2],[22.7,-79.2],[21.3,-66.1],[89.9,-58.6],[89.9,100.3],[-19.7,88.4],[-22.9,118.2],[-96.9,118.2]],
+        erase:[[-88.9,-71.2],[21.8,-71.2],[21.3,-66.1],[81.9,-59.5],[81.9,99.4],[-19.7,88.4],[-22.0,110.2],[-88.9,110.2]],
+        ap:   [[-70.9,-65.2],[19.2,-65.2],[19.1,-64.3],[70.9,-58.7],[70.9,65.2],[-70.9,65.2]] }
     ];
+
+    // Z-order for drawing the 7 frames (last = frontmost). The main card sits on top of
+    // the top-left / top-right cards (matching the original collage), and mid-left /
+    // mid-right sit on top of the bottom row.
+    const FRAME_ZORDER = [5, 1, 4, 3, 2, 6, 0];
 
     const frameStates = JSON.parse(JSON.stringify(FRAME_CONFIGS));
     const frameImages = {};
@@ -1094,6 +1129,87 @@
       c.lineTo(x, y + r);
       c.quadraticCurveTo(x, y, x + r, y);
       c.closePath();
+    }
+
+    // ========================================================================
+    // FRAME POLYGON HELPERS (calibrated notched-card geometry)
+    // ========================================================================
+    // Trace a (possibly concave) polygon path with gently rounded corners.
+    // `pts` are [[u, v], ...] in the caller's current coordinate space;
+    // `roundUnits` is the corner radius in the same units (0 = sharp corners).
+    function tracePolyPath(c, pts, roundUnits) {
+      const n = pts.length;
+      c.beginPath();
+      if (n < 3) return;
+      if (!roundUnits) {
+        c.moveTo(pts[0][0], pts[0][1]);
+        for (let i = 1; i < n; i++) c.lineTo(pts[i][0], pts[i][1]);
+        c.closePath();
+        return;
+      }
+      const r = roundUnits;
+      for (let i = 0; i < n; i++) {
+        const p0 = pts[(i - 1 + n) % n];
+        const p1 = pts[i];
+        const p2 = pts[(i + 1) % n];
+        const v1x = p1[0] - p0[0], v1y = p1[1] - p0[1];
+        const v2x = p2[0] - p1[0], v2y = p2[1] - p1[1];
+        const l1 = Math.hypot(v1x, v1y) || 1;
+        const l2 = Math.hypot(v2x, v2y) || 1;
+        const rA = Math.min(r, l1 / 2.5, l2 / 2.5);
+        const ax = p1[0] - (v1x / l1) * rA, ay = p1[1] - (v1y / l1) * rA;
+        const bx = p1[0] + (v2x / l2) * rA, by = p1[1] + (v2y / l2) * rA;
+        if (i === 0) c.moveTo(ax, ay);
+        else c.lineTo(ax, ay);
+        c.quadraticCurveTo(p1[0], p1[1], bx, by);
+      }
+      c.closePath();
+    }
+
+    // Map a rotated-frame polygon to canvas coordinates.
+    function polyToCanvas(poly, m) {
+      const c = Math.cos(m.rot), s = Math.sin(m.rot);
+      return poly.map(([u, v]) => [
+        m.cx + (u * c - v * s) * m.k,
+        m.cy + (u * s + v * c) * m.k
+      ]);
+    }
+
+    // Frame metrics: canvas center, scale (drawW/843 * user scale), rotation.
+    function frameMetrics(cfg, drawX, drawY, drawW, drawH) {
+      return {
+        cx: drawX + cfg.cxPct * drawW,
+        cy: drawY + cfg.cyPct * drawH,
+        k: (drawW / 843) * (cfg.scale || 1.0),
+        rot: (cfg.rotDeg || 0) * Math.PI / 180
+      };
+    }
+
+    function pointInPoly(x, y, poly) {
+      let inside = false;
+      for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+        const xi = poly[i][0], yi = poly[i][1];
+        const xj = poly[j][0], yj = poly[j][1];
+        if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+      }
+      return inside;
+    }
+
+    // Which frame (if any) is under a canvas point? Frontmost first.
+    function getFrameAtPoint(px, py) {
+      if (!currentDrawMetrics.drawW) return -1;
+      const { drawX, drawY, drawW, drawH } = currentDrawMetrics;
+      for (let i = FRAME_ZORDER.length - 1; i >= 0; i--) {
+        const cfg = frameStates[FRAME_ZORDER[i]];
+        const m = frameMetrics(cfg, drawX, drawY, drawW, drawH);
+        const dx = px - m.cx, dy = py - m.cy;
+        const c = Math.cos(m.rot), s = Math.sin(m.rot);
+        // Inverse-rotate into the frame's local (u, v) space, in 843-scale units.
+        const u = (dx * c + dy * s) / m.k;
+        const v = (-dx * s + dy * c) / m.k;
+        if (pointInPoly(u, v, cfg.card)) return cfg.id;
+      }
+      return -1;
     }
 
     // Auto-fit photo inside aperture with proper aspect ratio cover & pan
@@ -1342,62 +1458,54 @@
     function eraseOldPosterFrames(targetCtx, drawX, drawY, drawW, drawH) {
       targetCtx.save();
 
-      // Precise bounding boxes of the 7 old baked-in polaroid frames on the poster
-      const eraseRegions = [
-        // Center Main Polaroid
-        { cxPct: 0.5050, cyPct: 0.3950, w: drawW * 0.410, h: drawW * 0.510, rot: -2.6, dark: true },
-        // Top-Left Frame 1
-        { cxPct: 0.2450, cyPct: 0.2480, w: drawW * 0.265, h: drawW * 0.330, rot: -6.5, dark: false },
-        // Mid-Left Frame 2
-        { cxPct: 0.2280, cyPct: 0.4980, w: drawW * 0.265, h: drawW * 0.330, rot:  6.5, dark: true },
-        // Bottom-Left Frame 3
-        { cxPct: 0.3720, cyPct: 0.6420, w: drawW * 0.265, h: drawW * 0.330, rot: -3.6, dark: true },
-        // Bottom-Right Frame 4
-        { cxPct: 0.6260, cyPct: 0.6420, w: drawW * 0.265, h: drawW * 0.330, rot:  3.4, dark: true },
-        // Top-Right Frame 5
-        { cxPct: 0.7280, cyPct: 0.2520, w: drawW * 0.265, h: drawW * 0.330, rot:  6.2, dark: false },
-        // Mid-Right Frame 6
-        { cxPct: 0.7560, cyPct: 0.4980, w: drawW * 0.265, h: drawW * 0.330, rot: -6.2, dark: true }
+      // Calibrated erase polygons (in each frame's rotated space, 843-scale units).
+      // Each polygon is 3px INSIDE the new card outline, so the new card fully covers
+      // the dark fill — no dark rim — while the fill dissolves the old baked-in frame,
+      // its tape and its text. Every erase polygon was verified to stay clear of all
+      // 8 QR code keep-out zones.
+      const darkStyles = [
+        { c0: '#2e1814', c1: '#3b201a', c2: '#23120f' }, // main
+        { c0: '#35211b', c1: '#281714', c2: '#1e100d' }, // top-left
+        { c0: '#321d18', c1: '#261411', c2: '#1b0d0b' }, // mid-left
+        { c0: '#321d18', c1: '#261411', c2: '#1b0d0b' }, // bottom-left
+        { c0: '#321d18', c1: '#261411', c2: '#1b0d0b' }, // bottom-right
+        { c0: '#35211b', c1: '#281714', c2: '#1e100d' }, // top-right
+        { c0: '#321d18', c1: '#261411', c2: '#1b0d0b' }  // mid-right
       ];
 
-      eraseRegions.forEach((reg, idx) => {
-        const cx = drawX + reg.cxPct * drawW;
-        const cy = drawY + reg.cyPct * drawH;
+      FRAME_CONFIGS.forEach((cfg) => {
+        const st = darkStyles[cfg.id];
+        const m = frameMetrics(cfg, drawX, drawY, drawW, drawH);
+        const pts = polyToCanvas(cfg.erase, m);
 
-        targetCtx.save();
-        targetCtx.translate(cx, cy);
-        targetCtx.rotate(reg.rot * Math.PI / 180);
+        const eU0 = Math.min(...cfg.erase.map(p => p[0]));
+        const eU1 = Math.max(...cfg.erase.map(p => p[0]));
+        const eV0 = Math.min(...cfg.erase.map(p => p[1]));
+        const eV1 = Math.max(...cfg.erase.map(p => p[1]));
+        const diag = Math.hypot(eU1 - eU0, eV1 - eV0) * 0.5 * m.k;
 
-        // Fill with deep archival floral/cork backing blend that dissolves the old frames
-        const bgGrad = targetCtx.createRadialGradient(0, 0, reg.w * 0.15, 0, 0, reg.w * 0.65);
-        if (idx === 0) {
-          bgGrad.addColorStop(0, '#2e1814');
-          bgGrad.addColorStop(0.5, '#3b201a');
-          bgGrad.addColorStop(1, '#23120f');
-        } else if (idx === 1 || idx === 5) {
-          bgGrad.addColorStop(0, '#35211b');
-          bgGrad.addColorStop(0.6, '#281714');
-          bgGrad.addColorStop(1, '#1e100d');
-        } else {
-          bgGrad.addColorStop(0, '#321d18');
-          bgGrad.addColorStop(0.6, '#261411');
-          bgGrad.addColorStop(1, '#1b0d0b');
-        }
+        const bgGrad = targetCtx.createRadialGradient(m.cx, m.cy, diag * 0.2, m.cx, m.cy, diag * 1.3);
+        bgGrad.addColorStop(0, st.c0);
+        bgGrad.addColorStop(0.55, st.c1);
+        bgGrad.addColorStop(1, st.c2);
 
         targetCtx.fillStyle = bgGrad;
-        drawRoundedRect(targetCtx, -reg.w / 2, -reg.h / 2, reg.w, reg.h, 14);
+        tracePolyPath(targetCtx, pts, 3 * m.k);
         targetCtx.fill();
 
-        // Subtle floral speckle texture overlay matching scrapbook background
+        // Subtle floral speckle texture clipped to the erase shape
+        targetCtx.save();
+        tracePolyPath(targetCtx, pts, 3 * m.k);
+        targetCtx.clip();
         targetCtx.strokeStyle = 'rgba(235, 215, 195, 0.05)';
         targetCtx.lineWidth = 2;
-        for (let s = -reg.w / 2; s < reg.w / 2; s += 28) {
+        const span = diag;
+        for (let sX = m.cx - span; sX < m.cx + span; sX += 28) {
           targetCtx.beginPath();
-          targetCtx.moveTo(s, -reg.h / 2);
-          targetCtx.lineTo(s + reg.h * 0.5, reg.h / 2);
+          targetCtx.moveTo(sX, m.cy - span);
+          targetCtx.lineTo(sX + span * 0.5, m.cy + span);
           targetCtx.stroke();
         }
-
         targetCtx.restore();
       });
 
@@ -1412,100 +1520,97 @@
     function drawNewPolaroidFrame(targetCtx, cfg, photo, drawW, drawH, drawX, drawY) {
       const isMain = cfg.id === 0;
       const state = frameStates[cfg.id];
-      const scale = state.scale || 1.0;
-      const rot = state.rotDeg || 0;
+      const m = frameMetrics(cfg, drawX, drawY, drawW, drawH);
 
-      const cx = drawX + Math.round(drawW * cfg.cxPct);
-      const cy = drawY + Math.round(drawH * cfg.cyPct);
-
-      // Polaroid Card Outer Dimensions (sized generously to completely cover and replace old frames)
-      const cardW = Math.round(drawW * (isMain ? 0.3950 : 0.2500) * scale);
-      const cardH = Math.round(drawW * (isMain ? 0.4950 : 0.3150) * scale);
-      const cornerR = Math.round(drawW * (isMain ? 0.008 : 0.006));
-
-      // Inner Photo Aperture Dimensions
-      const photoW = Math.round(cardW * (isMain ? 0.880 : 0.860));
-      const photoH = Math.round(cardW * (isMain ? 0.770 : 0.750));
-      const topMargin = Math.round(cardH * (isMain ? 0.055 : 0.065));
-      const photoY = -cardH / 2 + topMargin + photoH / 2;
+      // Card & aperture extents in rotated units (843 poster px)
+      const card = cfg.card, ap = cfg.ap;
+      const u0 = Math.min(...card.map(p => p[0]));
+      const u1 = Math.max(...card.map(p => p[0]));
+      const v0 = Math.min(...card.map(p => p[1]));
+      const v1 = Math.max(...card.map(p => p[1]));
+      const cardW = u1 - u0, cardH = v1 - v0;
+      const apU0 = Math.min(...ap.map(p => p[0]));
+      const apU1 = Math.max(...ap.map(p => p[0]));
+      const apV0 = Math.min(...ap.map(p => p[1]));
+      const apV1 = Math.max(...ap.map(p => p[1]));
 
       targetCtx.save();
-      targetCtx.translate(cx, cy);
-      targetCtx.rotate(rot * Math.PI / 180);
+      targetCtx.translate(m.cx, m.cy);
+      targetCtx.rotate(m.rot);
+      targetCtx.scale(m.k, m.k);
 
       // -------------------------------------------------------------
       // STEP 1: REALISTIC POLAROID CARD DROP SHADOW & PAPER BASE
-      // (Completely replaces and hides any old frame underneath)
       // -------------------------------------------------------------
       targetCtx.save();
       targetCtx.shadowColor = 'rgba(20, 8, 14, 0.42)';
       targetCtx.shadowBlur = Math.round(drawW * (isMain ? 0.022 : 0.016));
-      targetCtx.shadowOffsetX = Math.round(drawW * (rot > 0 ? 0.004 : -0.004));
+      targetCtx.shadowOffsetX = Math.round(drawW * (state.rotDeg > 0 ? 0.004 : -0.004));
       targetCtx.shadowOffsetY = Math.round(drawW * 0.009);
 
-      const cardGrad = targetCtx.createLinearGradient(0, -cardH / 2, 0, cardH / 2);
+      const cardGrad = targetCtx.createLinearGradient(0, v0, 0, v1);
       cardGrad.addColorStop(0, '#fefdfa');
       cardGrad.addColorStop(0.65, '#fdfbf6');
       cardGrad.addColorStop(1, '#f6f0e4');
       targetCtx.fillStyle = cardGrad;
 
-      drawRoundedRect(targetCtx, -cardW / 2, -cardH / 2, cardW, cardH, cornerR);
+      tracePolyPath(targetCtx, card, 3.5);
       targetCtx.fill();
       targetCtx.restore();
 
       // Delicate cardstock bevel & paper edge
       targetCtx.strokeStyle = 'rgba(215, 205, 190, 0.85)';
-      targetCtx.lineWidth = Math.max(1.5, Math.round(drawW * 0.0010));
-      drawRoundedRect(targetCtx, -cardW / 2, -cardH / 2, cardW, cardH, cornerR);
+      targetCtx.lineWidth = 1.0;
+      tracePolyPath(targetCtx, card, 3.5);
       targetCtx.stroke();
 
       // -------------------------------------------------------------
-      // STEP 2: INNER PHOTO CAVITY / SHAAAW'S PHOTO
+      // STEP 2: INNER PHOTO CAVITY / SHAAAW'S PHOTO (clipped to the
+      // calibrated aperture polygon — notched apertures keep QR clear)
       // -------------------------------------------------------------
-      const photoX = -photoW / 2;
-      const photoTop = photoY - photoH / 2;
-      const photoR = Math.round(drawW * 0.003);
+      const photoW = apU1 - apU0;
+      const photoH = apV1 - apV0;
 
       targetCtx.save();
-      drawRoundedRect(targetCtx, photoX, photoTop, photoW, photoH, photoR);
+      tracePolyPath(targetCtx, ap, 2.5);
       targetCtx.clip();
 
       if (photo && photo.complete && photo.naturalWidth) {
         // Draw Shaaaw's photo with zoom and pan
-        drawCroppedPhoto(targetCtx, photo, photoX, photoTop, photoW, photoH, state.panX, state.panY, state.zoom);
+        drawCroppedPhoto(targetCtx, photo, apU0, apV0, photoW, photoH, state.panX, state.panY, state.zoom);
 
-        // Subtle paper recess shadow along top and left edges
-        const innerShadow = targetCtx.createLinearGradient(0, photoTop, 0, photoTop + Math.round(photoH * 0.09));
+        // Subtle paper recess shadow along the top edge
+        const innerShadow = targetCtx.createLinearGradient(0, apV0, 0, apV0 + photoH * 0.09);
         innerShadow.addColorStop(0, 'rgba(35, 18, 24, 0.28)');
         innerShadow.addColorStop(1, 'rgba(35, 18, 24, 0.0)');
         targetCtx.fillStyle = innerShadow;
-        targetCtx.fillRect(photoX, photoTop, photoW, Math.round(photoH * 0.09));
+        targetCtx.fillRect(apU0, apV0, photoW, photoH * 0.09);
       } else {
         // Empty frame placeholder: elegant vintage paper placeholder
         targetCtx.fillStyle = '#eae3d8';
-        targetCtx.fillRect(photoX, photoTop, photoW, photoH);
+        targetCtx.fillRect(apU0, apV0, photoW, photoH);
 
         targetCtx.strokeStyle = 'rgba(200, 190, 180, 0.35)';
-        targetCtx.lineWidth = 2;
-        for (let x = -photoW; x < photoW * 2; x += 24) {
+        targetCtx.lineWidth = 0.7;
+        for (let x = apU0 - photoH; x < apU1 + photoH; x += 8) {
           targetCtx.beginPath();
-          targetCtx.moveTo(photoX + x, photoTop);
-          targetCtx.lineTo(photoX + x + photoH, photoTop + photoH);
+          targetCtx.moveTo(x, apV0);
+          targetCtx.lineTo(x + photoH, apV0 + photoH);
           targetCtx.stroke();
         }
 
         targetCtx.fillStyle = '#8c7d75';
-        targetCtx.font = `bold ${Math.round(drawW * (isMain ? 0.015 : 0.011))}px sans-serif`;
+        targetCtx.font = `bold ${isMain ? 12.5 : 9.5}px sans-serif`;
         targetCtx.textAlign = 'center';
         targetCtx.textBaseline = 'middle';
-        targetCtx.fillText(isMain ? "📷 Click to Insert Shaaaw's Photo" : `📷 ${cfg.label}`, 0, photoY);
+        targetCtx.fillText(isMain ? "📷 Click to Insert Shaaaw's Photo" : `📷 ${cfg.label}`, (apU0 + apU1) / 2, (apV0 + apV1) / 2);
       }
       targetCtx.restore();
 
       // Crisp inner aperture paper bevel (photo is recessed inside the frame)
       targetCtx.strokeStyle = 'rgba(60, 35, 40, 0.28)';
-      targetCtx.lineWidth = Math.max(1.5, Math.round(drawW * 0.0012));
-      drawRoundedRect(targetCtx, photoX, photoTop, photoW, photoH, photoR);
+      targetCtx.lineWidth = 1.2;
+      tracePolyPath(targetCtx, ap, 2.5);
       targetCtx.stroke();
 
       // -------------------------------------------------------------
@@ -1514,16 +1619,25 @@
       const showEmbellishments = !document.getElementById('toggleEmbellishments') || document.getElementById('toggleEmbellishments').checked;
 
       if (showEmbellishments) {
+        // Top edge span of the (possibly notched) card, for tape placement
+        let tU0 = Infinity, tU1 = -Infinity;
+        for (const [uu, vv] of card) {
+          if (Math.abs(vv - v0) < 0.6) { tU0 = Math.min(tU0, uu); tU1 = Math.max(tU1, uu); }
+        }
+        const tMid = (tU0 + tU1) / 2;
+
         if (isMain) {
-          // A. Top Pink Gingham Washi Tape (ON TOP of card & photo)
-          drawGinghamTape(targetCtx, 0, -cardH / 2, Math.round(cardW * 0.65), Math.round(drawW * 0.044));
+          // A. Pink Gingham Washi Tape — placed just BELOW the top edge so it
+          //    covers the old tape without touching the poster text above
+          const tapeH = 37;
+          drawGinghamTape(targetCtx, tMid, v0 + 3 + tapeH / 2, Math.min(cardW * 0.65, (tU1 - tU0) * 0.92), tapeH);
 
           // B. Bottom Chin Handwritten Text: "You Make Everything More Fun ♡"
-          const chinCenterY = photoTop + photoH + (cardH / 2 - (photoTop + photoH)) / 2;
+          const chinCenterY = (apV1 + v1) / 2;
 
           // Smiley face on left
           const smileX = -cardW * 0.34;
-          drawHandDrawnSmiley(targetCtx, smileX, chinCenterY, Math.round(drawW * 0.015));
+          drawHandDrawnSmiley(targetCtx, smileX, chinCenterY, 12.6);
 
           // Caption text in handwritten cursive font
           const captionInput = document.getElementById('inputCenterCaption');
@@ -1531,27 +1645,28 @@
 
           targetCtx.save();
           targetCtx.fillStyle = '#261a22';
-          targetCtx.font = `700 ${Math.round(drawW * 0.019)}px 'Caveat', 'Patrick Hand', cursive, sans-serif`;
+          targetCtx.font = `700 16px 'Caveat', 'Patrick Hand', cursive, sans-serif`;
           targetCtx.textAlign = 'center';
           targetCtx.textBaseline = 'middle';
-          targetCtx.translate(Math.round(cardW * 0.02), chinCenterY - Math.round(drawW * 0.002));
+          targetCtx.translate(Math.round(cardW * 0.02), chinCenterY - 2);
           targetCtx.rotate(-0.015);
           targetCtx.fillText(captionText, 0, 0);
           targetCtx.restore();
 
           // C. Cute Layered Pink Heart Stickers on right
           const heartX = cardW * 0.35;
-          drawCuteHeartSticker(targetCtx, heartX, chinCenterY + Math.round(drawW * 0.004), Math.round(drawW * 0.026), -0.16);
-          drawCuteHeartSticker(targetCtx, heartX - Math.round(drawW * 0.025), chinCenterY - Math.round(drawW * 0.007), Math.round(drawW * 0.015), 0.22);
+          drawCuteHeartSticker(targetCtx, heartX, chinCenterY + 1.3, 21.9, -0.16);
+          drawCuteHeartSticker(targetCtx, heartX - 20.3, chinCenterY - 2.2, 12.6, 0.22);
         } else {
-          // Companion Polaroids: Washi tape at top (ON TOP of card & photo)
+          // Companion Polaroids: washi tape straddling the top edge (it doubles as
+          // the cover for the old tape, which sits just behind the new edge)
           const tapeColors = ['', '#d8b4e2', '#f472b6', '#fed7aa', '#fbcfe8', '#a7f3d0', '#fef08a'];
-          drawCornerTape(targetCtx, 0, -cardH / 2, Math.round(cardW * 0.50), Math.round(drawW * 0.030), tapeColors[cfg.id] || '#f472b6');
+          drawCornerTape(targetCtx, tMid, v0, Math.min(cardW * 0.50, (tU1 - tU0) * 0.92), 25.3, tapeColors[cfg.id] || '#f472b6');
 
           // Bottom label
-          const chinCenterY = photoTop + photoH + (cardH / 2 - (photoTop + photoH)) / 2;
+          const chinCenterY = (apV1 + v1) / 2;
           targetCtx.fillStyle = '#4a3843';
-          targetCtx.font = `700 ${Math.round(drawW * 0.012)}px 'Caveat', 'Patrick Hand', cursive, sans-serif`;
+          targetCtx.font = `700 10.1px 'Caveat', 'Patrick Hand', cursive, sans-serif`;
           targetCtx.textAlign = 'center';
           targetCtx.textBaseline = 'middle';
           targetCtx.fillText(`✨ ${cfg.label} ♡`, 0, chinCenterY);
@@ -1561,15 +1676,15 @@
       // Live Inspector Guides (if enabled)
       if (showAlignmentOutlines) {
         targetCtx.strokeStyle = cfg.id === activeFrameId ? '#ec4899' : 'rgba(56, 189, 248, 0.7)';
-        targetCtx.lineWidth = cfg.id === activeFrameId ? 3.0 : 1.5;
+        targetCtx.lineWidth = cfg.id === activeFrameId ? 1.0 : 0.5;
         if (cfg.id !== activeFrameId) targetCtx.setLineDash([6, 4]);
-        drawRoundedRect(targetCtx, -cardW / 2, -cardH / 2, cardW, cardH, cornerR);
+        tracePolyPath(targetCtx, card, 0);
         targetCtx.stroke();
         targetCtx.setLineDash([]);
 
         targetCtx.fillStyle = cfg.id === activeFrameId ? '#ec4899' : '#38bdf8';
-        targetCtx.font = 'bold 14px sans-serif';
-        targetCtx.fillText(`Frame ${cfg.id}: ${cfg.label || ''} (${cfg.rotDeg > 0 ? '+' : ''}${cfg.rotDeg.toFixed(1)}°)`, -cardW / 2 + 6, -cardH / 2 + 18);
+        targetCtx.font = 'bold 5px sans-serif';
+        targetCtx.fillText(`Frame ${cfg.id}: ${cfg.label || ''} (${cfg.rotDeg > 0 ? '+' : ''}${cfg.rotDeg.toFixed(1)}°)`, u0 + 2, v0 + 7);
       }
 
       targetCtx.restore();
@@ -1698,7 +1813,8 @@
       // 🌟 STEP 2: RENDER THE 7 BRAND-NEW 4K POLAROID FRAMES OVER ERASURES
       // ====================================================================
       // Note: All 8 QR codes on sourceImage are preserved 100% untouched.
-      frameStates.forEach(cfg => {
+      FRAME_ZORDER.forEach(id => {
+        const cfg = frameStates[id];
         const photo = frameImages[cfg.id];
         drawNewPolaroidFrame(ctx, cfg, photo, drawW, drawH, drawX, drawY);
       });
@@ -1776,8 +1892,6 @@
     function resetFrameToDefault(id) {
       frameStates[id].cxPct = FRAME_CONFIGS[id].cxPct;
       frameStates[id].cyPct = FRAME_CONFIGS[id].cyPct;
-      frameStates[id].wPct = FRAME_CONFIGS[id].wPct;
-      frameStates[id].hPct = FRAME_CONFIGS[id].hPct;
       frameStates[id].panX = FRAME_CONFIGS[id].panX;
       frameStates[id].panY = FRAME_CONFIGS[id].panY;
       frameStates[id].zoom = FRAME_CONFIGS[id].zoom;
@@ -1924,27 +2038,10 @@
       const clickX = (e.clientX - rect.left) * scaleX;
       const clickY = (e.clientY - rect.top) * scaleY;
 
-      const { drawX, drawY, drawW, drawH } = currentDrawMetrics;
-
-      for (let i = 0; i <= 6; i++) {
-        const cfg = frameStates[i];
-        const isMain = cfg.id === 0;
-        const cx = drawX + Math.round(drawW * cfg.cxPct);
-        const cy = drawY + Math.round(drawH * cfg.cyPct);
-        const cardW = Math.round(drawW * (isMain ? 0.3950 : 0.2500) * (cfg.scale || 1.0));
-        const cardH = Math.round(drawW * (isMain ? 0.4950 : 0.3150) * (cfg.scale || 1.0));
-        const rad = -cfg.rotDeg * Math.PI / 180;
-
-        const dx = clickX - cx;
-        const dy = clickY - cy;
-        const localX = dx * Math.cos(rad) - dy * Math.sin(rad);
-        const localY = dx * Math.sin(rad) + dy * Math.cos(rad);
-
-        if (Math.abs(localX) <= cardW / 2 && Math.abs(localY) <= cardH / 2) {
-          selectActiveFrame(i);
-          document.getElementById('activeFrameFileInput').click();
-          return;
-        }
+      const hit = getFrameAtPoint(clickX, clickY);
+      if (hit >= 0) {
+        selectActiveFrame(hit);
+        document.getElementById('activeFrameFileInput').click();
       }
     });
 
@@ -1979,28 +2076,8 @@
         const dropX = (e.clientX - rect.left) * scaleX;
         const dropY = (e.clientY - rect.top) * scaleY;
 
-        const { drawX, drawY, drawW, drawH } = currentDrawMetrics;
-        let targetFrame = activeFrameId;
-
-        for (let i = 0; i <= 6; i++) {
-          const cfg = frameStates[i];
-          const isMain = cfg.id === 0;
-          const cx = drawX + Math.round(drawW * cfg.cxPct);
-          const cy = drawY + Math.round(drawH * cfg.cyPct);
-          const cardW = Math.round(drawW * (isMain ? 0.3950 : 0.2500) * (cfg.scale || 1.0));
-          const cardH = Math.round(drawW * (isMain ? 0.4950 : 0.3150) * (cfg.scale || 1.0));
-          const rad = -cfg.rotDeg * Math.PI / 180;
-
-          const dx = dropX - cx;
-          const dy = dropY - cy;
-          const localX = dx * Math.cos(rad) - dy * Math.sin(rad);
-          const localY = dx * Math.sin(rad) + dy * Math.cos(rad);
-
-          if (Math.abs(localX) <= cardW / 2 && Math.abs(localY) <= cardH / 2) {
-            targetFrame = i;
-            break;
-          }
-        }
+        const dropHit = getFrameAtPoint(dropX, dropY);
+        const targetFrame = dropHit >= 0 ? dropHit : activeFrameId;
 
         const reader = new FileReader();
         reader.onload = function(ev) {
