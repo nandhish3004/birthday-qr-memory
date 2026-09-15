@@ -470,52 +470,10 @@ if ($posterSource) {
         }
 
         # ----------------------------------------------------------------------
-        # COMPOSITE 8 PERMANENT QR CODES (CALIBRATED DUMMY SQUARE FIT)
+        # NOTE: Embedded QR Codes are 100% untouched and preserved directly
+        # from the user's authentic scrapbook poster artwork!
         # ----------------------------------------------------------------------
-        # Replaces only the dummy QR code squares, preserving the torn paper edges,
-        # paperclips, washi tape, and cute hand-drawn hearts (♡)!
-        $qrPlacements = @(
-            @{ id = 1; cxPct = 0.098; cyPct = 0.076; sizePct = 0.106; rot = 0.0 },
-            @{ id = 2; cxPct = 0.092; cyPct = 0.327; sizePct = 0.104; rot = -1.5 },
-            @{ id = 3; cxPct = 0.088; cyPct = 0.615; sizePct = 0.104; rot = 0.0 },
-            @{ id = 4; cxPct = 0.934; cyPct = 0.126; sizePct = 0.098; rot = 0.0 },
-            @{ id = 5; cxPct = 0.934; cyPct = 0.328; sizePct = 0.098; rot = -1.0 },
-            @{ id = 6; cxPct = 0.916; cyPct = 0.615; sizePct = 0.098; rot = 1.0 },
-            @{ id = 7; cxPct = 0.908; cyPct = 0.745; sizePct = 0.098; rot = -0.8 },
-            @{ id = 8; cxPct = 0.893; cyPct = 0.892; sizePct = 0.098; rot = 0.8 }
-        )
-
-        $ivoryBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(252, 251, 248))
-        $antiqueBorderPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(40, 70, 45, 40), 1.5)
-
-        foreach ($p in $qrPlacements) {
-            $qrFile = Join-Path $qrDir "$($p.id).png"
-            if (Test-Path $qrFile) {
-                $qx = $drawX + [int]($drawW * $p.cxPct)
-                $qy = $drawY + [int]($drawH * $p.cyPct)
-                $qs = [int]($drawW * $p.sizePct)
-
-                $g.TranslateTransform($qx, $qy)
-                $g.RotateTransform($p.rot)
-
-                # 1. Warm archival ivory backing (replaces only the dummy QR square)
-                $g.FillRectangle($ivoryBrush, [int](-$qs / 2), [int](-$qs / 2), $qs, $qs)
-                $g.DrawRectangle($antiqueBorderPen, [int](-$qs / 2), [int](-$qs / 2), $qs, $qs)
-
-                # 2. Draw the genuine scannable QR code
-                $qrImg = [System.Drawing.Bitmap]::FromFile($qrFile)
-                $g.DrawImage($qrImg, [int](-$qs / 2), [int](-$qs / 2), $qs, $qs)
-                $qrImg.Dispose()
-
-                $g.ResetTransform()
-                Write-Host "   ✅ Embedded scannable QR #$($p.id) flush inside scrap." -ForegroundColor Green
-            } else {
-                Write-Host "   ⚠️ QR file missing: $qrFile" -ForegroundColor Yellow
-            }
-        }
-
-        $ivoryBrush.Dispose()
-        $antiqueBorderPen.Dispose()
+        Write-Host "   ✅ User-embedded QR codes 100% preserved and untouched!" -ForegroundColor Green
 
         # Inner frame border
         $borderPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(245, 235, 230), 3.0)

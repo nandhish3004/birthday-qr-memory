@@ -5,29 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kodak 9×10.9 Photo Print Studio 📸 Shaaaw's Birthday Scrapbook</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>">
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <style>
     :root {
       --kodak-yellow: #ffb800;
       --kodak-red: #e11d48;
       --paper-cream: #fbf6ee;
+      --pink-glow: rgba(236, 72, 153, 0.45);
+      --accent-pink: #ec4899;
+      --accent-purple: #a855f7;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
-      background: radial-gradient(circle at 50% 20%, #1e1026 0%, #0c0714 100%);
+      background: radial-gradient(circle at 50% 15%, #241231 0%, #0d0816 100%);
       color: #f8fafc;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       margin: 0;
       padding: 0;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
     .studio-container {
-      max-width: 1200px;
+      max-width: 1360px;
       margin: 0 auto;
-      padding: 24px 16px 60px;
+      padding: 24px 20px 80px;
     }
 
+    /* Top Navigation */
     .studio-nav {
       display: flex;
       align-items: center;
@@ -43,8 +51,8 @@
       gap: 8px;
       color: #cbd5e1;
       text-decoration: none;
-      font-size: 0.95rem;
-      padding: 8px 16px;
+      font-size: 0.92rem;
+      padding: 8px 18px;
       background: rgba(255, 255, 255, 0.06);
       border-radius: 999px;
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -54,13 +62,14 @@
     .studio-back-link:hover {
       background: rgba(255, 255, 255, 0.12);
       color: #fff;
+      transform: translateX(-2px);
     }
 
     .kodak-badge {
       background: linear-gradient(135deg, #ffb800, #f59e0b);
       color: #1a0f00;
       font-weight: 800;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       padding: 6px 14px;
       border-radius: 999px;
       letter-spacing: 0.05em;
@@ -68,47 +77,56 @@
       box-shadow: 0 0 20px rgba(255, 184, 0, 0.35);
     }
 
+    /* Header */
     .studio-header {
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
 
     .studio-title {
-      font-size: 2.2rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #fbcfe8, #f472b6, #fbbf24);
+      font-size: 2.3rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fbcfe8 0%, #f472b6 50%, #fbbf24 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin: 0 0 8px;
+      margin: 0 0 10px;
+      letter-spacing: -0.02em;
     }
 
     .studio-sub {
       color: #94a3b8;
       font-size: 1.05rem;
-      max-width: 680px;
+      max-width: 780px;
       margin: 0 auto;
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
+    .highlight-text {
+      color: #f472b6;
+      font-weight: 600;
+    }
+
+    /* Main Grid Layout */
     .studio-grid {
       display: grid;
-      grid-template-columns: 1fr 380px;
+      grid-template-columns: 1fr 440px;
       gap: 32px;
       align-items: start;
     }
 
-    @media (max-width: 960px) {
+    @media (max-width: 1040px) {
       .studio-grid {
         grid-template-columns: 1fr;
       }
     }
 
+    /* Canvas Stage */
     .preview-stage-wrap {
-      background: rgba(18, 11, 28, 0.7);
-      border: 1px solid rgba(244, 114, 182, 0.2);
-      border-radius: 20px;
+      background: rgba(20, 11, 30, 0.75);
+      border: 1px solid rgba(244, 114, 182, 0.22);
+      border-radius: 24px;
       padding: 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
       text-align: center;
       position: relative;
     }
@@ -122,19 +140,25 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       font-size: 0.88rem;
       color: #cbd5e1;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .paper-spec-tag {
       color: #fbbf24;
-      font-weight: 600;
+      font-weight: 700;
+      background: rgba(251, 191, 36, 0.12);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(251, 191, 36, 0.25);
     }
 
     .canvas-viewport {
       position: relative;
       display: inline-block;
       margin: 0 auto;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.15);
-      border-radius: 4px;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
       overflow: hidden;
       max-width: 100%;
       background: #000;
@@ -143,9 +167,38 @@
     #kodakCanvas {
       display: block;
       width: 100%;
-      max-width: 520px;
+      max-width: 560px;
       height: auto;
       aspect-ratio: 9 / 10.9;
+      cursor: crosshair;
+      transition: filter 0.2s ease;
+    }
+
+    .canvas-toast {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(15, 8, 24, 0.92);
+      border: 1px solid #ec4899;
+      color: #fdf2f8;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(236, 72, 153, 0.4);
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .canvas-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     .guide-overlay {
@@ -180,7 +233,7 @@
       color: #f87171;
       font-weight: 700;
       text-transform: uppercase;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.65);
       padding: 2px 6px;
       border-radius: 4px;
     }
@@ -203,11 +256,12 @@
       color: #38bdf8;
       font-weight: 700;
       text-transform: uppercase;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.65);
       padding: 2px 6px;
       border-radius: 4px;
     }
 
+    /* Control Panel */
     .control-panel {
       display: flex;
       flex-direction: column;
@@ -215,27 +269,197 @@
     }
 
     .panel-card {
-      background: rgba(22, 13, 34, 0.75);
-      border: 1px solid rgba(244, 114, 182, 0.2);
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      background: rgba(24, 13, 36, 0.82);
+      border: 1px solid rgba(244, 114, 182, 0.22);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+      position: relative;
     }
 
     .panel-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #f1f5f9;
-      margin: 0 0 16px;
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: #f8fafc;
+      margin: 0 0 14px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
     }
 
+    /* Hero Auto-Upload Box */
+    .hero-upload-card {
+      border: 1.5px solid rgba(236, 72, 153, 0.5);
+      background: linear-gradient(135deg, rgba(46, 17, 56, 0.95), rgba(28, 14, 40, 0.9));
+      box-shadow: 0 15px 40px rgba(236, 72, 153, 0.2);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #ec4899, #d946ef);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+
+    .btn-hero-upload {
+      background: linear-gradient(135deg, #ec4899 0%, #db2777 50%, #9333ea 100%);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
+      transition: all 0.2s ease;
+      width: 100%;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .btn-hero-upload:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 35px rgba(236, 72, 153, 0.6);
+    }
+
+    .upload-status-pills {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Polaroid Grid / Mini Thumbnails */
+    .polaroid-thumbnails-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .polaroid-thumb-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 8px 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .polaroid-thumb-item:hover {
+      background: rgba(244, 114, 182, 0.12);
+      border-color: rgba(244, 114, 182, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .polaroid-thumb-item.active {
+      background: rgba(236, 72, 153, 0.2);
+      border-color: #ec4899;
+      box-shadow: 0 0 12px rgba(236, 72, 153, 0.35);
+    }
+
+    .thumb-preview-box {
+      width: 46px;
+      height: 46px;
+      background: #181120;
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .thumb-preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .thumb-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      white-space: nowrap;
+    }
+
+    .thumb-angle {
+      font-size: 0.66rem;
+      color: #f472b6;
+      font-weight: 600;
+    }
+
+    /* Interactive Frame Adjuster */
+    .fine-tune-box {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(244, 114, 182, 0.2);
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 14px;
+    }
+
+    .fine-tune-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+
+    .slider-row {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 8px;
+    }
+
+    .slider-row-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: #cbd5e1;
+    }
+
+    .slider-row-header span:last-child {
+      color: #f472b6;
+      font-weight: 700;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #ec4899;
+      height: 4px;
+      cursor: pointer;
+    }
+
+    /* Style Buttons */
     .style-btn-group {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
     .style-option-btn {
@@ -245,7 +469,7 @@
       background: rgba(255, 255, 255, 0.04);
       border: 1.5px solid rgba(255, 255, 255, 0.12);
       border-radius: 12px;
-      padding: 12px 16px;
+      padding: 10px 14px;
       color: #e2e8f0;
       cursor: pointer;
       text-align: left;
@@ -265,13 +489,13 @@
 
     .style-btn-title {
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       display: block;
       margin-bottom: 2px;
     }
 
     .style-btn-desc {
-      font-size: 0.8rem;
+      font-size: 0.76rem;
       color: #94a3b8;
     }
 
@@ -281,7 +505,7 @@
       justify-content: space-between;
       padding: 10px 0;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: #cbd5e1;
     }
 
@@ -330,37 +554,15 @@
       transform: translateX(20px);
     }
 
-    .checklist-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      font-size: 0.88rem;
-    }
-
-    .checklist-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #e2e8f0;
-    }
-
-    .check-icon {
-      color: #10b981;
-      font-weight: bold;
-      font-size: 1.1rem;
-    }
-
+    /* Action Buttons */
     .actions-card {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .btn-download-hero {
-      background: linear-gradient(135deg, #ec4899, #d946ef);
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
       color: #fff;
       border: none;
       border-radius: 14px;
@@ -372,14 +574,14 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
+      box-shadow: 0 10px 25px rgba(236, 72, 153, 0.45);
       transition: all 0.2s ease;
       width: 100%;
     }
 
     .btn-download-hero:hover {
       transform: translateY(-2px);
-      box-shadow: 0 14px 32px rgba(236, 72, 153, 0.55);
+      box-shadow: 0 14px 35px rgba(236, 72, 153, 0.6);
     }
 
     .btn-download-sub {
@@ -389,7 +591,7 @@
       border-radius: 12px;
       padding: 12px 16px;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -409,15 +611,29 @@
       border: 1px solid rgba(255, 184, 0, 0.25);
       border-radius: 14px;
       padding: 16px;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       color: #fef08a;
       line-height: 1.5;
     }
 
     .kodak-tip-box strong {
-      color: #ffb800;    /* Dedicated Print Stylesheet */
+      color: #ffb800;
     }
 
+    .qr-safe-guarantee {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 0.85rem;
+      color: #a7f3d0;
+      line-height: 1.45;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    /* Print Stylesheet */
     @media print {
       @page {
         size: 9in 10.9in;
@@ -428,7 +644,7 @@
         margin: 0 !important;
         padding: 0 !important;
       }
-      .studio-nav, .studio-header, .control-panel, .preview-header-bar, .guide-overlay {
+      .studio-nav, .studio-header, .control-panel, .preview-header-bar, .guide-overlay, .canvas-toast {
         display: none !important;
       }
       .studio-container {
@@ -468,11 +684,11 @@
         <span>← Back to Vault Hub</span>
       </a>
       <div style="display: flex; align-items: center; gap: 10px;">
-        <span class="paper-spec-tag" id="posterStatusTag" style="background: rgba(236,72,153,0.25); color: #fbcfe8; font-weight: 700;">
-          ✨ Shaaaw Scrapbook Composite (QRs & Avatars Embedded)
+        <span class="paper-spec-tag" id="posterStatusTag" style="background: rgba(236,72,153,0.2); color: #fbcfe8; border-color: rgba(236,72,153,0.4);">
+          ✨ Embedded QR Codes Untouched & Preserved
         </span>
         <div class="kodak-badge">
-          📸 Kodak 9×10.9 Master Studio (300 DPI)
+          📸 Kodak 9×10.9 Master Studio (300 DPI / 4K)
         </div>
       </div>
     </nav>
@@ -480,25 +696,31 @@
     <header class="studio-header">
       <h1 class="studio-title">Shaaaw's 9×10.9 Kodak Photo Paper Studio</h1>
       <p class="studio-sub">
-        Modified for <strong>9" × 10.9" Kodak Photo Paper</strong> at <strong>300 DPI</strong> (2700 × 3270 pixels). 
-        QR codes and avatars are already embedded in the artwork — insert Shaaaw's photos into the polaroids and print!
+        Upload Shaaaw's pictures — photos <span class="highlight-text">automatically auto-align and tilt</span> to fit each Polaroid frame seamlessly.
+        Export a high-definition <span class="highlight-text">4K Ultra-HD enhanced poster</span> ready to print on <strong>9" × 10.9" Kodak photo paper</strong>.
       </p>
     </header>
 
     <div class="studio-grid">
+      <!-- Left: Master Canvas Preview -->
       <div class="preview-stage-wrap">
         <div class="preview-header-bar">
-          <span>Target: <span class="paper-spec-tag">9.0 × 10.9 Inches (Kodak Paper)</span></span>
-          <label class="btn-download-sub" style="padding: 4px 12px; font-size: 0.75rem; cursor: pointer; width: auto; margin: 0; background: rgba(255,255,255,0.12);">
-            <span>🖼️ Change Poster Image</span>
+          <span>Target Paper: <span class="paper-spec-tag">9.0 × 10.9 Inches (Kodak Paper)</span></span>
+          <label class="btn-download-sub" style="padding: 4px 12px; font-size: 0.76rem; cursor: pointer; width: auto; margin: 0; background: rgba(255,255,255,0.12);">
+            <span>🖼️ Change Poster Artwork</span>
             <input type="file" accept="image/*" style="display: none;" onchange="uploadCustomPoster(event)">
           </label>
           <span>Resolution: <span class="paper-spec-tag">2700 × 3270 px @ 300 DPI</span></span>
         </div>
 
         <div class="canvas-viewport" id="canvasViewport">
-          <!-- 300 DPI Master 9x10.9 Canvas -->
-          <canvas id="kodakCanvas" width="2700" height="3270" style="cursor: pointer;" title="Click any frame on the poster to upload a photo!"></canvas>
+          <!-- Master High-DPI Canvas -->
+          <canvas id="kodakCanvas" width="2700" height="3270" title="Click directly on any Polaroid frame to upload or change photo!"></canvas>
+
+          <div class="canvas-toast" id="canvasToast">
+            <span>✨ Photos Auto-Aligned & Tilted!</span>
+          </div>
+
           <div class="guide-overlay" id="guideOverlay">
             <div class="guide-bleed-line">
               <span class="guide-bleed-label">✂️ 1/8" Lab Cut Trim Line</span>
@@ -509,21 +731,109 @@
           </div>
         </div>
 
-        <div style="margin-top: 14px; font-size: 0.85rem; color: #cbd5e1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-          <span>💡 <strong>Interactive:</strong> Click directly on any polaroid frame on the canvas to place a photo!</span>
-          <span style="color: #f472b6;">🎨 7 Photo Frames Ready</span>
+        <div style="margin-top: 14px; font-size: 0.86rem; color: #cbd5e1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <span>💡 <strong>Interactive:</strong> Click any polaroid frame on the poster to replace its photo directly.</span>
+          <span style="color: #f472b6; font-weight: 700;">🎯 7 Polaroid Frames Calibrated</span>
         </div>
       </div>
 
+      <!-- Right: Controls & Upload Flow -->
       <div class="control-panel">
+
+        <!-- 1. Hero Auto-Upload Box -->
+        <div class="panel-card hero-upload-card">
+          <div class="hero-badge">✨ Smart Auto-Placement & Tilt</div>
+          <h3 class="panel-title" style="margin-bottom: 6px; font-size: 1.15rem; color: #fff;">
+            <span>🌸 Upload Shaaaw's Photos</span>
+          </h3>
+          <p style="font-size: 0.84rem; color: #cbd5e1; margin: 0 0 12px; line-height: 1.45;">
+            Select 1 to 7 photos of Shaaaw. They will <strong>automatically rotate to each Polaroid's exact tilt angle</strong>, auto-center, and clip into each frame!
+          </p>
+
+          <label class="btn-hero-upload">
+            <span>📂 Upload Photos (Auto-Fit All 7 Frames)</span>
+            <input type="file" id="batchPhotoInput" multiple accept="image/*" style="display: none;" onchange="handleBatchPhotoUpload(event)">
+          </label>
+
+          <div class="upload-status-pills">
+            <span id="photoCountStatus" style="font-weight: 700; color: #f472b6;">0 of 7 Frames Loaded</span>
+            <button class="btn-download-sub" style="padding: 3px 10px; font-size: 0.72rem; width: auto; color: #fca5a5;" onclick="clearAllPhotos()">
+              <span>🗑️ Clear Photos</span>
+            </button>
+          </div>
+
+          <!-- Polaroid Mini Gallery Tabs -->
+          <div class="polaroid-thumbnails-grid" id="thumbnailsGrid">
+            <!-- Populated via JS -->
+          </div>
+
+          <!-- Fine-Tuning Box for Active Frame -->
+          <div class="fine-tune-box" id="fineTuneBox">
+            <div class="fine-tune-header">
+              <span id="activeFrameTitle" style="font-weight: 700; font-size: 0.88rem; color: #f472b6;">🌟 Center Main Polaroid</span>
+              <div style="display: flex; gap: 6px;">
+                <label class="btn-download-sub" style="padding: 3px 8px; font-size: 0.74rem; cursor: pointer; background: #ec4899; color: #fff; border: none; width: auto;">
+                  <span>Choose</span>
+                  <input type="file" id="activeFrameFileInput" accept="image/*" style="display: none;" onchange="handleActiveFrameUpload(event)">
+                </label>
+                <button class="btn-download-sub" style="padding: 3px 8px; font-size: 0.74rem; width: auto;" onclick="resetActiveFrameDefaults()" title="Reset to default auto-tilt and alignment">
+                  <span>🔄 Auto</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-row-header">
+                <span>Vertical Center (Pan Y):</span>
+                <span id="panVal">18%</span>
+              </div>
+              <input type="range" id="sliderPanY" min="0" max="100" value="18" oninput="updateActivePanY(this.value)">
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-row-header">
+                <span>Horizontal Center (Pan X):</span>
+                <span id="panXVal">0%</span>
+              </div>
+              <input type="range" id="sliderPanX" min="-50" max="50" value="0" oninput="updateActivePanX(this.value)">
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-row-header">
+                <span>Photo Zoom:</span>
+                <span id="zoomVal">1.05x</span>
+              </div>
+              <input type="range" id="sliderZoom" min="100" max="250" value="105" oninput="updateActiveZoom(this.value)">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <div class="slider-row">
+                <div class="slider-row-header">
+                  <span>Auto-Tilt:</span>
+                  <span id="tiltVal">-2.0°</span>
+                </div>
+                <input type="range" id="sliderTilt" min="-120" max="120" value="-20" oninput="updateActiveTilt(this.value)">
+              </div>
+              <div class="slider-row">
+                <div class="slider-row-header">
+                  <span>Slot Scale:</span>
+                  <span id="scaleVal">100%</span>
+                </div>
+                <input type="range" id="sliderScale" min="85" max="115" value="100" oninput="updateActiveScale(this.value)">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Matting & Border Style -->
         <div class="panel-card">
-          <h3 class="panel-title">🎨 Matting & Border Style</h3>
+          <h3 class="panel-title">🎨 Matting & Framing Style</h3>
           
           <div class="style-btn-group">
             <button class="style-option-btn active" id="btnStyleMat" onclick="setFramingStyle('mat')">
               <div>
                 <span class="style-btn-title">🌸 Archival Kodak Mat (Recommended)</span>
-                <span class="style-btn-desc">Warm parchment mat & rose-gold frame. Best for framing in a 9×10.9 glass frame.</span>
+                <span class="style-btn-desc">Warm parchment mat & rose-gold frame. Ideal for framing in a 9×10.9 glass frame.</span>
               </div>
             </button>
 
@@ -542,175 +852,16 @@
             </button>
           </div>
 
-          <div class="toggle-row" style="margin-top: 16px;">
+          <div class="toggle-row" style="margin-top: 14px;">
             <span>Show Frame & Lab Cut Guides</span>
             <label class="switch">
               <input type="checkbox" id="toggleGuides" onchange="toggleGuidelines(this.checked)">
               <span class="slider"></span>
             </label>
           </div>
-        </div>
 
-        <div class="panel-card">
-          <h3 class="panel-title">🛡️ Kodak Print Safety Check</h3>
-          <ul class="checklist-list">
-            <li class="checklist-item">
-              <span class="check-icon">✓</span>
-              <span><strong>Exact 9:10.9 Ratio:</strong> Fits 9"×10.9" Kodak paper without distortion</span>
-            </li>
-            <li class="checklist-item">
-              <span class="check-icon">✓</span>
-              <span><strong>300 DPI Master Clarity:</strong> 2700 × 3270 px photo-lab standard</span>
-            </li>
-            <li class="checklist-item">
-              <span class="check-icon">✓</span>
-              <span><strong>8 QR Codes Embedded:</strong> Scannable codes are permanently part of the poster artwork</span>
-            </li>
-            <li class="checklist-item">
-              <span class="check-icon">✓</span>
-              <span><strong>3 Avatars Embedded:</strong> Vishnu, Buddha & Shepherd seamlessly integrated into the design</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Shaaaw's Polaroid Photo Placements & Controls (Dedicated Photo Studio) -->
-        <div class="panel-card" style="border-color: #ec4899; background: rgba(36, 16, 42, 0.9);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <h3 class="panel-title" style="color: #fbcfe8; margin-bottom: 0;">
-              <span>📸 Polaroid Photo Studio (All 7 Frames)</span>
-            </h3>
-            <span class="paper-spec-tag" style="font-size: 0.75rem; background: rgba(236,72,153,0.2); padding: 3px 8px; border-radius: 6px;">Photo Only Mode</span>
-          </div>
-          <p style="font-size: 0.82rem; color: #cbd5e1; margin-top: 4px; margin-bottom: 12px; line-height: 1.4;">
-            All QR codes and avatars are already integrated into the poster. Choose a frame below (or click directly on the canvas) to place Shaaaw's pictures:
-          </p>
-
-          <!-- Frame Selector Tabs -->
-          <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;">
-            <button class="style-option-btn active" id="tabFrame0" style="flex: 1 1 100%; padding: 8px 12px; font-size: 0.82rem;" onclick="selectActiveFrame(0)">
-              <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-                <span class="style-btn-title" style="font-size: 0.86rem; margin-bottom: 0;">🌟 Frame 0: Center Main (Shaaaw)</span>
-                <span id="badgeFrame0" style="font-size: 0.72rem; color: #10b981; font-weight: 700;">Active</span>
-              </div>
-            </button>
-            <button class="style-option-btn" id="tabFrame1" style="flex: 1 1 calc(33.3% - 4px); padding: 6px 8px; font-size: 0.76rem; text-align: center;" onclick="selectActiveFrame(1)">
-              <div><span class="style-btn-title" style="font-size: 0.78rem;">🖼️ Top-L</span><span id="badgeFrame1" style="font-size: 0.68rem; color: #94a3b8;">Empty</span></div>
-            </button>
-            <button class="style-option-btn" id="tabFrame2" style="flex: 1 1 calc(33.3% - 4px); padding: 6px 8px; font-size: 0.76rem; text-align: center;" onclick="selectActiveFrame(2)">
-              <div><span class="style-btn-title" style="font-size: 0.78rem;">🦋 Mid-L</span><span id="badgeFrame2" style="font-size: 0.68rem; color: #94a3b8;">Empty</span></div>
-            </button>
-            <button class="style-option-btn" id="tabFrame3" style="flex: 1 1 calc(33.3% - 4px); padding: 6px 8px; font-size: 0.76rem; text-align: center;" onclick="selectActiveFrame(3)">
-              <div><span class="style-btn-title" style="font-size: 0.78rem;">🎀 Btm-L</span><span id="badgeFrame3" style="font-size: 0.68rem; color: #94a3b8;">Empty</span></div>
-            </button>
-            <button class="style-option-btn" id="tabFrame4" style="flex: 1 1 calc(33.3% - 4px); padding: 6px 8px; font-size: 0.76rem; text-align: center;" onclick="selectActiveFrame(4)">
-              <div><span class="style-btn-title" style="font-size: 0.78rem;">🎀 Btm-R</span><span id="badgeFrame4" style="font-size: 0.68rem; color: #94a3b8;">Empty</span></div>
-            </button>
-            <button class="style-option-btn" id="tabFrame5" style="flex: 1 1 calc(33.3% - 4px); padding: 6px 8px; font-size: 0.76rem; text-align: center;" onclick="selectActiveFrame(5)">
-              <div><span class="style-btn-title" style="font-size: 0.78rem;">🏰 Top-R</span><span id="badgeFrame5" style="font-size: 0.68rem; color: #94a3b8;">Empty</span></div>
-            </button>
-            <button class="style-option-btn" id="tabFrame6" style="flex: 1 1 calc(33.3% - 4px); padding: 6px 8px; font-size: 0.76rem; text-align: center;" onclick="selectActiveFrame(6)">
-              <div><span class="style-btn-title" style="font-size: 0.78rem;">✨ Mid-R</span><span id="badgeFrame6" style="font-size: 0.68rem; color: #94a3b8;">Empty</span></div>
-            </button>
-          </div>
-
-          <!-- Active Frame Adjustment Box -->
-          <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(244, 114, 182, 0.25); border-radius: 12px; padding: 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
-              <span id="activeFrameTitle" style="font-weight: 700; font-size: 0.92rem; color: #f472b6;">🌟 Center Main Polaroid (Shaaaw)</span>
-              <div style="display: flex; gap: 6px;">
-                <label class="btn-download-sub" style="padding: 4px 10px; font-size: 0.76rem; cursor: pointer; background: #ec4899; color: #fff; border: none; width: auto;">
-                  <span>🖼️ Choose Photo</span>
-                  <input type="file" id="activeFrameFileInput" accept="image/*" style="display: none;" onchange="handleActiveFrameUpload(event)">
-                </label>
-                <button class="btn-download-sub" id="btnRemoveActivePhoto" style="padding: 4px 8px; font-size: 0.76rem; color: #fca5a5; display: none; width: auto;" onclick="removeActiveFramePhoto()">
-                  <span>🗑️ Clear</span>
-                </button>
-              </div>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-              <div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
-                  <span>Vertical Focus (Pan Y):</span>
-                  <span id="panVal" style="color: #f472b6; font-weight: 700;">18% (Face Focus)</span>
-                </div>
-                <input type="range" id="sliderPanY" min="0" max="100" value="18" style="width: 100%; accent-color: #ec4899;" oninput="updateActivePanY(this.value)">
-              </div>
-
-              <div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
-                  <span>Horizontal Center (Pan X):</span>
-                  <span id="panXVal" style="color: #f472b6; font-weight: 700;">0% (Centered)</span>
-                </div>
-                <input type="range" id="sliderPanX" min="-50" max="50" value="0" style="width: 100%; accent-color: #ec4899;" oninput="updateActivePanX(this.value)">
-              </div>
-
-              <div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
-                  <span>Photo Zoom:</span>
-                  <span id="zoomVal" style="color: #f472b6; font-weight: 700;">1.05x</span>
-                </div>
-                <input type="range" id="sliderZoom" min="100" max="250" value="105" style="width: 100%; accent-color: #ec4899;" oninput="updateActiveZoom(this.value)">
-              </div>
-
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                <div>
-                  <div style="display: flex; justify-content: space-between; font-size: 0.76rem; margin-bottom: 2px;">
-                    <span>Tilt Angle:</span>
-                    <span id="tiltVal" style="color: #f472b6; font-weight: 700;">-2.0°</span>
-                  </div>
-                  <input type="range" id="sliderTilt" min="-120" max="120" value="-20" step="1" style="width: 100%; accent-color: #ec4899;" oninput="updateActiveTilt(this.value)">
-                </div>
-                <div>
-                  <div style="display: flex; justify-content: space-between; font-size: 0.76rem; margin-bottom: 2px;">
-                    <span>Slot Size Scale:</span>
-                    <span id="scaleVal" style="color: #f472b6; font-weight: 700;">100%</span>
-                  </div>
-                  <input type="range" id="sliderScale" min="85" max="115" value="100" style="width: 100%; accent-color: #ec4899;" oninput="updateActiveScale(this.value)">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Quick Upload Matrix for Surrounding Frames 1-6 -->
-          <div style="background: rgba(255, 255, 255, 0.03); border-radius: 10px; padding: 10px; margin-top: 12px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span style="font-weight: 700; font-size: 0.82rem; color: #38bdf8;">⚡ Quick Upload (Frames 1–6)</span>
-              <button class="btn-download-sub" style="padding: 2px 8px; font-size: 0.72rem; width: auto;" onclick="resetAllFrameDefaults()">
-                <span>🔄 Reset Defaults</span>
-              </button>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
-              <label class="btn-download-sub" style="padding: 6px 8px; font-size: 0.75rem; cursor: pointer; justify-content: center;">
-                <span id="btnLbl1">🖼️ Upload Frame 1 (Top-L)</span>
-                <input type="file" accept="image/*" style="display: none;" onchange="uploadDirectFrame(1, event)">
-              </label>
-              <label class="btn-download-sub" style="padding: 6px 8px; font-size: 0.75rem; cursor: pointer; justify-content: center;">
-                <span id="btnLbl2">🖼️ Upload Frame 2 (Mid-L)</span>
-                <input type="file" accept="image/*" style="display: none;" onchange="uploadDirectFrame(2, event)">
-              </label>
-              <label class="btn-download-sub" style="padding: 6px 8px; font-size: 0.75rem; cursor: pointer; justify-content: center;">
-                <span id="btnLbl3">🖼️ Upload Frame 3 (Btm-L)</span>
-                <input type="file" accept="image/*" style="display: none;" onchange="uploadDirectFrame(3, event)">
-              </label>
-              <label class="btn-download-sub" style="padding: 6px 8px; font-size: 0.75rem; cursor: pointer; justify-content: center;">
-                <span id="btnLbl4">🖼️ Upload Frame 4 (Btm-R)</span>
-                <input type="file" accept="image/*" style="display: none;" onchange="uploadDirectFrame(4, event)">
-              </label>
-              <label class="btn-download-sub" style="padding: 6px 8px; font-size: 0.75rem; cursor: pointer; justify-content: center;">
-                <span id="btnLbl5">🖼️ Upload Frame 5 (Top-R)</span>
-                <input type="file" accept="image/*" style="display: none;" onchange="uploadDirectFrame(5, event)">
-              </label>
-              <label class="btn-download-sub" style="padding: 6px 8px; font-size: 0.75rem; cursor: pointer; justify-content: center;">
-                <span id="btnLbl6">🖼️ Upload Frame 6 (Mid-R)</span>
-                <input type="file" accept="image/*" style="display: none;" onchange="uploadDirectFrame(6, event)">
-              </label>
-            </div>
-          </div>
-
-          <!-- Alignment Guides Toggle -->
-          <div class="toggle-row" style="margin-top: 10px; padding: 8px 0 0;">
-            <span style="font-size: 0.82rem;">🔍 Show Polaroid Aperture Guides on Canvas</span>
+          <div class="toggle-row">
+            <span>Show Alignment Outlines on Canvas</span>
             <label class="switch">
               <input type="checkbox" id="toggleInspector" onchange="toggleAlignmentGuides(this.checked)">
               <span class="slider"></span>
@@ -718,9 +869,23 @@
           </div>
         </div>
 
+        <!-- 3. Export & Download -->
         <div class="panel-card actions-card">
-          <button class="btn-download-hero" onclick="downloadMasterImage('jpeg', true)" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">
-            <span>💎 Download 4K Ultra-HD Master (3840×4650)</span>
+          <h3 class="panel-title">💎 4K Print Export (9 × 10.9 Size)</h3>
+
+          <div class="toggle-row" style="border-top: none; padding-top: 0; margin-bottom: 6px;">
+            <div>
+              <span style="font-weight: 700; color: #fbcfe8;">✨ Kodak Lab Color & Clarity Enhancement</span>
+              <div style="font-size: 0.76rem; color: #94a3b8;">Boosts vibrance and crisp contrast for Kodak glossy/lustre photo paper</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggleEnhance" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <button class="btn-download-hero" onclick="downloadMasterImage('jpeg', true)">
+            <span>💎 Download 4K Ultra-HD Enhanced Poster (3840×4650)</span>
           </button>
 
           <button class="btn-download-sub" onclick="downloadMasterImage('png', true)" style="font-weight: 700; color: #fbcfe8;">
@@ -728,7 +893,7 @@
           </button>
 
           <button class="btn-download-sub" onclick="downloadMasterImage('jpeg', false)">
-            <span>⬇️ Download 9×10.9 Kodak JPEG (300 DPI)</span>
+            <span>⬇️ Download 9×10.9 Kodak Kiosk JPEG (2700×3270 @ 300 DPI)</span>
           </button>
 
           <button class="btn-download-sub" onclick="window.print()">
@@ -736,12 +901,23 @@
           </button>
         </div>
 
+        <!-- 4. QR Safety Guarantee -->
+        <div class="qr-safe-guarantee">
+          <span style="font-size: 1.3rem;">🛡️</span>
+          <div>
+            <strong>Embedded QR Codes 100% Untouched:</strong><br>
+            All 8 QR codes embedded into the poster artwork with your software remain completely original, crisp, and scannable.
+          </div>
+        </div>
+
+        <!-- 5. Kiosk Printing Advice -->
         <div class="kodak-tip-box">
           <strong>💡 Printing at Kodak Kiosk, Walmart, CVS, or Photo Lab:</strong><br>
-          1. Download the <strong>JPEG (300 DPI)</strong> file onto a USB thumb drive or phone.<br>
-          2. At the kiosk or website, select <strong>9" × 10.9" (or Custom Size)</strong>.<br>
-          3. Choose <strong>"Kodak Glossy"</strong> or <strong>"Kodak Lustre/Matte"</strong> finish for richest color pop!
+          1. Download the <strong>4K Ultra-HD (or 300 DPI JPEG)</strong> file to a USB thumb drive or phone.<br>
+          2. Select <strong>9" × 10.9" (or Custom Size)</strong> at the kiosk or online photo lab.<br>
+          3. Choose <strong>"Kodak Glossy"</strong> or <strong>"Kodak Lustre/Matte"</strong> for archival colors!
         </div>
+
       </div>
     </div>
   </div>
@@ -753,35 +929,35 @@
     const sourceImage = new Image();
     let showAlignmentOutlines = false;
 
-    // Calibrated coordinates and default transforms for all 7 polaroid frames
+    // ========================================================================
+    // CALIBRATED POLAROID GEOMETRIES & EXACT AUTO-TILT ANGLES
+    // ========================================================================
+    // Note: All 8 QR codes are part of sourceImage and are NEVER touched.
     const FRAME_CONFIGS = [
-      { id: 0, title: "🌟 Center Main Polaroid (Shaaaw)", cxPct: 0.490, cyPct: 0.368, wPct: 0.258, hPct: 0.252, rotDeg: -2.0, panX: 0.00, panY: 0.18, zoom: 1.05, scale: 1.00, isMain: true, label: "Shaaaw 💖" },
-      { id: 1, title: "🖼️ Top-Left Polaroid (Frame 1)",   cxPct: 0.245, cyPct: 0.250, wPct: 0.170, hPct: 0.145, rotDeg: 5.5,  panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "01. Memory 💗" },
-      { id: 2, title: "🦋 Mid-Left Polaroid (Frame 2)",    cxPct: 0.230, cyPct: 0.500, wPct: 0.175, hPct: 0.150, rotDeg: -5.8, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "02. Smiles ✨" },
-      { id: 3, title: "🎀 Bottom-Left Polaroid (Frame 3)", cxPct: 0.370, cyPct: 0.650, wPct: 0.175, hPct: 0.150, rotDeg: -3.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "03. Melody 🎵" },
-      { id: 4, title: "🎀 Bottom-Right Polaroid (Frame 4)",cxPct: 0.625, cyPct: 0.650, wPct: 0.175, hPct: 0.150, rotDeg: 3.2,  panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "04. Moments 🧇" },
-      { id: 5, title: "🏰 Top-Right Polaroid (Frame 5)",  cxPct: 0.725, cyPct: 0.258, wPct: 0.170, hPct: 0.145, rotDeg: -5.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "05. Fairytale 🏰" },
-      { id: 6, title: "✨ Mid-Right Polaroid (Frame 6)",   cxPct: 0.755, cyPct: 0.502, wPct: 0.175, hPct: 0.150, rotDeg: 5.5,  panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "06. Forever 🌸" }
+      { id: 0, title: "🌟 Center Main Polaroid (Shaaaw)", cxPct: 0.490, cyPct: 0.368, wPct: 0.258, hPct: 0.252, rotDeg: -2.0, panX: 0.00, panY: 0.18, zoom: 1.05, scale: 1.00, isMain: true,  label: "Shaaaw 💖", icon: "🌟" },
+      { id: 1, title: "🖼️ Top-Left Polaroid (Frame 1)",   cxPct: 0.245, cyPct: 0.250, wPct: 0.170, hPct: 0.145, rotDeg:  5.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Left",   icon: "🖼️" },
+      { id: 2, title: "🦋 Mid-Left Polaroid (Frame 2)",    cxPct: 0.230, cyPct: 0.500, wPct: 0.175, hPct: 0.150, rotDeg: -5.8, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Left",   icon: "🦋" },
+      { id: 3, title: "🎀 Bottom-Left Polaroid (Frame 3)", cxPct: 0.370, cyPct: 0.650, wPct: 0.175, hPct: 0.150, rotDeg: -3.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Left",   icon: "🎀" },
+      { id: 4, title: "🎀 Bottom-Right Polaroid (Frame 4)",cxPct: 0.625, cyPct: 0.650, wPct: 0.175, hPct: 0.150, rotDeg:  3.2, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Right",  icon: "🎀" },
+      { id: 5, title: "🏰 Top-Right Polaroid (Frame 5)",  cxPct: 0.725, cyPct: 0.258, wPct: 0.170, hPct: 0.145, rotDeg: -5.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Right",  icon: "🏰" },
+      { id: 6, title: "✨ Mid-Right Polaroid (Frame 6)",   cxPct: 0.755, cyPct: 0.502, wPct: 0.175, hPct: 0.150, rotDeg:  5.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Right",  icon: "✨" }
     ];
 
-    // Current working transform values (can be nudged via sliders)
     const frameStates = JSON.parse(JSON.stringify(FRAME_CONFIGS));
     const frameImages = {};
     let activeFrameId = 0;
-
-    // Cache drawn poster coordinates for mouse clicks & hit detection
     let currentDrawMetrics = { drawX: 0, drawY: 0, drawW: 2700, drawH: 3270 };
 
-    // 1. Poster Loading Candidates (Top Priority: User's composite poster)
+    // ========================================================================
+    // 1. POSTER ARTWORK LOADING (Relative paths first for maximum compatibility)
+    // ========================================================================
     const posterCandidates = [
-      'C:/Users/Nandheesaprasad/.gemini/antigravity-ide/brain/6ea84756-37a6-43a8-8392-c3735cd7d754/.user_uploaded/media_1789417290826.jpg',
-      'file:///C:/Users/Nandheesaprasad/.gemini/antigravity-ide/brain/6ea84756-37a6-43a8-8392-c3735cd7d754/.user_uploaded/media_1789417290826.jpg',
       'assets/original-poster.jpg',
-      'assets/clean-poster-bg.jpg',
-      '/assets/original-poster.jpg',
-      '/assets/clean-poster-bg.jpg',
+      './assets/original-poster.jpg',
       '../public/assets/original-poster.jpg',
-      '../public/assets/clean-poster-bg.jpg'
+      '/assets/original-poster.jpg',
+      'assets/clean-poster-bg.jpg',
+      'C:/Users/Nandheesaprasad/.gemini/antigravity-ide/brain/6ea84756-37a6-43a8-8392-c3735cd7d754/.user_uploaded/media_1789417290826.jpg'
     ];
 
     let posterIdx = 0;
@@ -796,13 +972,13 @@
     sourceImage.onerror = tryLoadNextPoster;
     tryLoadNextPoster();
 
-    // 2. Load Shaaaw Center Photo default into Frame 0
+    // Load Shaaaw Center Photo default if available
     const shaawDefaultImg = new Image();
     const shaawCandidates = [
       'assets/shaaw-center.jpg',
-      '/assets/shaaw-center.jpg',
+      './assets/shaaw-center.jpg',
       '../public/assets/shaaw-center.jpg',
-      'C:/Users/Nandheesaprasad/.gemini/antigravity-ide/brain/4d15bc15-2ae2-43f8-9dc8-e3aeeec3a9c5/.user_uploaded/media_1789381931433.jpg'
+      '/assets/shaaw-center.jpg'
     ];
     let shaawIdx = 0;
     function tryLoadNextShaaw() {
@@ -813,14 +989,17 @@
     shaawDefaultImg.onload = () => {
       if (!frameImages[0]) {
         frameImages[0] = shaawDefaultImg;
-        updateUIBadges();
+        renderThumbnailsGrid();
+        updatePhotoCountStatus();
         render9x10_9Poster();
       }
     };
     shaawDefaultImg.onerror = tryLoadNextShaaw;
     tryLoadNextShaaw();
 
-    // Helper: Rounded Rectangle
+    // ========================================================================
+    // 2. HELPER FUNCTIONS
+    // ========================================================================
     function drawRoundedRect(c, x, y, width, height, radius) {
       const maxR = Math.min(Math.abs(width) / 2, Math.abs(height) / 2);
       const r = Math.max(0, Math.min(radius || 0, maxR));
@@ -837,31 +1016,45 @@
       c.closePath();
     }
 
-    // Helper: Cropped photo inside an aperture with Pan X, Pan Y and Zoom
-    function drawCroppedPhoto(photoImg, destX, destY, destW, destH, panX, panY, zoom) {
+    // Auto-fit photo inside aperture with proper aspect ratio cover & pan
+    function drawCroppedPhoto(targetCtx, photoImg, destX, destY, destW, destH, panX, panY, zoom) {
       if (!photoImg || !photoImg.complete || !photoImg.naturalWidth) return;
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
+      targetCtx.imageSmoothingEnabled = true;
+      targetCtx.imageSmoothingQuality = 'high';
 
       const destAspect = destW / destH;
       const imgW = photoImg.naturalWidth;
       const imgH = photoImg.naturalHeight;
-      const baseCropW = imgW;
-      const baseCropH = imgW / destAspect;
-      
-      const cropW = baseCropW / zoom;
-      const cropH = baseCropH / zoom;
-      
+      const imgAspect = imgW / imgH;
+
+      let cropW, cropH;
+      if (imgAspect > destAspect) {
+        cropH = imgH / (zoom || 1.0);
+        cropW = (cropH * destAspect);
+      } else {
+        cropW = imgW / (zoom || 1.0);
+        cropH = (cropW / destAspect);
+      }
+
       const maxPanX = Math.max(0, imgW - cropW);
       const maxPanY = Math.max(0, imgH - cropH);
-      const cropX = Math.max(0, Math.min(maxPanX, maxPanX / 2 + panX * maxPanX));
-      const cropY = Math.max(0, Math.min(maxPanY, maxPanY * panY));
+      const cropX = Math.max(0, Math.min(maxPanX, (imgW - cropW) / 2 + (panX || 0) * maxPanX));
+      const cropY = Math.max(0, Math.min(maxPanY, maxPanY * (panY !== undefined ? panY : 0.5)));
 
-      ctx.drawImage(photoImg, cropX, cropY, cropW, cropH, destX, destY, destW, destH);
+      targetCtx.drawImage(photoImg, cropX, cropY, cropW, cropH, destX, destY, destW, destH);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('canvasToast');
+      if (toast) {
+        toast.innerHTML = `<span>${msg}</span>`;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2800);
+      }
     }
 
     // ========================================================================
-    // MASTER 9x10.9 KODAK RENDER ENGINE (PHOTO PLACEMENTS ONLY)
+    // 3. MASTER RENDER ENGINE (300 DPI & 4K ULTRA-HD)
     // ========================================================================
     function render9x10_9Poster() {
       const targetW = 2700;
@@ -965,8 +1158,9 @@
       currentDrawMetrics = { drawX, drawY, drawW, drawH };
 
       // ====================================================================
-      // 🌟 DRAW SHAAAW'S PHOTOS INTO THE 7 POLAROID FRAME APERTURES
+      // 🌸 DRAW SHAAAW'S PHOTOS INTO POLAROID FRAMES (AUTO-TILTED & ALIGNED)
       // ====================================================================
+      // NOTE: The 8 QR codes on the poster are strictly left untouched!
       frameStates.forEach(cfg => {
         const cx = drawX + Math.round(drawW * cfg.cxPct);
         const cy = drawY + Math.round(drawH * cfg.cyPct);
@@ -981,34 +1175,40 @@
 
         if (photo && photo.complete && photo.naturalWidth) {
           ctx.save();
-          ctx.beginPath();
-          drawRoundedRect(ctx, -aw / 2, -ah / 2, aw, ah, 4);
+          drawRoundedRect(ctx, -aw / 2, -ah / 2, aw, ah, 5);
           ctx.clip();
 
-          drawCroppedPhoto(photo, -aw / 2, -ah / 2, aw, ah, cfg.panX, cfg.panY, cfg.zoom);
+          drawCroppedPhoto(ctx, photo, -aw / 2, -ah / 2, aw, ah, cfg.panX, cfg.panY, cfg.zoom);
 
-          // Subtle inner shading to blend seamlessly into poster's frame aperture
-          ctx.strokeStyle = 'rgba(40, 20, 30, 0.25)';
+          // Subtle authentic inner vignette/shadow for authentic paper depth
+          const shadowGrad = ctx.createLinearGradient(0, -ah/2, 0, -ah/2 + 20);
+          shadowGrad.addColorStop(0, 'rgba(40, 20, 25, 0.22)');
+          shadowGrad.addColorStop(1, 'rgba(40, 20, 25, 0.0)');
+          ctx.fillStyle = shadowGrad;
+          ctx.fillRect(-aw/2, -ah/2, aw, 20);
+
+          // Authentic Polaroid paper bevel border
+          ctx.strokeStyle = 'rgba(50, 30, 40, 0.25)';
           ctx.lineWidth = 2.5;
-          drawRoundedRect(ctx, -aw / 2, -ah / 2, aw, ah, 4);
+          drawRoundedRect(ctx, -aw / 2, -ah / 2, aw, ah, 5);
           ctx.stroke();
 
           ctx.restore();
         }
 
-        // Live Alignment Inspector Guides (if toggled)
+        // Live Alignment Inspector Guides (if enabled)
         if (showAlignmentOutlines || cfg.id === activeFrameId) {
           ctx.strokeStyle = cfg.id === activeFrameId ? '#ec4899' : 'rgba(56, 189, 248, 0.6)';
           ctx.lineWidth = cfg.id === activeFrameId ? 3.5 : 2.0;
           if (cfg.id !== activeFrameId) ctx.setLineDash([8, 6]);
-          drawRoundedRect(ctx, -aw / 2, -ah / 2, aw, ah, 4);
+          drawRoundedRect(ctx, -aw / 2, -ah / 2, aw, ah, 5);
           ctx.stroke();
           ctx.setLineDash([]);
 
           // Frame badge label
           ctx.fillStyle = cfg.id === activeFrameId ? '#ec4899' : '#38bdf8';
           ctx.font = 'bold 15px sans-serif';
-          ctx.fillText(`Frame ${cfg.id}: ${cfg.label || ''}`, -aw / 2 + 6, -ah / 2 + 20);
+          ctx.fillText(`Frame ${cfg.id}: ${cfg.label || ''} (${cfg.rotDeg > 0 ? '+' : ''}${cfg.rotDeg.toFixed(1)}°)`, -aw / 2 + 6, -ah / 2 + 20);
         }
 
         ctx.restore();
@@ -1016,20 +1216,143 @@
     }
 
     // ========================================================================
-    // UI CONTROLS & FRAME SELECTION
+    // 4. MULTI-PHOTO UPLOAD & AUTO-ALLOCATION ENGINE
     // ========================================================================
+    function handleBatchPhotoUpload(event) {
+      const files = Array.from(event.target.files);
+      if (!files.length) return;
+
+      let loadedCount = 0;
+      files.slice(0, 7).forEach((file, index) => {
+        let targetFrameId = (files.length === 1 && activeFrameId !== undefined) ? activeFrameId : index;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            frameImages[targetFrameId] = img;
+
+            // Automatically reset this frame to its calibrated auto-tilt and alignment
+            resetFrameToDefault(targetFrameId);
+
+            loadedCount++;
+            if (loadedCount === Math.min(files.length, 7)) {
+              updatePhotoCountStatus();
+              renderThumbnailsGrid();
+              selectActiveFrame(targetFrameId);
+              render9x10_9Poster();
+              showToast(`🎉 ${loadedCount} Photo${loadedCount > 1 ? 's' : ''} Auto-Aligned & Tilted!`);
+            }
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      event.target.value = '';
+    }
+
+    function handleActiveFrameUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          frameImages[activeFrameId] = img;
+          resetFrameToDefault(activeFrameId);
+          updatePhotoCountStatus();
+          renderThumbnailsGrid();
+          selectActiveFrame(activeFrameId);
+          render9x10_9Poster();
+          showToast(`✨ Frame ${activeFrameId} Auto-Aligned & Tilted!`);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+      event.target.value = '';
+    }
+
+    function clearAllPhotos() {
+      for (let i = 0; i <= 6; i++) {
+        delete frameImages[i];
+      }
+      updatePhotoCountStatus();
+      renderThumbnailsGrid();
+      render9x10_9Poster();
+      showToast('🗑️ All Polaroid photos cleared');
+    }
+
+    function resetFrameToDefault(id) {
+      frameStates[id].panX = FRAME_CONFIGS[id].panX;
+      frameStates[id].panY = FRAME_CONFIGS[id].panY;
+      frameStates[id].zoom = FRAME_CONFIGS[id].zoom;
+      frameStates[id].rotDeg = FRAME_CONFIGS[id].rotDeg;
+      frameStates[id].scale = FRAME_CONFIGS[id].scale;
+    }
+
+    function resetActiveFrameDefaults() {
+      resetFrameToDefault(activeFrameId);
+      selectActiveFrame(activeFrameId);
+      render9x10_9Poster();
+      showToast(`🔄 Frame ${activeFrameId} reset to calibrated auto-tilt`);
+    }
+
+    function updatePhotoCountStatus() {
+      let count = 0;
+      for (let i = 0; i <= 6; i++) {
+        if (frameImages[i]) count++;
+      }
+      const countEl = document.getElementById('photoCountStatus');
+      if (countEl) {
+        countEl.textContent = `${count} of 7 Polaroid Frames Loaded`;
+        countEl.style.color = count === 7 ? '#10b981' : '#f472b6';
+      }
+    }
+
+    // ========================================================================
+    // 5. THUMBNAIL GALLERY & SELECTION
+    // ========================================================================
+    function renderThumbnailsGrid() {
+      const grid = document.getElementById('thumbnailsGrid');
+      if (!grid) return;
+
+      grid.innerHTML = '';
+      FRAME_CONFIGS.forEach(cfg => {
+        const hasImg = Boolean(frameImages[cfg.id]);
+        const item = document.createElement('div');
+        item.className = `polaroid-thumb-item ${cfg.id === activeFrameId ? 'active' : ''}`;
+        item.onclick = () => selectActiveFrame(cfg.id);
+
+        let previewContent = '';
+        if (hasImg) {
+          previewContent = `<img src="${frameImages[cfg.id].src}" alt="${cfg.label}">`;
+        } else {
+          previewContent = cfg.icon;
+        }
+
+        item.innerHTML = `
+          <div class="thumb-preview-box">${previewContent}</div>
+          <span class="thumb-label">${cfg.label}</span>
+          <span class="thumb-angle">${cfg.rotDeg > 0 ? '+' : ''}${cfg.rotDeg.toFixed(1)}°</span>
+        `;
+        grid.appendChild(item);
+      });
+    }
+
     function selectActiveFrame(id) {
       activeFrameId = id;
       const cfg = frameStates[id];
 
-      // Update tab styling
-      for (let i = 0; i <= 6; i++) {
-        const tab = document.getElementById(`tabFrame${i}`);
-        if (tab) tab.classList.toggle('active', i === id);
-      }
+      // Update thumbnail grid selection
+      const items = document.querySelectorAll('.polaroid-thumb-item');
+      items.forEach((it, idx) => {
+        it.classList.toggle('active', idx === id);
+      });
 
       // Update title
-      document.getElementById('activeFrameTitle').textContent = cfg.title;
+      document.getElementById('activeFrameTitle').textContent = `${cfg.icon} ${cfg.title}`;
 
       // Update slider positions
       document.getElementById('sliderPanY').value = Math.round(cfg.panY * 100);
@@ -1042,21 +1365,15 @@
       document.getElementById('zoomVal').textContent = `${cfg.zoom.toFixed(2)}x`;
 
       document.getElementById('sliderTilt').value = Math.round(cfg.rotDeg * 10);
-      document.getElementById('tiltVal').textContent = `${cfg.rotDeg.toFixed(1)}°`;
+      document.getElementById('tiltVal').textContent = `${cfg.rotDeg > 0 ? '+' : ''}${cfg.rotDeg.toFixed(1)}°`;
 
       document.getElementById('sliderScale').value = Math.round((cfg.scale || 1.0) * 100);
       document.getElementById('scaleVal').textContent = `${Math.round((cfg.scale || 1.0) * 100)}%`;
 
-      // Show/hide clear photo button
-      const hasPhoto = Boolean(frameImages[id]);
-      const btnRemove = document.getElementById('btnRemoveActivePhoto');
-      if (btnRemove) {
-        btnRemove.style.display = hasPhoto ? 'inline-flex' : 'none';
-      }
-
       render9x10_9Poster();
     }
 
+    // Slider Event Handlers
     function updateActivePanY(val) {
       frameStates[activeFrameId].panY = val / 100;
       document.getElementById('panVal').textContent = `${Math.round(val)}%`;
@@ -1077,7 +1394,7 @@
 
     function updateActiveTilt(val) {
       frameStates[activeFrameId].rotDeg = val / 10;
-      document.getElementById('tiltVal').textContent = `${(val / 10).toFixed(1)}°`;
+      document.getElementById('tiltVal').textContent = `${(val / 10) > 0 ? '+' : ''}${(val / 10).toFixed(1)}°`;
       render9x10_9Poster();
     }
 
@@ -1087,79 +1404,111 @@
       render9x10_9Poster();
     }
 
-    function handleActiveFrameUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-          frameImages[activeFrameId] = img;
-          updateUIBadges();
-          selectActiveFrame(activeFrameId);
-          render9x10_9Poster();
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
+    // ========================================================================
+    // 6. INTERACTIVE CANVAS HIT TESTING & DRAG-AND-DROP
+    // ========================================================================
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const clickX = (e.clientX - rect.left) * scaleX;
+      const clickY = (e.clientY - rect.top) * scaleY;
 
-    function uploadDirectFrame(id, event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-          frameImages[id] = img;
-          updateUIBadges();
-          selectActiveFrame(id);
-          render9x10_9Poster();
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
+      const { drawX, drawY, drawW, drawH } = currentDrawMetrics;
 
-    function removeActiveFramePhoto() {
-      delete frameImages[activeFrameId];
-      updateUIBadges();
-      selectActiveFrame(activeFrameId);
-      render9x10_9Poster();
-    }
-
-    function resetAllFrameDefaults() {
       for (let i = 0; i <= 6; i++) {
-        frameStates[i].panX = FRAME_CONFIGS[i].panX;
-        frameStates[i].panY = FRAME_CONFIGS[i].panY;
-        frameStates[i].zoom = FRAME_CONFIGS[i].zoom;
-        frameStates[i].rotDeg = FRAME_CONFIGS[i].rotDeg;
-        frameStates[i].scale = FRAME_CONFIGS[i].scale;
+        const cfg = frameStates[i];
+        const cx = drawX + Math.round(drawW * cfg.cxPct);
+        const cy = drawY + Math.round(drawH * cfg.cyPct);
+        const aw = Math.round(drawW * cfg.wPct * (cfg.scale || 1.0));
+        const ah = Math.round(drawW * cfg.hPct * (cfg.scale || 1.0));
+        const rad = -cfg.rotDeg * Math.PI / 180;
+
+        const dx = clickX - cx;
+        const dy = clickY - cy;
+        const localX = dx * Math.cos(rad) - dy * Math.sin(rad);
+        const localY = dx * Math.sin(rad) + dy * Math.cos(rad);
+
+        if (Math.abs(localX) <= aw / 2 && Math.abs(localY) <= ah / 2) {
+          selectActiveFrame(i);
+          document.getElementById('activeFrameFileInput').click();
+          return;
+        }
       }
-      selectActiveFrame(activeFrameId);
-      render9x10_9Poster();
-    }
+    });
 
-    function updateUIBadges() {
-      for (let i = 0; i <= 6; i++) {
-        const badge = document.getElementById(`badgeFrame${i}`);
-        const hasImg = Boolean(frameImages[i]);
-        if (badge) {
-          if (hasImg) {
-            badge.textContent = '✓ Photo Set';
-            badge.style.color = '#10b981';
-          } else {
-            badge.textContent = i === 0 ? 'Default' : 'Empty';
-            badge.style.color = '#94a3b8';
+    canvas.addEventListener('dragover', (e) => e.preventDefault());
+    canvas.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+      if (!files.length) return;
+
+      if (files.length > 1) {
+        files.slice(0, 7).forEach((file, idx) => {
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            const img = new Image();
+            img.onload = function() {
+              frameImages[idx] = img;
+              resetFrameToDefault(idx);
+              updatePhotoCountStatus();
+              renderThumbnailsGrid();
+              if (idx === 0) selectActiveFrame(0);
+              render9x10_9Poster();
+            };
+            img.src = ev.target.result;
+          };
+          reader.readAsDataURL(file);
+        });
+        showToast(`🎉 ${Math.min(files.length, 7)} Photos Dropped & Auto-Aligned!`);
+      } else {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const dropX = (e.clientX - rect.left) * scaleX;
+        const dropY = (e.clientY - rect.top) * scaleY;
+
+        const { drawX, drawY, drawW, drawH } = currentDrawMetrics;
+        let targetFrame = activeFrameId;
+
+        for (let i = 0; i <= 6; i++) {
+          const cfg = frameStates[i];
+          const cx = drawX + Math.round(drawW * cfg.cxPct);
+          const cy = drawY + Math.round(drawH * cfg.cyPct);
+          const aw = Math.round(drawW * cfg.wPct * (cfg.scale || 1.0));
+          const ah = Math.round(drawW * cfg.hPct * (cfg.scale || 1.0));
+          const rad = -cfg.rotDeg * Math.PI / 180;
+
+          const dx = dropX - cx;
+          const dy = dropY - cy;
+          const localX = dx * Math.cos(rad) - dy * Math.sin(rad);
+          const localY = dx * Math.sin(rad) + dy * Math.cos(rad);
+
+          if (Math.abs(localX) <= aw / 2 && Math.abs(localY) <= ah / 2) {
+            targetFrame = i;
+            break;
           }
         }
-        const btnLbl = document.getElementById(`btnLbl${i}`);
-        if (btnLbl) {
-          btnLbl.textContent = hasImg ? `✓ Frame ${i} Loaded` : `🖼️ Upload Frame ${i}`;
-        }
-      }
-    }
 
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          const img = new Image();
+          img.onload = function() {
+            frameImages[targetFrame] = img;
+            resetFrameToDefault(targetFrame);
+            updatePhotoCountStatus();
+            renderThumbnailsGrid();
+            selectActiveFrame(targetFrame);
+            render9x10_9Poster();
+            showToast(`✨ Frame ${targetFrame} Auto-Aligned & Tilted!`);
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(files[0]);
+      }
+    });
+
+    // Custom Poster Upload
     function uploadCustomPoster(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -1184,11 +1533,8 @@
 
     function toggleGuidelines(show) {
       const overlay = document.getElementById('guideOverlay');
-      if (show) {
-        overlay.classList.add('active');
-      } else {
-        overlay.classList.remove('active');
-      }
+      if (show) overlay.classList.add('active');
+      else overlay.classList.remove('active');
     }
 
     function toggleAlignmentGuides(val) {
@@ -1197,116 +1543,31 @@
     }
 
     // ========================================================================
-    // INTERACTIVE CANVAS: CLICK DIRECTLY ON ANY POLAROID TO UPLOAD PHOTO
-    // ========================================================================
-    canvas.addEventListener('click', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      const clickX = (e.clientX - rect.left) * scaleX;
-      const clickY = (e.clientY - rect.top) * scaleY;
-
-      const { drawX, drawY, drawW, drawH } = currentDrawMetrics;
-
-      // Check click against each frame's rotated bounding box
-      for (let i = 0; i <= 6; i++) {
-        const cfg = frameStates[i];
-        const cx = drawX + Math.round(drawW * cfg.cxPct);
-        const cy = drawY + Math.round(drawH * cfg.cyPct);
-        const aw = Math.round(drawW * cfg.wPct * (cfg.scale || 1.0));
-        const ah = Math.round(drawW * cfg.hPct * (cfg.scale || 1.0));
-        const rad = -cfg.rotDeg * Math.PI / 180;
-
-        // Un-rotate click point around frame center
-        const dx = clickX - cx;
-        const dy = clickY - cy;
-        const localX = dx * Math.cos(rad) - dy * Math.sin(rad);
-        const localY = dx * Math.sin(rad) + dy * Math.cos(rad);
-
-        if (Math.abs(localX) <= aw / 2 && Math.abs(localY) <= ah / 2) {
-          selectActiveFrame(i);
-          document.getElementById('activeFrameFileInput').click();
-          return;
-        }
-      }
-    });
-
-    // Drag and drop photo onto any frame on canvas
-    canvas.addEventListener('dragover', (e) => e.preventDefault());
-    canvas.addEventListener('drop', (e) => {
-      e.preventDefault();
-      const files = e.dataTransfer.files;
-      if (!files || !files.length) return;
-      const file = files[0];
-      if (!file.type.startsWith('image/')) return;
-
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      const dropX = (e.clientX - rect.left) * scaleX;
-      const dropY = (e.clientY - rect.top) * scaleY;
-
-      const { drawX, drawY, drawW, drawH } = currentDrawMetrics;
-      let targetFrame = -1;
-
-      for (let i = 0; i <= 6; i++) {
-        const cfg = frameStates[i];
-        const cx = drawX + Math.round(drawW * cfg.cxPct);
-        const cy = drawY + Math.round(drawH * cfg.cyPct);
-        const aw = Math.round(drawW * cfg.wPct * (cfg.scale || 1.0));
-        const ah = Math.round(drawW * cfg.hPct * (cfg.scale || 1.0));
-        const rad = -cfg.rotDeg * Math.PI / 180;
-
-        const dx = dropX - cx;
-        const dy = dropY - cy;
-        const localX = dx * Math.cos(rad) - dy * Math.sin(rad);
-        const localY = dx * Math.sin(rad) + dy * Math.cos(rad);
-
-        if (Math.abs(localX) <= aw / 2 && Math.abs(localY) <= ah / 2) {
-          targetFrame = i;
-          break;
-        }
-      }
-
-      const reader = new FileReader();
-      reader.onload = function(ev) {
-        const img = new Image();
-        img.onload = function() {
-          if (targetFrame >= 0) {
-            frameImages[targetFrame] = img;
-            updateUIBadges();
-            selectActiveFrame(targetFrame);
-            render9x10_9Poster();
-          } else {
-            sourceImage.onload = () => render9x10_9Poster();
-            sourceImage.src = ev.target.result;
-            const tag = document.getElementById('posterStatusTag');
-            if (tag) tag.textContent = '✨ Custom Poster Active (Drop)';
-          }
-        };
-        img.src = ev.target.result;
-      };
-      reader.readAsDataURL(file);
-    });
-
-    // ========================================================================
-    // 4K & KODAK PRINT EXPORT ENGINE
+    // 7. 4K ULTRA-HD ENHANCED EXPORT ENGINE (3840 × 4650 px @ 426 DPI)
     // ========================================================================
     function downloadMasterImage(format = 'jpeg', is4K = false) {
+      const isEnhanced = document.getElementById('toggleEnhance') ? document.getElementById('toggleEnhance').checked : true;
       let exportCanvas = canvas;
+
       if (is4K) {
-        // High-definition 4K Ultra-HD Master (3840 x 4650 px @ 426 DPI)
         exportCanvas = document.createElement('canvas');
         exportCanvas.width = 3840;
         exportCanvas.height = 4650;
         const eCtx = exportCanvas.getContext('2d');
         eCtx.imageSmoothingEnabled = true;
         eCtx.imageSmoothingQuality = 'high';
+
+        if (isEnhanced) {
+          eCtx.filter = 'contrast(1.05) saturate(1.09) brightness(1.01)';
+        }
+
         eCtx.drawImage(canvas, 0, 0, 3840, 4650);
+        eCtx.filter = 'none';
       }
+
       const link = document.createElement('a');
       const filename = is4K
-        ? `Shaaaw-Scrapbook-Poster-4K-UltraHD-Kodak.${format === 'jpeg' ? 'jpg' : 'png'}`
+        ? `Shaaaw-Scrapbook-Poster-4K-Enhanced-9x10.9.${format === 'jpeg' ? 'jpg' : 'png'}`
         : `Shaaaw-Scrapbook-9x10.9-Kodak-300DPI.${format === 'jpeg' ? 'jpg' : 'png'}`;
       link.download = filename;
 
@@ -1318,11 +1579,15 @@
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
+      showToast(`💾 ${is4K ? '4K Ultra-HD Enhanced' : '300 DPI'} Downloaded!`);
     }
 
+    // Initial Setup
     window.addEventListener('load', () => {
+      renderThumbnailsGrid();
       selectActiveFrame(0);
-      setTimeout(render9x10_9Poster, 200);
+      setTimeout(render9x10_9Poster, 150);
     });
   </script>
 </body>
