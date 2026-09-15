@@ -1,4 +1,3 @@
-﻿#!/usr/bin/env node
 /**
  * build-github-pages.js — REBUILT FROM SCRATCH
  * ---------------------------------------------------------------------------
@@ -21,7 +20,7 @@
  *     (1.png encoded /memory/2 and vice versa) — guarded by a marker file
  *   - fixes doc references to the dead free-plan URL
  *
- * Usage:  node scripts/build-github-pages.js     (idempotent, safe to re-run)
+ * Usage:  node scripts\build-github-pages.js     (idempotent, safe to re-run)
  * Then:   git add -A
  *         git commit -m "rebuild: QR tape pages now open the live app"
  *         git push origin main

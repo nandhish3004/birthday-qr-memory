@@ -9,7 +9,7 @@ const CONFIG_FILE = path.join(__dirname, '..', 'data', 'config.json');
 
 async function main() {
   const permanentDomain = process.argv[2] || 'https://nandhish3004.github.io/birthday-qr-memory';
-  const targetServerUrl = process.argv[3] || process.env.BASE_URL || 'https://birthday-qr-memory-system.onrender.com';
+  const targetServerUrl = process.argv[3] || process.env.BASE_URL || 'https://birthday-qr-memory.onrender.com';
 
   console.log(`\n======================================================`);
   console.log(`🔒 Generating Lifetime Permanent Birthday QRs`);

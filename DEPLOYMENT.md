@@ -38,12 +38,12 @@ Instead, your physical QR codes point to **GitHub Pages** (`https://nandhish3004
    - **Start Command**: `npm start`
    - **Plan**: `Free`
    - **Environment Variable**: `ADMIN_PIN=shaaaw2026`
-4. Click **Create Web Service**. Render gives you a live HTTPS URL (e.g. `https://birthday-qr-memory-system.onrender.com`).
+4. Click **Create Web Service**. Render gives you a live HTTPS URL (e.g. `https://birthday-qr-memory.onrender.com`).
 
 ---
 
 ## Step 3: Connect GitHub Pages to Render (1-Time Setup)
-1. Open your admin dashboard: `https://birthday-qr-memory-system.onrender.com/admin` (or `http://localhost:3000/admin`).
+1. Open your admin dashboard: `https://birthday-qr-memory.onrender.com/admin` (or `http://localhost:3000/admin`).
 2. Enter your Admin PIN.
 3. In the **Target Server Settings** panel, verify your Render URL is saved.
 4. Download your Master QR Pack or Print Sheet.

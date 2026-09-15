@@ -1,147 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shaaaw's Birthday Memories &bull; Lifetime Resolver Hub</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎁</text></svg>">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Playfair+Display:ital,wght@1,600;1,700&display=swap');
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      min-height: 100vh;
-      background: #0f172a;
-      color: #f8fafc;
-      padding: 32px 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .hub-container {
-      max-width: 600px;
-      width: 100%;
-      background: rgba(30, 41, 59, 0.7);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 28px;
-      padding: 36px 28px;
-      text-align: center;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
-    }
-    .badge {
-      display: inline-block;
-      background: rgba(225, 29, 72, 0.2);
-      border: 1px solid rgba(225, 29, 72, 0.4);
-      color: #fda4af;
-      font-size: 0.8rem;
-      font-weight: 800;
-      letter-spacing: 1px;
-      padding: 6px 16px;
-      border-radius: 999px;
-      margin-bottom: 16px;
-    }
-    h1 {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 10px;
-    }
-    p {
-      color: #94a3b8;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-bottom: 28px;
-    }
-    .tape-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    .tape-btn {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 12px 16px;
-      border-radius: 14px;
-      color: #f1f5f9;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-    }
-    .tape-btn:hover {
-      background: rgba(225, 29, 72, 0.25);
-      border-color: #e11d48;
-      transform: translateY(-2px);
-      color: #fff;
-    }
-    .live-app-btn {
-      display: inline-block;
-      background: linear-gradient(135deg, #e11d48, #f43f5e);
-      color: #fff;
-      text-decoration: none;
-      font-weight: 700;
-      padding: 14px 28px;
-      border-radius: 999px;
-      font-size: 1rem;
-      box-shadow: 0 10px 25px rgba(225, 29, 72, 0.4);
-      margin-top: 10px;
-    }
-    .footer-note {
-      margin-top: 24px;
-      font-size: 0.78rem;
-      color: #64748b;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Shaaaw 💖 — Birthday QR Memory</title>
+<style>
+  html, body { margin:0; min-height:100%; background: radial-gradient(1200px 600px at 50% 10%, #2a1230, #120818 60%, #0a0510);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color:#fff; }
+  .wrap { max-width:760px; margin:0 auto; padding:3.5rem 1.25rem 3rem; text-align:center; }
+  .cake { font-size:3rem; }
+  h1 { font-size:2rem; margin:.5rem 0 .25rem; letter-spacing:.06em; }
+  .tag { opacity:.75; margin-bottom:2rem; }
+  a.big { display:inline-block; background:#ff5fa2; color:#fff; text-decoration:none; font-weight:600;
+    padding:.85rem 2rem; border-radius:999px; font-size:1.05rem; box-shadow:0 8px 30px rgba(255,95,162,.35); }
+  a.big:hover { background:#ff79b0; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:.75rem; margin:2.25rem 0 1.5rem; text-align:left; }
+  .tile { display:block; text-decoration:none; color:#fff; background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:.8rem 1rem; }
+  .tile:hover { background:rgba(255,143,208,.12); border-color:#ff8fd0; }
+  .tile .n { display:block; font-size:.7rem; letter-spacing:.18em; color:#ff8fd0; margin-bottom:.3rem; }
+  .foot { display:flex; gap:1.5rem; justify-content:center; opacity:.7; font-size:.85rem; }
+  .foot a { color:#ff9fd6; text-decoration:none; }
+</style>
 </head>
 <body>
-  <div class="hub-container">
-    <span class="badge">🔒 PERMANENT RESOLVER VAULT &bull; ACTIVE</span>
-    <h1>Shaaaw's Birthday Archive</h1>
-    <p>Lifetime Resolver Hub hosted on GitHub Pages. Every scanned physical QR code resolves through this hub directly to Shaaaw's memory playback.</p>
-
-    <div class="tape-grid">
-      <a href="m/1.html" class="tape-btn"><span>📼</span> Tape 01</a>
-      <a href="m/2.html" class="tape-btn"><span>📼</span> Tape 02</a>
-      <a href="m/3.html" class="tape-btn"><span>📼</span> Tape 03</a>
-      <a href="m/4.html" class="tape-btn"><span>📼</span> Tape 04</a>
-      <a href="m/5.html" class="tape-btn"><span>📼</span> Tape 05</a>
-      <a href="m/6.html" class="tape-btn"><span>📼</span> Tape 06</a>
-      <a href="m/7.html" class="tape-btn"><span>📼</span> Tape 07</a>
-      <a href="m/8.html" class="tape-btn"><span>📼</span> Tape 08</a>
+  <div class="wrap">
+    <div class="cake">🎂</div>
+    <h1>For Shaaaw 💖</h1>
+    <div class="tag">Divine Chaos Since Day 1 ♡ — 8 lifetimes of memories, locked in QR</div>
+    <a class="big" href="https://birthday-qr-memory.onrender.com">Open the Live Experience</a>
+    <div class="grid">
+    <a class="tile" href="https://birthday-qr-memory.onrender.com/memory/1"><span class="n">TAPE 01</span>THE GENESIS MEMORY</a>
+    <a class="tile" href="https://birthday-qr-memory.onrender.com/memory/2"><span class="n">TAPE 02</span>THE UNBREAKABLE BOND</a>
+    <a class="tile" href="https://birthday-qr-memory.onrender.com/memory/3"><span class="n">TAPE 03</span>COZY MEMORIES & CONFESSIONS</a>
+    <a class="tile" href="https://birthday-qr-memory.onrender.com/memory/4"><span class="n">TAPE 04</span>PURE JOY & SUNSHINE</a>
+    <a class="tile" href="https://birthday-qr-memory.onrender.com/memory/5"><span class="n">TAPE 05</span>ADVENTURE & WANDERLUST</a>
+    <a class="tile" href="https://birthday-qr-memory.onrender.com/memory/6"><span class="n">TAPE 06</span>GROWTH & RESILIENCE</a>
+    <a class="tile" href="https://birthday-qr-memory.onrender.com/memory/7"><span class="n">TAPE 07</span>SOUNDTRACK OF OUR LIVES</a>
+    <a class="tile" href="https://birthday-qr-memory.onrender.com/memory/8"><span class="n">TAPE 08</span>FOREVER & ALWAYS</a>
     </div>
-
-    <a href="m/1.html" class="live-app-btn" id="liveAppBtn">
-      ✨ Start Memory Experience (Tape 01)
-    </a>
-
-    <a href="kodak-print.html" class="live-app-btn" style="margin-top: 12px; background: linear-gradient(135deg, #f43f5e, #fb7185); border: 1px solid #fecdd3; box-shadow: 0 10px 25px rgba(244, 63, 94, 0.45);">
-      💖 Open 9×10.9 Scrapbook Photo Studio (300 DPI & 4K)
-    </a>
-
-    <p class="footer-note">
-      Permanent Hub for: <code>https://nandhish3004.github.io/birthday-qr-memory</code>
-    </p>
+    <div class="foot">
+      <a href="https://birthday-qr-memory.onrender.com/kodak-print.html">📸 View the Poster</a>
+      <a href="https://birthday-qr-memory.onrender.com/admin.html">🔐 Admin</a>
+    </div>
   </div>
-
-  <script>
-    async function init() {
-      try {
-        const res = await fetch('config.json?t=' + Date.now());
-        if (res.ok) {
-          const cfg = await res.json();
-          if (cfg && cfg.targetBaseUrl) {
-            document.getElementById('liveAppBtn').href = cfg.targetBaseUrl;
-          }
-        }
-      } catch (e) {}
-    }
-    init();
-  </script>
 </body>
 </html>
