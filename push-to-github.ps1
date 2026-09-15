@@ -29,7 +29,7 @@ Write-Host "3. Staging modified files..." -ForegroundColor Green
 git add -A
 
 Write-Host "4. Committing changes..." -ForegroundColor Green
-git commit -m "feat: Use composite scrapbook poster, disable duplicate QRs/avatars, enable Shaaaw photo studio"
+git commit -m "fix: Completely erase old baked-in Polaroid frames and render fresh 4K Polaroids with pink washi tape and cursive caption"
 
 Write-Host "5. Setting main branch & pushing to GitHub..." -ForegroundColor Green
 git branch -M main

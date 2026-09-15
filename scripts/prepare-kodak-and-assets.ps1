@@ -423,20 +423,142 @@ if ($posterSource) {
         $g.DrawImage($origBmp, $drawX, $drawY, $drawW, $drawH)
 
         # ----------------------------------------------------------------------
-        # COMPOSITE SHAAAW PHOTO INTO CENTER POLAROID (CALIBRATED -2.6° TILT)
+        # 🌟 STEP 1: COMPLETELY ERASE THE 7 OLD POLAROID FRAMES FROM BASE COLLAGE
         # ----------------------------------------------------------------------
+        $eraseBoxes = @(
+            @{ cx = 0.5050; cy = 0.3950; w = 0.410; h = 0.510; rot = -2.6 },
+            @{ cx = 0.2450; cy = 0.2480; w = 0.265; h = 0.330; rot = -6.5 },
+            @{ cx = 0.2280; cy = 0.4980; w = 0.265; h = 0.330; rot =  6.5 },
+            @{ cx = 0.3720; cy = 0.6420; w = 0.265; h = 0.330; rot = -3.6 },
+            @{ cx = 0.6260; cy = 0.6420; w = 0.265; h = 0.330; rot =  3.4 },
+            @{ cx = 0.7280; cy = 0.2520; w = 0.265; h = 0.330; rot =  6.2 },
+            @{ cx = 0.7560; cy = 0.4980; w = 0.265; h = 0.330; rot = -6.2 }
+        )
+
+        foreach ($eb in $eraseBoxes) {
+            $ecx = $drawX + [int]($drawW * $eb.cx)
+            $ecy = $drawY + [int]($drawH * $eb.cy)
+            $ew  = [int]($drawW * $eb.w)
+            $eh  = [int]($drawW * $eb.h)
+
+            $g.TranslateTransform($ecx, $ecy)
+            $g.RotateTransform($eb.rot)
+
+            $eraseBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 42, 22, 18))
+            $g.FillRectangle($eraseBrush, [int](-$ew / 2), [int](-$eh / 2), $ew, $eh)
+            $eraseBrush.Dispose()
+
+            $g.ResetTransform()
+        }
+        Write-Host "   ✅ Erased all 7 old Polaroid frames and placeholder cavities from collage!" -ForegroundColor Green
+
+        # ----------------------------------------------------------------------
+        # 🌟 STEP 2: RENDER 6 COMPANION NEW POLAROID FRAMES
+        # ----------------------------------------------------------------------
+        $companionConfigs = @(
+            @{ id = 1; cx = 0.2450; cy = 0.2480; rot = -6.5; label = "Top-Left";   tapeColor = [System.Drawing.Color]::FromArgb(216, 180, 226) },
+            @{ id = 2; cx = 0.2280; cy = 0.4980; rot =  6.5; label = "Mid-Left";   tapeColor = [System.Drawing.Color]::FromArgb(244, 114, 182) },
+            @{ id = 3; cx = 0.3720; cy = 0.6420; rot = -3.6; label = "Btm-Left";   tapeColor = [System.Drawing.Color]::FromArgb(254, 215, 170) },
+            @{ id = 4; cx = 0.6260; cy = 0.6420; rot =  3.4; label = "Btm-Right";  tapeColor = [System.Drawing.Color]::FromArgb(251, 207, 232) },
+            @{ id = 5; cx = 0.7280; cy = 0.2520; rot =  6.2; label = "Top-Right";  tapeColor = [System.Drawing.Color]::FromArgb(167, 243, 208) },
+            @{ id = 6; cx = 0.7560; cy = 0.4980; rot = -6.2; label = "Mid-Right";  tapeColor = [System.Drawing.Color]::FromArgb(254, 240, 138) }
+        )
+
+        foreach ($cc in $companionConfigs) {
+            $ccx = $drawX + [int]($drawW * $cc.cx)
+            $ccy = $drawY + [int]($drawH * $cc.cy)
+            $cw  = [int]($drawW * 0.2500)
+            $ch  = [int]($drawW * 0.3150)
+            $pw  = [int]($cw * 0.860)
+            $ph  = [int]($cw * 0.750)
+            $topM = [int]($ch * 0.065)
+            $py   = [int](-$ch / 2 + $topM)
+
+            $g.TranslateTransform($ccx, $ccy)
+            $g.RotateTransform($cc.rot)
+
+            # Card drop shadow
+            $cShadow = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(70, 20, 8, 14))
+            $g.FillRectangle($cShadow, [int](-$cw / 2 + 5), [int](-$ch / 2 + 7), $cw, $ch)
+            $cShadow.Dispose()
+
+            # Crisp Polaroid cardstock
+            $cCard = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(254, 253, 250))
+            $g.FillRectangle($cCard, [int](-$cw / 2), [int](-$ch / 2), $cw, $ch)
+            $cCard.Dispose()
+
+            # Paper edge
+            $cEdge = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(215, 205, 190), 1.5)
+            $g.DrawRectangle($cEdge, [int](-$cw / 2), [int](-$ch / 2), $cw, $ch)
+            $cEdge.Dispose()
+
+            # Placeholder photo cavity
+            $cPhotoBg = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(234, 227, 216))
+            $g.FillRectangle($cPhotoBg, [int](-$pw / 2), $py, $pw, $ph)
+            $cPhotoBg.Dispose()
+
+            # Cavity inner border
+            $cPhotoBorder = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(60, 35, 40, 50), 1.5)
+            $g.DrawRectangle($cPhotoBorder, [int](-$pw / 2), $py, $pw, $ph)
+            $cPhotoBorder.Dispose()
+
+            # Top pastel washi tape
+            $tapeW = [int]($cw * 0.50)
+            $tapeH = [int]($drawW * 0.030)
+            $tapeBrush = New-Object System.Drawing.SolidBrush($cc.tapeColor)
+            $g.FillRectangle($tapeBrush, [int](-$tapeW / 2), [int](-$ch / 2 - $tapeH / 2), $tapeW, $tapeH)
+            $tapeBrush.Dispose()
+
+            # Bottom cursive label
+            try {
+                $lblFont = New-Object System.Drawing.Font("Segoe Script", 14, [System.Drawing.FontStyle]::Bold)
+                $lblBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(74, 56, 67))
+                $sf = New-Object System.Drawing.StringFormat
+                $sf.Alignment = [System.Drawing.StringAlignment]::Center
+                $sf.LineAlignment = [System.Drawing.StringAlignment]::Center
+                $chinY = $py + $ph + [int](($ch / 2 - ($py + $ph)) / 2)
+                $g.DrawString($cc.label, $lblFont, $lblBrush, 0, $chinY, $sf)
+                $lblFont.Dispose(); $lblBrush.Dispose(); $sf.Dispose()
+            } catch {}
+
+            $g.ResetTransform()
+        }
+
+        # ----------------------------------------------------------------------
+        # 🌟 STEP 3: RENDER BRAND NEW CENTER MAIN POLAROID (SHAAAW)
+        # ----------------------------------------------------------------------
+        $centerX = $drawX + [int]($drawW * 0.5050)
+        $centerY = $drawY + [int]($drawH * 0.3950)
+        $cardW   = [int]($drawW * 0.3950)
+        $cardH   = [int]($drawW * 0.4950)
+        $photoW  = [int]($cardW * 0.880)
+        $photoH  = [int]($cardW * 0.770)
+        $topMargin = [int]($cardH * 0.055)
+        $photoTop  = [int](-$cardH / 2 + $topMargin)
+
+        $g.TranslateTransform($centerX, $centerY)
+        $g.RotateTransform(-2.6)
+
+        # 1. Realistic Drop Shadow
+        $shadowBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(90, 20, 8, 14))
+        $g.FillRectangle($shadowBrush, [int](-$cardW / 2 + 6), [int](-$cardH / 2 + 10), $cardW, $cardH)
+        $shadowBrush.Dispose()
+
+        # 2. Crisp Polaroid Cardstock Base
+        $cardBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(254, 253, 250))
+        $g.FillRectangle($cardBrush, [int](-$cardW / 2), [int](-$cardH / 2), $cardW, $cardH)
+        $cardBrush.Dispose()
+
+        $cardBorder = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(215, 205, 190), 2.0)
+        $g.DrawRectangle($cardBorder, [int](-$cardW / 2), [int](-$cardH / 2), $cardW, $cardH)
+        $cardBorder.Dispose()
+
+        # 3. Shaaaw's Photo Recessed Inside Polaroid Aperture
         if ($shaawSource -and (Test-Path $shaawSource)) {
             try {
                 $shaawBmp = [System.Drawing.Bitmap]::FromFile($shaawSource)
-                
-                # Geometric center of inner Polaroid opening in original poster
-                $centerX = $drawX + [int]($drawW * 0.5055)
-                $centerY = $drawY + [int]($drawH * 0.3555)
-                $pw = [int]($drawW * 0.3220)
-                $ph = [int]($drawW * 0.3280)
 
-                # Focus crop on Shaaaw's face & smile (18% vertical pan, 1.05x zoom)
-                $destAspect = [double]$pw / [double]$ph
+                $destAspect = [double]$photoW / [double]$photoH
                 $baseW = $shaawBmp.Width
                 $baseH = [int]($shaawBmp.Width / $destAspect)
                 $cropW = [int]($baseW / 1.05)
@@ -448,26 +570,55 @@ if ($posterSource) {
                 if ($srcX + $cropW -gt $shaawBmp.Width) { $cropW = $shaawBmp.Width - $srcX }
                 if ($srcY + $cropH -gt $shaawBmp.Height) { $cropH = $shaawBmp.Height - $srcY }
 
-                # Apply exact -2.6 degree rotation transform so photo aligns with Polaroid
-                $g.TranslateTransform($centerX, $centerY)
-                $g.RotateTransform(-2.6)
-
-                $destRect = New-Object System.Drawing.Rectangle([int](-$pw / 2), [int](-$ph / 2), $pw, $ph)
+                $destRect = New-Object System.Drawing.Rectangle([int](-$photoW / 2), $photoTop, $photoW, $photoH)
                 $g.DrawImage($shaawBmp, $destRect, $srcX, $srcY, $cropW, $cropH, [System.Drawing.GraphicsUnit]::Pixel)
 
-                # Delicate authentic polaroid inner photo border
-                $innerPhotoPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(50, 40, 30, 20), 2.0)
-                $g.DrawRectangle($innerPhotoPen, [int](-$pw / 2), [int](-$ph / 2), $pw, $ph)
-                $innerPhotoPen.Dispose()
-
-                $g.ResetTransform()
-
                 $shaawBmp.Dispose()
-                Write-Host "   ✅ Beautifully fitted Shaaaw into Center Polaroid with -2.6° tilt alignment!" -ForegroundColor Green
+                Write-Host "   ✅ Beautifully inserted Shaaaw's photo inside the new Polaroid frame aperture!" -ForegroundColor Green
             } catch {
-                Write-Host "   ⚠️ Could not composite Shaaaw photo: $($_.Exception.Message)" -ForegroundColor Yellow
+                Write-Host "   ⚠️ Photo composite notice: $($_.Exception.Message)" -ForegroundColor Yellow
             }
         }
+
+        # 4. Polaroid Frame Bezel (Sits ON TOP of photo edges)
+        $innerPhotoPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(60, 35, 40, 60), 2.5)
+        $g.DrawRectangle($innerPhotoPen, [int](-$photoW / 2), $photoTop, $photoW, $photoH)
+        $innerPhotoPen.Dispose()
+
+        # 5. Top Pink Gingham Washi Tape (ON TOP of frame & photo)
+        $tapeW = [int]($cardW * 0.65)
+        $tapeH = [int]($drawW * 0.044)
+        $tapeBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(244, 114, 182))
+        $g.FillRectangle($tapeBrush, [int](-$tapeW / 2), [int](-$cardH / 2 - $tapeH / 2), $tapeW, $tapeH)
+        $tapeBrush.Dispose()
+
+        # 6. Bottom Chin Handwritten Text: "You Make Everything More Fun ♡"
+        $chinCenterY = $photoTop + $photoH + [int](($cardH / 2 - ($photoTop + $photoH)) / 2)
+        try {
+            $fontCandidates = @("Caveat", "Segoe Script", "Comic Sans MS", "Arial")
+            $captionFont = $null
+            foreach ($fn in $fontCandidates) {
+                try {
+                    $captionFont = New-Object System.Drawing.Font($fn, 20, [System.Drawing.FontStyle]::Bold)
+                    break
+                } catch {}
+            }
+            if ($captionFont) {
+                $captionBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(38, 26, 34))
+                $sf = New-Object System.Drawing.StringFormat
+                $sf.Alignment = [System.Drawing.StringAlignment]::Center
+                $sf.LineAlignment = [System.Drawing.StringAlignment]::Center
+                $g.DrawString("You Make Everything More Fun ♡", $captionFont, $captionBrush, 0, $chinCenterY, $sf)
+                $captionFont.Dispose(); $captionBrush.Dispose(); $sf.Dispose()
+            }
+        } catch {}
+
+        # 7. Cute Pink Heart Stickers on Right
+        $heartBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(236, 72, 153))
+        $g.FillEllipse($heartBrush, [int]($cardW * 0.33), [int]($chinCenterY - 14), 28, 28)
+        $heartBrush.Dispose()
+
+        $g.ResetTransform()
 
         # ----------------------------------------------------------------------
         # NOTE: Embedded QR Codes are 100% untouched and preserved directly

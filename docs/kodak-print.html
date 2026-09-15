@@ -1009,13 +1009,13 @@
     // More Fun ♡" text, stickers, and QR codes) is rendered ON TOP of the photos.
     // Photos sit UNDER the frame, bleeding slightly behind the white borders.
     const FRAME_CONFIGS = [
-      { id: 0, title: "🌟 Center Main Polaroid (Shaaaw)", cxPct: 0.5050, cyPct: 0.3400, wPct: 0.2680, hPct: 0.2220, rotDeg: -2.6, panX: 0.00, panY: 0.18, zoom: 1.05, scale: 1.00, isMain: true,  label: "Shaaaw 💖", icon: "🌟" },
-      { id: 1, title: "🖼️ Top-Left Polaroid (Frame 1)",   cxPct: 0.2450, cyPct: 0.2450, wPct: 0.1740, hPct: 0.1460, rotDeg:  5.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Left",   icon: "🖼️" },
-      { id: 2, title: "🦋 Mid-Left Polaroid (Frame 2)",    cxPct: 0.2280, cyPct: 0.4950, wPct: 0.1740, hPct: 0.1460, rotDeg: -6.0, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Left",   icon: "🦋" },
-      { id: 3, title: "🎀 Bottom-Left Polaroid (Frame 3)", cxPct: 0.3720, cyPct: 0.6420, wPct: 0.1740, hPct: 0.1460, rotDeg: -3.6, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Left",   icon: "🎀" },
-      { id: 4, title: "🎀 Bottom-Right Polaroid (Frame 4)",cxPct: 0.6260, cyPct: 0.6420, wPct: 0.1740, hPct: 0.1460, rotDeg:  3.4, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Right",  icon: "🎀" },
-      { id: 5, title: "🏰 Top-Right Polaroid (Frame 5)",  cxPct: 0.7280, cyPct: 0.2520, wPct: 0.1740, hPct: 0.1460, rotDeg: -5.6, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Right",  icon: "🏰" },
-      { id: 6, title: "✨ Mid-Right Polaroid (Frame 6)",   cxPct: 0.7560, cyPct: 0.4960, wPct: 0.1740, hPct: 0.1460, rotDeg:  5.8, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Right",  icon: "✨" }
+      { id: 0, title: "🌟 Center Main Polaroid (Shaaaw)", cxPct: 0.5050, cyPct: 0.3950, wPct: 0.3480, hPct: 0.3040, rotDeg: -2.6, panX: 0.00, panY: 0.18, zoom: 1.05, scale: 1.00, isMain: true,  label: "Shaaaw 💖", icon: "🌟" },
+      { id: 1, title: "🖼️ Top-Left Polaroid (Frame 1)",   cxPct: 0.2450, cyPct: 0.2480, wPct: 0.2150, hPct: 0.1880, rotDeg: -6.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Left",   icon: "🖼️" },
+      { id: 2, title: "🦋 Mid-Left Polaroid (Frame 2)",    cxPct: 0.2280, cyPct: 0.4980, wPct: 0.2150, hPct: 0.1880, rotDeg:  6.5, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Left",   icon: "🦋" },
+      { id: 3, title: "🎀 Bottom-Left Polaroid (Frame 3)", cxPct: 0.3720, cyPct: 0.6420, wPct: 0.2150, hPct: 0.1880, rotDeg: -3.6, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Left",   icon: "🎀" },
+      { id: 4, title: "🎀 Bottom-Right Polaroid (Frame 4)",cxPct: 0.6260, cyPct: 0.6420, wPct: 0.2150, hPct: 0.1880, rotDeg:  3.4, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Btm-Right",  icon: "🎀" },
+      { id: 5, title: "🏰 Top-Right Polaroid (Frame 5)",  cxPct: 0.7280, cyPct: 0.2520, wPct: 0.2150, hPct: 0.1880, rotDeg:  6.2, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Top-Right",  icon: "🏰" },
+      { id: 6, title: "✨ Mid-Right Polaroid (Frame 6)",   cxPct: 0.7560, cyPct: 0.4980, wPct: 0.2150, hPct: 0.1880, rotDeg: -6.2, panX: 0.00, panY: 0.50, zoom: 1.00, scale: 1.00, isMain: false, label: "Mid-Right",  icon: "✨" }
     ];
 
     const frameStates = JSON.parse(JSON.stringify(FRAME_CONFIGS));
@@ -1334,9 +1334,80 @@
     }
 
     /**
-     * Renders a brand-new, ultra-sharp 4K Polaroid Frame over the old frame location.
-     * Guaranteed to perfectly fit the photo into the aperture, with paper borders,
-     * washi tape, and cute handwritten caption sitting ON TOP of the photo!
+     * 🌟 COMPLETE FRAME ERASURE PASS
+     * Completely removes and erases all 7 old baked-in Polaroid frames,
+     * grey placeholder cavities, old tape, and old text from the poster artwork!
+     * Ensures ZERO trace of the old frames can peek through under any angle or scale.
+     */
+    function eraseOldPosterFrames(targetCtx, drawX, drawY, drawW, drawH) {
+      targetCtx.save();
+
+      // Precise bounding boxes of the 7 old baked-in polaroid frames on the poster
+      const eraseRegions = [
+        // Center Main Polaroid
+        { cxPct: 0.5050, cyPct: 0.3950, w: drawW * 0.410, h: drawW * 0.510, rot: -2.6, dark: true },
+        // Top-Left Frame 1
+        { cxPct: 0.2450, cyPct: 0.2480, w: drawW * 0.265, h: drawW * 0.330, rot: -6.5, dark: false },
+        // Mid-Left Frame 2
+        { cxPct: 0.2280, cyPct: 0.4980, w: drawW * 0.265, h: drawW * 0.330, rot:  6.5, dark: true },
+        // Bottom-Left Frame 3
+        { cxPct: 0.3720, cyPct: 0.6420, w: drawW * 0.265, h: drawW * 0.330, rot: -3.6, dark: true },
+        // Bottom-Right Frame 4
+        { cxPct: 0.6260, cyPct: 0.6420, w: drawW * 0.265, h: drawW * 0.330, rot:  3.4, dark: true },
+        // Top-Right Frame 5
+        { cxPct: 0.7280, cyPct: 0.2520, w: drawW * 0.265, h: drawW * 0.330, rot:  6.2, dark: false },
+        // Mid-Right Frame 6
+        { cxPct: 0.7560, cyPct: 0.4980, w: drawW * 0.265, h: drawW * 0.330, rot: -6.2, dark: true }
+      ];
+
+      eraseRegions.forEach((reg, idx) => {
+        const cx = drawX + reg.cxPct * drawW;
+        const cy = drawY + reg.cyPct * drawH;
+
+        targetCtx.save();
+        targetCtx.translate(cx, cy);
+        targetCtx.rotate(reg.rot * Math.PI / 180);
+
+        // Fill with deep archival floral/cork backing blend that dissolves the old frames
+        const bgGrad = targetCtx.createRadialGradient(0, 0, reg.w * 0.15, 0, 0, reg.w * 0.65);
+        if (idx === 0) {
+          bgGrad.addColorStop(0, '#2e1814');
+          bgGrad.addColorStop(0.5, '#3b201a');
+          bgGrad.addColorStop(1, '#23120f');
+        } else if (idx === 1 || idx === 5) {
+          bgGrad.addColorStop(0, '#35211b');
+          bgGrad.addColorStop(0.6, '#281714');
+          bgGrad.addColorStop(1, '#1e100d');
+        } else {
+          bgGrad.addColorStop(0, '#321d18');
+          bgGrad.addColorStop(0.6, '#261411');
+          bgGrad.addColorStop(1, '#1b0d0b');
+        }
+
+        targetCtx.fillStyle = bgGrad;
+        drawRoundedRect(targetCtx, -reg.w / 2, -reg.h / 2, reg.w, reg.h, 14);
+        targetCtx.fill();
+
+        // Subtle floral speckle texture overlay matching scrapbook background
+        targetCtx.strokeStyle = 'rgba(235, 215, 195, 0.05)';
+        targetCtx.lineWidth = 2;
+        for (let s = -reg.w / 2; s < reg.w / 2; s += 28) {
+          targetCtx.beginPath();
+          targetCtx.moveTo(s, -reg.h / 2);
+          targetCtx.lineTo(s + reg.h * 0.5, reg.h / 2);
+          targetCtx.stroke();
+        }
+
+        targetCtx.restore();
+      });
+
+      targetCtx.restore();
+    }
+
+    /**
+     * 🌟 Renders brand-new, ultra-sharp 4K Polaroid Frames over the erased frame locations.
+     * Guaranteed to perfectly fit the photo into the aperture, with Polaroid paper borders,
+     * authentic pink gingham washi tape, and cute handwritten caption sitting ON TOP of the photo!
      */
     function drawNewPolaroidFrame(targetCtx, cfg, photo, drawW, drawH, drawX, drawY) {
       const isMain = cfg.id === 0;
@@ -1347,15 +1418,15 @@
       const cx = drawX + Math.round(drawW * cfg.cxPct);
       const cy = drawY + Math.round(drawH * cfg.cyPct);
 
-      // Polaroid Card Outer Dimensions (sized to 100% cover the old frame underneath)
-      const cardW = Math.round(drawW * (isMain ? 0.3220 : 0.2080) * scale);
-      const cardH = Math.round(drawW * (isMain ? 0.3840 : 0.2540) * scale);
-      const cornerR = Math.round(drawW * (isMain ? 0.007 : 0.005));
+      // Polaroid Card Outer Dimensions (sized generously to completely cover and replace old frames)
+      const cardW = Math.round(drawW * (isMain ? 0.3950 : 0.2500) * scale);
+      const cardH = Math.round(drawW * (isMain ? 0.4950 : 0.3150) * scale);
+      const cornerR = Math.round(drawW * (isMain ? 0.008 : 0.006));
 
       // Inner Photo Aperture Dimensions
-      const photoW = Math.round(drawW * (isMain ? 0.2740 : 0.1760) * scale);
-      const photoH = Math.round(drawW * (isMain ? 0.2300 : 0.1500) * scale);
-      const topMargin = Math.round(drawW * (isMain ? 0.0240 : 0.0160) * scale);
+      const photoW = Math.round(cardW * (isMain ? 0.880 : 0.860));
+      const photoH = Math.round(cardW * (isMain ? 0.770 : 0.750));
+      const topMargin = Math.round(cardH * (isMain ? 0.055 : 0.065));
       const photoY = -cardH / 2 + topMargin + photoH / 2;
 
       targetCtx.save();
@@ -1364,27 +1435,27 @@
 
       // -------------------------------------------------------------
       // STEP 1: REALISTIC POLAROID CARD DROP SHADOW & PAPER BASE
-      // (Completely covers old polaroid frame from the background image)
+      // (Completely replaces and hides any old frame underneath)
       // -------------------------------------------------------------
       targetCtx.save();
-      targetCtx.shadowColor = 'rgba(25, 12, 18, 0.35)';
-      targetCtx.shadowBlur = Math.round(drawW * (isMain ? 0.016 : 0.012));
-      targetCtx.shadowOffsetX = Math.round(drawW * (rot > 0 ? 0.003 : -0.003));
-      targetCtx.shadowOffsetY = Math.round(drawW * 0.007);
+      targetCtx.shadowColor = 'rgba(20, 8, 14, 0.42)';
+      targetCtx.shadowBlur = Math.round(drawW * (isMain ? 0.022 : 0.016));
+      targetCtx.shadowOffsetX = Math.round(drawW * (rot > 0 ? 0.004 : -0.004));
+      targetCtx.shadowOffsetY = Math.round(drawW * 0.009);
 
       const cardGrad = targetCtx.createLinearGradient(0, -cardH / 2, 0, cardH / 2);
       cardGrad.addColorStop(0, '#fefdfa');
-      cardGrad.addColorStop(0.7, '#fdfbf7');
-      cardGrad.addColorStop(1, '#f6f1e7');
+      cardGrad.addColorStop(0.65, '#fdfbf6');
+      cardGrad.addColorStop(1, '#f6f0e4');
       targetCtx.fillStyle = cardGrad;
 
       drawRoundedRect(targetCtx, -cardW / 2, -cardH / 2, cardW, cardH, cornerR);
       targetCtx.fill();
       targetCtx.restore();
 
-      // Subtle paper edge border
-      targetCtx.strokeStyle = 'rgba(220, 210, 195, 0.7)';
-      targetCtx.lineWidth = Math.max(1, Math.round(drawW * 0.0008));
+      // Delicate cardstock bevel & paper edge
+      targetCtx.strokeStyle = 'rgba(215, 205, 190, 0.85)';
+      targetCtx.lineWidth = Math.max(1.5, Math.round(drawW * 0.0010));
       drawRoundedRect(targetCtx, -cardW / 2, -cardH / 2, cardW, cardH, cornerR);
       targetCtx.stroke();
 
@@ -1393,7 +1464,7 @@
       // -------------------------------------------------------------
       const photoX = -photoW / 2;
       const photoTop = photoY - photoH / 2;
-      const photoR = Math.round(drawW * 0.002);
+      const photoR = Math.round(drawW * 0.003);
 
       targetCtx.save();
       drawRoundedRect(targetCtx, photoX, photoTop, photoW, photoH, photoR);
@@ -1424,16 +1495,16 @@
         }
 
         targetCtx.fillStyle = '#8c7d75';
-        targetCtx.font = `bold ${Math.round(drawW * (isMain ? 0.014 : 0.010))}px sans-serif`;
+        targetCtx.font = `bold ${Math.round(drawW * (isMain ? 0.015 : 0.011))}px sans-serif`;
         targetCtx.textAlign = 'center';
         targetCtx.textBaseline = 'middle';
         targetCtx.fillText(isMain ? "📷 Click to Insert Shaaaw's Photo" : `📷 ${cfg.label}`, 0, photoY);
       }
       targetCtx.restore();
 
-      // Subtle photo paper bevel border (recess edge)
-      targetCtx.strokeStyle = 'rgba(50, 30, 35, 0.20)';
-      targetCtx.lineWidth = Math.max(1, Math.round(drawW * 0.0009));
+      // Crisp inner aperture paper bevel (photo is recessed inside the frame)
+      targetCtx.strokeStyle = 'rgba(60, 35, 40, 0.28)';
+      targetCtx.lineWidth = Math.max(1.5, Math.round(drawW * 0.0012));
       drawRoundedRect(targetCtx, photoX, photoTop, photoW, photoH, photoR);
       targetCtx.stroke();
 
@@ -1444,23 +1515,23 @@
 
       if (showEmbellishments) {
         if (isMain) {
-          // A. Top Pink Gingham Washi Tape
-          drawGinghamTape(targetCtx, 0, -cardH / 2, Math.round(cardW * 0.62), Math.round(drawW * 0.040));
+          // A. Top Pink Gingham Washi Tape (ON TOP of card & photo)
+          drawGinghamTape(targetCtx, 0, -cardH / 2, Math.round(cardW * 0.65), Math.round(drawW * 0.044));
 
           // B. Bottom Chin Handwritten Text: "You Make Everything More Fun ♡"
           const chinCenterY = photoTop + photoH + (cardH / 2 - (photoTop + photoH)) / 2;
 
           // Smiley face on left
-          const smileX = -cardW * 0.35;
-          drawHandDrawnSmiley(targetCtx, smileX, chinCenterY, Math.round(drawW * 0.013));
+          const smileX = -cardW * 0.34;
+          drawHandDrawnSmiley(targetCtx, smileX, chinCenterY, Math.round(drawW * 0.015));
 
-          // Caption text in handwritten font
+          // Caption text in handwritten cursive font
           const captionInput = document.getElementById('inputCenterCaption');
           const captionText = (captionInput && captionInput.value.trim()) ? captionInput.value.trim() : "You Make Everything More Fun ♡";
 
           targetCtx.save();
           targetCtx.fillStyle = '#261a22';
-          targetCtx.font = `700 ${Math.round(drawW * 0.0165)}px 'Caveat', 'Patrick Hand', cursive, sans-serif`;
+          targetCtx.font = `700 ${Math.round(drawW * 0.019)}px 'Caveat', 'Patrick Hand', cursive, sans-serif`;
           targetCtx.textAlign = 'center';
           targetCtx.textBaseline = 'middle';
           targetCtx.translate(Math.round(cardW * 0.02), chinCenterY - Math.round(drawW * 0.002));
@@ -1469,18 +1540,18 @@
           targetCtx.restore();
 
           // C. Cute Layered Pink Heart Stickers on right
-          const heartX = cardW * 0.36;
-          drawCuteHeartSticker(targetCtx, heartX, chinCenterY + Math.round(drawW * 0.004), Math.round(drawW * 0.022), -0.18);
-          drawCuteHeartSticker(targetCtx, heartX - Math.round(drawW * 0.022), chinCenterY - Math.round(drawW * 0.006), Math.round(drawW * 0.013), 0.22);
+          const heartX = cardW * 0.35;
+          drawCuteHeartSticker(targetCtx, heartX, chinCenterY + Math.round(drawW * 0.004), Math.round(drawW * 0.026), -0.16);
+          drawCuteHeartSticker(targetCtx, heartX - Math.round(drawW * 0.025), chinCenterY - Math.round(drawW * 0.007), Math.round(drawW * 0.015), 0.22);
         } else {
-          // Companion Polaroids: Washi tape at top
+          // Companion Polaroids: Washi tape at top (ON TOP of card & photo)
           const tapeColors = ['', '#d8b4e2', '#f472b6', '#fed7aa', '#fbcfe8', '#a7f3d0', '#fef08a'];
-          drawCornerTape(targetCtx, 0, -cardH / 2, Math.round(cardW * 0.46), Math.round(drawW * 0.028), tapeColors[cfg.id] || '#f472b6');
+          drawCornerTape(targetCtx, 0, -cardH / 2, Math.round(cardW * 0.50), Math.round(drawW * 0.030), tapeColors[cfg.id] || '#f472b6');
 
           // Bottom label
           const chinCenterY = photoTop + photoH + (cardH / 2 - (photoTop + photoH)) / 2;
           targetCtx.fillStyle = '#4a3843';
-          targetCtx.font = `600 ${Math.round(drawW * 0.010)}px 'Caveat', 'Patrick Hand', cursive, sans-serif`;
+          targetCtx.font = `700 ${Math.round(drawW * 0.012)}px 'Caveat', 'Patrick Hand', cursive, sans-serif`;
           targetCtx.textAlign = 'center';
           targetCtx.textBaseline = 'middle';
           targetCtx.fillText(`✨ ${cfg.label} ♡`, 0, chinCenterY);
@@ -1618,7 +1689,13 @@
       currentDrawMetrics = { drawX, drawY, drawW, drawH };
 
       // ====================================================================
-      // 🌟 RENDER THE 7 NEW POLAROID FRAMES (PERFECT FIT & COVERS OLD FRAMES)
+      // 🌟 STEP 1: COMPLETELY ERASE THE 7 OLD POLAROID FRAMES FROM POSTER
+      // ====================================================================
+      // Eliminates the old baked-in grey cavities, borders, old tape & text!
+      eraseOldPosterFrames(ctx, drawX, drawY, drawW, drawH);
+
+      // ====================================================================
+      // 🌟 STEP 2: RENDER THE 7 BRAND-NEW 4K POLAROID FRAMES OVER ERASURES
       // ====================================================================
       // Note: All 8 QR codes on sourceImage are preserved 100% untouched.
       frameStates.forEach(cfg => {
@@ -1854,8 +1931,8 @@
         const isMain = cfg.id === 0;
         const cx = drawX + Math.round(drawW * cfg.cxPct);
         const cy = drawY + Math.round(drawH * cfg.cyPct);
-        const cardW = Math.round(drawW * (isMain ? 0.3220 : 0.2080) * (cfg.scale || 1.0));
-        const cardH = Math.round(drawW * (isMain ? 0.3840 : 0.2540) * (cfg.scale || 1.0));
+        const cardW = Math.round(drawW * (isMain ? 0.3950 : 0.2500) * (cfg.scale || 1.0));
+        const cardH = Math.round(drawW * (isMain ? 0.4950 : 0.3150) * (cfg.scale || 1.0));
         const rad = -cfg.rotDeg * Math.PI / 180;
 
         const dx = clickX - cx;
@@ -1910,8 +1987,8 @@
           const isMain = cfg.id === 0;
           const cx = drawX + Math.round(drawW * cfg.cxPct);
           const cy = drawY + Math.round(drawH * cfg.cyPct);
-          const cardW = Math.round(drawW * (isMain ? 0.3220 : 0.2080) * (cfg.scale || 1.0));
-          const cardH = Math.round(drawW * (isMain ? 0.3840 : 0.2540) * (cfg.scale || 1.0));
+          const cardW = Math.round(drawW * (isMain ? 0.3950 : 0.2500) * (cfg.scale || 1.0));
+          const cardH = Math.round(drawW * (isMain ? 0.4950 : 0.3150) * (cfg.scale || 1.0));
           const rad = -cfg.rotDeg * Math.PI / 180;
 
           const dx = dropX - cx;
