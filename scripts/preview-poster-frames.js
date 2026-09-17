@@ -28,13 +28,25 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const Jimp = require('jimp');
+let Jimp;
+try { Jimp = require('jimp'); }
+catch {
+  console.error('\n✗ The "jimp" image library is not installed.');
+  console.error('  Run:  npm install\n');
+  process.exit(1);
+}
 
 const argv = process.argv.slice(2);
 const positional = argv.filter(a => !a.startsWith('--'));
 const [templatePath, boxesPath] = positional;
 if (!templatePath || !boxesPath) {
   console.error('Usage: node scripts/preview-poster-frames.js <template> <boxes.json> [--scale=2] [--solid]');
+  process.exit(1);
+}
+if (!fs.existsSync(boxesPath)) {
+  console.error(`\n✗ Calibration file not found: ${boxesPath}`);
+  console.error('  It is generated, not committed. Create it first:');
+  console.error('    npm run poster:calibrate\n');
   process.exit(1);
 }
 const flag = (n, d) => {

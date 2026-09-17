@@ -38,7 +38,13 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const Jimp = require('jimp');
+let Jimp;
+try { Jimp = require('jimp'); }
+catch {
+  console.error('\n✗ The "jimp" image library is not installed.');
+  console.error('  Run:  npm install\n');
+  process.exit(1);
+}
 
 /* ----------------------------- args ---------------------------------- */
 const argv = process.argv.slice(2);

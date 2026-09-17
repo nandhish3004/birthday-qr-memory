@@ -157,8 +157,12 @@ Frame positions aren't eyeballed — they're **measured from the artwork**:
 ```bash
 npm run poster:calibrate   # find the 10 panels, dump exact geometry
 npm run poster:preview     # composite test photos, prove zero spill
-npm run poster:check       # verify the page + smoke-test it
+npm run poster:check       # calibrate, verify the page, then smoke-test it
 ```
+
+`poster:check` regenerates the calibration first, so it works on a fresh clone
+with no generated files present. `poster:preview` expects `poster:calibrate`
+to have been run already.
 
 `calibrate` fits an exact oriented bounding box (convex hull + rotating calipers)
 to each panel, so tilted frames are measured as tilted rather than approximated

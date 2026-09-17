@@ -26,11 +26,23 @@
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
-const Jimp = require('jimp');
+let Jimp;
+try { Jimp = require('jimp'); }
+catch {
+  console.error('\n✗ The "jimp" image library is not installed.');
+  console.error('  Run:  npm install\n');
+  process.exit(1);
+}
 
 const [htmlPath, templatePath, calibPath] = process.argv.slice(2);
 if (!htmlPath || !templatePath || !calibPath) {
   console.error('Usage: node scripts/verify-poster-studio.js <studio.html> <template.jpg> <calibration.json>');
+  process.exit(1);
+}
+if (!fs.existsSync(calibPath)) {
+  console.error(`\n✗ Calibration file not found: ${calibPath}`);
+  console.error('  It is generated, not committed. Create it first:');
+  console.error('    npm run poster:calibrate\n');
   process.exit(1);
 }
 

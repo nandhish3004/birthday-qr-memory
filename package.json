@@ -14,7 +14,7 @@
     "poster:preview": "node scripts/preview-poster-frames.js public/assets/poster-v4/template.jpg public/assets/poster-v4/template-boxes.json --scale=2 --out=poster-preview.png",
     "poster:verify": "node scripts/verify-poster-studio.js public/poster-v4.html public/assets/poster-v4/template.jpg public/assets/poster-v4/template-boxes.json",
     "poster:test": "node scripts/test-poster-studio.js public/poster-v4.html",
-    "poster:check": "npm run poster:verify && npm run poster:test"
+    "poster:check": "npm run poster:calibrate --silent && npm run poster:verify --silent && npm run poster:test --silent"
   },
   "keywords": [
     "birthday",
