@@ -5,3 +5,7 @@ uploads/*
 data/*.tmp
 .DS_Store
 Thumbs.db
+
+# Poster auto-calibration output (generated proof overlays + geometry dumps)
+*-detected.png
+*-boxes.json
