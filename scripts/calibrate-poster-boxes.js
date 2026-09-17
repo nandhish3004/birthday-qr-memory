@@ -19,8 +19,12 @@
  *
  *   --dark           panels are darker than the artwork   (default: auto)
  *   --light          panels are LIGHTER than the artwork (white polaroids)
- *   --inset=<pct>    shrink each panel by this % of the poster on every side
- *                    so no dark frame edge peeks out. Default 0.35
+ *   --expand=<pct>   grow each panel by this % of the poster on every side.
+ *                    Default 0.25 — the frame must be marginally LARGER than
+ *                    the dark panel, otherwise a black ring of leftover panel
+ *                    shows around every photo. The overhang lands on the
+ *                    frame's decorative border, where it is invisible.
+ *   --inset=<pct>    shrink instead of grow (rarely wanted; left for testing)
  *   --min-area=<pct> ignore blobs smaller than this % of the poster. Default 0.4
  *   --aspect=<lo-hi> accept panels whose w/h is inside range. Default 0.45-2.3
  *   --json           machine-readable output only
@@ -45,7 +49,9 @@ const flag = (name, dflt) => {
   return hit ? Number(hit.split('=')[1]) : dflt;
 };
 const has = n => argv.includes('--' + n);
-const INSET = flag('inset', 0.35);                 // % of poster
+// Positive = grow the frame beyond the panel (covers the panel completely).
+// Negative = shrink it (leaves a ring of the panel showing — usually a bug).
+const INSET = flag('inset', null) !== null ? -flag('inset', 0.35) : flag('expand', 0.25);
 const MIN_AREA_PCT = flag('min-area', 0.4);        // % of poster
 const MIN_FILL = flag('min-fill', 0.72);           // solidity in the ROTATED frame
 const aspectArg = (argv.find(a => a.startsWith('--aspect=')) || '').split('=')[1] || '0.45-2.3';
@@ -98,29 +104,30 @@ Jimp.read(abs).then(async img => {
     aspect: +(W / H).toFixed(4),
     mode: pick,
     candidates: { dark: results.dark.length, light: results.light.length },
-    insetPct: INSET,
+    expandPct: INSET,
     frameCount: ordered.length,
     frames: ordered.map((b, i) => {
       const wP = (b.w / W) * 100, hP = (b.h / H) * 100;
       const xP = (b.cx / W) * 100, yP = (b.cy / H) * 100;
-      const iw = Math.max(wP - INSET * 2, 0.5);
-      const ih = Math.max(hP - INSET * 2, 0.5);
+      // 'frame' is the rect the studio should fill with a photo: the panel
+      // grown by INSET on every side, so the panel is fully covered.
+      const fw = Math.max(wP + INSET * 2, 0.5);
+      const fh = Math.max(hP + INSET * 2, 0.5);
       return {
         id: `photo-${i + 1}`,
-        center: { x: r3(xP), y: r3(yP), w: r3(wP), h: r3(hP) },
-        topLeft: { x: r3(xP - wP / 2), y: r3(yP - hP / 2), w: r3(wP), h: r3(hP) },
-        inset: { x: r3(xP), y: r3(yP), w: r3(iw), h: r3(ih) },
+        panel: { x: r3(xP), y: r3(yP), w: r3(wP), h: r3(hP) },   // exact artwork
+        frame: { x: r3(xP), y: r3(yP), w: r3(fw), h: r3(fh) },   // use this
         rot: r3(b.rot),
         px: { x: Math.round(b.minX), y: Math.round(b.minY), w: Math.round(b.w), h: Math.round(b.h) },
         fill: +b.fill.toFixed(3),
-        aspect: +(b.w / b.h).toFixed(3),
+        panelAspect: +(b.w / b.h).toFixed(3),
       };
     }),
   };
 
   /* ---------------------- paste-ready snippet ----------------------- */
   out.positionsSnippet = '{\n' + out.frames
-    .map(f => `    '${f.id}': {x:${f.inset.x}, y:${f.inset.y}, w:${f.inset.w}, h:${f.inset.h}, rot:${f.rot}},`)
+    .map(f => `    '${f.id}': {x:${f.frame.x}, y:${f.frame.y}, w:${f.frame.w}, h:${f.frame.h}, rot:${f.rot}},`)
     .join('\n') + '\n  }';
 
   /* ------------------------- proof overlay -------------------------- */
@@ -131,7 +138,7 @@ Jimp.read(abs).then(async img => {
   const GREEN = Jimp.rgbaToInt(0, 220, 120, 255);
   for (const b of ordered) {
     strokeOBB(proof, b, RED, 4);                                    // detected panel
-    strokeOBB(proof, { ...b, w: b.w - 2 * INSET * W / 100, h: b.h - 2 * INSET * H / 100 }, GREEN, 2); // photo area
+    strokeOBB(proof, { ...b, w: b.w + 2 * INSET * W / 100, h: b.h + 2 * INSET * H / 100 }, GREEN, 2); // photo frame
   }
   await proof.writeAsync(proofPath);
 
@@ -146,16 +153,17 @@ Jimp.read(abs).then(async img => {
 
   console.log(`\n📐 ${out.image}   ${W}×${H}px   ratio ${out.aspect}`);
   console.log(`   detection mode: ${pick}  (dark candidates ${results.dark.length}, light candidates ${results.light.length})`);
-  console.log(`   panels found: ${out.frameCount}   inset: ${INSET}% per side\n`);
-  console.log('   #   centre x%   centre y%     w%      h%     rot°    px(x,y,w,h)            fill');
-  console.log('   ' + '-'.repeat(88));
+  console.log(`   panels found: ${out.frameCount}   frame expand: ${INSET}% per side\n`);
+  console.log('   #    centre x%   centre y%    panel w%×h%      frame w%×h%       rot°    fill   px(x,y,w,h)');
+  console.log('   ' + '-'.repeat(96));
   out.frames.forEach(f => {
-    console.log(`   ${String(f.id.replace('photo-', '')).padStart(2)}   ${p(f.center.x, 8)} ${p(f.center.y, 9)} ${p(f.center.w, 7)} ${p(f.center.h, 7)} ${p(f.rot, 6)}   ` +
-      `${String(f.px.x).padStart(5)},${String(f.px.y).padStart(5)},${String(f.px.w).padStart(4)},${String(f.px.h).padStart(4)}   ${f.fill}`);
+    console.log(`   ${String(f.id.replace('photo-', '')).padStart(2)}   ${p(f.panel.x, 9)} ${p(f.panel.y, 11)} ` +
+      `${p(f.panel.w + '×' + f.panel.h, 15)} ${p(f.frame.w + '×' + f.frame.h, 15)} ` +
+      `${p(f.rot, 6)}  ${p(f.fill, 6)} ${String(f.px.x).padStart(5)},${String(f.px.y).padStart(5)},${String(f.px.w).padStart(4)},${String(f.px.h).padStart(4)}`);
   });
-  console.log(`\n   🖼  proof overlay → ${out.proof}   (red = detected panel, green = photo area after inset)`);
+  console.log(`\n   🖼  proof overlay → ${out.proof}   (red = detected panel, green = photo frame)`);
   console.log(`   🧾  geometry json → ${out.jsonFile}`);
-  console.log(`\n   Paste-ready DEFAULTS.positions block (centre-anchored, inset applied):\n`);
+  console.log(`\n   Paste-ready DEFAULTS.positions block (centre-anchored, expanded to cover panel):\n`);
   console.log('   positions: ' + out.positionsSnippet + '\n');
 }).catch(e => { console.error('✗ ' + e.stack); process.exit(1); });
 
