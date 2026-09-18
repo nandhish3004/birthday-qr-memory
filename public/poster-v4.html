@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shaaaw's Birthday Poster Studio · 10 Frames</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2d2a26;
+    --accent:#e11d48;
+    --accent-soft:#fecdd3;
+    --ok:#059669;
+    --warn:#d97706;
+    --panel:#ffffff;
+    --muted:#6b7280;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 15% -10%, #ffe4e6 0%, transparent 60%),
+      radial-gradient(900px 500px at 90% 5%, #e0e7ff 0%, transparent 60%),
+      radial-gradient(800px 600px at 50% 115%, #fef3c7 0%, transparent 70%),
+      #fdf6f0;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
+  /* ---------------- toolbar ---------------- */
+  .toolbar{
+    position:sticky;top:0;z-index:100;
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;
+    padding:10px 14px;
+    background:rgba(255,255,255,.93);
+    backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(0,0,0,.06);
+  }
+  .toolbar-side{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .brand{
+    display:flex;align-items:center;gap:8px;
+    padding:6px 12px;border:1px solid var(--accent-soft);border-radius:999px;background:#fff;
+    font-weight:800;font-size:13px;letter-spacing:-.02em;
+    box-shadow:0 2px 10px rgba(225,29,72,.08);
+  }
+  .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(5,150,105,.18)}
+  .btn{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:8px 14px;border:1px solid rgba(0,0,0,.08);border-radius:999px;background:#fff;
+    font:inherit;font-size:13px;font-weight:700;color:var(--ink);cursor:pointer;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);transition:transform .15s,box-shadow .15s;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.1)}
+  .btn:active{transform:translateY(0)}
+  .btn-primary{background:linear-gradient(135deg,#e11d48,#f43f5e);color:#fff;border-color:transparent}
+  .btn[aria-pressed="true"]{background:#111827;color:#fff;border-color:transparent}
+  .status{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+  .status .pulse{width:6px;height:6px;border-radius:50%;background:var(--ok);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(5,150,105,.5)}70%{box-shadow:0 0 0 6px rgba(5,150,105,0)}100%{box-shadow:0 0 0 0 rgba(5,150,105,0)}}
+
+  /* ---------------- layout ---------------- */
+  .stage{
+    display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;
+    max-width:1180px;margin:18px auto;padding:0 14px 60px;
+  }
+  @media (max-width:1000px){ .stage{grid-template-columns:1fr} }
+
+  .poster-wrap{display:flex;justify-content:center;align-items:flex-start}
+  .poster{
+    position:relative;
+    width:min(100%,560px);
+    aspect-ratio:675/1200;               /* matches the artwork exactly */
+    background:#fff;
+    border-radius:16px;
+    overflow:hidden;
+    isolation:isolate;
+    touch-action:none;
+    box-shadow:0 20px 60px rgba(0,0,0,.18),0 2px 10px rgba(0,0,0,.08);
+  }
+  .poster > .bg{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;z-index:0;pointer-events:none;user-select:none;
+  }
+
+  /* ------------- photo frames -------------
+     Position, size and rotation come straight from the calibration of the
+     artwork, so a photo can never spill outside its frame or sit off-centre.
+     overflow:hidden + object-fit:cover guarantee the photo fills the frame
+     with no letterboxing, whatever its aspect ratio. */
+  .frame{
+    position:absolute;z-index:2;
+    transform-origin:center center;
+    cursor:pointer;
+    background:transparent;
+    transition:box-shadow .15s;
+  }
+  .frame img{
+    width:100%;height:100%;display:block;
+    object-fit:cover;object-position:center;
+    border-radius:2px;
+    -webkit-user-drag:none;user-select:none;
+  }
+  .frame::after{                        /* subtle affordance outline */
+    content:'';position:absolute;inset:0;border-radius:3px;
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.55);
+    pointer-events:none;opacity:0;transition:opacity .15s;
+  }
+  .frame:hover::after,.frame.dragging::after{opacity:1}
+  .frame.dragging{z-index:60 !important;box-shadow:0 14px 34px rgba(0,0,0,.34)}
+  .frame .empty{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;height:100%;
+    font-family:'Caveat',cursive;font-size:clamp(11px,2.1vw,19px);color:#fff;
+    background:rgba(17,17,17,.82);
+    border-radius:3px;text-align:center;padding:4px;line-height:1.05;
+    user-select:none;pointer-events:none;
+  }
+  .frame .del{
+    position:absolute;top:-9px;right:-9px;width:22px;height:22px;border-radius:50%;
+    display:none;align-items:center;justify-content:center;
+    background:#111827;color:#fff;border:2px solid #fff;
+    font-size:11px;line-height:1;cursor:pointer;z-index:4;
+    box-shadow:0 2px 8px rgba(0,0,0,.3);
+  }
+  .frame.filled .del{display:flex}
+  .frame input[type=file]{display:none}
+
+  /* ------------- editable text ------------- */
+  .txt{
+    position:absolute;z-index:3;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    cursor:text;outline:none;padding:2px 4px;
+    transition:box-shadow .15s;
+  }
+  .txt:hover,.txt:focus{box-shadow:0 0 0 2px rgba(225,29,72,.35);border-radius:4px}
+  .txt.name{
+    font-family:'Caveat',cursive;font-weight:700;color:#4c1d95;
+    font-size:clamp(12px,2.3vw,22px);line-height:1;
+  }
+  .txt.message{
+    font-family:'Caveat',cursive;color:#4b3f2f;
+    font-size:clamp(9px,1.75vw,15px);line-height:1.25;
+    white-space:pre-wrap;align-items:center;
+  }
+
+  /* ------------- QR easter eggs ------------- */
+  .qr{
+    position:absolute;z-index:4;
+    transform-origin:center center;
+    background:#fff;border-radius:4px;padding:1.6%;
+    box-shadow:0 1px 5px rgba(0,0,0,.22);
+    cursor:grab;
+  }
+  .qr img{width:100%;height:100%;display:block;pointer-events:none}
+  .qr.off{display:none}
+  .poster.no-qr .qr{display:none}
+
+  /* ------------- side panel ------------- */
+  .panel{display:flex;flex-direction:column;gap:14px}
+  .card{
+    background:var(--panel);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);
+    padding:16px;box-shadow:0 10px 28px -12px rgba(0,0,0,.14);
+  }
+  .card h3{font-size:15px;font-weight:800;display:flex;align-items:center;gap:7px;margin-bottom:10px}
+  .hint{font-size:12.5px;line-height:1.55;color:#4b5563}
+  .hint b{color:var(--ink)}
+  code{background:#f3f4f6;border:1px solid rgba(0,0,0,.06);border-radius:4px;padding:1px 5px;font-size:11.5px}
+  .kvs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .kv{font-size:10.5px;font-weight:700;background:#f3f4f6;border:1px solid rgba(0,0,0,.06);border-radius:999px;padding:3px 9px;color:#374151}
+  .grid2{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+  .thumb{
+    position:relative;aspect-ratio:1;border-radius:9px;overflow:hidden;cursor:pointer;
+    border:1px solid rgba(0,0,0,.08);background:#f9fafb;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:12px;color:#9ca3af;
+    transition:transform .12s,box-shadow .12s;
+  }
+  .thumb:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(0,0,0,.12)}
+  .thumb img{width:100%;height:100%;object-fit:cover}
+  .thumb.done{border-color:var(--ok)}
+  .thumb .tick{
+    position:absolute;right:3px;bottom:3px;width:15px;height:15px;border-radius:50%;
+    background:var(--ok);color:#fff;font-size:9px;display:flex;align-items:center;justify-content:center;
+  }
+  .row{display:flex;gap:8px;flex-wrap:wrap}
+  .row .btn{flex:1;justify-content:center;min-width:0}
+  .toggle{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;cursor:pointer;user-select:none}
+  .toggle input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
+  .note{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:8px}
+
+  /* ------------- toast + loader ------------- */
+  .toast{
+    position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);
+    background:#111827;color:#fff;padding:11px 18px;border-radius:999px;
+    font-size:13px;font-weight:600;opacity:0;pointer-events:none;
+    transition:opacity .25s,transform .25s;z-index:300;max-width:90vw;text-align:center;
+    box-shadow:0 12px 30px rgba(0,0,0,.3);
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .loader{
+    position:fixed;inset:0;z-index:400;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:12px;
+    background:rgba(255,255,255,.86);backdrop-filter:blur(8px);
+    transition:opacity .3s;
+  }
+  .loader.hidden{opacity:0;pointer-events:none}
+  .spinner{width:28px;height:28px;border:3px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ------------- print ------------- */
+  @media print{
+    @page{margin:0}
+    body{background:#fff}
+    .toolbar,.panel,.toast,.loader{display:none !important}
+    .stage{display:block;margin:0;padding:0;max-width:none}
+    .poster-wrap{padding:0}
+    .poster{
+      width:100%;max-width:none;height:100vh;aspect-ratio:auto;
+      border-radius:0;box-shadow:none;
+    }
+    .frame .del{display:none !important}
+    .frame::after{opacity:0 !important}
+    .txt:hover,.txt:focus{box-shadow:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="loader" id="loader">
+  <div class="spinner"></div>
+  <div style="font-weight:800;font-size:13px;color:#6b7280">Loading your 10 frames…</div>
+</div>
+
+<div class="toolbar">
+  <div class="toolbar-side">
+    <div class="brand"><span class="dot"></span> Poster Studio · 10 frames · auto-save</div>
+    <div class="status"><span class="pulse"></span><span id="saveText">Saved locally</span></div>
+  </div>
+  <div class="toolbar-side">
+    <button class="btn" id="btnHelp">💡 How to use</button>
+    <button class="btn" id="btnQr" aria-pressed="true">🔳 QR codes</button>
+    <button class="btn" id="btnReset">↺ Reset layout</button>
+    <button class="btn" id="btnPrint">🖨️ Print / PDF</button>
+    <button class="btn btn-primary" id="btnExport">⬇️ Save PNG</button>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="poster-wrap">
+    <div class="poster" id="poster">
+      <img class="bg" id="bg" src="assets/poster-v4/template.jpg" alt="Birthday poster artwork">
+      <!-- 10 calibrated frames + editable text injected here -->
+    </div>
+  </div>
+
+  <aside class="panel">
+    <div class="card">
+      <h3>🎨 Fill your 10 frames</h3>
+      <div class="hint">
+        <b>Tap a frame</b> to add a photo, or <b>drag a photo file</b> straight onto it.
+        <b>Drag a filled frame</b> to nudge its position. <b>Double-tap</b> to remove the photo.
+      </div>
+      <div class="kvs">
+        <span class="kv">10 frames</span>
+        <span class="kv">calibrated to artwork</span>
+        <span class="kv">name strip</span>
+        <span class="kv">note card</span>
+        <span class="kv">8 QR links</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>⚡ Quick fill</h3>
+      <div class="grid2" id="quickFill"></div>
+      <div class="note">Your work saves in this browser automatically.</div>
+    </div>
+
+    <div class="card">
+      <h3>✍️ Text</h3>
+      <div class="row">
+        <button class="btn" id="btnName">Edit name</button>
+        <button class="btn" id="btnMsg">Edit message</button>
+      </div>
+      <div class="note">The name strip sits on the lavender bar; the message sits on the cream card.</div>
+    </div>
+
+    <div class="card">
+      <h3>🖨️ Print &amp; export</h3>
+      <div class="row">
+        <button class="btn" id="btnExport2">⬇️ Save PNG</button>
+        <button class="btn" id="btnPrint2">🖨️ Print / PDF</button>
+      </div>
+      <label class="toggle" style="margin-top:12px">
+        <input type="checkbox" id="chkQr" checked> Show QR memory codes
+      </label>
+      <label class="toggle" style="margin-top:8px">
+        <input type="checkbox" id="chkGuides"> Show frame guides
+      </label>
+      <div class="note">
+        <b>Save PNG</b> renders at print resolution (3× the artwork = 2025×3600 px, ~300 DPI at 9×10.9in).
+        <b>Print / PDF</b> for the sharpest output — choose <i>Save as PDF</i> in the print dialog.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🔄 Start over</h3>
+      <div class="row">
+        <button class="btn" id="btnClear">🧹 Clear photos</button>
+        <button class="btn" id="btnReset2">↺ Reset layout</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="globalFile" accept="image/*" style="display:none">
+
+<script>
+/* ==========================================================================
+   Poster Studio v4
+   --------------------------------------------------------------------------
+   Every frame below was measured from the artwork itself by
+   scripts/calibrate-poster-boxes.js (exact minimum-area rectangle per panel,
+   then expanded 0.25% so the photo fully covers the panel's dark area).
+
+   Coordinates are CENTRE-anchored and expressed as a percentage of the
+   poster, so the whole layout scales to any screen or print size.
+
+     x, y  = centre of the frame, % of poster width / height
+     w, h  = size of the frame,    % of poster width / height
+     rot   = rotation in degrees,  matching the tilt in the artwork
+   ========================================================================== */
+
+const POSTER_W = 675, POSTER_H = 1200;
+
+const FRAME_GEOMETRY = {
+  'photo-1':  {x:83.275, y:11.585, w:22.116, h:12.912, rot:12.53},
+  'photo-2':  {x:18.19,  y:32.4,   w:24.597, h:14.418, rot:-9.89},
+  'photo-3':  {x:51.329, y:28.326, w:18.321, h:10.861, rot:-2.73},
+  'photo-4':  {x:82.513, y:30.56,  w:22.785, h:13.53,  rot:13.67},
+  'photo-5':  {x:21.503, y:51.742, w:20.774, h:12.253, rot:11.56},
+  'photo-6':  {x:53.369, y:46.076, w:22.778, h:13.815, rot:-12.15},
+  'photo-7':  {x:84.682, y:50.545, w:23.927, h:13.855, rot:9.2},
+  'photo-8':  {x:16.809, y:71.11,  w:22.96,  h:13.377, rot:-12.88},
+  'photo-9':  {x:50.385, y:66.242, w:21.502, h:12.445, rot:12.99},
+  'photo-10': {x:82.524, y:70.461, w:25.215, h:14.81,  rot:9.66},
+};
+
+/* Editable text — sits on the lavender bar and the cream card. */
+const TEXT_GEOMETRY = {
+  name:    {x:39.6, y:16.0, w:42,   h:3.6,  rot:-1},
+  message: {x:50.5, y:88.5, w:54,   h:16,   rot:-.6},
+};
+
+/* QR memory codes, tucked into the artwork's margins. */
+const QR_GEOMETRY = [
+  {x:6.2,  y:3.4,  rot:-8},
+  {x:94.2, y:3.2,  rot:6},
+  {x:5.4,  y:20.2, rot:-5},
+  {x:94.8, y:20.6, rot:7},
+  {x:5.0,  y:41.0, rot:-6},
+  {x:95.2, y:63.0, rot:5},
+  {x:6.0,  y:88.6, rot:-7},
+  {x:94.6, y:88.2, rot:6},
+];
+const QR_SIZE = 4.4;      // % of poster width — large enough to scan when printed
+
+const STORAGE_KEY = 'poster-v4-data-v1';
+
+/* Small deep clone. structuredClone() is not available in every browser or
+   embedded webview, and losing the whole studio to a missing global would be
+   a poor trade for these few lines. */
+function clone(o){
+  if(Array.isArray(o)) return o.map(clone);
+  if(o && typeof o === 'object'){
+    const r = {};
+    for(const k in o) r[k] = clone(o[k]);
+    return r;
+  }
+  return o;
+}
+
+const DEFAULTS = {
+  photos: {},                                   // 'photo-1' -> dataURL
+  positions: clone(FRAME_GEOMETRY),             // intentionally override-able
+  texts: {
+    name: 'Shaaaw ♡',
+    message: 'Happy Birthday to my sweetest person!\nEvery frame here is a little piece of us.\n— with all my love',
+  },
+  showQr: true,
+};
+
+/* ------------------------------- state -------------------------------- */
+const $poster = document.getElementById('poster');
+const $bg = document.getElementById('bg');
+const $loader = document.getElementById('loader');
+const $saveText = document.getElementById('saveText');
+const $toast = document.getElementById('toast');
+const $globalFile = document.getElementById('globalFile');
+
+let state = loadState();
+let drag = null;
+let pendingFrame = null;
+
+/* --------------------------- persistence ------------------------------ */
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return clone(DEFAULTS);
+    const p = JSON.parse(raw);
+    return {
+      photos: {...(p.photos || {})},
+      positions: {...DEFAULTS.positions, ...(p.positions || {})},
+      texts: {...DEFAULTS.texts, ...(p.texts || {})},
+      showQr: p.showQr !== undefined ? !!p.showQr : DEFAULTS.showQr,
+    };
+  }catch{ return clone(DEFAULTS); }
+}
+
+let saveTimer = null;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      $saveText.textContent = 'Saved · ' + new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    }catch(e){
+      // Quota is the realistic failure here (photos are stored as data URLs)
+      $saveText.textContent = 'Storage full — export your PNG!';
+      toast('Browser storage is full. Save your PNG before closing.');
+    }
+    setTimeout(()=>{ $saveText.textContent = 'Saved locally'; }, 2200);
+  }, 220);
+}
+
+/* ------------------------------- utils -------------------------------- */
+let toastTimer = null;
+function toast(msg){
+  $toast.textContent = msg;
+  $toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> $toast.classList.remove('show'), 3200);
+}
+
+/** Centre-anchored placement, shared by every movable element. */
+function place(el, pos){
+  el.style.left   = pos.x + '%';
+  el.style.top    = pos.y + '%';
+  el.style.width  = pos.w + '%';
+  el.style.height = pos.h + '%';
+  el.style.transform = `translate(-50%,-50%) rotate(${pos.rot || 0}deg)`;
+}
+
+/** Read a file as a data URL. */
+function readFile(file){
+  return new Promise((resolve, reject)=>{
+    if(!file.type.startsWith('image/')) return reject(new Error('Not an image'));
+    const r = new FileReader();
+    r.onload = e => resolve(e.target.result);
+    r.onerror = () => reject(new Error('Could not read that file'));
+    r.readAsDataURL(file);
+  });
+}
+
+/* ------------------------------ build UI ------------------------------ */
+function buildPoster(){
+  $poster.querySelectorAll('.frame,.txt,.qr').forEach(n => n.remove());
+
+  /* --- 10 photo frames --- */
+  for(let i = 1; i <= 10; i++){
+    const id = `photo-${i}`;
+    const pos = state.positions[id] || FRAME_GEOMETRY[id];
+
+    const el = document.createElement('div');
+    el.className = 'frame';
+    el.dataset.id = id;
+    el.title = `Frame ${i} — tap to add a photo`;
+    place(el, pos);
+    el.innerHTML = `
+      <div class="empty">ur pic here</div>
+      <img alt="" style="display:none">
+      <span class="del" title="Remove photo">✕</span>
+      <input type="file" accept="image/*">
+    `;
+
+    const img   = el.querySelector('img');
+    const empty = el.querySelector('.empty');
+    const input = el.querySelector('input');
+    const del   = el.querySelector('.del');
+
+    if(state.photos[id]){
+      img.src = state.photos[id];
+      img.style.display = 'block';
+      empty.style.display = 'none';
+      el.classList.add('filled');
+    }
+
+    el.addEventListener('click', e => {
+      if(e.target === del) return;
+      if(drag && drag.moved) return;
+      pendingFrame = id;
+      input.click();
+    });
+
+    input.addEventListener('change', e => {
+      const f = e.target.files[0];
+      if(f) setPhoto(id, f);
+      input.value = '';
+    });
+
+    del.addEventListener('click', e => {
+      e.stopPropagation();
+      delete state.photos[id];
+      img.style.display = 'none';
+      img.removeAttribute('src');
+      empty.style.display = 'flex';
+      el.classList.remove('filled');
+      save(); buildQuickFill();
+      toast(`Photo removed from frame ${i}`);
+    });
+
+    /* drag a file from the desktop onto a frame */
+    el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('dragging'); });
+    el.addEventListener('dragleave', () => el.classList.remove('dragging'));
+    el.addEventListener('drop', async e => {
+      e.preventDefault();
+      el.classList.remove('dragging');
+      const f = e.dataTransfer.files[0];
+      if(f) setPhoto(id, f);
+    });
+
+    $poster.appendChild(el);
+  }
+
+  /* --- editable text --- */
+  const nameEl = document.createElement('div');
+  nameEl.className = 'txt name';
+  nameEl.contentEditable = 'true';
+  nameEl.spellcheck = false;
+  nameEl.textContent = state.texts.name;
+  place(nameEl, TEXT_GEOMETRY.name);
+  nameEl.addEventListener('input', () => { state.texts.name = nameEl.textContent.trim(); save(); });
+  nameEl.addEventListener('blur', () => { if(!nameEl.textContent.trim()){ nameEl.textContent = DEFAULTS.texts.name; state.texts.name = DEFAULTS.texts.name; save(); } });
+  $poster.appendChild(nameEl);
+
+  const msgEl = document.createElement('div');
+  msgEl.className = 'txt message';
+  msgEl.contentEditable = 'true';
+  msgEl.spellcheck = false;
+  msgEl.textContent = state.texts.message;
+  place(msgEl, TEXT_GEOMETRY.message);
+  msgEl.addEventListener('input', () => { state.texts.message = msgEl.textContent; save(); });
+  $poster.appendChild(msgEl);
+
+  /* --- QR memory codes --- */
+  QR_GEOMETRY.forEach((q, i) => {
+    const n = i + 1;
+    const el = document.createElement('a');
+    el.className = 'qr';
+    el.href = `/m/${n}`;
+    el.target = '_blank';
+    el.rel = 'noopener';
+    el.title = `Memory ${n} — tap to test the scan`;
+    el.style.left = q.x + '%';
+    el.style.top = q.y + '%';
+    el.style.width = QR_SIZE + '%';
+    el.style.aspectRatio = '1';
+    el.style.transform = `translate(-50%,-50%) rotate(${q.rot}deg)`;
+    el.innerHTML = `<img src="assets/poster-v4/qr/${n}.png" alt="QR ${n}">`;
+    /* the QRs are links, so keep them out of the drag handler's way */
+    el.addEventListener('click', e => { if(drag && drag.moved) e.preventDefault(); });
+    $poster.appendChild(el);
+  });
+
+  applyQrVisibility();
+  initDrag();
+  buildQuickFill();
+}
+
+function applyQrVisibility(){
+  $poster.classList.toggle('no-qr', !state.showQr);
+}
+
+function setPhoto(id, file){
+  readFile(file).then(dataUrl => {
+    // downscale once so localStorage doesn't blow its quota
+    shrink(dataUrl, 1400).then(small => {
+      state.photos[id] = small;
+      buildPoster();
+      save();
+      const n = id.replace('photo-', '');
+      toast(`Photo added to frame ${n} 💗`);
+    }).catch(() => {
+      state.photos[id] = dataUrl;
+      buildPoster(); save();
+    });
+  }).catch(err => toast(err.message));
+}
+
+/** Downscale a data URL so a full set of photos fits in localStorage. */
+function shrink(dataUrl, maxSide){
+  return new Promise((resolve, reject) => {
+    const im = new Image();
+    im.onload = () => {
+      const scale = Math.min(1, maxSide / Math.max(im.width, im.height));
+      if(scale >= 1) return resolve(dataUrl);           // already small enough
+      const c = document.createElement('canvas');
+      c.width = Math.round(im.width * scale);
+      c.height = Math.round(im.height * scale);
+      c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+      resolve(c.toDataURL('image/jpeg', 0.88));
+    };
+    im.onerror = () => reject(new Error('bad image'));
+    im.src = dataUrl;
+  });
+}
+
+/* --------------------------- drag to nudge ---------------------------- */
+function initDrag(){
+  $poster.querySelectorAll('.frame,.qr').forEach(el => {
+    el.addEventListener('pointerdown', onDown);
+  });
+}
+
+function onDown(e){
+  if(e.button !== undefined && e.button !== 0) return;
+  const el = e.currentTarget;
+  if(e.target.classList && e.target.classList.contains('del')) return;
+  if(el.classList.contains('txt')) return;
+
+  const r = $poster.getBoundingClientRect();
+  const id = el.dataset.id || el.getAttribute('href');
+  const pos = el.classList.contains('qr')
+    ? QR_GEOMETRY[Number(el.getAttribute('href').split('/').pop()) - 1]
+    : (state.positions[id] || FRAME_GEOMETRY[id]);
+
+  drag = {
+    el, id, isQr: el.classList.contains('qr'),
+    startX: e.clientX, startY: e.clientY,
+    origX: pos.x, origY: pos.y,
+    moved: false,
+    rect: r,
+    pos,
+  };
+
+  el.classList.add('dragging');
+  el.setPointerCapture?.(e.pointerId);
+  el.addEventListener('pointermove', onMove);
+  el.addEventListener('pointerup', onUp);
+  el.addEventListener('pointercancel', onUp);
+  e.stopPropagation();
+}
+
+function onMove(e){
+  if(!drag) return;
+  const dx = e.clientX - drag.startX;
+  const dy = e.clientY - drag.startY;
+  if(!drag.moved && Math.hypot(dx, dy) < 4) return;   // ignore jittery taps
+  drag.moved = true;
+
+  const nx = clamp(drag.origX + (dx / drag.rect.width)  * 100, 2, 98);
+  const ny = clamp(drag.origY + (dy / drag.rect.height) * 100, 1, 99);
+
+  drag.pos.x = round2(nx);
+  drag.pos.y = round2(ny);
+  drag.el.style.left = nx + '%';
+  drag.el.style.top  = ny + '%';
+
+  if(!drag.isQr){
+    state.positions[drag.id] = {
+      ...(state.positions[drag.id] || FRAME_GEOMETRY[drag.id]),
+      x: round2(nx), y: round2(ny),
+    };
+  }
+}
+
+function onUp(e){
+  if(!drag) return;
+  const el = drag.el;
+  el.classList.remove('dragging');
+  el.removeEventListener('pointermove', onMove);
+  el.removeEventListener('pointerup', onUp);
+  el.removeEventListener('pointercancel', onUp);
+
+  if(drag.moved && !drag.isQr) save();
+  // let the click-through decide whether this was a tap or a drag
+  const wasDrag = drag.moved;
+  const thisDrag = drag;
+  drag = null;
+  if(wasDrag){
+    // swallow the click that follows a drag
+    const swallow = ev => { ev.stopPropagation(); ev.preventDefault(); };
+    el.addEventListener('click', swallow, {capture:true, once:true});
+    setTimeout(()=> el.removeEventListener('click', swallow, {capture:true}), 350);
+  }
+  if(!thisDrag.isQr) buildQuickFill();
+}
+
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const round2 = n => Math.round(n * 100) / 100;
+
+/* ---------------------------- quick fill ------------------------------ */
+function buildQuickFill(){
+  const grid = document.getElementById('quickFill');
+  grid.innerHTML = '';
+  for(let i = 1; i <= 10; i++){
+    const id = `photo-${i}`;
+    const has = !!state.photos[id];
+    const t = document.createElement('div');
+    t.className = 'thumb' + (has ? ' done' : '');
+    t.title = has ? `Frame ${i} — click to replace` : `Frame ${i} — click to add`;
+    t.innerHTML = has
+      ? `<img src="${state.photos[id]}" alt=""><span class="tick">✓</span>`
+      : String(i).padStart(2, '0');
+    t.addEventListener('click', () => {
+      pendingFrame = id;
+      $globalFile.click();
+    });
+    grid.appendChild(t);
+  }
+}
+
+$globalFile.addEventListener('change', e => {
+  const f = e.target.files[0];
+  if(f && pendingFrame) setPhoto(pendingFrame, f);
+  $globalFile.value = '';
+});
+
+/* ------------------------------- export ------------------------------- */
+/**
+ * Render the poster to a canvas at print resolution.
+ *
+ * Rather than screenshotting the DOM (which no client-side library does
+ * faithfully with rotation + object-fit), this draws the artwork and then
+ * composites each photo through the SAME centre-anchored geometry the layout
+ * uses. Because it is the same maths, the PNG cannot disagree with the
+ * on-screen layout — and it renders at 3x for a crisp print.
+ */
+async function renderPoster(scale = 3){
+  const W = Math.round(POSTER_W * scale);
+  const H = Math.round(POSTER_H * scale);
+  const c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  const ctx = c.getContext('2d');
+  ctx.imageSmoothingQuality = 'high';
+
+  // 1. artwork
+  const bg = await loadImg($bg.src);
+  ctx.drawImage(bg, 0, 0, W, H);
+
+  // 2. photos, in the same order and geometry as the layout
+  for(let i = 1; i <= 10; i++){
+    const id = `photo-${i}`;
+    const src = state.photos[id];
+    if(!src) continue;
+    const pos = state.positions[id] || FRAME_GEOMETRY[id];
+    const cx = (pos.x / 100) * W, cy = (pos.y / 100) * H;
+    const w  = (pos.w / 100) * W, h  = (pos.h / 100) * H;
+
+    const img = await loadImg(src);
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate((pos.rot || 0) * Math.PI / 180);
+    ctx.beginPath();
+    ctx.rect(-w / 2, -h / 2, w, h);
+    ctx.clip();
+    // object-fit: cover
+    const s = Math.max(w / img.width, h / img.height);
+    const dw = img.width * s, dh = img.height * s;
+    ctx.drawImage(img, -dw / 2, -dh / 2, dw, dh);
+    ctx.restore();
+  }
+
+  // 3. text
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  drawText(ctx, state.texts.name, TEXT_GEOMETRY.name, W, H, {
+    font: weight => `${weight} ${Math.round(W * 0.038)}px Caveat, cursive`,
+    weight: 700, color: '#4c1d95',
+  });
+  drawText(ctx, state.texts.message, TEXT_GEOMETRY.message, W, H, {
+    font: weight => `${weight} ${Math.round(W * 0.0255)}px Caveat, cursive`,
+    weight: 600, color: '#4b3f2f', multiline: true,
+  });
+
+  // 4. QR codes
+  if(state.showQr){
+    for(let i = 0; i < QR_GEOMETRY.length; i++){
+      const q = QR_GEOMETRY[i];
+      const cx = (q.x / 100) * W, cy = (q.y / 100) * H;
+      const size = (QR_SIZE / 100) * W;
+      const pad = size * 0.075;               // quiet zone, printed as white
+      const img = await loadImg(`assets/poster-v4/qr/${i + 1}.png`);
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(q.rot * Math.PI / 180);
+      ctx.fillStyle = '#fff';
+      roundRect(ctx, -size / 2 - pad, -size / 2 - pad, size + pad * 2, size + pad * 2, size * 0.06);
+      ctx.fill();
+      ctx.drawImage(img, -size / 2, -size / 2, size, size);
+      ctx.restore();
+    }
+  }
+
+  return c;
+}
+
+function drawText(ctx, text, geo, W, H, opt){
+  const cx = (geo.x / 100) * W;
+  const lineH = Math.round(W * 0.032);
+  const lines = opt.multiline ? String(text).split('\n') : [text];
+  ctx.save();
+  ctx.translate(cx, (geo.y / 100) * H);
+  ctx.rotate((geo.rot || 0) * Math.PI / 180);
+  ctx.font = opt.font(opt.weight);
+  ctx.fillStyle = opt.color;
+  const total = (lines.length - 1) * lineH;
+  lines.forEach((ln, i) => {
+    ctx.fillText(ln, 0, -total / 2 + i * lineH);
+  });
+  ctx.restore();
+}
+
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y,     x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x,     y + h, r);
+  ctx.arcTo(x,     y + h, x,     y,     r);
+  ctx.arcTo(x,     y,     x + w, y,     r);
+  ctx.closePath();
+}
+
+function loadImg(src){
+  return new Promise((resolve, reject) => {
+    const im = new Image();
+    im.crossOrigin = 'anonymous';
+    im.onload = () => resolve(im);
+    im.onerror = () => reject(new Error('Could not load ' + src));
+    im.src = src;
+  });
+}
+
+async function exportPng(){
+  toast('Rendering at print resolution…');
+  try{
+    // make sure webfonts are ready, or the text renders in a fallback face
+    if(document.fonts && document.fonts.ready) await document.fonts.ready;
+    const c = await renderPoster(3);
+    const blob = await new Promise(r => c.toBlob(r, 'image/png'));
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `shaaaw-birthday-poster-${c.width}x${c.height}.png`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=> URL.revokeObjectURL(url), 4000);
+    toast(`Saved ${c.width}×${c.height}px PNG 🎉`);
+  }catch(err){
+    toast('Export failed: ' + err.message);
+  }
+}
+
+/* ------------------------------ controls ------------------------------ */
+document.getElementById('btnExport').addEventListener('click', exportPng);
+document.getElementById('btnExport2').addEventListener('click', exportPng);
+document.getElementById('btnPrint').addEventListener('click', () => window.print());
+document.getElementById('btnPrint2').addEventListener('click', () => window.print());
+
+document.getElementById('btnReset').addEventListener('click', resetLayout);
+document.getElementById('btnReset2').addEventListener('click', resetLayout);
+function resetLayout(){
+  if(!confirm('Put all 10 frames back to their original calibrated positions?')) return;
+  state.positions = clone(FRAME_GEOMETRY);
+  save(); buildPoster();
+  toast('Frames restored to the artwork positions');
+}
+
+document.getElementById('btnClear').addEventListener('click', () => {
+  if(!confirm('Remove all photos? Your text and QR codes stay.')) return;
+  state.photos = {};
+  save(); buildPoster();
+  toast('All photos cleared');
+});
+
+const chkQr = document.getElementById('chkQr');
+chkQr.checked = state.showQr;
+chkQr.addEventListener('change', () => {
+  state.showQr = chkQr.checked;
+  applyQrVisibility();
+  save();
+});
+
+document.getElementById('chkGuides').addEventListener('change', e => {
+  $poster.querySelectorAll('.frame').forEach(f => {
+    f.style.outline = e.target.checked ? '1.5px dashed rgba(225,29,72,.75)' : 'none';
+    f.style.outlineOffset = '0px';
+  });
+});
+
+document.getElementById('btnQr').addEventListener('click', e => {
+  state.showQr = !state.showQr;
+  chkQr.checked = state.showQr;
+  e.currentTarget.setAttribute('aria-pressed', String(state.showQr));
+  applyQrVisibility();
+  save();
+});
+document.getElementById('btnQr').setAttribute('aria-pressed', String(state.showQr));
+
+document.getElementById('btnName').addEventListener('click', () => {
+  const el = $poster.querySelector('.txt.name');
+  el.focus();
+  document.getSelection().selectAllChildren(el);
+});
+document.getElementById('btnMsg').addEventListener('click', () => {
+  const el = $poster.querySelector('.txt.message');
+  el.focus();
+  document.getSelection().selectAllChildren(el);
+});
+
+document.getElementById('btnHelp').addEventListener('click', () => {
+  alert(
+`Poster Studio — how it works
+
+1.  Tap any of the 10 frames (or drag a photo file onto it) to add a picture.
+    Double-tap a photo, or hit its ✕, to remove it.
+
+2.  Drag a frame to nudge it. Your layout saves automatically in this browser.
+
+3.  The frame positions were MEASURED from the artwork, so photos fill their
+    frames exactly — nothing spills onto the collage and no dark edge shows.
+    "Reset layout" puts them all back.
+
+4.  Click the name strip or the cream card to edit the text.
+
+5.  Save PNG renders 2025×3600 px for printing.
+    Print / PDF gives the sharpest result — pick "Save as PDF" in the dialog.
+
+Tip: for a 9×10.9in print, save the PNG and upload it to your photo printer.`
+  );
+});
+
+/* keyboard nudging for fine-tuning */
+document.addEventListener('keydown', e => {
+  const el = document.activeElement;
+  if(!el || !el.classList || !el.classList.contains('frame')) return;
+  const step = e.shiftKey ? 1 : 0.2;
+  const pos = state.positions[el.dataset.id];
+  if(!pos) return;
+  const map = {ArrowUp:['y',-1], ArrowDown:['y',1], ArrowLeft:['x',-1], ArrowRight:['x',1]};
+  const hit = map[e.key];
+  if(!hit) return;
+  e.preventDefault();
+  pos[hit[0]] = round2(clamp(pos[hit[0]] + hit[1] * step, 1, 99));
+  place(el, pos);
+  save();
+  buildQuickFill();
+});
+
+/* -------------------------------- boot -------------------------------- */
+function hideLoader(){ setTimeout(()=> $loader.classList.add('hidden'), 250); }
+
+buildPoster();
+
+if($bg.complete) hideLoader();
+else { $bg.addEventListener('load', hideLoader); $bg.addEventListener('error', () => {
+  toast('Could not load the poster artwork.');
+  hideLoader();
+}); }
+
+document.fonts?.ready.then(()=>{ /* text metrics settle before any export */ });
+</script>
+</body>
+</html>

@@ -5,3 +5,11 @@ uploads/*
 data/*.tmp
 .DS_Store
 Thumbs.db
+
+# Poster auto-calibration output (generated proof overlays + geometry dumps)
+*-detected.png
+*-boxes.json
+
+# Generated poster previews (recreate with `npm run poster:preview`)
+poster-preview.png
+public/poster-preview.png

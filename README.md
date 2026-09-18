@@ -139,6 +139,47 @@ birthday-qr-memory-system/
 
 ---
 
+## 🖼️ 10-Frame Poster Studio (`/poster-v4.html`)
+
+Fill the 10 photo panels in the birthday collage with your own pictures, then print.
+
+- **Add a photo** — tap a frame, use the quick-fill tile, or drag a file straight onto a frame
+- **Reposition** — drag a frame to nudge it; arrow keys fine-tune (shift = bigger steps)
+- **Edit text** — click the name strip or the cream message card
+- **QR codes** — 8 memory links, tucked into the margins; toggle them on or off
+- **Export** — *Save PNG* renders 2025×3600 px (~300 DPI at 9×10.9in); *Print / PDF* for the sharpest output
+- Everything auto-saves in your browser, so a refresh won't lose your work
+
+### Why the frames line up exactly
+
+Frame positions aren't eyeballed — they're **measured from the artwork**:
+
+```bash
+npm run poster:calibrate   # find the 10 panels, dump exact geometry
+npm run poster:preview     # composite test photos, prove zero spill
+npm run poster:check       # calibrate, verify the page, then smoke-test it
+```
+
+`poster:check` regenerates the calibration first, so it works on a fresh clone
+with no generated files present. `poster:preview` expects `poster:calibrate`
+to have been run already.
+
+`calibrate` fits an exact oriented bounding box (convex hull + rotating calipers)
+to each panel, so tilted frames are measured as tilted rather than approximated
+as axis-aligned. Each frame is then grown 0.25% beyond its panel — shrinking them
+leaves a black ring of exposed panel around every photo.
+
+`poster:check` proves two things: that the geometry embedded in the page still
+matches the calibration, and that compositing through it leaves **zero** leftover
+panel pixels for both landscape and portrait uploads.
+
+> Swapping the artwork? Drop your image at `public/assets/poster-v4/template.jpg`,
+> re-run `npm run poster:calibrate`, and paste the printed positions block into
+> `FRAME_GEOMETRY` in `public/poster-v4.html`. If your design has a different
+> number of panels, adjust the frame loop as well.
+
+---
+
 ## 🖨️ Printing & Poster Tips
 
 - The poster should be printed at standard photo poster sizes (e.g. 12x18 inches, A3, or 8x12 inches).
